@@ -1,0 +1,183 @@
+{
+  "id": "statement",
+  "name": "主張：藍色專業",
+  "description": "一頁一個主張：左欄是帶藍線的支撐條列，右欄隔一條細線放淡藍底的主張框、三張小數字卡與一行補充。改成純文字頁會失去「證據在左、結論在右」的閱讀方向。",
+  "content_relations": [
+    "statement",
+    "evidence",
+    "sequence"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship",
+    "pause"
+  ],
+  "density": {
+    "max_chars": 360,
+    "max_elements": 12
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "evidence": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "三到五條支撐；每條兩行以內"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "主張的一句話或引言，三行以內、五十字以內"
+    },
+    "stat-1": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "小數字卡：metric 的 value 是數字、label 是說明（八字以內）；不需要就留空"
+    },
+    "stat-2": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "stat-3": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "右欄的補充說明，兩行以內"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "evidence",
+      "kind": "text"
+    },
+    {
+      "id": "split",
+      "kind": "shape"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "stat-1",
+      "kind": "text"
+    },
+    {
+      "id": "stat-2",
+      "kind": "text"
+    },
+    {
+      "id": "stat-3",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "先修會影響交付的三個問題，其餘排進下一季"
+    },
+    "evidence": {
+      "type": "list",
+      "items": [
+        "首頁載入超過三秒的頁面佔兩成，且集中在行動版",
+        "有三成的表單送出後沒有回饋，使用者會重複送出",
+        "監控只看主機，看不到使用者實際的等待時間",
+        "修復流程沒有負責人，同一個問題會回到待辦三次"
+      ]
+    },
+    "body": {
+      "type": "text",
+      "value": "「不是所有問題都值得現在修，但這三個會直接影響交付。」"
+    },
+    "stat-1": {
+      "type": "metric",
+      "value": "20%",
+      "label": "慢頁面佔比"
+    },
+    "stat-2": {
+      "type": "metric",
+      "value": "3 成",
+      "label": "無回饋表單"
+    },
+    "stat-3": {
+      "type": "metric",
+      "value": "3 次",
+      "label": "重複回到待辦"
+    },
+    "caption": {
+      "type": "text",
+      "value": "其餘十二項列在附錄，依影響與成本排序，下一季再談。"
+    }
+  }
+}

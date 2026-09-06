@@ -1,0 +1,120 @@
+/* blue-professional/agenda — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
+[data-layout="agenda"] [data-el="kicker"] {
+  left: 77px;
+  top: 62px;
+  width: 1100px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="agenda"] [data-el="meta"] {
+  left: 1563px;
+  top: 58px;
+  width: 280px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+[data-layout="agenda"] [data-el="title"] {
+  left: 77px;
+  top: 128px;
+  width: 1766px;
+  height: 140px;
+  font-size: 56px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="agenda"] [data-el="accent"] {
+  left: 77px;
+  top: 292px;
+  width: 60px;
+  height: 4px;
+}
+
+[data-layout="agenda"] [data-el="item-1"] {
+  left: 77px;
+  top: 330px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="item-2"] {
+  left: 984px;
+  top: 330px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="item-3"] {
+  left: 77px;
+  top: 546px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="item-4"] {
+  left: 984px;
+  top: 546px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="item-5"] {
+  left: 77px;
+  top: 762px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="item-6"] {
+  left: 984px;
+  top: 762px;
+  width: 859px;
+  height: 200px;
+  font-size: 32px;
+  line-height: 1.4;
+  padding: 20px 24px;
+}
+
+[data-layout="agenda"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="agenda"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+[data-layout="agenda"] [data-role="entry"] .metric { display: grid; grid-template-columns: 96px 1fr; grid-template-rows: auto auto; column-gap: 24px; align-content: center; justify-items: start; }
+[data-layout="agenda"] [data-role="entry"] .metric-value { grid-row: 1 / span 2; align-self: center; font-size: 48px; line-height: 1; }
+[data-layout="agenda"] [data-role="entry"] .metric-label { font-size: 32px; line-height: 1.3; }
+[data-layout="agenda"] [data-role="entry"] .metric-delta { font-size: 28px; line-height: 1.45; margin-top: 8px; }
+

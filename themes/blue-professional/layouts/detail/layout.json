@@ -1,0 +1,228 @@
+{
+  "id": "detail",
+  "name": "細節：藍色專業",
+  "description": "兩欄兩列四個淡藍底區塊，各有一個粗體小標與帶藍線的兩到三條要點。改成一條長清單會失去「四件事各自成組」的分類感。",
+  "content_relations": [
+    "list",
+    "hierarchy",
+    "evidence"
+  ],
+  "scene_roles": [
+    "evidence",
+    "map"
+  ],
+  "density": {
+    "max_chars": 400,
+    "max_elements": 17
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "head-1": {
+      "type": "text",
+      "required": true,
+      "hint": "區塊小標，十二字以內"
+    },
+    "list-1": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "二到三條，每條一行"
+    },
+    "head-2": {
+      "type": "text",
+      "required": true,
+      "hint": "同上；不需要就整組留空"
+    },
+    "list-2": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "同上"
+    },
+    "head-3": {
+      "type": "text",
+      "required": false,
+      "hint": "同上；不需要就整組留空"
+    },
+    "list-3": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "head-4": {
+      "type": "text",
+      "required": false,
+      "hint": "同上；不需要就整組留空"
+    },
+    "list-4": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "block-1",
+      "kind": "shape"
+    },
+    {
+      "id": "head-1",
+      "kind": "text"
+    },
+    {
+      "id": "list-1",
+      "kind": "text"
+    },
+    {
+      "id": "block-2",
+      "kind": "shape"
+    },
+    {
+      "id": "head-2",
+      "kind": "text"
+    },
+    {
+      "id": "list-2",
+      "kind": "text"
+    },
+    {
+      "id": "block-3",
+      "kind": "shape"
+    },
+    {
+      "id": "head-3",
+      "kind": "text"
+    },
+    {
+      "id": "list-3",
+      "kind": "text"
+    },
+    {
+      "id": "block-4",
+      "kind": "shape"
+    },
+    {
+      "id": "head-4",
+      "kind": "text"
+    },
+    {
+      "id": "list-4",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "四個做法上的改變"
+    },
+    "head-1": {
+      "type": "text",
+      "value": "假設更高的修復成本"
+    },
+    "list-1": {
+      "type": "list",
+      "items": [
+        "每項修復都估兩週以上的循環",
+        "小修不再插隊，改排進固定循環",
+        "先量再修，避免修錯地方"
+      ]
+    },
+    "head-2": {
+      "type": "text",
+      "value": "更保守的排程"
+    },
+    "list-2": {
+      "type": "list",
+      "items": [
+        "同時進行的項目不超過三個",
+        "每個項目都有停損點",
+        "超過一個月的自動升級討論"
+      ]
+    },
+    "head-3": {
+      "type": "text",
+      "value": "以交付為先"
+    },
+    "list-3": {
+      "type": "list",
+      "items": [
+        "先修影響交付的問題",
+        "新功能排在體質指標達標之後",
+        "每季只承諾三件事"
+      ]
+    },
+    "head-4": {
+      "type": "text",
+      "value": "由下而上的回報"
+    },
+    "list-4": {
+      "type": "list",
+      "items": [
+        "問題由第一線直接回報",
+        "兩週一次的公開排序",
+        "數據放在大家看得到的地方"
+      ]
+    }
+  }
+}

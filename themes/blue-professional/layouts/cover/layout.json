@@ -1,30 +1,102 @@
 {
   "id": "cover",
   "name": "封面：藍色專業",
-  "description": "顧問報告的封面：右側一片斜切的淡色面、右下 3×3 小點陣，左側短藍線、標題、導語與一行 meta，左下頁碼、底部一截進度條。改成置中標題頁會失去「文件感」的左對齊節奏與斜切面的份量。",
-  "content_relations": ["statement"],
-  "scene_roles": ["hero"],
-  "density": { "max_chars": 180, "max_elements": 9 },
+  "description": "顧問報告的封面：右側一片斜切的淡色面、右下 3×3 小點陣，左側系列名、短藍線、標題、導語與一行 meta，左下頁碼、底部進度條。改成置中標題頁會失去「文件感」的左對齊節奏與斜切面的份量。",
+  "content_relations": [
+    "statement"
+  ],
+  "scene_roles": [
+    "hero"
+  ],
+  "density": {
+    "max_chars": 200,
+    "max_elements": 9
+  },
   "slots": {
-    "title": { "type": "text", "required": true, "hint": "主張式標題，一到兩行，十六字以內；可用 *關鍵詞* 強調（藍色）" },
-    "subtitle": { "type": "text", "required": false, "hint": "一到兩行導語，四十五字以內" },
-    "meta": { "type": "text", "required": false, "hint": "場合、日期或機密等級，自動填 occasion 的第一句（十字以內）" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填「01 / 08」" }
+    "brand": {
+      "type": "text",
+      "required": false,
+      "hint": "系列名或簡報名，自動填敘事標題冒號前的部分；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "主張式標題，一到兩行，十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一到兩行導語，四十五字以內"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "場合、日期或機密等級，自動填 occasion 的第一句（十字以內）"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
   },
   "elements": [
-    { "id": "panel", "kind": "shape" },
-    { "id": "dots", "kind": "shape" },
-    { "id": "accent", "kind": "shape" },
-    { "id": "title", "kind": "text" },
-    { "id": "subtitle", "kind": "text" },
-    { "id": "meta", "kind": "text" },
-    { "id": "page", "kind": "text" },
-    { "id": "progress", "kind": "shape" }
+    {
+      "id": "panel",
+      "kind": "shape"
+    },
+    {
+      "id": "dots",
+      "kind": "shape"
+    },
+    {
+      "id": "brand",
+      "kind": "text"
+    },
+    {
+      "id": "accent",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
   ],
   "sample": {
-    "title": { "type": "text", "value": "我們改簡報的時間，花在*版面*" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面；敘事先被確認，版面修改就會消失。" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09 · 內部" },
-    "page": { "type": "text", "value": "01 / 08" }
+    "brand": {
+      "type": "text",
+      "value": "季度營運回顧"
+    },
+    "title": {
+      "type": "text",
+      "value": "先修*等待*，再談功能"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "三個月的量測說明：使用者流失在載入與表單，不在功能清單。"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧 · 2026-09 · 內部"
+    },
+    "page": {
+      "type": "text",
+      "value": "01 / 10"
+    }
   }
 }

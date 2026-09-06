@@ -1,0 +1,103 @@
+{
+  "id": "closing",
+  "name": "結尾：藍色專業",
+  "description": "置中收尾：背後兩個同心的細圓環，短藍線、一句收尾大標、一段說明、一顆實心藍色膠囊按鈕當行動呼籲，最後一行聯絡方式。改成「謝謝」頁會失去把下一步交到對方手上的動作。",
+  "content_relations": [
+    "closing",
+    "statement"
+  ],
+  "scene_roles": [
+    "close"
+  ],
+  "density": {
+    "max_chars": 200,
+    "max_elements": 9
+  },
+  "slots": {
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "收尾主張，一行、十六字以內"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "一到兩行說明，五十字以內"
+    },
+    "cta": {
+      "type": "text",
+      "required": true,
+      "hint": "主要的行動呼籲，一個短句、十二字以內"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "聯絡方式或下一次見面的時間，一行"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "ring-big",
+      "kind": "shape"
+    },
+    {
+      "id": "ring-small",
+      "kind": "shape"
+    },
+    {
+      "id": "accent",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "cta",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "title": {
+      "type": "text",
+      "value": "先修等待，再談功能"
+    },
+    "body": {
+      "type": "text",
+      "value": "這一季把三個影響交付的問題修掉，下一季才有餘裕做新的東西。"
+    },
+    "cta": {
+      "type": "text",
+      "value": "下週三前回覆優先順序"
+    },
+    "caption": {
+      "type": "text",
+      "value": "回顧資料與附錄放在共用資料夾，會後一小時內更新"
+    },
+    "page": {
+      "type": "text",
+      "value": "10 / 10"
+    }
+  }
+}

@@ -1,0 +1,100 @@
+/* blue-professional/comparison — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
+[data-layout="comparison"] [data-el="kicker"] {
+  left: 77px;
+  top: 62px;
+  width: 1100px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="comparison"] [data-el="meta"] {
+  left: 1563px;
+  top: 58px;
+  width: 280px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+[data-layout="comparison"] [data-el="title"] {
+  left: 77px;
+  top: 128px;
+  width: 1766px;
+  height: 140px;
+  font-size: 56px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="comparison"] [data-el="left"] {
+  left: 77px;
+  top: 300px;
+  width: 859px;
+  height: 660px;
+}
+
+[data-layout="comparison"] [data-el="left-title"] {
+  left: 117px;
+  top: 340px;
+  width: 779px;
+  height: 52px;
+  font-size: 36px;
+  line-height: 52px;
+}
+
+[data-layout="comparison"] [data-el="left-items"] {
+  left: 117px;
+  top: 412px;
+  width: 779px;
+  height: 520px;
+  font-size: 32px;
+  line-height: 1.55;
+}
+
+[data-layout="comparison"] [data-el="right"] {
+  left: 984px;
+  top: 300px;
+  width: 859px;
+  height: 660px;
+}
+
+[data-layout="comparison"] [data-el="right-title"] {
+  left: 1024px;
+  top: 340px;
+  width: 779px;
+  height: 52px;
+  font-size: 36px;
+  line-height: 52px;
+}
+
+[data-layout="comparison"] [data-el="right-items"] {
+  left: 1024px;
+  top: 412px;
+  width: 779px;
+  height: 520px;
+  font-size: 32px;
+  line-height: 1.55;
+}
+
+[data-layout="comparison"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="comparison"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+[data-layout="comparison"] [data-el="left-items"] li, [data-layout="comparison"] [data-el="right-items"] li { padding-left: 24px; margin-bottom: 16px; }
+

@@ -1,0 +1,162 @@
+{
+  "id": "tabs",
+  "name": "分頁籤：藍色專業",
+  "description": "標題、導語，下面一張淡藍框裝幾個頁籤，各放一個面板（條列、表格或一段話），播放時點頁籤切換，靜態只看第一個。改成三頁會失去「同一個框裡切換比較」的對照感。",
+  "content_relations": [
+    "list",
+    "comparison",
+    "evidence"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 320,
+    "max_elements": 8
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語，五十字以內"
+    },
+    "panels": {
+      "type": "tabs",
+      "required": true,
+      "hint": "二到五個頁籤，標籤六字以內；每個面板三到五條或一張小表格，第一個面板是靜態與 QA 看到的"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "一行註記或提醒"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "panels",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "三種人各看自己要的那一頁"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "主管看指標、工程看待辦、客服看回報流程，資料同一份。"
+    },
+    "panels": {
+      "type": "tabs",
+      "panels": [
+        {
+          "label": "主管",
+          "content": {
+            "type": "list",
+            "items": [
+              "六個指標每月更新",
+              "紅色代表落後目標",
+              "點指標看趨勢"
+            ]
+          }
+        },
+        {
+          "label": "工程",
+          "content": {
+            "type": "list",
+            "items": [
+              "待辦依影響排序",
+              "每項有負責人與停損點",
+              "兩週一個循環"
+            ]
+          }
+        },
+        {
+          "label": "客服",
+          "content": {
+            "type": "table",
+            "header": [
+              "情境",
+              "怎麼做"
+            ],
+            "rows": [
+              [
+                "使用者回報慢",
+                "貼連結到回報表單"
+              ],
+              [
+                "表單送不出去",
+                "先查狀態頁再回覆"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "播放時點頁籤切換；靜態模式只顯示第一個面板。"
+    }
+  }
+}

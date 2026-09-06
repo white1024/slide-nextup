@@ -1,0 +1,149 @@
+{
+  "id": "data-table",
+  "name": "表格：藍色專業",
+  "description": "標題、導語，下面一張淡藍框裝表格，表頭是藍色大寫小字加藍色底線，底下一行註記。改成條列會失去欄與欄的對齊。",
+  "content_relations": [
+    "comparison",
+    "evidence",
+    "list"
+  ],
+  "scene_roles": [
+    "evidence"
+  ],
+  "density": {
+    "max_chars": 400,
+    "max_elements": 8
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語，五十字以內"
+    },
+    "table": {
+      "type": "table",
+      "required": true,
+      "hint": "表格：表頭一列、三到六列資料；每格一到十個字"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "一行註記或資料來源"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "table",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "四個指標，上季與本季並排看"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "變化欄是本季減上季；負值代表變快或變少。"
+    },
+    "table": {
+      "type": "table",
+      "header": [
+        "指標",
+        "上季",
+        "本季",
+        "變化"
+      ],
+      "rows": [
+        [
+          "首頁載入中位數",
+          "4.1 秒",
+          "2.6 秒",
+          "−1.5 秒"
+        ],
+        [
+          "兩週內關閉率",
+          "44%",
+          "61%",
+          "+17 pts"
+        ],
+        [
+          "待辦超過一個月",
+          "23",
+          "17",
+          "−6"
+        ],
+        [
+          "滿意度（5 分）",
+          "4.2",
+          "4.6",
+          "+0.4"
+        ]
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "資料來源：本季量測與問卷；問卷抽樣兩百位。"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+/* blue-professional/quote — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
+[data-layout="quote"] [data-el="kicker"] {
+  left: 77px;
+  top: 62px;
+  width: 1100px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="quote"] [data-el="meta"] {
+  left: 1563px;
+  top: 58px;
+  width: 280px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+[data-layout="quote"] [data-el="ring"] {
+  left: 96px;
+  top: 108px;
+  width: 80px;
+  height: 80px;
+}
+
+[data-layout="quote"] [data-el="orb"] {
+  left: 1728px;
+  top: 890px;
+  width: 60px;
+  height: 60px;
+}
+
+[data-layout="quote"] [data-el="mark"] {
+  left: 910px;
+  top: 268px;
+  width: 100px;
+  height: 80px;
+}
+
+[data-layout="quote"] [data-el="title"] {
+  left: 335px;
+  top: 400px;
+  width: 1250px;
+  height: 240px;
+  font-size: 56px;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+[data-layout="quote"] [data-el="caption"] {
+  left: 335px;
+  top: 680px;
+  width: 1250px;
+  height: 48px;
+  font-size: 28px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+[data-layout="quote"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="quote"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+

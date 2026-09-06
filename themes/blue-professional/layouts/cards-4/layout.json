@@ -1,0 +1,173 @@
+{
+  "id": "cards-4",
+  "name": "四張卡：藍色專業",
+  "description": "標題與導語下面四張窄的淡藍底卡片。四個並列的小點用這個；文字要短。",
+  "content_relations": [
+    "list",
+    "evidence",
+    "hierarchy"
+  ],
+  "scene_roles": [
+    "map",
+    "evidence"
+  ],
+  "density": {
+    "max_chars": 460,
+    "max_elements": 10
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語，五十字以內"
+    },
+    "card-1": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "卡片：metric 的 value 是大數字、label 是標題、delta 是說明；或一段短文；可加 details（播放時點卡片展開的完整內容）"
+    },
+    "card-2": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "同上"
+    },
+    "card-3": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "card-4": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "card-1",
+      "kind": "text"
+    },
+    {
+      "id": "card-2",
+      "kind": "text"
+    },
+    {
+      "id": "card-3",
+      "kind": "text"
+    },
+    {
+      "id": "card-4",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "三個數字說明這一季的變化"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "與上一季相比，慢頁面變少、無回饋的表單變少，重複回到待辦的問題還在。"
+    },
+    "card-1": {
+      "type": "metric",
+      "value": "−38%",
+      "label": "慢頁面減少",
+      "delta": "首頁與列表頁的載入時間都回到三秒內",
+      "details": {
+        "type": "list",
+        "items": [
+          "行動版首頁：4.1 秒 → 2.6 秒",
+          "列表頁：3.8 秒 → 2.4 秒",
+          "圖片改為延遲載入是主要原因"
+        ]
+      }
+    },
+    "card-2": {
+      "type": "metric",
+      "value": "12 件",
+      "label": "表單補上回饋",
+      "delta": "送出後的等待狀態與成功訊息都有了"
+    },
+    "card-3": {
+      "type": "metric",
+      "value": "3 次",
+      "label": "重複回到待辦",
+      "delta": "同一個問題被指派三次，流程仍缺負責人"
+    },
+    "card-4": {
+      "type": "metric",
+      "value": "2 週",
+      "label": "平均修復時間",
+      "delta": "從回報到上線的中位數"
+    }
+  }
+}

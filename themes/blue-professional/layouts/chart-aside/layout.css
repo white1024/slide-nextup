@@ -1,0 +1,81 @@
+/* blue-professional/chart-aside — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
+[data-layout="chart-aside"] [data-el="kicker"] {
+  left: 77px;
+  top: 62px;
+  width: 1100px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="chart-aside"] [data-el="meta"] {
+  left: 1563px;
+  top: 58px;
+  width: 280px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+[data-layout="chart-aside"] [data-el="title"] {
+  left: 77px;
+  top: 128px;
+  width: 1766px;
+  height: 140px;
+  font-size: 56px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="chart-aside"] [data-el="chart"] {
+  left: 77px;
+  top: 300px;
+  width: 1140px;
+  height: 620px;
+  font-size: 32px;
+  line-height: 1.4;
+}
+
+[data-layout="chart-aside"] [data-el="aside"] {
+  left: 1257px;
+  top: 300px;
+  width: 586px;
+  height: 620px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 40px 36px;
+}
+
+[data-layout="chart-aside"] [data-el="caption"] {
+  left: 77px;
+  top: 944px;
+  width: 1766px;
+  height: 48px;
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+[data-layout="chart-aside"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="chart-aside"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+[data-layout="chart-aside"] [data-el="aside"] .metric { justify-content: flex-start; }
+[data-layout="chart-aside"] [data-el="aside"] .metric-value { font-size: 84px; line-height: 1; }
+[data-layout="chart-aside"] [data-el="aside"] .metric-label { font-size: 32px; line-height: 1.4; margin-top: 18px; }
+[data-layout="chart-aside"] [data-el="aside"] .metric-delta { font-size: 28px; line-height: 1.5; margin-top: 12px; }
+

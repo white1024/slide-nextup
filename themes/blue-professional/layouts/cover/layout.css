@@ -1,7 +1,8 @@
-/* blue-professional/cover — geometry only. Ported from beautiful-html-templates/blue-professional layout-cover (MIT); vw/vh/rem resolved at 1920×1080 and scaled up for projection. */
+/* blue-professional/cover — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
 [data-layout="cover"] [data-el="panel"] {
   left: 1248px;
-  top: 0;
+  top: 0px;
   width: 672px;
   height: 1080px;
   clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
@@ -12,6 +13,15 @@
   top: 902px;
   width: 48px;
   height: 48px;
+}
+
+[data-layout="cover"] [data-el="brand"] {
+  left: 154px;
+  top: 262px;
+  width: 900px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
 }
 
 [data-layout="cover"] [data-el="accent"] {
@@ -49,6 +59,13 @@
   line-height: 32px;
 }
 
+[data-layout="cover"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
 [data-layout="cover"] [data-el="page"] {
   left: 58px;
   top: 1029px;
@@ -58,9 +75,3 @@
   line-height: 24px;
 }
 
-[data-layout="cover"] [data-el="progress"] {
-  left: 0;
-  top: 1077px;
-  width: 240px;
-  height: 3px;
-}

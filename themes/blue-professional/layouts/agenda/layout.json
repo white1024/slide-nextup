@@ -1,0 +1,191 @@
+{
+  "id": "agenda",
+  "name": "議程：藍色專業",
+  "description": "目錄頁：標題下一條短藍線，六個編號項目排成兩欄三列，每項是藍色序號、小標與一句說明，底下細線分隔。改成一條清單會失去「六件事各自成格」的掃視節奏。",
+  "content_relations": [
+    "list",
+    "hierarchy",
+    "sequence"
+  ],
+  "scene_roles": [
+    "map"
+  ],
+  "density": {
+    "max_chars": 320,
+    "max_elements": 12
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "item-1": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "議程項目：metric 的 value 是序號（01）、label 是小標、delta 是一句說明；或一段短文"
+    },
+    "item-2": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "同上；不需要就留空"
+    },
+    "item-3": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "item-4": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "item-5": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "item-6": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "accent",
+      "kind": "shape"
+    },
+    {
+      "id": "item-1",
+      "kind": "text"
+    },
+    {
+      "id": "item-2",
+      "kind": "text"
+    },
+    {
+      "id": "item-3",
+      "kind": "text"
+    },
+    {
+      "id": "item-4",
+      "kind": "text"
+    },
+    {
+      "id": "item-5",
+      "kind": "text"
+    },
+    {
+      "id": "item-6",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "目錄"
+    },
+    "meta": {
+      "type": "text",
+      "value": "總覽"
+    },
+    "page": {
+      "type": "text",
+      "value": "02 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "這場回顧要談的六件事"
+    },
+    "item-1": {
+      "type": "metric",
+      "value": "01",
+      "label": "現況盤點",
+      "delta": "三個月的健檢數據怎麼看"
+    },
+    "item-2": {
+      "type": "metric",
+      "value": "02",
+      "label": "風險排序",
+      "delta": "哪些問題先修、哪些可以等"
+    },
+    "item-3": {
+      "type": "metric",
+      "value": "03",
+      "label": "投入配置",
+      "delta": "人力與預算往哪裡移"
+    },
+    "item-4": {
+      "type": "metric",
+      "value": "04",
+      "label": "季度目標",
+      "delta": "下一季要交出的三件事"
+    },
+    "item-5": {
+      "type": "metric",
+      "value": "05",
+      "label": "風險與機會",
+      "delta": "守成與進攻的取捨"
+    },
+    "item-6": {
+      "type": "metric",
+      "value": "06",
+      "label": "結論與下一步",
+      "delta": "會後誰要做什麼"
+    }
+  }
+}

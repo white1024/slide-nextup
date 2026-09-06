@@ -129,4 +129,4 @@ metric 卡的內部結構是 `.metric-value`、`.metric-label`、`.metric-delta`
 | quote | title、caption |
 | closing | title、body、cta |
 
-家具槽位 `brand`、`meta`、`kicker`、`page` 選填。主題包可以再加自己的版型（例如 warm-keynote 的 `cards-2`、`cards-4`、`fact`、`before-after`、`chart-aside`）。缺的核心版型會退回通用版型，外觀仍由主題決定，但看起來會弱一截，所以還是補齊。字級下限依 role 分級：一般內容 32px，`chapter`／`pill`／`caption` 24px，`meta`／`chip`／`eyebrow` 20px，`table` 22px。
+家具槽位 `brand`、`meta`、`kicker`、`page` 選填。主題包可以再加自己的版型（例如 warm-keynote 的 `cards-2`、`cards-4`、`fact`、`before-after`、`chart-aside`；blue-professional 的 `agenda`、`dashboard`、`detail`、`tabs`）。目前完整的主題包有兩套：warm-keynote（16 個版型）與 blue-professional（17 個版型，由 `themes/blue-professional/generate-layouts.cjs` 從規格產生，改版型就改規格再跑一次）。缺的核心版型會退回通用版型，外觀仍由主題決定，但看起來會弱一截，所以還是補齊。字級下限依 role 分級：一般內容 32px，`chapter`／`pill`／`caption` 24px，`meta`／`chip`／`eyebrow` 20px，`table` 22px。

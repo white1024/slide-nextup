@@ -1,16 +1,16 @@
 {
   "id": "blue-professional",
   "name": "藍色專業",
-  "description": "顧問報告的節制：暖米紙底、唯一的電光鈷藍、墨黑標題與灰色說明；Space Grotesk 標題配 Inter 內文，中文落到 Noto Sans TC／微軟正黑。卡片是淡藍底加 1.5px 半透明邊框與 12px 圓角，沒有實色邊框與陰影。裝飾只有斜切的淡色面、3×3 小點陣、60×4 的藍色短線與底部進度條。移植自 beautiful-html-templates 的 blue-professional。",
+  "description": "顧問報告的節制：暖米紙底、唯一的電光鈷藍、墨黑標題與灰色說明；Space Grotesk 標題配 Inter 內文，中文落到 Noto Sans TC／微軟正黑。卡片是淡藍底加 1.5px 半透明邊框與 12px 圓角，沒有實色邊框與陰影。每頁左上是藍色大寫的 eyebrow、右上是淡藍圓角標籤、左下頁碼、底邊一條隨頁數前進的 3px 進度條；數字一律鈷藍，流程是編號的藍圓與淡色連線，行動呼籲是唯一的實心藍膠囊。移植自 beautiful-html-templates 的 blue-professional。",
   "colors": {
     "paper": { "value": "#fdfae7", "use": "頁面底色（暖米紙）" },
     "ink": { "value": "#111111", "use": "主要文字；反相頁用鈷藍當底" },
     "muted": { "value": "#6b6b6b", "use": "副標、說明、內文" },
-    "accent": { "value": "#1e2bfa", "use": "唯一強調色：短線、eyebrow、KPI 數字、進度條、圖表、圖示" },
-    "surface": { "value": "#f4f2e8", "use": "卡片與程式碼區塊底（原版 4% 鈷藍淡底，預先與紙色混色）" },
-    "line": { "value": "#d0d1eb", "use": "卡片邊框、表格線、圖表軌道（原版 20% 鈷藍）" },
-    "tint": { "value": "#ebe9e9", "use": "封面斜切面與標籤底（原版 8% 鈷藍）" },
-    "light": { "value": "#9a9a9a", "use": "封面 meta 行、頁碼、最次要的文字" },
+    "accent": { "value": "#1e2bfa", "use": "唯一強調色：短線、eyebrow、數字、進度條、圖表、圖示、流程節點、行動呼籲" },
+    "surface": { "value": "#f4f2e8", "use": "卡片、表格、頁籤與程式碼區塊底（原版 4% 鈷藍淡底，預先與紙色混色）" },
+    "line": { "value": "#d0d1eb", "use": "卡片邊框、表格線、圓環、流程連線（原版 20% 鈷藍）" },
+    "tint": { "value": "#ebe9e9", "use": "封面斜切面、標籤底、主張框底、圖表軌道（原版 8% 鈷藍）" },
+    "light": { "value": "#9a9a9a", "use": "封面 meta 行、頁碼、數據格的脈絡行" },
     "positive": { "value": "#059669", "use": "正向數值" },
     "negative": { "value": "#dc2626", "use": "負向數值" }
   },
@@ -26,11 +26,29 @@
   },
   "spacing": { "radius": 12 },
   "decoration": {
-    "vocabulary": ["斜切淡色面", "3×3 小點陣", "60×4 鈷藍短線", "淡藍圓角卡片", "底部 3px 進度條", "大寫 eyebrow 加圓角標籤"],
-    "avoid": ["實色邊框卡片", "陰影", "第二個強調色", "漸層", "插圖", "置中大標"]
+    "vocabulary": ["斜切淡色面", "3×3 小點陣", "60×4 鈷藍短線", "淡藍圓角卡片", "底部 3px 進度條", "大寫 eyebrow 加圓角標籤", "編號藍圓與淡色連線", "淡藍底加藍色左線的主張框", "同心細圓環", "實心藍膠囊按鈕"],
+    "avoid": ["實色邊框卡片", "陰影", "第二個強調色", "漸層", "插圖", "置中大標（封面與內頁；引言與結尾例外）"]
   },
   "motion": {
-    "transition": "push"
+    "transition": "push",
+    "default": "fade-up",
+    "byRole": {
+      "card": "scale-in",
+      "stat": "scale-in",
+      "entry": "fade-up",
+      "step": "fade-up",
+      "highlight": "fade-up",
+      "list": "fade-up",
+      "cta": "scale-in",
+      "number": "fade",
+      "chart": "wipe",
+      "table": "wipe",
+      "tabs": "fade-up",
+      "photo": "fade",
+      "connector": "fade"
+    },
+    "stagger": 70,
+    "duration": 350
   },
   "source": {
     "name": "beautiful-html-templates",

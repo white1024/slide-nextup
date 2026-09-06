@@ -1,0 +1,149 @@
+{
+  "id": "chart-aside",
+  "name": "圖表與旁註：藍色專業",
+  "description": "標題下面左邊一張圖表（橫條排名、進度、折線、環形），右邊一張淡藍底卡片放旁註或關鍵數字，底下一行註記。改成純表格會失去比例感。",
+  "content_relations": [
+    "evidence",
+    "comparison",
+    "sequence"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 260,
+    "max_elements": 8
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "chart": {
+      "type": "chart",
+      "required": true,
+      "hint": "圖表：bar 或 progress 最像原版的橫條排名，也可 line、donut"
+    },
+    "aside": {
+      "type": [
+        "metric",
+        "text",
+        "chart"
+      ],
+      "required": false,
+      "hint": "旁註：一個關鍵數字或一段話"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "一行註記或提醒"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "chart",
+      "kind": "text"
+    },
+    {
+      "id": "aside",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "使用者最在意的是等待，不是功能"
+    },
+    "chart": {
+      "type": "chart",
+      "kind": "bar",
+      "series": [
+        {
+          "label": "頁面載入慢",
+          "value": 79
+        },
+        {
+          "label": "表單沒有回饋",
+          "value": 69
+        },
+        {
+          "label": "搜尋找不到",
+          "value": 39
+        },
+        {
+          "label": "行動版排版跑掉",
+          "value": 37
+        },
+        {
+          "label": "通知太多",
+          "value": 25
+        }
+      ],
+      "unit": "%",
+      "toggle": true
+    },
+    "aside": {
+      "type": "metric",
+      "value": "79%",
+      "label": "把「等待」排在第一",
+      "delta": "每五位受訪者就有四位提到載入時間"
+    },
+    "caption": {
+      "type": "text",
+      "value": "抽樣兩百位使用者，複選；播放時點圖例可以拿掉一項再比。"
+    }
+  }
+}

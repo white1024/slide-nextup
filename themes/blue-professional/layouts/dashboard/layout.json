@@ -1,0 +1,188 @@
+{
+  "id": "dashboard",
+  "name": "儀表板：藍色專業",
+  "description": "六格數據：標題下三欄兩列的淡藍底格子，各放一個藍色數字、指標名稱與一行細線隔開的脈絡。改成表格會失去每個數字各自被框住的份量。",
+  "content_relations": [
+    "evidence",
+    "list",
+    "comparison"
+  ],
+  "scene_roles": [
+    "evidence",
+    "map"
+  ],
+  "density": {
+    "max_chars": 360,
+    "max_elements": 11
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+    },
+    "stat-1": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": true,
+      "hint": "數據格：metric 的 value 是數字、label 是指標名稱（十五字以內）、delta 是一行脈絡；可加 details"
+    },
+    "stat-2": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": true,
+      "hint": "同上；不需要就留空"
+    },
+    "stat-3": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": true,
+      "hint": "同上；不需要就留空"
+    },
+    "stat-4": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "stat-5": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "stat-6": {
+      "type": [
+        "metric",
+        "text"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "stat-1",
+      "kind": "text"
+    },
+    {
+      "id": "stat-2",
+      "kind": "text"
+    },
+    {
+      "id": "stat-3",
+      "kind": "text"
+    },
+    {
+      "id": "stat-4",
+      "kind": "text"
+    },
+    {
+      "id": "stat-5",
+      "kind": "text"
+    },
+    {
+      "id": "stat-6",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "02 — 營運現況"
+    },
+    "meta": {
+      "type": "text",
+      "value": "季度回顧"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 10"
+    },
+    "title": {
+      "type": "text",
+      "value": "六個指標看這一季的體質"
+    },
+    "stat-1": {
+      "type": "metric",
+      "value": "98.7%",
+      "label": "可用率",
+      "delta": "較上季持平，兩次短暫中斷都在維護時段"
+    },
+    "stat-2": {
+      "type": "metric",
+      "value": "2.6 秒",
+      "label": "首頁載入中位數",
+      "delta": "較上季快 1.5 秒，行動版改善最多"
+    },
+    "stat-3": {
+      "type": "metric",
+      "value": "412",
+      "label": "本季回報問題數",
+      "delta": "其中六成在兩週內關閉"
+    },
+    "stat-4": {
+      "type": "metric",
+      "value": "61%",
+      "label": "兩週內關閉率",
+      "delta": "上季 44%，流程加了負責人後改善"
+    },
+    "stat-5": {
+      "type": "metric",
+      "value": "17",
+      "label": "待辦超過一個月",
+      "delta": "多為需要改架構的項目"
+    },
+    "stat-6": {
+      "type": "metric",
+      "value": "4.6",
+      "label": "滿意度（5 分）",
+      "delta": "抽樣兩百位使用者的問卷"
+    }
+  }
+}
