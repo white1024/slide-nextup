@@ -39,6 +39,10 @@ pnpm preflight          # 確認 node / pnpm / playwright / chromium 都正常�
 
 主題從三個地方找，先找到的為準：deck 自己的資料夾（`decks/<id>/themes/<theme>/`）、使用者目錄（`$SLIDE_NEXTUP_HOME/themes/`，沒設環境變數就是 `~/.slide-nextup/themes/`）、最後才是 repo 的 `themes/`。`render`、`qa`、`deck:*`、`design:preview` 與 `pnpm dev` 以 deck.json 所在資料夾為準；`theme:lint`、`theme:qa`、`layouts`、`layout:gallery` 加 `--deck <deck.json>` 才會連 deck 資料夾裡的主題一起看，不加就只看使用者目錄與 repo。通用版型一律來自 repo 的 `layouts/`。
 
+## 新增版型
+
+需要的版型不存在（時間軸、四象限）時不必等別人：一個版型就是 `layouts/<id>/` 或 `themes/<theme>/layouts/<id>/` 底下的三個檔（layout.json、layout.html、layout.css），規格與 role 清單在 `.agents/skills/slide-build/references/new-layout.md`，讓 agent 照著寫即可，沒有另外的 skill。主題包裡的版型只有用該主題的 deck 看得到，跨主題不混用。規則由工具把關：`pnpm theme:lint` 擋顏色、字型這類不屬於版型的 CSS，`pnpm layout:gallery --theme <theme> <id>` 用 sample 截圖並把每個文字框的容量對照 slot hint（`--capacity` 印出容量表），`pnpm theme:qa --theme <theme> <id>` 跑完整 QA。做法是先截圖給使用者看、改到點頭，再用 `deck:scaffold --layouts s3=<id>` 登記到 deck；放在主題包裡的版型隨 `theme:export` 一起分享。齊備核心版型的主題包各帶一支 `generate-layouts.cjs`，是「緊湊規格產生三個檔」的寫法範本，複製改寫用，直接跑會重寫該主題包的全部版型。
+
 ## 分享主題包
 
 一套主題包就是一個資料夾：`theme.json`（含 `schemaVersion`，可選 `engine` 版本範圍）、`theme.css`、`layouts/<id>/` 三個檔一組，有產生器就一起帶著。要給別人：`pnpm theme:export <id>` 產出 `artifacts/themes/<id>.zip`（或 `-o 某資料夾`）。拿到別人的：`pnpm theme:import <zip 或資料夾>`，預設放進使用者目錄（`~/.slide-nextup/themes/`），之後任何 deck 都能用；`--to deck:<deck.json>` 只給那一份 deck 用，`--to repo` 才進版本控制。匯入前會在暫存目錄跑完 `theme:check`（schema、CSS ownership、十個核心版型）與 `theme:qa`（每個版型用自己的範例渲染檢查），有一關不過就什麼都不寫。移植自別人模板的主題（theme.json 有 `source`）匯入後記得在 THIRD_PARTY_NOTICES.md 補一條。

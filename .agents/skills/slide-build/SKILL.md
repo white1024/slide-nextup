@@ -28,7 +28,7 @@ pnpm layouts --theme <design.json 的 theme>
 
 `deck:scaffold` 會依每頁的 scene_role 與 content_relation 自動選（對應表在 slide-story 的 references）。你要做的是逐頁問一句：**「這頁改成普通 grid 會失去什麼？」** 答得出來就用那個版型；答不出來代表內容關係選錯了，回頭改 story 或換版型。不合的頁用 `--layouts s3=photo,s5=cards` 指定。
 
-需要的版型不存在（例如時間軸、四象限）：依 [references/new-layout.md](references/new-layout.md) 新增一個，不要把內容硬塞進不合的版型。
+需要的版型不存在（例如時間軸、四象限）：依 [references/new-layout.md](references/new-layout.md) 新增一個，不要把內容硬塞進不合的版型。新增後先 `pnpm layout:gallery --theme <theme> <id>` 截圖給使用者看，改到點頭再用 `--layouts` 登記；使用者在流程外直接要新版型時也走這裡。
 
 ### 3. 生成 deck.json
 

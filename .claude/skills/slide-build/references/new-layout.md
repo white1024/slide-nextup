@@ -1,6 +1,6 @@
 # 新增一個版型
 
-版型放在 `layouts/<id>/`，三個檔案。契約正本是 `specs/theme-layout-contract`，`pnpm theme:lint` 會逐條檢查。
+版型放在 `layouts/<id>/`，三個檔案。契約由 `pnpm theme:lint` 逐條檢查，規則在 `src/qa/layout-check.ts` 與 `src/qa/css-ownership.ts`。
 
 主題包自己的版型放 `themes/<theme-id>/layouts/<id>/`，格式相同；同名會蓋掉 `layouts/<id>/`（每個主題包都有自己的 `cover`），`pnpm layouts --theme <theme-id>` 與 `deck:scaffold --theme` 都會用到它們。跨主題包不混用版型。
 
@@ -76,10 +76,10 @@
 
 ```bash
 pnpm theme:lint
-pnpm layout:gallery <id>
+pnpm layout:gallery [--theme <theme-id>] <id>
 pnpm theme:qa --theme <theme-id> [<id>]
 ```
 
-gallery 會用 sample 渲染、截圖到 `artifacts/layout-gallery/<id>.png`、檢查溢出，並把每個文字框的容量對照 hint 裡的字數與行數（容量表在 `capacity-<theme>.json`，加 `--capacity` 直接印出）；看一眼截圖再用。
+gallery 會用 sample 渲染、截圖到 `artifacts/layout-gallery/<id>.png`、檢查溢出，並把每個文字框的容量對照 hint 裡的字數與行數（容量表在 `capacity-<theme>.json`，加 `--capacity` 直接印出）；看一眼截圖再用。主題包裡的版型一定要加 `--theme`，沒加只會查通用版型庫。
 
 theme:qa 把該主題每個版型的 sample 組成一份 deck 跑完整 QA（字級下限、重疊、密度、幾何不變，不只溢出），error 與 warning 都算失敗；tests 對八套主題全跑，所以 sample 要當成版型自己的示範來寫：必要 slot 都填、字數在密度上限內、家具角色的字級不低於下限表（內文 32px；meta／chip／eyebrow 20px；chapter／pill／caption／cta／kicker／flow 24px；表格 22px）。

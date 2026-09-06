@@ -24,6 +24,7 @@
 - 「先把故事線想好」「改敘事」「調整順序」「重寫第幾頁的訊息」→ `slide-story`；使用者確認前絕不生成頁面。
 - 「換個風格」「主題」「配色」「看起來太 AI」→ `slide-design`。
 - 「重做第 3 頁」「這頁換版型」「重新生成」→ `slide-build`，只重做該頁，手動覆寫保留。
+- 「我要一個時間軸版型」「這頁沒有合適的版型」→ 沒有另外的 skill：照 `slide-build` 逐頁決定版型那一步讀 `.agents/skills/slide-build/references/new-layout.md` 新增（三個檔，規則由 `theme:lint` 與 `theme:qa` 把關），先 `pnpm layout:gallery --theme <theme> <id>` 截圖給使用者看，點頭再用 `deck:scaffold --layouts sN=<id>` 登記；放在主題包的 `layouts/` 裡就能隨 `theme:export` 分享，但只有用該主題的 deck 看得到。
 
 ## 邊界
 
