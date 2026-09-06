@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs'
-import { relative, resolve } from 'node:path'
+import { dirname, relative, resolve } from 'node:path'
 import { parseDeck, stringifyDeck, validateDeck } from '../model/deck.ts'
 import { rethemeDeck } from '../model/retheme.ts'
 import { loadTheme } from '../render/assets.ts'
@@ -22,9 +22,15 @@ if (!parsed.ok) {
   for (const e of parsed.errors) console.log(`✖ ${target} ${e.path}  ${e.message}`)
   process.exit(1)
 }
-loadTheme(themeId)
+const deckDir = dirname(file)
+try {
+  loadTheme(themeId, { deckDir })
+} catch (err) {
+  console.log(`✖ ${(err as Error).message}`)
+  process.exit(1)
+}
 
-const { deck, report } = rethemeDeck(parsed.deck, themeId, { resetPositions })
+const { deck, report } = rethemeDeck(parsed.deck, themeId, { resetPositions, deckDir })
 const check = validateDeck(deck)
 if (!check.ok) {
   for (const e of check.errors) console.log(`✖ ${e.path}  ${e.message}`)

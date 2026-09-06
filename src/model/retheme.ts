@@ -1,8 +1,12 @@
-import { type LayoutJson, loadLayout, PROJECT_ROOT } from '../render/assets.ts'
+import { type LayoutJson, loadLayout } from '../render/assets.ts'
 import type { Deck, Element, Override, Slide, Slot } from './deck.ts'
 
 export interface RethemeOptions {
   root?: string
+  /** the deck folder whose themes/ may hold the new theme */
+  deckDir?: string
+  /** the user directory's themes folder; undefined reads the environment, null turns it off */
+  userThemesDir?: string | null
   /** drop x / y / w / h / rotation from the overrides that survive, because the new pack's geometry differs */
   resetPositions?: boolean
 }
@@ -40,7 +44,7 @@ export function rethemeDeck(
   theme: string,
   opts: RethemeOptions = {},
 ): { deck: Deck; report: RethemeReport } {
-  const root = opts.root ?? PROJECT_ROOT
+  const lookup = { root: opts.root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
   const report: RethemeReport = {
     theme,
     layoutSource: {},
@@ -52,7 +56,7 @@ export function rethemeDeck(
   }
 
   const slides: Slide[] = deck.slides.map((slide) => {
-    const layout = loadLayout(slide.layout, theme, root)
+    const layout = loadLayout(slide.layout, theme, lookup)
     report.layoutSource[slide.id] = layout.dir.includes(`themes`) ? 'pack' : 'global'
     const prior = new Map(slide.elements.map((e) => [e.id, e]))
     const elements = layout.json.elements.map((e) => {

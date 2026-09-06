@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "id": "creative-mode",
   "name": "創意模式",
   "description": "新粗獷主義的編輯海報：暖米紙底、4px 墨黑邊框、硬邊位移陰影，四個飽和強調色（森林綠、桃紅、橘、黃）。Archivo Black 全大寫大標（中文落到微軟正黑粗體）、Space Grotesk 內文、JetBrains Mono 家具。全部平塗色塊，沒有漸層、沒有圓角、沒有柔和。移植自 beautiful-html-templates 的 creative-mode。",

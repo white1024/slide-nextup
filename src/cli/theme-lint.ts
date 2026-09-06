@@ -3,9 +3,11 @@ import { relative, resolve } from 'node:path'
 import { type CssOwner, lintCss } from '../qa/css-ownership.ts'
 import { type CheckIssue, checkLayout, checkTheme } from '../qa/layout-check.ts'
 import {
+  deckDirOfPath,
+  describeOrigin,
   listLayoutIds,
-  listThemeIds,
   listThemeLayoutIds,
+  listThemes,
   loadLayout,
   loadTheme,
   PROJECT_ROOT,
@@ -14,7 +16,13 @@ import {
 const args = process.argv.slice(2)
 const asIndex = args.indexOf('--as')
 const owner = asIndex === -1 ? null : (args[asIndex + 1] as CssOwner | undefined)
-const files = args.filter((a, i) => !a.startsWith('--') && (asIndex === -1 || i !== asIndex + 1))
+// --deck <deck.json|dir>: lint that deck's own themes/ too (the user directory is always included)
+const deckIndex = args.indexOf('--deck')
+const lookup = { deckDir: deckIndex === -1 ? undefined : deckDirOfPath(args[deckIndex + 1] ?? '.') }
+const isValueOf = (idx: number, i: number) => idx !== -1 && i === idx + 1
+const files = args.filter(
+  (a, i) => !a.startsWith('--') && !isValueOf(asIndex, i) && !isValueOf(deckIndex, i),
+)
 
 function print(issues: CheckIssue[]): number {
   let errors = 0
@@ -46,11 +54,12 @@ if (files.length > 0) {
     checked++
   }
 } else {
-  for (const id of listThemeIds()) {
-    errors += print(checkTheme(loadTheme(id)))
+  for (const t of listThemes(lookup)) {
+    if (t.origin !== 'repo') console.log(`主題 ${t.id} 來自${describeOrigin(t.origin)}：${t.dir}`)
+    errors += print(checkTheme(loadTheme(t.id, lookup)))
     checked++
-    for (const layoutId of listThemeLayoutIds(id)) {
-      errors += print(checkLayout(loadLayout(layoutId, id)))
+    for (const layoutId of listThemeLayoutIds(t.id, lookup)) {
+      errors += print(checkLayout(loadLayout(layoutId, t.id, lookup)))
       checked++
     }
   }

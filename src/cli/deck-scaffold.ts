@@ -4,7 +4,13 @@ import { type Deck, parseDeck, type Slide, stringifyDeck, validateDeck } from '.
 import { deckIdFromStoryPath, scaffoldDeck } from '../model/scaffold.ts'
 import { loadStory } from '../model/story.ts'
 import { confirmationStatus, describeStatus } from '../model/story-confirm.ts'
-import { type LayoutJson, layoutRoles, listLayoutIdsFor, loadLayout } from '../render/assets.ts'
+import {
+  type LayoutJson,
+  layoutRoles,
+  listLayoutIdsFor,
+  loadLayout,
+  loadTheme,
+} from '../render/assets.ts'
 
 const args = process.argv.slice(2)
 const flag = (name: string) => args.includes(name)
@@ -64,10 +70,18 @@ if (existsSync(outFile)) {
 }
 
 const theme = opt('--theme') ?? existing?.theme ?? 'ink-paper'
+// the deck's own folder may carry the theme (decks/<id>/themes/<theme>/), so look from there
+const lookup = { deckDir: dirname(outFile) }
+try {
+  loadTheme(theme, lookup)
+} catch (err) {
+  console.log(`✖ ${(err as Error).message}`)
+  process.exit(1)
+}
 const layouts = new Map<string, LayoutJson>()
 const roles = new Map<string, Map<string, string>>()
-for (const id of listLayoutIdsFor(theme)) {
-  const layout = loadLayout(id, theme)
+for (const id of listLayoutIdsFor(theme, lookup)) {
+  const layout = loadLayout(id, theme, lookup)
   layouts.set(id, layout.json)
   roles.set(id, layoutRoles(layout))
 }

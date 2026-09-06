@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "id": "warm-keynote",
   "name": "暖色 Keynote",
   "description": "暖米紙底鋪 48px 淡格線、深褐色文字、青綠色當唯一強調色，橘紅色專門表示後果與風險。白色玻璃卡片（32px 圓角、大而軟的陰影）、膠囊形流程節點、章節頭的青綠短豎條加等寬字、Inter 900 的大數字、玻璃容器裡的表格。標題與內文都是 Noto Sans TC（本機字型），拉丁與數字用 Inter，家具用 JetBrains Mono。風格取自友人的內部簡報（已同意，不需署名），內容一概不用。",

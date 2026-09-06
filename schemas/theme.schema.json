@@ -6,6 +6,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "schemaVersion",
     "id",
     "name",
     "description",
@@ -15,6 +16,16 @@
     "decoration"
   ],
   "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "theme.json 的格式版本；這個引擎認得 1（pnpm theme:check 會對）"
+    },
+    "engine": {
+      "type": "string",
+      "minLength": 1,
+      "description": "需要的引擎版本範圍（semver：>=0.1.0、^0.1.0、0.1.x、>=1.0.0 <2.0.0），對 package.json 的 version；沒寫就不限"
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$"

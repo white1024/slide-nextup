@@ -12,6 +12,7 @@ test-results/
 artifacts/preflight/
 artifacts/qa/
 artifacts/layout-gallery/
+artifacts/themes/
 artifacts/**/*.tmp
 
 # OS / editor noise

@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "id": "cobalt-grid",
   "name": "鈷藍方格",
   "description": "日系趨勢報告的兩色系統：暖米紙底、電光鈷藍當唯一的墨，整頁鋪 42px 方格紙格線。Newsreader 襯線大標（中文落 Noto Serif TC／新細明體）、Hanken Grotesk 內文、DM Mono 家具。招牌裝飾是右側像素階梯的直線掃描柱與上下兩條 1.5px 髮線；沒有陰影、沒有圓角、沒有第二個顏色。移植自 beautiful-html-templates 的 cobalt-grid。",

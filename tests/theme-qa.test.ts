@@ -27,7 +27,7 @@ describe('every theme pack’s layouts pass full QA on their own samples', () =>
     ).toEqual(['cover', 'closing'])
   })
 
-  it.each(listThemeIds())(
+  it.each(listThemeIds({ userThemesDir: null }))(
     '%s: zero errors and zero warnings',
     async (theme) => {
       const deck = sampleDeck(theme)

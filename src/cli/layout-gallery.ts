@@ -4,19 +4,29 @@ import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
 import { checkHint, measureCapacity, type TextCapacity } from '../qa/capacity.ts'
 import { measureSlide, summariseOverflow, waitForFit } from '../qa/measure.ts'
-import { listLayoutIdsFor, loadLayout, loadTheme, PROJECT_ROOT } from '../render/assets.ts'
+import {
+  deckDirOfPath,
+  listLayoutIdsFor,
+  loadLayout,
+  loadTheme,
+  PROJECT_ROOT,
+} from '../render/assets.ts'
 import { renderPreviewDocument } from '../render/preview.ts'
 
 const args = process.argv.slice(2)
 const themeIndex = args.indexOf('--theme')
 const themeId = themeIndex === -1 ? 'ink-paper' : (args[themeIndex + 1] ?? 'ink-paper')
 const outIndex = args.indexOf('-o')
+const deckIndex = args.indexOf('--deck')
 const showCapacity = args.includes('--capacity')
+const isValueOf = (idx: number, i: number) => idx !== -1 && i === idx + 1
 const isOptionValue = (i: number) =>
-  (themeIndex !== -1 && i === themeIndex + 1) || (outIndex !== -1 && i === outIndex + 1)
+  isValueOf(themeIndex, i) || isValueOf(outIndex, i) || isValueOf(deckIndex, i)
 const only = args.filter((a, i) => !a.startsWith('-') && !isOptionValue(i))
 
-const theme = loadTheme(themeId)
+// --deck <deck.json|dir>: the theme may live in that deck's own themes/ folder
+const lookup = { deckDir: deckIndex === -1 ? undefined : deckDirOfPath(args[deckIndex + 1] ?? '.') }
+const theme = loadTheme(themeId, lookup)
 const outDir =
   outIndex === -1
     ? join(PROJECT_ROOT, 'artifacts', 'layout-gallery')
@@ -29,8 +39,8 @@ let failures = 0
 let hintProblems = 0
 const capacities: Array<TextCapacity & { layout: string; hint?: string }> = []
 
-for (const id of only.length > 0 ? only : listLayoutIdsFor(themeId)) {
-  const layout = loadLayout(id, themeId)
+for (const id of only.length > 0 ? only : listLayoutIdsFor(themeId, lookup)) {
+  const layout = loadLayout(id, themeId, lookup)
   const html = renderPreviewDocument({ theme, layout, slideId: id, slots: layout.json.sample })
   const htmlFile = join(outDir, `${id}.html`)
   writeFileSync(htmlFile, html, 'utf8')

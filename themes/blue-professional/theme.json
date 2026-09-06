@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "id": "blue-professional",
   "name": "藍色專業",
   "description": "顧問報告的節制：暖米紙底、唯一的電光鈷藍、墨黑標題與灰色說明；Space Grotesk 標題配 Inter 內文，中文落到 Noto Sans TC／微軟正黑。卡片是淡藍底加 1.5px 半透明邊框與 12px 圓角，沒有實色邊框與陰影。每頁左上是藍色大寫的 eyebrow、右上是淡藍圓角標籤、左下頁碼、底邊一條隨頁數前進的 3px 進度條；數字一律鈷藍，流程是編號的藍圓與淡色連線，行動呼籲是唯一的實心藍膠囊。移植自 beautiful-html-templates 的 blue-professional。",

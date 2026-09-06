@@ -110,7 +110,7 @@ metric 卡的內部結構是 `.metric-value`、`.metric-label`、`.metric-delta`
 4. 版型：模板的每一頁 = 主題包裡一個版型 `themes/<slug>/layouts/<id>/`。固定 1920×1080 的模板（deck-stage）數字直接用；vw／vh／clamp 的模板在 1920×1080 下換算（1vw = 19.2px、1vh = 10.8px、1rem = 16px），clamp 取中間值夾住的結果。原版字級在 1920 畫布常只有 13–20px，投影要放大：標題與內文按比例放大到 ≥ 32px，家具（`data-role="meta"`）≥ 20px，保持原本的層級比。
 5. 裝飾一律做成 shape 元件：斜切面用 `clip-path`（幾何，版型可寫）、位移陰影用 `box-shadow`（外觀，主題寫）、圖案用 `background-image`、掃描線用內嵌 `<svg>` 加 pattern，顏色由主題以 `[data-role="<role>"] line { stroke }` 上。主題包可以用自己的 role（`tint`、`dots`、`pixel`、`poster`…），版型與主題成對即可。
 6. 模板的家具對應我們的槽位：頁碼 → `page`，簡報名／系列名 → `brand`，場合／日期 → `meta` 或 `kicker`，來源行 → `cta`（scaffold 自動填第一條 evidence）。
-7. `pnpm theme:lint` 零錯誤，`pnpm design:preview <story> --theme <slug> --layout cover` 看真實內容，和原模板截圖並排比對；`pnpm layouts --theme <slug>` 會列出主題包的版型。
+7. `pnpm theme:check --theme <slug>` 零錯誤（含 theme:lint、schemaVersion、核心版型齊全；role 沒規則只是警告，但要看過），`pnpm design:preview <story> --theme <slug> --layout cover` 看真實內容，和原模板截圖並排比對；`pnpm layouts --theme <slug>` 會列出主題包的版型。
 
 ### 共用版型詞彙（讓 deck 可以換主題包）
 

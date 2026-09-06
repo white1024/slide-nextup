@@ -44,6 +44,8 @@ export interface QaReport {
 export interface QaOptions {
   deckDir: string
   root?: string
+  /** the user directory's themes folder; undefined reads the environment, null turns it off */
+  userThemesDir?: string | null
   /** minimum computed font-size of a text element itself */
   minFont?: number
   /** minimum computed font-size of any text node inside an element */
@@ -102,18 +104,21 @@ function intersects(a: ElementBox, b: ElementBox): boolean {
 export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> {
   const started = Date.now()
   const root = opts.root ?? PROJECT_ROOT
+  const lookup = { root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
   const minFont = opts.minFont ?? 32
   const minInnerFont = opts.minInnerFont ?? 28
   const themed = renderDeckDocument(deck, {
     deckDir: opts.deckDir,
     outDir: opts.deckDir,
     root,
+    userThemesDir: opts.userThemesDir,
     staticMode: true,
   }).html
   const bare = renderDeckDocument(deck, {
     deckDir: opts.deckDir,
     outDir: opts.deckDir,
     root,
+    userThemesDir: opts.userThemesDir,
     staticMode: true,
     omitThemeCss: true,
   }).html
@@ -143,7 +148,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
   const played = deck.slides.filter((s) => !pages.hidden.includes(s.id))
   const slides: QaSlideReport[] = played.map((slide) => {
     const findings: QaFinding[] = []
-    const layout = loadLayout(slide.layout, deck.theme, root)
+    const layout = loadLayout(slide.layout, deck.theme, lookup)
     const kind = new Map(slide.elements.map((e) => [e.id, e.kind]))
     const mine = boxes.filter((b) => b.slide === slide.id && !hiddenSet.has(`${slide.id}/${b.el}`))
 

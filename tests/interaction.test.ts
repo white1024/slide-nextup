@@ -46,12 +46,15 @@ describe('link markup in text slots', () => {
 })
 
 describe('theme hover contract', () => {
-  it.each(listThemeIds())('%s defines a hover state for every hover-able role it styles', (id) => {
-    const css = loadTheme(id).css
-    expect(lintThemeHover(css)).toEqual([])
-    expect(lintCss(css, 'theme').filter((i) => i.severity === 'error')).toEqual([])
-    expect(css).toMatch(/\[data-interactive\] \[data-role="card"\]:hover/)
-  })
+  it.each(listThemeIds({ userThemesDir: null }))(
+    '%s defines a hover state for every hover-able role it styles',
+    (id) => {
+      const css = loadTheme(id).css
+      expect(lintThemeHover(css)).toEqual([])
+      expect(lintCss(css, 'theme').filter((i) => i.severity === 'error')).toEqual([])
+      expect(css).toMatch(/\[data-interactive\] \[data-role="card"\]:hover/)
+    },
+  )
 
   it('requires the [data-interactive] gate, a data-role, and a hover for every styled hover-able role', () => {
     expect(HOVER_ROLES).toEqual(['card', 'pill', 'cta', 'photo', 'table'])

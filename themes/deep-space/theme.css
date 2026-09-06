@@ -235,3 +235,18 @@
 [data-interactive] [data-role="table"] tbody tr:hover td {
   background: rgba(34, 211, 238, 0.08);
 }
+
+/* tabs (the generic tabs layout): the strip follows the card look, the active tab carries the ink */
+[data-role="tabs"] .tab {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+[data-role="tabs"] .tab.is-active {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+[data-interactive] [data-role="tabs"] .tab:hover {
+  color: var(--color-ink);
+}

@@ -1,5 +1,5 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { join, relative, resolve } from 'node:path'
+import { dirname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
 import { deckIdFromStoryPath, slotsFor } from '../model/scaffold.ts'
@@ -41,8 +41,15 @@ if (!first) {
   process.exit(1)
 }
 const layoutId = opt('--layout') ?? 'cover'
-const theme = loadTheme(themeId)
-const layout = loadLayout(layoutId, themeId)
+const lookup = { deckDir: dirname(storyFile) }
+let theme: ReturnType<typeof loadTheme>
+try {
+  theme = loadTheme(themeId, lookup)
+} catch (err) {
+  console.log(`✖ ${(err as Error).message}`)
+  process.exit(1)
+}
+const layout = loadLayout(layoutId, themeId, lookup)
 const slots = slotsFor(first, layout.json, story)
 const outDir = resolve(
   opt('-o') ?? join(PROJECT_ROOT, 'artifacts', 'design', deckIdFromStoryPath(storyFile)),

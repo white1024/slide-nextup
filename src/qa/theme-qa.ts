@@ -1,6 +1,6 @@
 import type { Browser } from 'playwright'
 import type { Deck, Slide } from '../model/deck.ts'
-import { listLayoutIdsFor, loadLayout, PROJECT_ROOT, themeDir } from '../render/assets.ts'
+import { type Lookup, listLayoutIdsFor, loadLayout, themeDir } from '../render/assets.ts'
 import { type QaReport, runDeckQa } from './run.ts'
 
 /**
@@ -11,10 +11,10 @@ import { type QaReport, runDeckQa } from './run.ts'
  */
 
 /** One deck per theme pack: a slide per layout (slide id = layout id), each filled with its sample. */
-export function sampleDeck(themeId: string, root = PROJECT_ROOT, only?: string[]): Deck {
-  const ids = only?.length ? only : listLayoutIdsFor(themeId, root)
+export function sampleDeck(themeId: string, lookup?: Lookup, only?: string[]): Deck {
+  const ids = only?.length ? only : listLayoutIdsFor(themeId, lookup)
   const slides: Slide[] = ids.map((id) => {
-    const layout = loadLayout(id, themeId, root)
+    const layout = loadLayout(id, themeId, lookup)
     return {
       id,
       layout: id,
@@ -36,6 +36,10 @@ export function sampleDeck(themeId: string, root = PROJECT_ROOT, only?: string[]
 
 export interface ThemeQaOptions {
   root?: string
+  /** the deck folder whose themes/ may hold the theme (and where relative assets resolve) */
+  deckDir?: string
+  /** the user directory's themes folder; undefined reads the environment, null turns it off */
+  userThemesDir?: string | null
   /** an already running browser to reuse across themes */
   browser?: Browser
   /** only these layout ids (default: every layout the theme offers) */
@@ -43,10 +47,12 @@ export interface ThemeQaOptions {
 }
 
 export async function runThemeQa(themeId: string, opts: ThemeQaOptions = {}): Promise<QaReport> {
-  const deck = sampleDeck(themeId, opts.root, opts.only)
+  const lookup = { root: opts.root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
+  const deck = sampleDeck(themeId, lookup, opts.only)
   return runDeckQa(deck, {
-    deckDir: themeDir(themeId, opts.root),
+    deckDir: opts.deckDir ?? themeDir(themeId, lookup),
     root: opts.root,
+    userThemesDir: opts.userThemesDir,
     browser: opts.browser,
   })
 }

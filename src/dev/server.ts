@@ -22,7 +22,7 @@ import {
   type Transition,
   validateDeck,
 } from '../model/deck.ts'
-import { PROJECT_ROOT } from '../render/assets.ts'
+import { PROJECT_ROOT, userThemesDir } from '../render/assets.ts'
 import { renderDeckDocument } from '../render/deck.ts'
 
 const DEV_CLIENT_JS = readFileSync(new URL('./client.js', import.meta.url), 'utf8')
@@ -32,6 +32,8 @@ export interface DevServerOptions {
   port?: number
   host?: string
   root?: string
+  /** the user directory's themes folder; undefined reads the environment, null turns it off */
+  userThemesDir?: string | null
 }
 
 export interface DevServer {
@@ -177,7 +179,12 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
 
   const page = (): string => {
     const deck = readDeck()
-    const { html, warnings } = renderDeckDocument(deck, { deckDir, outDir: deckDir, root })
+    const { html, warnings } = renderDeckDocument(deck, {
+      deckDir,
+      outDir: deckDir,
+      root,
+      userThemesDir: opts.userThemesDir,
+    })
     const config = { overridesHash: hashJson(editable(deck)), warnings }
     const inject = `<script>window.__devConfig=${JSON.stringify(config).replace(/</g, '\\u003c')}</script>\n<script>\n${DEV_CLIENT_JS}\n</script>\n</body>`
     return html.replace(/<\/body>/, inject)
@@ -293,6 +300,7 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
           deckDir,
           outDir: deckDir,
           root,
+          userThemesDir: opts.userThemesDir,
           inlineAssets: true,
         })
         const name = `${deck.id.replace(/[^A-Za-z0-9._-]+/g, '-') || 'deck'}.html`
@@ -347,7 +355,15 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
     }, 250)
   }
   const watchers: FSWatcher[] = []
-  for (const dir of [deckDir, join(root, 'themes'), join(root, 'layouts')]) {
+  // external themes reload the page too: the deck folder (recursive) already covers decks/<id>/themes/
+  const userDir = opts.userThemesDir === undefined ? userThemesDir() : opts.userThemesDir
+  const watched = [
+    deckDir,
+    join(root, 'themes'),
+    join(root, 'layouts'),
+    ...(userDir ? [userDir] : []),
+  ]
+  for (const dir of watched) {
     if (existsSync(dir)) watchers.push(watch(dir, { recursive: true }, onChange))
   }
 

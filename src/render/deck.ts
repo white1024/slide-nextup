@@ -31,6 +31,8 @@ export interface RenderDeckOptions {
   /** embed images as data URLs so the HTML is a single file */
   inlineAssets?: boolean
   root?: string
+  /** the user directory's themes folder; undefined reads the environment, null turns it off */
+  userThemesDir?: string | null
   /** leave theme.css out (QA uses this to prove the theme moves no box) */
   omitThemeCss?: boolean
   /** every step element visible and no transitions (QA and exports); same as opening with ?static=1 */
@@ -176,16 +178,16 @@ function modelScript(deck: Deck): string {
 }
 
 export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderDeckResult {
-  const root = opts.root ?? PROJECT_ROOT
+  const lookup = { root: opts.root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
   const warnings: string[] = []
-  const theme = loadTheme(deck.theme, root)
+  const theme = loadTheme(deck.theme, lookup)
   const layouts = new Map<string, Layout>()
   const problems: string[] = []
 
   const sections = deck.slides.map((slide) => {
     let layout = layouts.get(slide.layout)
     if (!layout) {
-      layout = loadLayout(slide.layout, deck.theme, root)
+      layout = loadLayout(slide.layout, deck.theme, lookup)
       layouts.set(slide.layout, layout)
     }
     problems.push(...checkSlideAgainstLayout(slide, layout, deck.overrides))

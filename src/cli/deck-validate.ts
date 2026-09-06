@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { parseDeck, stringifyDeck } from '../model/deck.ts'
 import { effectiveOrder, followsStory } from '../model/pages.js'
 import { loadLayout } from '../render/assets.ts'
@@ -41,7 +41,8 @@ for (const s of deck.slides) {
 const problems: string[] = []
 for (const s of deck.slides) {
   try {
-    problems.push(...checkSlideAgainstLayout(s, loadLayout(s.layout, deck.theme), deck.overrides))
+    const layout = loadLayout(s.layout, deck.theme, { deckDir: dirname(file) })
+    problems.push(...checkSlideAgainstLayout(s, layout, deck.overrides))
   } catch (err) {
     problems.push((err as Error).message)
   }
