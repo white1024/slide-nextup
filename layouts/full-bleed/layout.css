@@ -1,0 +1,42 @@
+[data-layout="full-bleed"] [data-el="photo"] {
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+}
+
+[data-layout="full-bleed"] [data-el="scrim"] {
+  left: 0;
+  top: 640px;
+  width: 1920px;
+  height: 440px;
+}
+
+[data-layout="full-bleed"] [data-el="title"] {
+  left: 96px;
+  top: 700px;
+  width: 1500px;
+  height: 220px;
+  font-size: 88px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="full-bleed"] [data-el="caption"] {
+  left: 96px;
+  top: 940px;
+  width: 1500px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="full-bleed"] [data-el="page"] {
+  left: 1624px;
+  top: 992px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

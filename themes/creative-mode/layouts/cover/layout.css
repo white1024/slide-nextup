@@ -1,0 +1,84 @@
+/* creative-mode/cover — geometry only. Ported from beautiful-html-templates/creative-mode s1 (MIT); the template is authored at 1920×1080 so the numbers are its own. */
+[data-layout="cover"] [data-el="poster"] {
+  left: 1064px;
+  top: 140px;
+  width: 760px;
+  height: 800px;
+}
+
+[data-layout="cover"] [data-el="switch"] {
+  left: 1254px;
+  top: 350px;
+  width: 380px;
+  height: 380px;
+}
+
+[data-layout="cover"] [data-el="lip"] {
+  left: 1322px;
+  top: 584px;
+  width: 240px;
+  height: 34px;
+  transform: skewY(-8deg);
+}
+
+[data-layout="cover"] [data-el="lever"] {
+  left: 1322px;
+  top: 418px;
+  width: 240px;
+  height: 170px;
+  transform: skewY(-8deg);
+}
+
+[data-layout="cover"] [data-el="anchor"] {
+  left: 96px;
+  top: 174px;
+  width: 60px;
+  height: 3px;
+}
+
+[data-layout="cover"] [data-el="kicker"] {
+  left: 174px;
+  top: 158px;
+  width: 820px;
+  height: 34px;
+  font-size: 24px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 96px;
+  top: 420px;
+  width: 900px;
+  height: 240px;
+  font-size: 112px;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 96px;
+  top: 790px;
+  width: 700px;
+  height: 150px;
+  font-size: 32px;
+  line-height: 1.4;
+}
+
+[data-layout="cover"] [data-el="brand"] {
+  left: 64px;
+  top: 1008px;
+  width: 1100px;
+  height: 32px;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+[data-layout="cover"] [data-el="page"] {
+  left: 1556px;
+  top: 1008px;
+  width: 300px;
+  height: 32px;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: right;
+}

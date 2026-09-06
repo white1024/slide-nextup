@@ -1,0 +1,33 @@
+{
+  "id": "comparison",
+  "name": "兩欄對比",
+  "description": "左右各一個標題與清單，中間一條分隔線。改成一張表格會失去「兩邊各自成段落」的閱讀節奏。",
+  "content_relations": ["comparison"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 320, "max_elements": 6 },
+  "slots": {
+    "title": { "type": "text", "required": true, "hint": "對比的結論，一行" },
+    "left-title": { "type": "text", "required": true, "hint": "左欄名稱，二到六個字" },
+    "left-items": { "type": "list", "required": true, "hint": "三到五條" },
+    "right-title": { "type": "text", "required": true, "hint": "右欄名稱，二到六個字" },
+    "right-items": { "type": "list", "required": true, "hint": "三到五條" }
+  },
+  "elements": [
+    { "id": "title", "kind": "text" },
+    { "id": "divider", "kind": "shape" },
+    { "id": "left-title", "kind": "text" },
+    { "id": "left-items", "kind": "text" },
+    { "id": "right-title", "kind": "text" },
+    { "id": "right-items", "kind": "text" }
+  ],
+  "sample": {
+    "title": { "type": "text", "value": "工具沒有錯，順序錯了" },
+    "left-title": { "type": "text", "value": "現況" },
+    "left-items": {
+      "type": "list",
+      "items": ["開簡報軟體", "排版", "講一遍", "發現順序不對", "重排"]
+    },
+    "right-title": { "type": "text", "value": "目標" },
+    "right-items": { "type": "list", "items": ["寫敘事", "確認", "生成版面", "只微調"] }
+  }
+}

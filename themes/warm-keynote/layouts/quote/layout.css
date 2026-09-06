@@ -1,0 +1,64 @@
+/* warm-keynote/quote — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="quote"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="quote"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="quote"] [data-el="box"] {
+  left: 101px;
+  top: 180px;
+  width: 1718px;
+  height: 320px;
+}
+
+[data-layout="quote"] [data-el="title"] {
+  left: 161px;
+  top: 230px;
+  width: 1598px;
+  height: 220px;
+  font-size: 46px;
+  line-height: 1.55;
+}
+
+[data-layout="quote"] [data-el="caption"] {
+  left: 101px;
+  top: 540px;
+  width: 1718px;
+  height: 60px;
+  font-size: 28px;
+  line-height: 1.6;
+}
+
+[data-layout="quote"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="quote"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+

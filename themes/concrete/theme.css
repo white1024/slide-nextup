@@ -1,0 +1,238 @@
+/* concrete — appearance only. Geometry lives in each layout.css. */
+
+.slide {
+  background-color: var(--color-paper);
+  background-image: radial-gradient(circle, rgba(17, 17, 17, 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+}
+
+[data-tone="inverse"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+[data-role="backdrop"] {
+  background: var(--color-accent);
+}
+
+[data-role="divider"] {
+  background: var(--color-ink);
+}
+
+[data-tone="inverse"] [data-role="divider"] {
+  background: var(--color-paper);
+}
+
+[data-role="glow"] {
+  background: var(--color-accent);
+  border-radius: 50%;
+  opacity: 0.95;
+}
+
+[data-role="corner"] {
+  border-top: 3px solid var(--color-ink);
+  border-left: 3px solid var(--color-ink);
+}
+
+[data-role="corner-end"] {
+  border-bottom: 3px solid var(--color-ink);
+  border-right: 3px solid var(--color-ink);
+}
+
+[data-role="frame"] {
+  border: 2px solid var(--color-ink);
+}
+
+[data-role="meta"] {
+  color: var(--color-ink);
+  font-family: 'Cascadia Code', 'Consolas', 'JetBrains Mono', 'Noto Sans TC', 'Microsoft JhengHei', monospace;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-role="kicker"] {
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+[data-role="title"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.04em;
+}
+
+[data-role="title"] em,
+[data-role="body"] em,
+[data-role="subtitle"] em,
+[data-role="card"] em,
+[data-role="list"] em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+[data-role="subtitle"],
+[data-role="caption"] {
+  color: var(--color-muted);
+}
+
+[data-tone="inverse"] [data-role="subtitle"],
+[data-tone="inverse"] [data-role="body"] {
+  color: var(--color-paper);
+  opacity: 0.9;
+}
+
+[data-role="number"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-accent);
+  letter-spacing: -0.06em;
+}
+
+[data-role="card"] {
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-left: 12px solid var(--color-accent);
+  border-radius: var(--radius);
+}
+
+[data-role="stat"] .metric-value,
+[data-role="card"] .metric-value {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-ink);
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-role="stat"] .metric-label,
+[data-role="card"] .metric-label {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.metric-delta {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+[data-role="node"] {
+  background: var(--color-ink);
+  border: 4px solid var(--color-accent);
+  border-radius: 50%;
+}
+
+[data-role="connector"]:not(svg) {
+  background: var(--color-ink);
+}
+
+.list li {
+  border-left: 8px solid var(--color-accent);
+}
+
+[data-role="cta"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  border-bottom: 8px solid var(--color-accent);
+}
+
+[data-tone="inverse"] [data-role="cta"] {
+  color: var(--color-paper);
+  border-bottom: 8px solid var(--color-accent);
+}
+
+[data-role="photo"] {
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+}
+
+/* ---- composite slots ---- */
+
+[data-role="scrim"] {
+  background: var(--color-paper);
+  opacity: 0.92;
+}
+
+[data-role="chart"] {
+  color: var(--color-ink);
+}
+
+[data-role="chart"] .chart-track {
+  fill: rgba(17, 17, 17, 0.12);
+}
+
+[data-role="chart"] .chart-grid {
+  stroke: var(--color-ink);
+  opacity: 0.2;
+}
+
+[data-role="chart"] .chart-dot {
+  fill: var(--color-ink);
+  stroke: var(--color-accent);
+  stroke-width: 6;
+}
+
+[data-role="chart"] .chart-label {
+  fill: var(--color-ink);
+  opacity: 1;
+  font-weight: 700;
+}
+
+[data-role="table"] .table th {
+  border-bottom: 4px solid var(--color-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+[data-role="table"] .table td {
+  border-bottom: 2px solid var(--color-line);
+}
+
+[data-role="code"] {
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-left: 12px solid var(--color-accent);
+}
+
+[data-role="icon"] {
+  color: var(--color-ink);
+}
+
+[data-role="connector"] line {
+  stroke: var(--color-ink);
+  stroke-width: 10;
+}
+
+[data-role="connector"] polygon {
+  fill: var(--color-accent);
+  stroke: var(--color-ink);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+/* ---- playback micro-interactions: only under html[data-interactive]; the player drops it in static and edit modes ---- */
+
+[data-interactive] [data-role="card"]:hover {
+  box-shadow: 8px 8px 0 var(--color-ink);
+  transform: translate(-3px, -3px);
+}
+
+[data-interactive] [data-role="cta"]:hover {
+  border-bottom-color: var(--color-ink);
+  color: var(--color-accent);
+}
+
+[data-interactive] [data-role="photo"]:hover {
+  box-shadow: 8px 8px 0 var(--color-ink);
+  transform: translate(-3px, -3px);
+}
+
+[data-interactive] [data-role="table"] tbody tr:hover td {
+  background: var(--color-surface);
+}

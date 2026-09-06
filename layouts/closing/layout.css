@@ -1,0 +1,35 @@
+[data-layout="closing"] [data-el="backdrop"] {
+  left: 96px;
+  top: 160px;
+  width: 240px;
+  height: 16px;
+}
+
+[data-layout="closing"] [data-el="title"] {
+  left: 96px;
+  top: 300px;
+  width: 1728px;
+  height: 280px;
+  font-size: 112px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="closing"] [data-el="body"] {
+  left: 96px;
+  top: 620px;
+  width: 1728px;
+  height: 140px;
+  font-size: 44px;
+  line-height: 1.5;
+}
+
+[data-layout="closing"] [data-el="cta"] {
+  left: 96px;
+  top: 820px;
+  width: 1728px;
+  height: 96px;
+  padding-bottom: 12px;
+  font-size: 40px;
+  line-height: 1.2;
+}

@@ -1,0 +1,50 @@
+{
+  "name": "slide-nextup",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "以敘事為核心的簡報生成框架與工作流：agent 先與使用者確認敘事，再生成可在瀏覽器內完整編輯的 HTML 簡報。",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "preflight": "node src/cli/preflight.ts",
+    "render": "node src/cli/render.ts",
+    "qa": "node src/cli/qa.ts",
+    "dev": "node src/cli/dev.ts",
+    "browsers:install": "playwright install chromium",
+    "story:check": "node src/cli/story-check.ts",
+    "story:confirm": "node src/cli/story-confirm.ts",
+    "story:apply-deck": "node src/cli/story-apply-deck.ts",
+    "deck:scaffold": "node src/cli/deck-scaffold.ts",
+    "deck:regenerate": "node src/cli/deck-scaffold.ts",
+    "layouts": "node src/cli/layouts.ts",
+    "design:preview": "node src/cli/design-preview.ts",
+    "skills:sync": "node src/cli/skills-sync.ts sync",
+    "skills:check": "node src/cli/skills-sync.ts check",
+    "deck:validate": "node src/cli/deck-validate.ts",
+    "deck:retheme": "node src/cli/deck-retheme.ts",
+    "theme:lint": "node src/cli/theme-lint.ts",
+    "theme:qa": "node src/cli/theme-qa.ts",
+    "layout:gallery": "node src/cli/layout-gallery.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check": "biome check .",
+    "check:fix": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "@types/node": "^24.13.3",
+    "lucide-static": "^1.40.0",
+    "playwright": "^1.62.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "yaml": "^2.9.0"
+  }
+}

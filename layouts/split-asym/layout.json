@@ -1,0 +1,41 @@
+{
+  "id": "split-asym",
+  "name": "非對稱兩欄",
+  "description": "三分之二的主欄放清單或段落，三分之一的側欄放一個數字或一句話，中間一條細線。改成 50/50 會失去「主資訊佔多、留白給次資訊」的重心。",
+  "content_relations": ["list", "evidence", "statement", "sequence"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 360, "max_elements": 7 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
+    "main": { "type": ["list", "text"], "required": true, "hint": "主欄：三到五條，或一段" },
+    "aside": { "type": ["text", "metric"], "required": false, "hint": "側欄：一個大數字或一句話" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "main", "kind": "text" },
+    { "id": "divider", "kind": "shape" },
+    { "id": "aside", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "現有工具都先讓你排版面，再回頭想敘事" },
+    "main": {
+      "type": "list",
+      "items": [
+        "開簡報軟體，先挑一個模板",
+        "把想到的內容塞進版面",
+        "講一遍，發現順序不對",
+        "重排版面，再講一遍"
+      ]
+    },
+    "aside": { "type": "metric", "value": "4", "label": "平均改版輪數", "delta": "上季六份簡報" },
+    "page": { "type": "text", "value": "04 / 08" }
+  }
+}

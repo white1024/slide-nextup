@@ -1,0 +1,42 @@
+[data-layout="cover-poster"] [data-el="panel"] {
+  left: 0;
+  top: 0;
+  width: 600px;
+  height: 1080px;
+}
+
+[data-layout="cover-poster"] [data-el="kicker"] {
+  left: 120px;
+  top: 60px;
+  width: 64px;
+  height: 960px;
+  writing-mode: vertical-rl;
+  font-size: 32px;
+  line-height: 64px;
+}
+
+[data-layout="cover-poster"] [data-el="rule"] {
+  left: 680px;
+  top: 216px;
+  width: 1120px;
+  height: 6px;
+}
+
+[data-layout="cover-poster"] [data-el="title"] {
+  left: 680px;
+  top: 272px;
+  width: 1160px;
+  height: 600px;
+  font-size: 168px;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+[data-layout="cover-poster"] [data-el="subtitle"] {
+  left: 680px;
+  top: 890px;
+  width: 1120px;
+  height: 110px;
+  font-size: 34px;
+  line-height: 1.45;
+}

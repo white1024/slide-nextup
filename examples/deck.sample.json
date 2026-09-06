@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "id": "story-first",
+  "title": "先確認敘事，再做簡報",
+  "theme": "ink-paper",
+  "canvas": {
+    "width": 1920,
+    "height": 1080
+  },
+  "story": {
+    "path": "story.sample.md",
+    "sha256": "176d8452ec710ef182cabdb23c91bd879d1e1fce429ad5668a21cf810eb4d54b"
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "layout": "cover",
+      "slots": {
+        "kicker": {
+          "type": "text",
+          "value": "週會提案"
+        },
+        "title": {
+          "type": "text",
+          "value": "我們改簡報的時間，花在哪裡"
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "上季六份簡報平均改四輪，其中三輪只動版面。"
+        }
+      },
+      "elements": [
+        {
+          "id": "backdrop",
+          "kind": "shape"
+        },
+        {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "subtitle",
+          "kind": "text"
+        }
+      ],
+      "notes": "開場先問：上一次改簡報，你改的是內容還是版面？停三秒再翻頁。"
+    },
+    {
+      "id": "s2",
+      "layout": "cards",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "今天談三件事"
+        },
+        "card-1": {
+          "type": "text",
+          "value": "為什麼一直改版面"
+        },
+        "card-2": {
+          "type": "text",
+          "value": "新流程長什麼樣"
+        },
+        "card-3": {
+          "type": "text",
+          "value": "下週的試用計畫"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "card-1",
+          "kind": "text"
+        },
+        {
+          "id": "card-2",
+          "kind": "text"
+        },
+        {
+          "id": "card-3",
+          "kind": "text"
+        }
+      ],
+      "notes": "這頁只停十秒，讓大家知道結構就好。"
+    },
+    {
+      "id": "s3",
+      "layout": "statement",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "改版輪數的真相"
+        },
+        "body": {
+          "type": "text",
+          "value": "三輪版面修改裡，有兩輪是因為內容順序在中途改變。"
+        },
+        "evidence": {
+          "type": "list",
+          "items": [
+            "六份簡報、二十四輪修改的逐輪紀錄",
+            "十六輪與版面有關，其中十一輪起因是內容順序調整"
+          ]
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "body",
+          "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        }
+      ],
+      "notes": "強調「版面被改」是結果，不是原因。"
+    },
+    {
+      "id": "s4",
+      "layout": "comparison",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "工具沒有錯，順序錯了"
+        },
+        "left-title": {
+          "type": "text",
+          "value": "現況"
+        },
+        "left-items": {
+          "type": "list",
+          "items": [
+            "開簡報軟體",
+            "排版",
+            "講一遍",
+            "發現順序不對",
+            "重排"
+          ]
+        },
+        "right-title": {
+          "type": "text",
+          "value": "目標"
+        },
+        "right-items": {
+          "type": "list",
+          "items": [
+            "寫敘事",
+            "確認",
+            "生成版面",
+            "只微調"
+          ]
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "divider",
+          "kind": "shape"
+        },
+        {
+          "id": "left-title",
+          "kind": "text"
+        },
+        {
+          "id": "left-items",
+          "kind": "text"
+        },
+        {
+          "id": "right-title",
+          "kind": "text"
+        },
+        {
+          "id": "right-items",
+          "kind": "text"
+        }
+      ],
+      "notes": "用左右對比，不要讀完，讓對比自己說話。"
+    },
+    {
+      "id": "s5",
+      "layout": "statement",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "新流程的五步"
+        },
+        "body": {
+          "type": "text",
+          "value": "brief → 敘事文件（你確認）→ 視覺方向 → 生成 → 瀏覽器內編輯"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "body",
+          "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        }
+      ],
+      "notes": "指出「你確認」這一步是唯一需要人停下來的地方。"
+    },
+    {
+      "id": "s6",
+      "layout": "cards",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "試做兩份，改版輪數歸零"
+        },
+        "card-1": {
+          "type": "metric",
+          "value": "0",
+          "label": "試做 A 的版面修改輪數",
+          "delta": "敘事改兩輪"
+        },
+        "card-2": {
+          "type": "metric",
+          "value": "0",
+          "label": "試做 B 的版面修改輪數",
+          "delta": "敘事改一輪"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "card-1",
+          "kind": "text"
+        },
+        {
+          "id": "card-2",
+          "kind": "text"
+        },
+        {
+          "id": "card-3",
+          "kind": "text"
+        }
+      ],
+      "notes": "這是高峰頁，數字放大，停久一點。"
+    },
+    {
+      "id": "s7",
+      "layout": "statement",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "你上一次改簡報，改的是內容，還是版面？"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "body",
+          "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        }
+      ],
+      "notes": "不講話，等三到五秒。"
+    },
+    {
+      "id": "s8",
+      "layout": "closing",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "下週做一份真的"
+        },
+        "body": {
+          "type": "text",
+          "value": "用這套流程做一份真實提案，我們一起看結果。"
+        },
+        "cta": {
+          "type": "text",
+          "value": "需要一位志願者提供題目"
+        }
+      },
+      "elements": [
+        {
+          "id": "backdrop",
+          "kind": "shape"
+        },
+        {
+          "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "body",
+          "kind": "text"
+        },
+        {
+          "id": "cta",
+          "kind": "text"
+        }
+      ],
+      "notes": "直接問誰願意提供題目，當場定下來。"
+    }
+  ],
+  "overrides": {
+    "s1/title": {
+      "y": 360,
+      "style": {
+        "fontSize": 128
+      }
+    },
+    "s6/card-1": {
+      "style": {
+        "color": "#c8102e",
+        "fontSize": 160
+      }
+    },
+    "s6/card-3": {
+      "hidden": true
+    }
+  }
+}

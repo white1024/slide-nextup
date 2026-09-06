@@ -1,0 +1,35 @@
+{
+  "id": "two-cols-header",
+  "name": "上總述、下雙欄",
+  "description": "標題下一段橫跨全寬的總述，再分左右兩張卡。改成純雙欄會失去「先講共同前提、再分兩邊」的結構。",
+  "content_relations": ["comparison", "list", "evidence"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 420, "max_elements": 7 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張" },
+    "body": { "type": "text", "required": false, "hint": "一到兩行總述" },
+    "left": { "type": ["list", "text", "metric"], "required": true, "hint": "左欄：清單、短句或數字" },
+    "right": { "type": ["list", "text", "metric"], "required": true, "hint": "右欄：同上" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "body", "kind": "text" },
+    { "id": "left", "kind": "text" },
+    { "id": "right", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "同一份提案，兩種做法的差別" },
+    "body": { "type": "text", "value": "兩邊的工具一樣、講的人一樣，差在敘事什麼時候被確認。" },
+    "left": { "type": "list", "items": ["先排版面，再想順序", "講一遍才發現要調", "平均改四輪"] },
+    "right": { "type": "list", "items": ["先確認敘事，再生成版面", "改的是文字，不是排版", "版面零輪"] },
+    "page": { "type": "text", "value": "04 / 08" }
+  }
+}

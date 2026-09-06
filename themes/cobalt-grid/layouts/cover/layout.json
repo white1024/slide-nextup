@@ -1,0 +1,35 @@
+{
+  "id": "cover",
+  "name": "封面：鈷藍方格",
+  "description": "趨勢報告的封面：上下兩條髮線框住整頁，左上巨大的襯線標題、系列名與一句襯線導語，右側一根像素階梯的掃描柱，最右邊一行直排的場合小字，左下一行來源說明，右下頁碼。改成一般標題頁會失去掃描柱與直排小字帶來的「印刷刊物」感。",
+  "content_relations": ["statement"],
+  "scene_roles": ["hero"],
+  "density": { "max_chars": 220, "max_elements": 9 },
+  "slots": {
+    "title": { "type": "text", "required": true, "hint": "主張式標題，兩行、十六字以內；襯線大字，可用 *關鍵詞* 換斜體" },
+    "brand": { "type": "text", "required": false, "hint": "系列名或簡報名，大寫小字，自動填敘事標題的系列名（冒號前）" },
+    "subtitle": { "type": "text", "required": false, "hint": "一句襯線導語，五十字以內" },
+    "meta": { "type": "text", "required": false, "hint": "直排的場合或日期小字，自動填 occasion 的第一句（十字以內）" },
+    "cta": { "type": "text", "required": false, "hint": "左下一行來源或作者說明，自動填第一條 evidence" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填「01 / 08」" }
+  },
+  "elements": [
+    { "id": "rule-top", "kind": "shape" },
+    { "id": "rule-bottom", "kind": "shape" },
+    { "id": "pixel", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "brand", "kind": "text" },
+    { "id": "subtitle", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "cta", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "title": { "type": "text", "value": "我們改簡報的時間，花在版面" },
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報 · 第一期" },
+    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "cta": { "type": "text", "value": "整理自上季六份簡報的修改紀錄與會議記錄" },
+    "page": { "type": "text", "value": "01 / 08" }
+  }
+}

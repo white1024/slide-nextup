@@ -1,0 +1,81 @@
+[data-layout="tabs"] [data-el="brand"] {
+  left: 96px;
+  top: 48px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="tabs"] [data-el="meta"] {
+  left: 1024px;
+  top: 48px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="tabs"] [data-el="title"] {
+  left: 96px;
+  top: 112px;
+  width: 1728px;
+  height: 100px;
+  font-size: 64px;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+[data-layout="tabs"] [data-el="panels"] {
+  left: 96px;
+  top: 256px;
+  width: 1728px;
+  height: 640px;
+  padding: 0 40px 32px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="tabs"] [data-el="panels"] .tabs {
+  gap: 0 8px;
+}
+
+[data-layout="tabs"] [data-el="panels"] .tab {
+  padding: 18px 28px;
+  font-size: 30px;
+  line-height: 1.3;
+}
+
+[data-layout="tabs"] [data-el="panels"] .tab-panel {
+  padding: 32px 8px 0;
+}
+
+[data-layout="tabs"] [data-el="panels"] li {
+  margin-bottom: 16px;
+  padding-left: 40px;
+}
+
+[data-layout="tabs"] [data-el="panels"] .table th,
+[data-layout="tabs"] [data-el="panels"] .table td {
+  padding: 16px 24px;
+}
+
+[data-layout="tabs"] [data-el="caption"] {
+  left: 96px;
+  top: 928px;
+  width: 1400px;
+  height: 48px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="tabs"] [data-el="page"] {
+  left: 1624px;
+  top: 1008px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

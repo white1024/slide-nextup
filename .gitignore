@@ -1,0 +1,22 @@
+# dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Playwright downloads (browsers live in %LOCALAPPDATA%/ms-playwright, never in the repo)
+.playwright/
+playwright-report/
+test-results/
+
+# transient outputs under artifacts/ (deliverables stay tracked)
+artifacts/preflight/
+artifacts/qa/
+artifacts/layout-gallery/
+artifacts/**/*.tmp
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
+decks/*/deck.html
+artifacts/design/

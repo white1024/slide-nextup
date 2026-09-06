@@ -1,0 +1,116 @@
+{
+  "id": "closing",
+  "name": "結尾：暖色 Keynote",
+  "description": "青綠短線、一句收尾大標、一行導語與一行提醒，最後一排膠囊：主要的行動呼籲加幾個要點。改成「謝謝」頁會失去把下一步交到對方手上的動作。",
+  "content_relations": [
+    "closing",
+    "statement"
+  ],
+  "scene_roles": [
+    "close"
+  ],
+  "density": {
+    "max_chars": 220,
+    "max_elements": 8
+  },
+  "slots": {
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "收尾主張，兩行以內"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "一行提醒，膠囊前的引言"
+    },
+    "cta": {
+      "type": "text",
+      "required": true,
+      "hint": "主要的行動呼籲，一個短句、十二字以內"
+    },
+    "evidence": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "幾個要點，每條一個膠囊"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "bar",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "cta",
+      "kind": "text"
+    },
+    {
+      "id": "evidence",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "title": {
+      "type": "text",
+      "value": "只要想到「這件事能不能交給 AI」，就可以來聊聊。"
+    },
+    "body": {
+      "type": "text",
+      "value": "不管是想讓 AI 陪你一起想，還是直接把任務交給它代工，都歡迎。"
+    },
+    "caption": {
+      "type": "text",
+      "value": "真的要動手時，這五題我們會陪你一起釐清："
+    },
+    "cta": {
+      "type": "text",
+      "value": "找 AI 小組聊聊"
+    },
+    "evidence": {
+      "type": "list",
+      "items": [
+        "需要哪些工具",
+        "抽哪些欄位",
+        "什麼時候追問",
+        "要不要人工確認"
+      ]
+    },
+    "page": {
+      "type": "text",
+      "value": "08 / 08"
+    }
+  }
+}

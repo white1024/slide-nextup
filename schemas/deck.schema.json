@@ -1,0 +1,303 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://slide-workflow.local/schemas/deck.schema.json",
+  "title": "Deck",
+  "description": "deck.json：渲染器、瀏覽器編輯器與 agent 共用的單一來源。slides[] 由 agent 產生，overrides 由編輯器寫入，兩者不重疊。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "title", "theme", "canvas", "slides", "overrides"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "$ref": "#/definitions/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "theme": {
+      "$ref": "#/definitions/id",
+      "description": "主題 id，對應 themes/<id>/"
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "const": 1920 },
+        "height": { "const": 1080 }
+      }
+    },
+    "transition": {
+      "enum": ["none", "fade", "push", "lift", "slide-left"],
+      "description": "換頁效果：fade 交叉淡入、push 兩頁一起推移（往回翻反向）、lift 新頁上浮蓋上、none 直切；slide-left 是舊名，播放時等於 push。沒有這個欄位就用主題 theme.json 的 motion.transition，再沒有就 fade。靜態模式（?static=1、QA、匯出）一律無轉場"
+    },
+    "motion": {
+      "enum": ["on", "off"],
+      "description": "元件動畫的總開關：off 時播放不逐步、不進場，每按一下就換頁（換頁轉場照舊）。播放時按 M 可對這個瀏覽器臨時切換，不改這個值"
+    },
+    "story": {
+      "type": "object",
+      "description": "這份簡報所依據的 story.md；sha256 用來偵測敘事是否已經變更",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/slide" }
+    },
+    "overrides": {
+      "type": "object",
+      "description": "手動編輯的覆寫，鍵為 slideId/elementId。agent 重新生成頁面時不得改動這裡",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*/[A-Za-z][A-Za-z0-9_-]*$" },
+      "additionalProperties": { "$ref": "#/definitions/override" }
+    },
+    "pages": {
+      "type": "object",
+      "description": "頁面層覆寫：播放順序與隱藏頁，由編輯器寫入。story.md 仍是敘事正本；沒列在 order 裡的頁依敘事順序插回原相對位置",
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/id" }
+        },
+        "hidden": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/id" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+    "slide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "layout", "slots", "elements"],
+      "properties": {
+        "id": { "$ref": "#/definitions/id" },
+        "layout": {
+          "$ref": "#/definitions/id",
+          "description": "版型 id，對應 layouts/<id>/（主題可在 themes/<theme>/layouts/<id>/ 提供同名覆蓋）"
+        },
+        "slots": {
+          "type": "object",
+          "description": "版型宣告的內容槽位；每個鍵必須是本頁 elements 之一",
+          "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "additionalProperties": { "$ref": "#/definitions/slot" }
+        },
+        "elements": {
+          "type": "array",
+          "description": "版型宣告的可編輯元件，生成時從版型物化到這裡，讓 deck.json 自描述",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/element" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": { "$ref": "#/definitions/id" },
+        "kind": { "enum": ["text", "image", "shape"] },
+        "step": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "逐步顯示：按第幾次「下一步」才出現；沒有就一開始就可見"
+        },
+        "enter": {
+          "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe"],
+          "description": "到達 step 時的進場方式；沒有就用主題 motion 依 data-role 的預設。只對有 step 的元件有作用"
+        }
+      }
+    },
+    "hotspot": {
+      "type": "object",
+      "description": "圖片上的熱區：以圖片框的百分比定位，播放時點擊跳到 target 頁",
+      "additionalProperties": false,
+      "required": ["target", "x", "y", "w", "h"],
+      "properties": {
+        "target": { "$ref": "#/definitions/id" },
+        "x": { "type": "number", "minimum": 0, "maximum": 100 },
+        "y": { "type": "number", "minimum": 0, "maximum": 100 },
+        "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "h": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "label": { "type": "string" }
+      }
+    },
+    "slot": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "const": "text" },
+            "value": { "type": "string" },
+            "details": { "$ref": "#/definitions/slot", "description": "點擊展開的完整內容；收合是預設，QA 只量收合狀態" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "list" },
+            "items": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "details": { "$ref": "#/definitions/slot" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "src"],
+          "properties": {
+            "type": { "const": "image" },
+            "src": { "type": "string", "minLength": 1 },
+            "alt": { "type": "string" },
+            "hotspots": { "type": "array", "maxItems": 12, "items": { "$ref": "#/definitions/hotspot" } }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "label"],
+          "properties": {
+            "type": { "const": "metric" },
+            "value": { "type": "string", "minLength": 1 },
+            "label": { "type": "string", "minLength": 1 },
+            "delta": { "type": "string" },
+            "details": { "$ref": "#/definitions/slot" }
+          }
+        },
+        {
+          "type": "object",
+          "description": "圖表：渲染器畫成內嵌 SVG；bar 與 line 用整個 series，donut 與 progress 用第一筆對 max（預設 100）；toggle 讓播放時圖例可點，關掉的項目不計入比例",
+          "additionalProperties": false,
+          "required": ["type", "kind", "series"],
+          "properties": {
+            "type": { "const": "chart" },
+            "kind": { "enum": ["bar", "line", "donut", "progress"] },
+            "series": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "value"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "value": { "type": "number" }
+                }
+              }
+            },
+            "unit": { "type": "string" },
+            "max": { "type": "number", "exclusiveMinimum": 0 },
+            "toggle": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "description": "分頁籤：同一個框裡的多個面板，播放時點頁籤切換；靜態模式與 QA 只看第一個面板",
+          "additionalProperties": false,
+          "required": ["type", "panels"],
+          "properties": {
+            "type": { "const": "tabs" },
+            "panels": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "content"],
+                "properties": {
+                  "label": { "type": "string", "minLength": 1 },
+                  "content": { "$ref": "#/definitions/slot" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "表格：header 選填；每列欄數不必相等，渲染器照原樣輸出",
+          "additionalProperties": false,
+          "required": ["type", "rows"],
+          "properties": {
+            "type": { "const": "table" },
+            "header": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "rows": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "程式碼：純等寬文字，不做語法上色；lang 只是標籤",
+          "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "const": "code" },
+            "value": { "type": "string" },
+            "lang": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "description": "圖示：內建圖示集裡的名稱（Lucide 子集，見 src/render/icons.ts）",
+          "additionalProperties": false,
+          "required": ["type", "name"],
+          "properties": {
+            "type": { "const": "icon" },
+            "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+          }
+        }
+      ]
+    },
+    "override": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "w": { "type": "number", "exclusiveMinimum": 0 },
+        "h": { "type": "number", "exclusiveMinimum": 0 },
+        "rotation": { "type": "number" },
+        "z": { "type": "integer" },
+        "hidden": { "type": "boolean" },
+        "text": { "type": "string", "description": "只允許 kind 為 text 的元件" },
+        "src": { "type": "string", "minLength": 1, "description": "只允許 kind 為 image 的元件" },
+        "details": { "type": "string", "description": "展開內容的文字形式（規則同 text 覆寫）；空字串表示拿掉展開內容。只允許 kind 為 text 的元件" },
+        "hotspots": { "type": "array", "maxItems": 12, "items": { "$ref": "#/definitions/hotspot" }, "description": "取代圖片的熱區；空陣列表示沒有熱區。只允許 kind 為 image 的元件" },
+        "style": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "color": { "type": "string" },
+            "background": { "type": "string" },
+            "fontFamily": { "type": "string" },
+            "fontSize": { "type": "number", "exclusiveMinimum": 0 },
+            "fontWeight": { "type": "integer", "minimum": 100, "maximum": 900 },
+            "lineHeight": { "type": "number", "exclusiveMinimum": 0 },
+            "letterSpacing": { "type": "number" },
+            "textAlign": { "enum": ["left", "center", "right"] },
+            "fontStyle": { "enum": ["italic", "normal"] },
+            "textDecoration": { "enum": ["underline", "line-through", "none"] },
+            "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+            "borderRadius": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

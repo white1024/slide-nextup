@@ -1,0 +1,121 @@
+{
+  "id": "photo",
+  "name": "圖：暖色 Keynote",
+  "description": "章節頭下面一張全寬的玻璃框，裡面放圖（系統圖、截圖），底下一行說明。改成小圖加文字會失去圖本身當主角的份量。",
+  "content_relations": [
+    "evidence",
+    "statement"
+  ],
+  "scene_roles": [
+    "hero",
+    "evidence",
+    "pause"
+  ],
+  "density": {
+    "max_chars": 120,
+    "max_elements": 9
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "photo": {
+      "type": "image",
+      "required": true,
+      "hint": "圖片，建議 1678×560 或同比例；可加 hotspots（播放時點擊跳頁的區域，百分比定位）"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "一行圖說"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "frame",
+      "kind": "shape"
+    },
+    {
+      "id": "photo",
+      "kind": "image"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "量測工具的骨架"
+    },
+    "photo": {
+      "type": "image",
+      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23e6dcc4%27/%3E%3C/svg%3E",
+      "alt": "系統圖",
+      "hotspots": [
+        {
+          "target": "cards",
+          "x": 56,
+          "y": 30,
+          "w": 16,
+          "h": 40,
+          "label": "run 目錄：看設計原則"
+        }
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "設定與模型進來，走兩條路徑，落到同一個 run 目錄。"
+    }
+  }
+}

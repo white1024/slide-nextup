@@ -1,0 +1,48 @@
+[data-layout="cover-editorial"] [data-el="rule-top"] {
+  left: 120px;
+  top: 104px;
+  width: 1680px;
+  height: 3px;
+}
+
+[data-layout="cover-editorial"] [data-el="kicker"] {
+  left: 120px;
+  top: 136px;
+  width: 1100px;
+  height: 48px;
+  font-size: 32px;
+  line-height: 48px;
+}
+
+[data-layout="cover-editorial"] [data-el="subtitle"] {
+  left: 1240px;
+  top: 136px;
+  width: 560px;
+  height: 300px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cover-editorial"] [data-el="mark"] {
+  left: 120px;
+  top: 508px;
+  width: 120px;
+  height: 14px;
+}
+
+[data-layout="cover-editorial"] [data-el="title"] {
+  left: 120px;
+  top: 564px;
+  width: 1560px;
+  height: 400px;
+  font-size: 136px;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+[data-layout="cover-editorial"] [data-el="rule-bottom"] {
+  left: 120px;
+  top: 992px;
+  width: 1680px;
+  height: 3px;
+}

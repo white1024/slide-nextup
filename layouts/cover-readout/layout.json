@@ -1,0 +1,26 @@
+{
+  "id": "cover-readout",
+  "name": "封面：量測儀表",
+  "description": "儀表式封面：左上等寬 kicker 與一小段色條，大標佔左側三分之二，右下是一個裝著副標的讀數框，底部一條刻度線。改成置中標題頁會失去「像儀器面板一樣有讀數區」的語彙。",
+  "content_relations": ["statement"],
+  "scene_roles": ["hero"],
+  "density": { "max_chars": 130, "max_elements": 6 },
+  "slots": {
+    "kicker": { "type": "text", "required": false, "hint": "場合或系列名，四到十二個字，英數會用等寬字" },
+    "title": { "type": "text", "required": true, "hint": "主張式標題，一到兩行，十六字以內" },
+    "subtitle": { "type": "text", "required": false, "hint": "一句支撐主張的事實，會放進右下讀數框，五十字以內" }
+  },
+  "elements": [
+    { "id": "kicker", "kind": "text" },
+    { "id": "rule", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "frame", "kind": "shape" },
+    { "id": "subtitle", "kind": "text" },
+    { "id": "ruler", "kind": "shape" }
+  ],
+  "sample": {
+    "kicker": { "type": "text", "value": "週會提案" },
+    "title": { "type": "text", "value": "我們改簡報的時間，花在哪裡" },
+    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" }
+  }
+}

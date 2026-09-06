@@ -1,0 +1,28 @@
+{
+  "id": "cover",
+  "name": "封面：暖色 Keynote",
+  "description": "Keynote 式的封面：格線紙上一條青綠短線接系列名、一行 900 字重的大標（關鍵詞換成青綠）、一行副標；底部左邊是進度刻度（一頁一格、目前頁點亮）、右邊是頁碼膠囊。標題與副標都是單行，太長會自動縮字。改成置中標題頁會失去左對齊的節奏與頁面家具帶來的「產品感」。",
+  "content_relations": ["statement"],
+  "scene_roles": ["hero"],
+  "density": { "max_chars": 120, "max_elements": 8 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "青綠短線後的系列名或產品名，自動填敘事標題的系列名（冒號前）" },
+    "title": { "type": "text", "required": true, "hint": "主張式標題，單行、十六字以內；用 *關鍵詞* 把重點換成青綠" },
+    "subtitle": { "type": "text", "required": false, "hint": "一行副標，四十五字以內" },
+    "page": { "type": "text", "required": false, "hint": "頁碼膠囊，自動填「01 / 08」" }
+  },
+  "elements": [
+    { "id": "bar", "kind": "shape" },
+    { "id": "brand", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "subtitle", "kind": "text" },
+    { "id": "progress", "kind": "shape" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "title": { "type": "text", "value": "把時間花在*敘事*，不是版面" },
+    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面；敘事先被確認，版面修改就會消失。" },
+    "page": { "type": "text", "value": "01 / 08" }
+  }
+}

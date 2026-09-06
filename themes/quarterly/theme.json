@@ -1,0 +1,28 @@
+{
+  "id": "quarterly",
+  "name": "季刊紙本",
+  "description": "週末早晨攤開的季刊：米紙底帶微噪點、masthead 式的頂欄小字、墨色粗細線、700 字重明體大標，關鍵詞換成斜體磚紅。卡片不上底色，只有一條墨線在上緣。",
+  "colors": {
+    "paper": { "value": "#f6f0e3", "use": "頁面底色（米紙）" },
+    "ink": { "value": "#1a1a1a", "use": "主要文字、墨線；反相頁的底色" },
+    "muted": { "value": "#4a4a4a", "use": "副標、說明" },
+    "accent": { "value": "#a0392b", "use": "唯一強調色：kicker、關鍵詞、節點、CTA" },
+    "surface": { "value": "#efe7d4", "use": "面板底色（很少用）" },
+    "line": { "value": "#d8cfbb", "use": "淡分隔線、內框" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Noto Serif TC', 'Songti TC', 'Source Han Serif TC', 'PMingLiU', Georgia, serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "'Noto Serif TC', 'Songti TC', 'Source Han Serif TC', 'PMingLiU', Georgia, serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 0 },
+  "decoration": {
+    "vocabulary": ["masthead 頂欄", "墨色細線", "紙張噪點", "斜體磚紅關鍵詞", "無底卡片加上緣線", "淡色水印數字"],
+    "avoid": ["深色底", "光暈", "圓角", "飽和彩色", "無襯線大標"]
+  }
+}

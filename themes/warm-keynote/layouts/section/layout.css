@@ -1,0 +1,64 @@
+/* warm-keynote/section — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="section"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="section"] [data-el="number"] {
+  left: 101px;
+  top: 290px;
+  width: 700px;
+  height: 220px;
+  font-size: 200px;
+  line-height: 1;
+}
+
+[data-layout="section"] [data-el="rule"] {
+  left: 101px;
+  top: 548px;
+  width: 82px;
+  height: 6px;
+}
+
+[data-layout="section"] [data-el="title"] {
+  left: 101px;
+  top: 590px;
+  width: 1500px;
+  height: 200px;
+  font-size: 76px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="section"] [data-el="body"] {
+  left: 101px;
+  top: 810px;
+  width: 1300px;
+  height: 110px;
+  font-size: 32px;
+  line-height: 1.65;
+}
+
+[data-layout="section"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="section"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+

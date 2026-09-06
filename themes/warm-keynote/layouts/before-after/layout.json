@@ -1,0 +1,168 @@
+{
+  "id": "before-after",
+  "name": "之前之後：暖色 Keynote",
+  "description": "左邊沉底卡片放之前的步驟膠囊，右邊玻璃卡片放之後的青綠膠囊，下面一行提醒。改成兩個條列會失去「步驟變少」的視覺對比。",
+  "content_relations": [
+    "comparison",
+    "sequence"
+  ],
+  "scene_roles": [
+    "relationship",
+    "evidence"
+  ],
+  "density": {
+    "max_chars": 240,
+    "max_elements": 13
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "before-label": {
+      "type": "text",
+      "required": false,
+      "hint": "左欄小標，例如「BEFORE · 5 步」"
+    },
+    "before": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "之前的步驟，每條一個膠囊"
+    },
+    "after-label": {
+      "type": "text",
+      "required": false,
+      "hint": "右欄小標，例如「AFTER · 3 步」"
+    },
+    "after": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "之後的步驟，每條一個膠囊"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "結尾的補充或提醒，一到兩行"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "before-box",
+      "kind": "shape"
+    },
+    {
+      "id": "before-label",
+      "kind": "text"
+    },
+    {
+      "id": "before",
+      "kind": "text"
+    },
+    {
+      "id": "after-box",
+      "kind": "shape"
+    },
+    {
+      "id": "after-label",
+      "kind": "text"
+    },
+    {
+      "id": "after",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "不是再多一個入口，是把功能送進對話"
+    },
+    "before-label": {
+      "type": "text",
+      "value": "BEFORE · 5 步"
+    },
+    "before": {
+      "type": "list",
+      "items": [
+        "找入口",
+        "查紀錄",
+        "選表單",
+        "填欄位",
+        "送出"
+      ]
+    },
+    "after-label": {
+      "type": "text",
+      "value": "AFTER · 3 步"
+    },
+    "after": {
+      "type": "list",
+      "items": [
+        "收到通知",
+        "確認預填內容",
+        "送出"
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "少掉的兩步，正是員工最常卡住的地方。"
+    }
+  }
+}

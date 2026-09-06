@@ -1,0 +1,237 @@
+/* deep-space — appearance only. Geometry lives in each layout.css. */
+
+.slide {
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(ellipse 100% 80% at 50% -20%, #0a1f3d 0%, rgba(7, 13, 31, 0) 60%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    80px 80px,
+    80px 80px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-tone="inverse"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+[data-role="backdrop"] {
+  background: var(--color-accent);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.6);
+}
+
+[data-role="divider"] {
+  background: var(--color-line);
+}
+
+[data-role="glow"] {
+  background:
+    radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.55) 0%, rgba(99, 102, 241, 0) 55%),
+    radial-gradient(circle at 70% 65%, rgba(34, 211, 238, 0.35) 0%, rgba(34, 211, 238, 0) 50%);
+  filter: blur(60px);
+  opacity: 0.9;
+}
+
+[data-role="corner"] {
+  border-top: 1px solid rgba(34, 211, 238, 0.45);
+  border-left: 1px solid rgba(34, 211, 238, 0.45);
+}
+
+[data-role="corner-end"] {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.45);
+  border-right: 1px solid rgba(34, 211, 238, 0.45);
+}
+
+[data-role="frame"] {
+  border: 1px solid var(--color-line);
+}
+
+[data-role="meta"] {
+  color: var(--color-muted);
+  font-family: 'Cascadia Code', 'Consolas', 'JetBrains Mono', 'Noto Sans TC', 'Microsoft JhengHei', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+[data-role="kicker"] {
+  color: var(--color-accent);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+[data-role="title"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.03em;
+}
+
+[data-role="title"] em,
+[data-role="body"] em,
+[data-role="subtitle"] em,
+[data-role="card"] em,
+[data-role="list"] em {
+  font-family: 'Noto Serif TC', 'Songti TC', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-accent);
+}
+
+[data-role="subtitle"],
+[data-role="caption"] {
+  color: var(--color-muted);
+}
+
+[data-tone="inverse"] [data-role="subtitle"],
+[data-tone="inverse"] [data-role="body"] {
+  color: var(--color-paper);
+  opacity: 0.85;
+}
+
+[data-role="number"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-accent);
+  opacity: 0.9;
+  letter-spacing: -0.04em;
+}
+
+[data-role="card"] {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.09) 0%, rgba(99, 102, 241, 0.05) 100%);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: var(--radius);
+}
+
+[data-role="stat"] .metric-value,
+[data-role="card"] .metric-value {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-ink);
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-role="stat"] .metric-label,
+[data-role="card"] .metric-label {
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+}
+
+.metric-delta {
+  color: var(--color-accent);
+}
+
+[data-role="node"] {
+  background: var(--color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.7);
+}
+
+[data-role="connector"]:not(svg) {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0) 0%, var(--color-accent) 20%, var(--color-accent) 80%, rgba(34, 211, 238, 0) 100%);
+  opacity: 0.55;
+}
+
+.list li {
+  border-left: 3px solid var(--color-accent);
+}
+
+[data-role="cta"] {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-bottom: 2px solid rgba(34, 211, 238, 0.5);
+}
+
+[data-tone="inverse"] [data-role="cta"] {
+  color: var(--color-paper);
+  border-bottom: 4px solid var(--color-accent);
+}
+
+[data-role="photo"] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+/* ---- composite slots ---- */
+
+[data-role="scrim"] {
+  background: var(--color-paper);
+  opacity: 0.85;
+}
+
+[data-role="chart"] {
+  color: var(--color-ink);
+}
+
+[data-role="chart"] .chart-dot,
+[data-role="chart"] .chart-ring-fill {
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.7));
+}
+
+[data-role="chart"] .chart-label {
+  fill: var(--color-muted);
+  opacity: 1;
+}
+
+[data-role="table"] .table th {
+  border-bottom: 2px solid rgba(34, 211, 238, 0.6);
+  color: var(--color-accent);
+  letter-spacing: 0.06em;
+}
+
+[data-role="table"] .table td {
+  border-bottom: 1px solid var(--color-line);
+}
+
+[data-role="code"] {
+  background: rgba(16, 26, 51, 0.92);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: var(--radius);
+  color: #dbe7ff;
+}
+
+[data-role="icon"] {
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.55));
+}
+
+[data-role="connector"] line {
+  stroke: var(--color-accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+[data-role="connector"] polygon {
+  fill: var(--color-accent);
+}
+
+/* ---- playback micro-interactions: only under html[data-interactive]; the player drops it in static and edit modes ---- */
+
+[data-interactive] [data-role="card"]:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 16px 40px rgba(34, 211, 238, 0.18);
+  transform: translateY(-4px);
+}
+
+[data-interactive] [data-role="cta"]:hover {
+  border-bottom-color: var(--color-accent);
+  filter: brightness(1.15);
+}
+
+[data-interactive] [data-role="photo"]:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 16px 40px rgba(34, 211, 238, 0.18);
+  transform: scale(1.015);
+}
+
+[data-interactive] [data-role="table"] tbody tr:hover td {
+  background: rgba(34, 211, 238, 0.08);
+}

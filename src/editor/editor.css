@@ -1,0 +1,931 @@
+/* Editor chrome. Everything here is created at runtime and removed on exit; nothing enters the model.
+   Three pieces: a fixed top toolbar (.ed-topbar), a slide rail with live thumbnails (.ed-pages) and a
+   floating toolbar that follows the selection (.ed-float). Light panels over the dark viewer ground. */
+
+.ed-active {
+  --ed-bg: #ffffff;
+  --ed-bg-soft: #f4f6f9;
+  --ed-line: #dde2e8;
+  --ed-text: #1f2933;
+  --ed-muted: #6b7686;
+  --ed-accent: #2f7cff;
+  --ed-accent-soft: #e6efff;
+  --ed-danger: #d9534f;
+  --ed-radius: 10px;
+  --ed-shadow: 0 10px 30px rgba(9, 18, 33, 0.22);
+  --ed-font: 13px / 1.4 system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+}
+
+.ed-active .deck-stage > .slide.is-active [data-el] {
+  cursor: move;
+}
+
+.ed-active .deck-stage > .slide.is-active [data-el]:hover {
+  outline: 1px dashed rgba(47, 124, 255, 0.7);
+}
+
+.ed-reveal .deck-stage > .slide.is-active [data-hidden="true"] {
+  visibility: visible;
+  opacity: 0.35;
+  outline: 1px dashed rgba(255, 63, 164, 0.8);
+}
+
+.ed-editing {
+  cursor: text;
+  outline: 2px solid #ffb300;
+}
+
+/* hotspots stay visible while editing (they are inert here), so the regions can be checked against the picture */
+.ed-active .deck-stage > .slide .hotspot {
+  outline: 2px dashed rgba(255, 63, 164, 0.8);
+  background: rgba(255, 63, 164, 0.08);
+}
+
+/* every region says where it jumps while editing (the player shows only the label, on hover) */
+.ed-active .deck-stage > .slide .hotspot::after {
+  content: "→ " attr(data-target);
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 63, 164, 0.92);
+  color: #fff;
+  font:
+    600 20px / 1.3 system-ui,
+    -apple-system,
+    "Segoe UI",
+    "Noto Sans TC",
+    sans-serif;
+  white-space: nowrap;
+  visibility: visible;
+}
+
+.ed-active .deck-stage > .slide .hotspot[data-label]::after {
+  content: "→ " attr(data-target) " · " attr(data-label);
+}
+
+/* ---- hotspot mode: regions are drawn, moved, resized and retargeted on the picture ---- */
+
+.ed-spot .deck-stage > .slide.is-active [data-el].ed-spot-host {
+  cursor: crosshair;
+  outline: 2px solid rgba(255, 63, 164, 0.9);
+}
+
+.ed-spot-box {
+  position: absolute;
+  outline: 2px solid #ff3fa4;
+  pointer-events: none;
+}
+
+.ed-spot-bar {
+  position: fixed;
+  z-index: 2150;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: var(--ed-bg);
+  box-shadow: var(--ed-shadow);
+  color: var(--ed-text);
+  font: var(--ed-font);
+}
+
+.ed-spot-bar select,
+.ed-spot-bar input {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ed-text);
+  font: inherit;
+}
+
+.ed-spot-bar select {
+  max-width: 260px;
+}
+
+.ed-spot-bar input {
+  width: 200px;
+}
+
+/* ---- selection overlay (lives inside the scaled stage) ---- */
+
+.ed-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.ed-box {
+  position: absolute;
+  outline: 2px solid #2f7cff;
+  pointer-events: none;
+}
+
+.ed-handle {
+  position: absolute;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #2f7cff;
+  border-radius: 3px;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.ed-handle-nw {
+  left: 0;
+  top: 0;
+  cursor: nwse-resize;
+}
+.ed-handle-n {
+  left: 50%;
+  top: 0;
+  cursor: ns-resize;
+}
+.ed-handle-ne {
+  left: 100%;
+  top: 0;
+  cursor: nesw-resize;
+}
+.ed-handle-e {
+  left: 100%;
+  top: 50%;
+  cursor: ew-resize;
+}
+.ed-handle-se {
+  left: 100%;
+  top: 100%;
+  cursor: nwse-resize;
+}
+.ed-handle-s {
+  left: 50%;
+  top: 100%;
+  cursor: ns-resize;
+}
+.ed-handle-sw {
+  left: 0;
+  top: 100%;
+  cursor: nesw-resize;
+}
+.ed-handle-w {
+  left: 0;
+  top: 50%;
+  cursor: ew-resize;
+}
+
+.ed-spot-box .ed-handle {
+  border-color: #ff3fa4;
+}
+
+.ed-guide {
+  position: absolute;
+  background: #ff3fa4;
+  pointer-events: none;
+}
+
+.ed-guide-v {
+  top: 0;
+  height: 1080px;
+}
+.ed-guide-h {
+  left: 0;
+  width: 1920px;
+}
+
+/* ---- shared controls ---- */
+
+.ed-topbar,
+.ed-pages,
+.ed-float {
+  color: var(--ed-text);
+  font: var(--ed-font);
+  user-select: none;
+}
+
+.ed-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ed-btn,
+.ed-ibtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ed-text);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ed-ibtn {
+  width: 30px;
+  padding: 0;
+  justify-content: center;
+}
+
+.ed-btn:hover,
+.ed-ibtn:hover {
+  background: var(--ed-bg-soft);
+}
+
+.ed-btn:disabled,
+.ed-ibtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  background: transparent;
+}
+
+.ed-btn.is-on,
+.ed-ibtn.is-on {
+  background: var(--ed-accent-soft);
+  color: var(--ed-accent);
+}
+
+.ed-btn-primary {
+  background: var(--ed-text);
+  color: #fff;
+}
+
+.ed-btn-primary:hover {
+  background: #0f1720;
+}
+
+.ed-btn kbd {
+  font:
+    11px ui-monospace,
+    Consolas,
+    monospace;
+  color: var(--ed-muted);
+  padding: 1px 5px;
+  border: 1px solid var(--ed-line);
+  border-radius: 4px;
+  background: var(--ed-bg-soft);
+}
+
+.ed-btn-primary kbd {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ed-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--ed-muted);
+  white-space: nowrap;
+}
+
+.ed-toggle:hover {
+  background: var(--ed-bg-soft);
+}
+
+.ed-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.ed-toggle:has(input:checked) {
+  background: var(--ed-accent-soft);
+  color: var(--ed-accent);
+}
+
+.ed-lbl {
+  color: var(--ed-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.ed-num,
+.ed-float select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ed-text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-num {
+  width: 62px;
+}
+
+.ed-num:focus,
+.ed-float select:focus,
+.ed-float textarea:focus {
+  outline: 2px solid var(--ed-accent-soft);
+  border-color: var(--ed-accent);
+}
+
+.ed-range {
+  width: 80px;
+  accent-color: var(--ed-accent);
+}
+
+/* ---- top toolbar ---- */
+
+.ed-topbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 48px;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  background: var(--ed-bg);
+  border-bottom: 1px solid var(--ed-line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.ed-tb-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ed-tb-mode {
+  gap: 8px;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.ed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ed-accent);
+  box-shadow: 0 0 0 3px var(--ed-accent-soft);
+}
+
+.ed-tb-sep {
+  width: 1px;
+  height: 22px;
+  margin: 0 6px;
+  background: var(--ed-line);
+}
+
+.ed-tb-spacer {
+  flex: 1;
+}
+
+.ed-tb-status {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  color: var(--ed-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.ed-tb-status:empty {
+  display: none;
+}
+
+.ed-tb-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--ed-line);
+  color: var(--ed-muted);
+  font-size: 12px;
+  cursor: help;
+}
+
+/* ---- slide rail ---- */
+
+.ed-pages {
+  position: fixed;
+  left: 0;
+  top: 48px;
+  bottom: 0;
+  width: 220px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--ed-bg-soft);
+  border-right: 1px solid var(--ed-line);
+  z-index: 2000;
+}
+
+.ed-pages-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 12px 8px;
+}
+
+.ed-panel-title {
+  font-weight: 700;
+}
+
+.ed-pages-hint {
+  color: var(--ed-muted);
+  font-size: 11px;
+  cursor: help;
+}
+
+.ed-pages-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 8px 12px;
+  overflow: auto;
+  flex: 1;
+}
+
+.ed-pages-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 6px;
+  align-items: start;
+  padding: 6px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ed-pages-list li:hover {
+  background: rgba(47, 124, 255, 0.08);
+}
+
+.ed-page-no {
+  padding-top: 2px;
+  color: var(--ed-muted);
+  font:
+    700 11px ui-monospace,
+    Consolas,
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-pages-list li.is-current .ed-page-no {
+  color: var(--ed-accent);
+}
+
+.ed-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.ed-thumb > .slide {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: visible;
+  transform-origin: 0 0;
+}
+
+.ed-pages-list li.is-current .ed-thumb {
+  border-color: var(--ed-accent);
+  box-shadow: 0 0 0 2px var(--ed-accent-soft);
+}
+
+.ed-pages-list li.is-hidden .ed-thumb {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+.ed-pages-list li.is-dragover {
+  box-shadow: 0 -2px 0 var(--ed-accent);
+}
+
+.ed-page-actions {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--ed-line);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.ed-pages-list li:hover .ed-page-actions,
+.ed-pages-list li:focus-within .ed-page-actions,
+.ed-pages-list li.is-hidden .ed-page-actions {
+  opacity: 1;
+}
+
+.ed-page-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ed-text);
+  font:
+    11px system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+
+.ed-page-actions button:hover {
+  background: var(--ed-bg-soft);
+}
+
+.ed-page-actions .ed-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.ed-pages-note {
+  margin: 0 12px 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff6e0;
+  color: #8a5a00;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ---- floating toolbar (follows the selection) ---- */
+
+.ed-float {
+  position: fixed;
+  z-index: 2100;
+  max-width: 960px;
+  padding: 6px 8px;
+  border-radius: var(--ed-radius);
+  background: var(--ed-bg);
+  border: 1px solid var(--ed-line);
+  box-shadow: var(--ed-shadow);
+}
+
+.ed-float.is-dragging {
+  visibility: hidden;
+}
+
+.ed-float-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.ed-float-row + .ed-float-row {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--ed-line);
+}
+
+.ed-key {
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--ed-bg-soft);
+  color: var(--ed-muted);
+  font:
+    11px ui-monospace,
+    Consolas,
+    monospace;
+  line-height: 28px;
+  white-space: nowrap;
+}
+
+.ed-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ed-seg {
+  gap: 0;
+  padding: 1px;
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+}
+
+.ed-seg .ed-ibtn {
+  width: 28px;
+  height: 26px;
+  border-radius: 6px;
+}
+
+.ed-swatch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ed-swatch input[type="color"] {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--ed-line);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.ed-swatch input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.ed-swatch input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 50%;
+}
+
+.ed-swatch.is-unset input[type="color"] {
+  background: linear-gradient(
+    135deg,
+    transparent 46%,
+    var(--ed-danger) 46%,
+    var(--ed-danger) 54%,
+    transparent 54%
+  );
+}
+
+.ed-file {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ed-line);
+}
+
+.ed-file input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.ed-content-lbl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  color: var(--ed-muted);
+  font-size: 12px;
+}
+
+.ed-content-lbl small {
+  margin-left: 6px;
+  color: var(--ed-muted);
+}
+
+.ed-float textarea {
+  width: 100%;
+  min-width: 420px;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ed-text);
+  font:
+    12px / 1.5 ui-monospace,
+    Consolas,
+    monospace;
+  resize: vertical;
+}
+
+.ed-float-more .ed-num {
+  width: 58px;
+}
+
+/* The chrome toggles controls with the hidden attribute. The display rules above would win over the
+   browser's [hidden] default, so this rule sits last and carries two class-level selectors on purpose. */
+.ed-topbar [hidden],
+.ed-pages [hidden],
+.ed-float [hidden],
+.ed-float[hidden],
+.ed-spot-bar[hidden] {
+  display: none;
+}
+
+/* ---- multi-selection, marquee ---- */
+
+.ed-box.is-multi {
+  outline-style: dashed;
+}
+
+.ed-multi {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ed-box-thin {
+  position: absolute;
+  outline: 1px solid rgba(47, 124, 255, 0.85);
+  pointer-events: none;
+}
+
+.ed-marquee {
+  position: absolute;
+  outline: 1px dashed #2f7cff;
+  background: rgba(47, 124, 255, 0.08);
+  pointer-events: none;
+}
+
+/* ---- colour chips (theme tokens read from :root) ---- */
+
+.ed-chips {
+  gap: 3px;
+}
+
+.ed-chips .ed-lbl {
+  margin-right: 3px;
+}
+
+.ed-chip {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  background: var(--chip, #fff);
+  cursor: pointer;
+}
+
+.ed-chip:hover {
+  transform: scale(1.12);
+}
+
+.ed-chip.is-on {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--ed-accent);
+}
+
+.ed-chip-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--ed-muted);
+}
+
+.ed-chip-clear .ed-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.ed-chips .ed-swatch {
+  margin-left: 3px;
+}
+
+.ed-chips .ed-swatch input[type="color"] {
+  width: 22px;
+  height: 22px;
+}
+
+.ed-font {
+  max-width: 132px;
+}
+
+/* ---- draft bar (no dev server) ---- */
+
+.ed-draft {
+  position: fixed;
+  left: 50%;
+  top: 60px;
+  transform: translateX(-50%);
+  z-index: 2200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  background: var(--ed-bg);
+  border: 1px solid var(--ed-line);
+  box-shadow: var(--ed-shadow);
+  color: var(--ed-text);
+  font: var(--ed-font);
+  white-space: nowrap;
+}
+
+.ed-draft b {
+  font-family: ui-monospace, Consolas, monospace;
+  font-weight: 600;
+}
+
+.ed-draft [hidden] {
+  display: none;
+}
+
+/* ---- the element toolbar docked on the right (a viewer preference) ---- */
+
+.ed-float.is-docked {
+  /* biome-ignore lint/complexity/noImportantStyles: the floating mode's inline coordinates must lose */
+  left: auto !important;
+  right: 0;
+  /* biome-ignore lint/complexity/noImportantStyles: the floating mode's inline coordinates must lose */
+  top: 48px !important;
+  bottom: 0;
+  width: 320px;
+  max-width: none;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 10px 12px 16px;
+  border-radius: 0;
+  border-width: 0 0 0 1px;
+  box-shadow: none;
+  z-index: 2000;
+}
+
+.ed-float.is-docked.is-dragging {
+  visibility: visible;
+}
+
+.ed-float.is-docked[data-empty="true"] > * {
+  display: none;
+}
+
+.ed-float.is-docked[data-empty="true"]::before {
+  content: "點選元件開始編輯";
+  display: block;
+  padding: 32px 0;
+  color: var(--ed-muted);
+  text-align: center;
+}
+
+.ed-float.is-docked .ed-float-row {
+  gap: 6px 8px;
+}
+
+.ed-float.is-docked .ed-float-row + .ed-float-row {
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.ed-float.is-docked .ed-ctl {
+  flex-wrap: wrap;
+}
+
+.ed-float.is-docked .ed-content-lbl,
+.ed-float.is-docked textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---- the top toolbar's page-transition menu ---- */
+
+/* biome-ignore lint/style/noDescendingSpecificity: a different container from the docked toolbar's .ed-ctl */
+.ed-topbar .ed-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 4px;
+}
+
+.ed-topbar select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ed-text);
+  font: inherit;
+}

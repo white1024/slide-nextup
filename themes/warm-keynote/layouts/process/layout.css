@@ -1,0 +1,168 @@
+/* warm-keynote/process — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="process"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="process"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="process"] [data-el="title"] {
+  left: 101px;
+  top: 140px;
+  width: 1718px;
+  height: 150px;
+  font-size: 55px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="process"] [data-el="subtitle"] {
+  left: 101px;
+  top: 318px;
+  width: 1718px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="process"] [data-el="step-1"] {
+  left: 101px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-1"] {
+  left: 345px;
+  top: 466px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-2"] {
+  left: 398px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-2"] {
+  left: 642px;
+  top: 466px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-3"] {
+  left: 695px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-3"] {
+  left: 939px;
+  top: 466px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-4"] {
+  left: 992px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-4"] {
+  left: 1236px;
+  top: 466px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-5"] {
+  left: 1289px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-5"] {
+  left: 1533px;
+  top: 466px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-6"] {
+  left: 1586px;
+  top: 430px;
+  width: 232px;
+  height: 96px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="caption"] {
+  left: 101px;
+  top: 560px;
+  width: 1718px;
+  height: 120px;
+  font-size: 28px;
+  line-height: 1.6;
+}
+
+[data-layout="process"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="process"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+

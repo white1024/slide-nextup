@@ -1,0 +1,158 @@
+{
+  "id": "comparison",
+  "name": "起因與後果：暖色 Keynote",
+  "description": "左邊玻璃卡片放起因，右邊橘紅卡片放後果，中間一顆橘紅圓形箭頭。後果那張刻意比較重。改成左右對稱的兩欄會失去因果方向。",
+  "content_relations": [
+    "comparison"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 320,
+    "max_elements": 15
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "left-title": {
+      "type": "text",
+      "required": true,
+      "hint": "左欄標題，例如「HR 的月底循環」"
+    },
+    "left-items": {
+      "type": "list",
+      "required": true,
+      "hint": "左欄三到四條"
+    },
+    "right-title": {
+      "type": "text",
+      "required": true,
+      "hint": "右欄標題，例如「催不動的代價」"
+    },
+    "right-items": {
+      "type": "list",
+      "required": true,
+      "hint": "右欄三到四條"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "left",
+      "kind": "shape"
+    },
+    {
+      "id": "left-title",
+      "kind": "text"
+    },
+    {
+      "id": "left-items",
+      "kind": "text"
+    },
+    {
+      "id": "link",
+      "kind": "shape"
+    },
+    {
+      "id": "badge",
+      "kind": "shape"
+    },
+    {
+      "id": "badge-arrow",
+      "kind": "shape"
+    },
+    {
+      "id": "right",
+      "kind": "shape"
+    },
+    {
+      "id": "right-title",
+      "kind": "text"
+    },
+    {
+      "id": "right-items",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "員工拖延，後果由 HR 扛"
+    },
+    "left-title": {
+      "type": "text",
+      "value": "HR 的月底循環"
+    },
+    "left-items": {
+      "type": "list",
+      "items": [
+        "檢查異常：逐人比對打卡紀錄",
+        "催員工補單：追第二次第三次",
+        "答重複問題：同樣的問題每天答數十次"
+      ]
+    },
+    "right-title": {
+      "type": "text",
+      "value": "催不動的代價"
+    },
+    "right-items": {
+      "type": "list",
+      "items": [
+        "薪資算錯：HR 先被追究",
+        "法遵風險：出勤不實與短付加班費",
+        "時間黑洞：催繳與答詢吃掉工時"
+      ]
+    }
+  }
+}

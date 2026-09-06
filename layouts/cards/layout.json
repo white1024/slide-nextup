@@ -1,0 +1,35 @@
+{
+  "id": "cards",
+  "name": "一加三卡片",
+  "description": "一個標題加三張等寬卡片，卡片可放短句或大數字。改成條列會失去「三件事各自獨立」的並列感。",
+  "content_relations": ["list", "evidence", "hierarchy"],
+  "scene_roles": ["map", "evidence"],
+  "density": { "max_chars": 240, "max_elements": 4 },
+  "slots": {
+    "title": { "type": "text", "required": true, "hint": "統括三張卡片的標題，一行" },
+    "card-1": { "type": ["text", "metric"], "required": true, "hint": "短句或 metric（大數字、標籤、變化）；可加 details（播放時點卡片展開的完整內容）" },
+    "card-2": { "type": ["text", "metric"], "required": true, "hint": "同上" },
+    "card-3": { "type": ["text", "metric"], "required": false, "hint": "同上；只有兩張時用覆寫隱藏或留空" }
+  },
+  "elements": [
+    { "id": "title", "kind": "text" },
+    { "id": "card-1", "kind": "text" },
+    { "id": "card-2", "kind": "text" },
+    { "id": "card-3", "kind": "text" }
+  ],
+  "sample": {
+    "title": { "type": "text", "value": "試做兩份，改版輪數歸零" },
+    "card-1": {
+      "type": "metric",
+      "value": "0",
+      "label": "試做 A 的版面修改輪數",
+      "delta": "敘事改兩輪",
+      "details": {
+        "type": "list",
+        "items": ["第一輪：對調第 2、3 章的順序", "第二輪：把數據頁拆成兩頁", "版面從頭到尾沒有動過"]
+      }
+    },
+    "card-2": { "type": "metric", "value": "0", "label": "試做 B 的版面修改輪數", "delta": "敘事改一輪" },
+    "card-3": { "type": "text", "value": "下一步：用真實提案再試一次，看數字會不會維持。" }
+  }
+}

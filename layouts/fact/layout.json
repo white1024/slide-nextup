@@ -1,0 +1,35 @@
+{
+  "id": "fact",
+  "name": "單一數字",
+  "description": "一個 300px 的大數字佔滿畫面，配標籤、變化量與一句說明。改成卡片會失去「這一頁只有一個數字要記住」的重量。",
+  "content_relations": ["evidence", "statement"],
+  "scene_roles": ["evidence", "hero", "pause"],
+  "density": { "max_chars": 160, "max_elements": 10 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "kicker": { "type": "text", "required": false, "hint": "數字的脈絡，四到十二個字" },
+    "fact": { "type": ["metric", "text"], "required": true, "hint": "metric：value 是數字、label 是它代表什麼、delta 是變化或母體" },
+    "caption": { "type": "text", "required": false, "hint": "一句出處或限制說明" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "corner-tl", "kind": "shape" },
+    { "id": "corner-br", "kind": "shape" },
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "kicker", "kind": "text" },
+    { "id": "rule", "kind": "shape" },
+    { "id": "fact", "kind": "text" },
+    { "id": "caption", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "kicker": { "type": "text", "value": "上季六份簡報的改版紀錄" },
+    "fact": { "type": "metric", "value": "0", "label": "新流程試做兩份的版面修改輪數", "delta": "舊流程平均 4 輪" },
+    "caption": { "type": "text", "value": "兩份試做各改敘事一到兩輪，版面零輪。" },
+    "page": { "type": "text", "value": "06 / 08" }
+  }
+}

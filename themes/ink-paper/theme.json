@@ -1,0 +1,28 @@
+{
+  "id": "ink-paper",
+  "name": "墨與紙",
+  "description": "暖紙底、墨色文字、單一朱紅強調色。襯線標題配無襯線內文，只用細線與色塊裝飾，沒有漸層與陰影。",
+  "colors": {
+    "paper": { "value": "#f4efe6", "use": "頁面底色" },
+    "ink": { "value": "#1b1a17", "use": "主要文字；反相頁的底色" },
+    "muted": { "value": "#6b665c", "use": "副標、說明、次要文字" },
+    "accent": { "value": "#c8102e", "use": "唯一強調色：kicker、關鍵數字、CTA、分隔線、列表記號" },
+    "surface": { "value": "#ebe3d3", "use": "卡片與面板底色" },
+    "line": { "value": "#cfc6b4", "use": "細線、邊框、分隔" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Noto Serif TC', 'Songti TC', 'PMingLiU', 'Source Han Serif TC', Georgia, serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 4 },
+  "decoration": {
+    "vocabulary": ["細線分隔", "單一朱紅色條", "放大的數字", "大面積留白"],
+    "avoid": ["漸層", "陰影", "圓角卡片牆", "右側制式插圖", "Inter 或 Roboto"]
+  }
+}

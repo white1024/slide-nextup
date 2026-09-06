@@ -1,0 +1,28 @@
+{
+  "id": "concrete",
+  "name": "混凝土與橘",
+  "description": "包浩斯與瑞士國際主義：水泥灰底帶細點陣、墨黑 900 字重大標、整塊橘色幾何（實心圓、色條）、黑框卡片配橘色左緣，家具用等寬字。關鍵詞不斜體，直接換成橘色。",
+  "colors": {
+    "paper": { "value": "#d9d9d6", "use": "頁面底色（水泥灰）" },
+    "ink": { "value": "#111111", "use": "主要文字、黑框；反相頁的底色" },
+    "muted": { "value": "#4f5350", "use": "副標、說明" },
+    "accent": { "value": "#ff5a1f", "use": "唯一強調色：實心圓、色條、關鍵詞、卡片左緣、節點" },
+    "surface": { "value": "#e8e8e5", "use": "卡片底色" },
+    "line": { "value": "#b9bab6", "use": "細線" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif",
+      "weight": 900
+    },
+    "body": {
+      "family": "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 0 },
+  "decoration": {
+    "vocabulary": ["實心橘色圓", "黑框卡片", "橘色左緣", "3px 黑角標", "細點陣底", "等寬家具"],
+    "avoid": ["光暈", "圓角", "襯線", "漸層", "陰影"]
+  }
+}

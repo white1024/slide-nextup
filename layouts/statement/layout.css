@@ -1,0 +1,32 @@
+[data-layout="statement"] [data-el="title"] {
+  left: 96px;
+  top: 120px;
+  width: 1728px;
+  height: 300px;
+  font-size: 96px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="statement"] [data-el="body"] {
+  left: 96px;
+  top: 460px;
+  width: 1728px;
+  height: 200px;
+  font-size: 44px;
+  line-height: 1.5;
+}
+
+[data-layout="statement"] [data-el="evidence"] {
+  left: 96px;
+  top: 700px;
+  width: 1728px;
+  height: 280px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="statement"] .list li {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}

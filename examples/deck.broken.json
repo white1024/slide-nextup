@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "broken",
+  "title": "故意壞掉的 deck",
+  "theme": "ink-paper",
+  "canvas": {
+    "width": 1920,
+    "height": 1080
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "layout": "cover",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "標題"
+        },
+        "ghost": {
+          "type": "text",
+          "value": "這個 slot 沒有對應的元件"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "layout": "statement",
+      "slots": {
+        "title": {
+          "type": "text",
+          "value": "重複的頁面 id"
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "kind": "text"
+        }
+      ]
+    },
+    {
+      "layout": "closing",
+      "slots": {},
+      "elements": [
+        {
+          "id": "photo",
+          "kind": "image"
+        }
+      ]
+    }
+  ],
+  "overrides": {
+    "s1/missing": {
+      "x": 10
+    },
+    "s9/title": {
+      "y": 10
+    },
+    "s1/title": {
+      "src": "photo.jpg"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+[data-layout="code-block"] [data-el="brand"] {
+  left: 96px;
+  top: 48px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="code-block"] [data-el="meta"] {
+  left: 1024px;
+  top: 48px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="code-block"] [data-el="title"] {
+  left: 96px;
+  top: 112px;
+  width: 1728px;
+  height: 100px;
+  font-size: 64px;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+[data-layout="code-block"] [data-el="code"] {
+  left: 96px;
+  top: 256px;
+  width: 1728px;
+  height: 600px;
+  padding: 40px 48px;
+  font-size: 32px;
+  line-height: 1.55;
+}
+
+[data-layout="code-block"] [data-el="caption"] {
+  left: 96px;
+  top: 888px;
+  width: 1728px;
+  height: 90px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="code-block"] [data-el="page"] {
+  left: 1624px;
+  top: 1008px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

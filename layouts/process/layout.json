@@ -1,0 +1,43 @@
+{
+  "id": "process",
+  "name": "流程：四步",
+  "description": "一條橫向軌道、四個節點、四張步驟卡；步驟卡可放「序號｜步驟名｜一句說明」的 metric。改成一條箭頭字串會失去「每一步各自有名字與說明」的可讀性。",
+  "content_relations": ["sequence"],
+  "scene_roles": ["relationship", "map"],
+  "density": { "max_chars": 400, "max_elements": 14 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
+    "step-1": { "type": ["text", "metric"], "required": true, "hint": "metric：value 放序號或步驟名，label 放一句說明" },
+    "step-2": { "type": ["text", "metric"], "required": true, "hint": "同上" },
+    "step-3": { "type": ["text", "metric"], "required": true, "hint": "同上" },
+    "step-4": { "type": ["text", "metric"], "required": false, "hint": "同上；只有三步就留空並隱藏第四個節點" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "rail", "kind": "shape" },
+    { "id": "node-1", "kind": "shape" },
+    { "id": "node-2", "kind": "shape" },
+    { "id": "node-3", "kind": "shape" },
+    { "id": "node-4", "kind": "shape" },
+    { "id": "step-1", "kind": "text" },
+    { "id": "step-2", "kind": "text" },
+    { "id": "step-3", "kind": "text" },
+    { "id": "step-4", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "新流程的四步，只有一步需要人停下來" },
+    "step-1": { "type": "metric", "value": "01", "label": "Brief：一次問清用途、時長、材料、密度" },
+    "step-2": { "type": "metric", "value": "02", "label": "敘事文件：逐頁訊息與證據，*你確認*後才往下" },
+    "step-3": { "type": "metric", "value": "03", "label": "視覺方向：三張真封面，挑一張" },
+    "step-4": { "type": "metric", "value": "04", "label": "生成與編輯：HTML 產出，瀏覽器裡改" },
+    "page": { "type": "text", "value": "05 / 08" }
+  }
+}

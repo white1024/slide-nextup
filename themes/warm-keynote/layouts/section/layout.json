@@ -1,0 +1,97 @@
+{
+  "id": "section",
+  "name": "章節：暖色 Keynote",
+  "description": "章節開場：右上膠囊標籤、左邊一個淡青綠的巨大編號、青綠短線、大標與一段導語。改成一般標題頁會失去編號帶來的「翻到下一章」節奏。",
+  "content_relations": [
+    "statement",
+    "list"
+  ],
+  "scene_roles": [
+    "map",
+    "pause",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 120,
+    "max_elements": 7
+  },
+  "slots": {
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤"
+    },
+    "number": {
+      "type": "text",
+      "required": true,
+      "hint": "章節編號，兩位數"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "章節標題，一到兩行、十四字以內"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "一段導語，五十字以內"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "number",
+      "kind": "text"
+    },
+    {
+      "id": "rule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "meta": {
+      "type": "text",
+      "value": "第一章"
+    },
+    "number": {
+      "type": "text",
+      "value": "01"
+    },
+    "title": {
+      "type": "text",
+      "value": "為什麼一直改版面"
+    },
+    "body": {
+      "type": "text",
+      "value": "先看使用者怎麼描述問題，再看數字。"
+    },
+    "page": {
+      "type": "text",
+      "value": "02 / 08"
+    }
+  }
+}

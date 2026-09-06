@@ -1,0 +1,61 @@
+/* warm-keynote/fact — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="fact"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="fact"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="fact"] [data-el="fact"] {
+  left: 101px;
+  top: 300px;
+  width: 1718px;
+  height: 420px;
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+[data-layout="fact"] [data-el="caption"] {
+  left: 101px;
+  top: 760px;
+  width: 1718px;
+  height: 120px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="fact"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="fact"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+
+[data-layout="fact"] [data-el="fact"] .metric { justify-content: flex-start; }
+[data-layout="fact"] [data-el="fact"] .metric-value { font-size: 240px; line-height: 1; }
+[data-layout="fact"] [data-el="fact"] .metric-label { font-size: 36px; line-height: 1.4; margin-top: 24px; }
+

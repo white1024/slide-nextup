@@ -1,0 +1,220 @@
+{
+  "id": "process",
+  "name": "流程：暖色 Keynote",
+  "description": "一條橫向流程：六個膠囊節點與五個箭頭，上面導語、下面提醒。改成條列會失去「一眼看完整條線」的效果。",
+  "content_relations": [
+    "sequence"
+  ],
+  "scene_roles": [
+    "relationship",
+    "map"
+  ],
+  "density": {
+    "max_chars": 260,
+    "max_elements": 19
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語，五十字以內"
+    },
+    "step-1": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "步驟名，每行七字以內、兩行以內"
+    },
+    "step-2": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "同上；不需要就留空"
+    },
+    "step-3": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "同上；不需要就留空"
+    },
+    "step-4": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "step-5": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "step-6": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "同上；不需要就留空"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "流程的提醒：最容易漏的一兩件事"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "step-1",
+      "kind": "text"
+    },
+    {
+      "id": "arrow-1",
+      "kind": "shape"
+    },
+    {
+      "id": "step-2",
+      "kind": "text"
+    },
+    {
+      "id": "arrow-2",
+      "kind": "shape"
+    },
+    {
+      "id": "step-3",
+      "kind": "text"
+    },
+    {
+      "id": "arrow-3",
+      "kind": "shape"
+    },
+    {
+      "id": "step-4",
+      "kind": "text"
+    },
+    {
+      "id": "arrow-4",
+      "kind": "shape"
+    },
+    {
+      "id": "step-5",
+      "kind": "text"
+    },
+    {
+      "id": "arrow-5",
+      "kind": "shape"
+    },
+    {
+      "id": "step-6",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "固定六步的量測流程"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "一次完整量測是固定的六步，可中斷、可續跑。"
+    },
+    "step-1": {
+      "type": "text",
+      "value": "preflight"
+    },
+    "step-2": {
+      "type": "text",
+      "value": "download"
+    },
+    "step-3": {
+      "type": "text",
+      "value": "plan"
+    },
+    "step-4": {
+      "type": "text",
+      "value": "run"
+    },
+    "step-5": {
+      "type": "text",
+      "value": "aggregate"
+    },
+    "step-6": {
+      "type": "text",
+      "value": "export"
+    },
+    "caption": {
+      "type": "text",
+      "value": "run 不會自動產出結果檔，漏掉 export 等於跑完卻交不出東西。"
+    }
+  }
+}

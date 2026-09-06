@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://slide-workflow.local/schemas/layout.schema.json",
+  "title": "Layout",
+  "description": "layouts/<id>/layout.json：版型只描述結構。slots 是 agent 要填的內容槽位，elements 是編輯器可操作的元件；兩者的 id 必須與 layout.html 的 data-slot / data-el 一致。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "description",
+    "content_relations",
+    "scene_roles",
+    "density",
+    "slots",
+    "elements",
+    "sample"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "一句話說明這個版型適合什麼內容關係，以及「改成普通 grid 會失去什麼」"
+    },
+    "content_relations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": ["statement", "comparison", "sequence", "hierarchy", "evidence", "list", "closing"]
+      }
+    },
+    "scene_roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["hero", "map", "evidence", "relationship", "pause", "close"] }
+    },
+    "density": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_chars", "max_elements"],
+      "properties": {
+        "max_chars": { "type": "integer", "minimum": 1 },
+        "max_elements": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "required"],
+        "properties": {
+          "type": {
+            "description": "可接受的 slot 型別；一個或多個（例如卡片同時接受 text 與 metric）",
+            "oneOf": [
+              { "enum": ["text", "list", "image", "metric", "chart", "table", "code", "icon", "tabs"] },
+              {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "enum": ["text", "list", "image", "metric", "chart", "table", "code", "icon", "tabs"] }
+              }
+            ]
+          },
+          "required": { "type": "boolean" },
+          "hint": { "type": "string" }
+        }
+      }
+    },
+    "elements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "kind": { "enum": ["text", "image", "shape"] }
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "description": "預覽與測試用的範例內容；鍵必須是 slots 之一",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+      "additionalProperties": {
+        "$ref": "https://slide-workflow.local/schemas/deck.schema.json#/definitions/slot"
+      }
+    }
+  }
+}

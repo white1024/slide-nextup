@@ -1,0 +1,35 @@
+{
+  "id": "section",
+  "name": "章節頁",
+  "description": "大號章節數字、一小段色條、標題與一句導語，其餘留白。改成一般標題頁會失去「翻到這裡就知道換章了」的呼吸感。",
+  "content_relations": ["statement", "list"],
+  "scene_roles": ["map", "pause", "relationship"],
+  "density": { "max_chars": 160, "max_elements": 10 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填敘事標題的系列名（冒號前）" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填 occasion 的第一句（十字以內）" },
+    "number": { "type": "text", "required": true, "hint": "章節序號，兩位數字，例如 02" },
+    "title": { "type": "text", "required": true, "hint": "章節標題，一到兩行" },
+    "body": { "type": "text", "required": false, "hint": "一到兩行導語" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "corner-tl", "kind": "shape" },
+    { "id": "corner-br", "kind": "shape" },
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "number", "kind": "text" },
+    { "id": "rule", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "body", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "number": { "type": "text", "value": "02" },
+    "title": { "type": "text", "value": "工具沒有錯，順序錯了" },
+    "body": { "type": "text", "value": "現有工具都先讓你排版面，再回頭想敘事，所以每次改敘事都要重排。" },
+    "page": { "type": "text", "value": "03 / 08" }
+  }
+}

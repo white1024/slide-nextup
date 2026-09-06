@@ -1,0 +1,53 @@
+/* warm-keynote/cover — geometry only. The source deck is a 1600×900 stage; every number here is its value × 1.2. */
+[data-layout="cover"] [data-el="bar"] {
+  left: 120px;
+  top: 366px;
+  width: 53px;
+  height: 5px;
+}
+
+[data-layout="cover"] [data-el="brand"] {
+  left: 192px;
+  top: 351px;
+  width: 1200px;
+  height: 34px;
+  font-size: 24px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 120px;
+  top: 416px;
+  width: 1680px;
+  height: 110px;
+  font-size: 91px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 120px;
+  top: 557px;
+  width: 1680px;
+  height: 52px;
+  font-size: 32px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+[data-layout="cover"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="cover"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}

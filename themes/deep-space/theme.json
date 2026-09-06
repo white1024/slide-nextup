@@ -1,0 +1,29 @@
+{
+  "id": "deep-space",
+  "name": "深空儀表",
+  "description": "天文台穹頂裡的儀器面板：深藍黑底、青色與靛藍兩團光暈、80px 網格線、青色錨點 label、800 字重負字距大標，關鍵詞換成襯線斜體青色。家具用等寬字。",
+  "colors": {
+    "paper": { "value": "#070d1f", "use": "頁面底色（深）" },
+    "ink": { "value": "#f3f6fb", "use": "主要文字；反相頁的底色" },
+    "muted": { "value": "#93a0b8", "use": "副標、說明、家具小字" },
+    "accent": { "value": "#22d3ee", "use": "唯一強調色：錨點、kicker、關鍵數字、節點、CTA、em" },
+    "accent2": { "value": "#6366f1", "use": "第二團光暈與卡片底的冷紫；不用在文字上" },
+    "surface": { "value": "#101a33", "use": "卡片與面板底色" },
+    "line": { "value": "#223052", "use": "細線、邊框、軌道" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif",
+      "weight": 800
+    },
+    "body": {
+      "family": "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 12 },
+  "decoration": {
+    "vocabulary": ["雙色光暈", "80px 網格線", "青色錨點 label", "發光節點", "襯線斜體關鍵詞", "等寬家具"],
+    "avoid": ["白底", "彩虹漸層", "馬卡龍色", "襯線大標", "圓角卡片牆"]
+  }
+}

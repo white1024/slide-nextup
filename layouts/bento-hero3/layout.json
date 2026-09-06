@@ -1,0 +1,41 @@
+{
+  "id": "bento-hero3",
+  "name": "Bento：頂部英雄加三子項",
+  "description": "一張橫向的主卡承載總述，下方三張子卡各講一項。改成四張等大卡片會失去「先總後分」的層級。",
+  "content_relations": ["hierarchy", "list", "evidence"],
+  "scene_roles": ["map", "evidence", "relationship"],
+  "density": { "max_chars": 420, "max_elements": 8 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
+    "hero": { "type": ["text", "list"], "required": true, "hint": "總述：一到三行，或三條以內的清單" },
+    "card-1": { "type": ["text", "metric"], "required": true, "hint": "子項一：短句或大數字" },
+    "card-2": { "type": ["text", "metric"], "required": true, "hint": "子項二" },
+    "card-3": { "type": ["text", "metric"], "required": false, "hint": "子項三；沒有就留空" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "hero", "kind": "text" },
+    { "id": "card-1", "kind": "text" },
+    { "id": "card-2", "kind": "text" },
+    { "id": "card-3", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "新流程把「確認敘事」放在生成版面之前" },
+    "hero": {
+      "type": "text",
+      "value": "brief → 敘事文件（你確認）→ 視覺方向 → 生成 → 瀏覽器內編輯。唯一需要人停下來的地方，是確認敘事那一步。"
+    },
+    "card-1": { "type": "metric", "value": "1", "label": "需要人停下來的關卡", "delta": "敘事確認" },
+    "card-2": { "type": "metric", "value": "3", "label": "視覺方向，各一張真封面", "delta": "使用者挑一個" },
+    "card-3": { "type": "text", "value": "生成之後的修改只發生在瀏覽器裡，重生成不會蓋掉。" },
+    "page": { "type": "text", "value": "05 / 08" }
+  }
+}

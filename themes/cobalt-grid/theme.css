@@ -1,0 +1,268 @@
+/* cobalt-grid — appearance only; geometry lives in each layout.css.
+   Ported from beautiful-html-templates/cobalt-grid (Zara Zhang, MIT) — see THIRD_PARTY_NOTICES.md.
+   Fonts: Newsreader + Hanken Grotesk + DM Mono (OFL) via Google Fonts, Latin subset; CJK falls through to system fonts. */
+
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/dmmono/v16/aFTU7PB1QTsUX8KYthqQBA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59A.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59A.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/newsreader/v26/cY9kfjOCX1hbuyalUrK439vogqC9yFZCYg7oRZaLP4obnf7fTXglsMwoT9ZHFjQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/newsreader/v26/cY9VfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBAbNJYQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/newsreader/v26/cY9VfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBAbNJYQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.slide {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
+  background-size: 42px 42px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-tone="inverse"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+[data-role="backdrop"] {
+  background: var(--color-ink);
+}
+
+[data-role="divider"] {
+  background: var(--color-line);
+}
+
+[data-role="pixel"] line {
+  stroke: var(--color-ink);
+  stroke-width: 1;
+}
+
+[data-role="meta"] {
+  color: var(--color-ink);
+  font-family: 'DM Mono', 'Cascadia Code', 'Consolas', 'Noto Sans TC', 'Microsoft JhengHei', monospace;
+  letter-spacing: 0.06em;
+}
+
+[data-role="kicker"] {
+  color: var(--color-ink);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+[data-role="title"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.008em;
+}
+
+[data-role="subtitle"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-ink);
+}
+
+[data-role="body"],
+[data-role="caption"] {
+  color: var(--color-ink);
+}
+
+[data-tone="inverse"] [data-role="subtitle"],
+[data-tone="inverse"] [data-role="body"],
+[data-tone="inverse"] [data-role="meta"],
+[data-tone="inverse"] [data-role="kicker"] {
+  color: var(--color-paper);
+}
+
+[data-role="card"] {
+  background: var(--color-paper);
+  border: 1.5px solid var(--color-line);
+}
+
+[data-role="cta"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+.list li {
+  border-top: 1.5px solid var(--color-line);
+}
+
+.metric-value,
+[data-role="number"],
+[data-role="stat"] .metric-value {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+.metric-label,
+[data-role="stat"] .metric-label {
+  color: var(--color-ink);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.metric-delta {
+  color: var(--color-muted);
+}
+
+[data-role="photo"] {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-line);
+}
+
+[data-role="corner"] {
+  border-top: 1.5px solid var(--color-line);
+  border-left: 1.5px solid var(--color-line);
+}
+
+[data-role="corner-end"] {
+  border-bottom: 1.5px solid var(--color-line);
+  border-right: 1.5px solid var(--color-line);
+}
+
+[data-role="glow"] {
+  background: radial-gradient(circle at center, var(--color-ink) 0%, transparent 62%);
+  opacity: 0.06;
+}
+
+[data-role="frame"] {
+  border: 1.5px solid var(--color-line);
+}
+
+[data-role="node"] {
+  background: var(--color-ink);
+}
+
+[data-role="connector"]:not(svg) {
+  background: var(--color-line);
+}
+
+[data-role="connector"] line {
+  stroke: var(--color-ink);
+  stroke-width: 3;
+}
+
+[data-role="connector"] polygon {
+  fill: var(--color-ink);
+}
+
+[data-role="title"] em,
+[data-role="body"] em,
+[data-role="subtitle"] em,
+[data-role="card"] em,
+[data-role="list"] em {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+[data-role="scrim"] {
+  background: var(--color-paper);
+  opacity: 0.9;
+}
+
+[data-role="chart"] {
+  color: var(--color-ink);
+}
+
+.chart-track {
+  fill: var(--color-faint);
+}
+
+.chart-grid {
+  stroke: var(--color-faint);
+}
+
+[data-role="table"] .table th {
+  border-bottom: 1.5px solid var(--color-line);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+[data-role="table"] .table td {
+  border-bottom: 1px solid var(--color-faint);
+  font-family: 'DM Mono', 'Cascadia Code', 'Consolas', 'Noto Sans TC', 'Microsoft JhengHei', monospace;
+}
+
+[data-role="code"] {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-line);
+}
+
+[data-role="icon"] {
+  color: var(--color-ink);
+}
+
+/* ---- playback micro-interactions: only under html[data-interactive]; the player drops it in static and edit modes ---- */
+
+[data-interactive] [data-role="card"]:hover {
+  border-color: var(--color-ink);
+  box-shadow: 6px 6px 0 var(--color-line);
+  transform: translate(-2px, -2px);
+}
+
+[data-interactive] [data-role="cta"]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+[data-interactive] [data-role="photo"]:hover {
+  border-color: var(--color-ink);
+  box-shadow: 6px 6px 0 var(--color-line);
+  transform: translate(-2px, -2px);
+}
+
+[data-interactive] [data-role="table"] tbody tr:hover td {
+  background: var(--color-surface);
+}

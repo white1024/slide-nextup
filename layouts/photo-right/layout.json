@@ -1,0 +1,36 @@
+{
+  "id": "photo-right",
+  "name": "圖在右",
+  "description": "右半邊整塊出血的圖，左邊 kicker、標題與一段說明。改成上下排會失去「圖與文各佔一半、互相對望」的張力。",
+  "content_relations": ["evidence", "statement"],
+  "scene_roles": ["evidence", "hero", "pause", "relationship"],
+  "density": { "max_chars": 200, "max_elements": 6 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填；在左下" },
+    "photo": { "type": "image", "required": true, "hint": "直幅或方形的圖，會以 cover 裁切到右半邊" },
+    "kicker": { "type": "text", "required": false, "hint": "小標，四到十二個字" },
+    "title": { "type": "text", "required": true, "hint": "主張，一到三行" },
+    "body": { "type": "text", "required": false, "hint": "一到三行說明" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "page", "kind": "text" },
+    { "id": "photo", "kind": "image" },
+    { "id": "kicker", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "body", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "page": { "type": "text", "value": "04 / 08" },
+    "photo": {
+      "type": "image",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'><rect width='3' height='4' fill='%23cfc6b4'/><circle cx='0.9' cy='1' r='0.4' fill='%23c8102e'/><path d='M0 4 L1.1 2.3 L1.8 3 L2.4 2.4 L3 4 Z' fill='%236b665c'/></svg>",
+      "alt": "示意圖"
+    },
+    "kicker": { "type": "text", "value": "工具沒有錯" },
+    "title": { "type": "text", "value": "順序錯了，版面才會一直改" },
+    "body": { "type": "text", "value": "現有工具都先讓你排版面，再回頭想敘事；每次改敘事都要重排一次。" }
+  }
+}

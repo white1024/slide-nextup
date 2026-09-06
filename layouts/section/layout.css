@@ -1,0 +1,77 @@
+[data-layout="section"] [data-el="corner-tl"] {
+  left: 40px;
+  top: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="section"] [data-el="corner-br"] {
+  left: 1840px;
+  top: 1000px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="section"] [data-el="brand"] {
+  left: 96px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="section"] [data-el="meta"] {
+  left: 1024px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="section"] [data-el="number"] {
+  left: 96px;
+  top: 170px;
+  width: 700px;
+  height: 370px;
+  font-size: 260px;
+  line-height: 1.2;
+}
+
+[data-layout="section"] [data-el="rule"] {
+  left: 96px;
+  top: 548px;
+  width: 160px;
+  height: 8px;
+}
+
+[data-layout="section"] [data-el="title"] {
+  left: 96px;
+  top: 604px;
+  width: 1500px;
+  height: 240px;
+  font-size: 96px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="section"] [data-el="body"] {
+  left: 96px;
+  top: 868px;
+  width: 1200px;
+  height: 110px;
+  font-size: 34px;
+  line-height: 1.5;
+}
+
+[data-layout="section"] [data-el="page"] {
+  left: 1624px;
+  top: 992px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

@@ -1,0 +1,26 @@
+{
+  "id": "cover-editorial",
+  "name": "封面：雜誌編輯",
+  "description": "雜誌內頁式的封面：頂底兩條細線，kicker 在左上、副標像引言放在右上窄欄，標題壓在左下三分點，上方留白。改成置中標題頁會失去「先看到留白再看到主張」的節奏。",
+  "content_relations": ["statement"],
+  "scene_roles": ["hero"],
+  "density": { "max_chars": 130, "max_elements": 6 },
+  "slots": {
+    "kicker": { "type": "text", "required": false, "hint": "場合或系列名，四到十二個字" },
+    "title": { "type": "text", "required": true, "hint": "主張式標題，一到兩行，十六字以內" },
+    "subtitle": { "type": "text", "required": false, "hint": "一句支撐主張的事實，會放在右上窄欄，四十字以內" }
+  },
+  "elements": [
+    { "id": "rule-top", "kind": "shape" },
+    { "id": "kicker", "kind": "text" },
+    { "id": "subtitle", "kind": "text" },
+    { "id": "mark", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "rule-bottom", "kind": "shape" }
+  ],
+  "sample": {
+    "kicker": { "type": "text", "value": "週會提案" },
+    "title": { "type": "text", "value": "我們改簡報的時間，花在哪裡" },
+    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" }
+  }
+}

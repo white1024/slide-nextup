@@ -1,0 +1,118 @@
+{
+  "id": "statement",
+  "name": "主張：暖色 Keynote",
+  "description": "一頁一個主張：章節頭、導語，下面一張玻璃卡片放支撐的條列。改成純文字頁會失去卡片把論點框起來的份量。",
+  "content_relations": [
+    "statement",
+    "evidence",
+    "sequence"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship",
+    "pause"
+  ],
+  "density": {
+    "max_chars": 320,
+    "max_elements": 9
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "一到兩行導語"
+    },
+    "evidence": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "三到五條支撐；每條一行"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "slab",
+      "kind": "shape"
+    },
+    {
+      "id": "evidence",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "我們改簡報的時間，花在版面"
+    },
+    "body": {
+      "type": "text",
+      "value": "上季六份簡報平均改四輪，其中三輪只動版面。"
+    },
+    "evidence": {
+      "type": "list",
+      "items": [
+        "第一輪：換配色",
+        "第二輪：換版型",
+        "第三輪：內容其實沒動"
+      ]
+    }
+  }
+}

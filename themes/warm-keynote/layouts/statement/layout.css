@@ -1,0 +1,76 @@
+/* warm-keynote/statement — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="statement"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="statement"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="statement"] [data-el="title"] {
+  left: 101px;
+  top: 140px;
+  width: 1718px;
+  height: 150px;
+  font-size: 55px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="statement"] [data-el="body"] {
+  left: 101px;
+  top: 318px;
+  width: 1718px;
+  height: 110px;
+  font-size: 32px;
+  line-height: 1.65;
+}
+
+[data-layout="statement"] [data-el="slab"] {
+  left: 101px;
+  top: 452px;
+  width: 1718px;
+  height: 530px;
+}
+
+[data-layout="statement"] [data-el="evidence"] {
+  left: 141px;
+  top: 492px;
+  width: 1638px;
+  height: 450px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="statement"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="statement"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+
+[data-layout="statement"] [data-el="evidence"] li { padding-left: 34px; margin-bottom: 18px; }
+

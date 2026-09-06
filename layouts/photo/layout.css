@@ -1,0 +1,25 @@
+[data-layout="photo"] [data-el="photo"] {
+  left: 96px;
+  top: 96px;
+  width: 1056px;
+  height: 888px;
+}
+
+[data-layout="photo"] [data-el="title"] {
+  left: 1216px;
+  top: 96px;
+  width: 608px;
+  height: 400px;
+  font-size: 72px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="photo"] [data-el="caption"] {
+  left: 1216px;
+  top: 540px;
+  width: 608px;
+  height: 300px;
+  font-size: 36px;
+  line-height: 1.5;
+}

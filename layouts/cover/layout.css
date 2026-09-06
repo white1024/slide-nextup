@@ -1,0 +1,34 @@
+[data-layout="cover"] [data-el="backdrop"] {
+  left: 96px;
+  top: 96px;
+  width: 16px;
+  height: 888px;
+}
+
+[data-layout="cover"] [data-el="kicker"] {
+  left: 176px;
+  top: 260px;
+  width: 1600px;
+  height: 48px;
+  font-size: 32px;
+  line-height: 48px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 176px;
+  top: 330px;
+  width: 1600px;
+  height: 450px;
+  font-size: 128px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 176px;
+  top: 820px;
+  width: 1600px;
+  height: 130px;
+  font-size: 40px;
+  line-height: 1.5;
+}

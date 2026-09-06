@@ -1,0 +1,58 @@
+{
+  "id": "tabs",
+  "name": "分頁籤",
+  "description": "標題下面一個框，裡面幾個頁籤各放一個面板（條列、表格或一段話），播放時點頁籤切換，靜態只看第一個。改成三頁會失去「同一個框裡切換比較」的對照感。",
+  "content_relations": ["list", "comparison", "evidence"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 320, "max_elements": 6 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
+    "panels": { "type": "tabs", "required": true, "hint": "二到五個頁籤，標籤六字以內；每個面板三到五條或一張小表格，第一個面板是靜態與 QA 看到的" },
+    "caption": { "type": "text", "required": false, "hint": "一行出處或提醒" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "panels", "kind": "text" },
+    { "id": "caption", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "同一份流程，三種人各看自己的那一段" },
+    "panels": {
+      "type": "tabs",
+      "panels": [
+        {
+          "label": "作者",
+          "content": {
+            "type": "list",
+            "items": ["先寫敘事文件，逐頁一句訊息", "確認之後才生成版面", "改文字在瀏覽器裡改，不回頭動版面"]
+          }
+        },
+        {
+          "label": "審稿人",
+          "content": {
+            "type": "list",
+            "items": ["看逐頁摘要與節奏條，不看版面", "回覆「確認」或指出要改的頁", "改動再小也重新確認"]
+          }
+        },
+        {
+          "label": "數字",
+          "content": {
+            "type": "table",
+            "header": ["階段", "輪數", "起因"],
+            "rows": [["敘事", "2", "順序"], ["版面", "0", "－"]]
+          }
+        }
+      ]
+    },
+    "caption": { "type": "text", "value": "播放時點頁籤切換；靜態模式只顯示第一個面板。" },
+    "page": { "type": "text", "value": "04 / 08" }
+  }
+}

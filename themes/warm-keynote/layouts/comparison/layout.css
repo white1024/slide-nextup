@@ -1,0 +1,122 @@
+/* warm-keynote/comparison — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="comparison"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="comparison"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="comparison"] [data-el="title"] {
+  left: 101px;
+  top: 140px;
+  width: 1718px;
+  height: 150px;
+  font-size: 55px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="comparison"] [data-el="left"] {
+  left: 101px;
+  top: 318px;
+  width: 760px;
+  height: 650px;
+}
+
+[data-layout="comparison"] [data-el="left-title"] {
+  left: 141px;
+  top: 358px;
+  width: 680px;
+  height: 50px;
+  font-size: 32px;
+  line-height: 50px;
+}
+
+[data-layout="comparison"] [data-el="left-items"] {
+  left: 141px;
+  top: 428px;
+  width: 680px;
+  height: 520px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="comparison"] [data-el="link"] {
+  left: 881px;
+  top: 642px;
+  width: 178px;
+  height: 2px;
+}
+
+[data-layout="comparison"] [data-el="badge"] {
+  left: 938px;
+  top: 610px;
+  width: 65px;
+  height: 65px;
+}
+
+[data-layout="comparison"] [data-el="badge-arrow"] {
+  left: 954px;
+  top: 631px;
+  width: 33px;
+  height: 22px;
+}
+
+[data-layout="comparison"] [data-el="right"] {
+  left: 1059px;
+  top: 318px;
+  width: 760px;
+  height: 650px;
+}
+
+[data-layout="comparison"] [data-el="right-title"] {
+  left: 1099px;
+  top: 358px;
+  width: 680px;
+  height: 50px;
+  font-size: 32px;
+  line-height: 50px;
+}
+
+[data-layout="comparison"] [data-el="right-items"] {
+  left: 1099px;
+  top: 428px;
+  width: 680px;
+  height: 520px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="comparison"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="comparison"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+
+[data-layout="comparison"] [data-el="left-items"] li, [data-layout="comparison"] [data-el="right-items"] li { padding-left: 34px; margin-bottom: 16px; }
+

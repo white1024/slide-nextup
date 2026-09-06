@@ -1,0 +1,66 @@
+/* blue-professional/cover — geometry only. Ported from beautiful-html-templates/blue-professional layout-cover (MIT); vw/vh/rem resolved at 1920×1080 and scaled up for projection. */
+[data-layout="cover"] [data-el="panel"] {
+  left: 1248px;
+  top: 0;
+  width: 672px;
+  height: 1080px;
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+[data-layout="cover"] [data-el="dots"] {
+  left: 1718px;
+  top: 902px;
+  width: 48px;
+  height: 48px;
+}
+
+[data-layout="cover"] [data-el="accent"] {
+  left: 154px;
+  top: 323px;
+  width: 60px;
+  height: 4px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 154px;
+  top: 351px;
+  width: 1056px;
+  height: 200px;
+  font-size: 88px;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 154px;
+  top: 565px;
+  width: 768px;
+  height: 104px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cover"] [data-el="meta"] {
+  left: 154px;
+  top: 713px;
+  width: 900px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="cover"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+[data-layout="cover"] [data-el="progress"] {
+  left: 0;
+  top: 1077px;
+  width: 240px;
+  height: 3px;
+}

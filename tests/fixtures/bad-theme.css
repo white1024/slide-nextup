@@ -1,0 +1,15 @@
+/* a theme that tries to move boxes around */
+[data-role="title"] {
+  color: #123456;
+  width: 900px;
+  margin-top: 12px;
+}
+
+[data-layout="cover"] [data-role="kicker"] {
+  color: red !important;
+}
+
+:root {
+  --card-gap: 48px;
+  --radius: 8px;
+}

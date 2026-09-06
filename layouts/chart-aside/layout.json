@@ -1,0 +1,45 @@
+{
+  "id": "chart-aside",
+  "name": "圖表加側欄",
+  "description": "左邊三分之二一張圖表（長條、折線、環形或進度），右邊一張卡放結論數字或一句判讀，下方一行出處。改成表格會失去「一眼看出高低」的直覺。",
+  "content_relations": ["evidence", "comparison", "sequence"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 520, "max_elements": 7 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "圖表的結論，一行" },
+    "chart": { "type": "chart", "required": true, "hint": "kind：bar｜line｜donut｜progress；series 三到八筆；toggle 為 true 時播放時圖例可點" },
+    "aside": { "type": ["metric", "text", "chart"], "required": false, "hint": "一個結論數字、一句判讀，或一個 donut／progress 小圖" },
+    "caption": { "type": "text", "required": false, "hint": "資料來源與量測條件，一行" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "chart", "kind": "text" },
+    { "id": "aside", "kind": "text" },
+    { "id": "caption", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "十六輪版面修改，十一輪起因是內容順序" },
+    "chart": {
+      "type": "chart",
+      "kind": "bar",
+      "unit": " 輪",
+      "toggle": true,
+      "series": [
+        { "label": "內容順序調整", "value": 11 },
+        { "label": "字太小、圖放錯", "value": 3 },
+        { "label": "配色與字型", "value": 2 }
+      ]
+    },
+    "aside": { "type": "metric", "value": "69%", "label": "版面修改其實是順序問題", "delta": "11 / 16 輪" },
+    "caption": { "type": "text", "value": "上季六份簡報、二十四輪修改的逐輪紀錄。" },
+    "page": { "type": "text", "value": "03 / 08" }
+  }
+}

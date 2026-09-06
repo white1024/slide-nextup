@@ -1,0 +1,137 @@
+{
+  "id": "cards-2",
+  "name": "兩張卡：暖色 Keynote",
+  "description": "章節頭加導語，下面兩張寬的玻璃卡片。兩個並列的概念用這個，不要硬塞第三張。",
+  "content_relations": [
+    "list",
+    "evidence",
+    "hierarchy"
+  ],
+  "scene_roles": [
+    "map",
+    "evidence"
+  ],
+  "density": {
+    "max_chars": 260,
+    "max_elements": 8
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "一行導語，五十字以內"
+    },
+    "card-1": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "卡片：metric 的 value 是編號或字母、label 是標題、delta 是說明；或一段短文；可加 details（播放時點卡片展開的完整內容）"
+    },
+    "card-2": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "同上"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "頁碼膠囊，自動填「01 / 08」"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "card-1",
+      "kind": "text"
+    },
+    {
+      "id": "card-2",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "01 — 為什麼做"
+    },
+    "meta": {
+      "type": "text",
+      "value": "員工端"
+    },
+    "page": {
+      "type": "text",
+      "value": "03 / 08"
+    },
+    "title": {
+      "type": "text",
+      "value": "每件事都不難，難的是散在不同入口"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "四道小小的認知負擔加起來，就成了拖延。"
+    },
+    "card-1": {
+      "type": "metric",
+      "value": "A",
+      "label": "我有異常嗎？",
+      "delta": "忘刷了自己不會知道",
+      "details": {
+        "type": "list",
+        "items": [
+          "忘刷卡：系統不主動通知",
+          "遲到早退：月底才在報表看到",
+          "加班未申請：時數直接消失"
+        ]
+      }
+    },
+    "card-2": {
+      "type": "metric",
+      "value": "B",
+      "label": "要去哪處理？",
+      "delta": "入口不在手邊，得先找"
+    }
+  }
+}

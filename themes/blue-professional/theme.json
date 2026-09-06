@@ -1,0 +1,42 @@
+{
+  "id": "blue-professional",
+  "name": "藍色專業",
+  "description": "顧問報告的節制：暖米紙底、唯一的電光鈷藍、墨黑標題與灰色說明；Space Grotesk 標題配 Inter 內文，中文落到 Noto Sans TC／微軟正黑。卡片是淡藍底加 1.5px 半透明邊框與 12px 圓角，沒有實色邊框與陰影。裝飾只有斜切的淡色面、3×3 小點陣、60×4 的藍色短線與底部進度條。移植自 beautiful-html-templates 的 blue-professional。",
+  "colors": {
+    "paper": { "value": "#fdfae7", "use": "頁面底色（暖米紙）" },
+    "ink": { "value": "#111111", "use": "主要文字；反相頁用鈷藍當底" },
+    "muted": { "value": "#6b6b6b", "use": "副標、說明、內文" },
+    "accent": { "value": "#1e2bfa", "use": "唯一強調色：短線、eyebrow、KPI 數字、進度條、圖表、圖示" },
+    "surface": { "value": "#f4f2e8", "use": "卡片與程式碼區塊底（原版 4% 鈷藍淡底，預先與紙色混色）" },
+    "line": { "value": "#d0d1eb", "use": "卡片邊框、表格線、圖表軌道（原版 20% 鈷藍）" },
+    "tint": { "value": "#ebe9e9", "use": "封面斜切面與標籤底（原版 8% 鈷藍）" },
+    "light": { "value": "#9a9a9a", "use": "封面 meta 行、頁碼、最次要的文字" },
+    "positive": { "value": "#059669", "use": "正向數值" },
+    "negative": { "value": "#dc2626", "use": "負向數值" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Space Grotesk', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', sans-serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 12 },
+  "decoration": {
+    "vocabulary": ["斜切淡色面", "3×3 小點陣", "60×4 鈷藍短線", "淡藍圓角卡片", "底部 3px 進度條", "大寫 eyebrow 加圓角標籤"],
+    "avoid": ["實色邊框卡片", "陰影", "第二個強調色", "漸層", "插圖", "置中大標"]
+  },
+  "motion": {
+    "transition": "push"
+  },
+  "source": {
+    "name": "beautiful-html-templates",
+    "url": "https://github.com/zarazhangrui/beautiful-html-templates/tree/main/templates/blue-professional",
+    "author": "Zara Zhang",
+    "license": "MIT",
+    "template": "blue-professional"
+  }
+}

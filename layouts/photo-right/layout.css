@@ -1,0 +1,52 @@
+[data-layout="photo-right"] [data-el="brand"] {
+  left: 96px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="photo-right"] [data-el="page"] {
+  left: 96px;
+  top: 992px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="photo-right"] [data-el="photo"] {
+  left: 1040px;
+  top: 0;
+  width: 880px;
+  height: 1080px;
+}
+
+[data-layout="photo-right"] [data-el="kicker"] {
+  left: 96px;
+  top: 240px;
+  width: 860px;
+  height: 44px;
+  font-size: 32px;
+  line-height: 44px;
+}
+
+[data-layout="photo-right"] [data-el="title"] {
+  left: 96px;
+  top: 304px;
+  width: 860px;
+  height: 380px;
+  font-size: 88px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+[data-layout="photo-right"] [data-el="body"] {
+  left: 96px;
+  top: 720px;
+  width: 860px;
+  height: 220px;
+  font-size: 36px;
+  line-height: 1.5;
+}

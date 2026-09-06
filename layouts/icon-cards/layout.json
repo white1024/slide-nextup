@@ -1,0 +1,44 @@
+{
+  "id": "icon-cards",
+  "name": "圖示卡片",
+  "description": "三張卡各頂著一個圖示，圖示讓三件事不用讀字就能區分。改成純文字卡會失去「掃一眼就知道是哪三類」的速度。",
+  "content_relations": ["list", "hierarchy", "evidence"],
+  "scene_roles": ["map", "evidence"],
+  "density": { "max_chars": 360, "max_elements": 10 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張" },
+    "card-1": { "type": ["text", "metric"], "required": true, "hint": "短句或大數字" },
+    "card-2": { "type": ["text", "metric"], "required": true, "hint": "同上" },
+    "card-3": { "type": ["text", "metric"], "required": false, "hint": "同上" },
+    "icon-1": { "type": "icon", "required": false, "hint": "圖示名，例如 check、cpu、rocket（見 src/render/icons.ts）" },
+    "icon-2": { "type": "icon", "required": false, "hint": "同上" },
+    "icon-3": { "type": "icon", "required": false, "hint": "同上" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "card-1", "kind": "text" },
+    { "id": "card-2", "kind": "text" },
+    { "id": "card-3", "kind": "text" },
+    { "id": "icon-1", "kind": "text" },
+    { "id": "icon-2", "kind": "text" },
+    { "id": "icon-3", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "新流程守住的三件事" },
+    "card-1": { "type": "text", "value": "敘事沒被確認之前，不生成任何一頁。" },
+    "card-2": { "type": "text", "value": "三個視覺方向都用真的封面挑，不用形容詞。" },
+    "card-3": { "type": "text", "value": "重新生成某一頁時，手動修改一律保留。" },
+    "icon-1": { "type": "icon", "name": "shield-check" },
+    "icon-2": { "type": "icon", "name": "eye" },
+    "icon-3": { "type": "icon", "name": "refresh-cw" },
+    "page": { "type": "text", "value": "06 / 08" }
+  }
+}

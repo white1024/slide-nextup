@@ -1,0 +1,49 @@
+[data-layout="cards"] [data-el="title"] {
+  left: 96px;
+  top: 96px;
+  width: 1728px;
+  height: 200px;
+  font-size: 80px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="cards"] [data-el="card-1"],
+[data-layout="cards"] [data-el="card-2"],
+[data-layout="cards"] [data-el="card-3"] {
+  top: 360px;
+  width: 544px;
+  height: 600px;
+  padding: 48px;
+  font-size: 40px;
+  line-height: 1.5;
+}
+
+[data-layout="cards"] [data-el="card-1"] {
+  left: 96px;
+}
+
+[data-layout="cards"] [data-el="card-2"] {
+  left: 688px;
+}
+
+[data-layout="cards"] [data-el="card-3"] {
+  left: 1280px;
+}
+
+[data-layout="cards"] .metric-value {
+  font-size: 200px;
+  line-height: 1;
+  margin-bottom: 32px;
+}
+
+[data-layout="cards"] .metric-label {
+  font-size: 36px;
+  line-height: 1.4;
+}
+
+[data-layout="cards"] .metric-delta {
+  font-size: 28px;
+  line-height: 1.4;
+  margin-top: 12px;
+}

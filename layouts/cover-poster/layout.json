@@ -1,0 +1,25 @@
+{
+  "id": "cover-poster",
+  "name": "封面：海報色塊",
+  "description": "海報式封面：左三分之一是整塊實色面板，kicker 直排在面板內，右側是 168px 的極粗大標與底部一句副標。改成置中標題頁會失去「一整塊顏色先打到眼睛」的衝擊。",
+  "content_relations": ["statement"],
+  "scene_roles": ["hero"],
+  "density": { "max_chars": 120, "max_elements": 5 },
+  "slots": {
+    "kicker": { "type": "text", "required": false, "hint": "場合或系列名，直排，四到十二個字" },
+    "title": { "type": "text", "required": true, "hint": "主張式標題，最多三行、每行六字以內" },
+    "subtitle": { "type": "text", "required": false, "hint": "一句支撐主張的事實，六十字以內" }
+  },
+  "elements": [
+    { "id": "panel", "kind": "shape" },
+    { "id": "kicker", "kind": "text" },
+    { "id": "rule", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "subtitle", "kind": "text" }
+  ],
+  "sample": {
+    "kicker": { "type": "text", "value": "週會提案" },
+    "title": { "type": "text", "value": "改簡報的時間，花在哪裡" },
+    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" }
+  }
+}

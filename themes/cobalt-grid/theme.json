@@ -1,0 +1,37 @@
+{
+  "id": "cobalt-grid",
+  "name": "鈷藍方格",
+  "description": "日系趨勢報告的兩色系統：暖米紙底、電光鈷藍當唯一的墨，整頁鋪 42px 方格紙格線。Newsreader 襯線大標（中文落 Noto Serif TC／新細明體）、Hanken Grotesk 內文、DM Mono 家具。招牌裝飾是右側像素階梯的直線掃描柱與上下兩條 1.5px 髮線；沒有陰影、沒有圓角、沒有第二個顏色。移植自 beautiful-html-templates 的 cobalt-grid。",
+  "colors": {
+    "paper": { "value": "#f0ebde", "use": "頁面底色（暖米紙）" },
+    "ink": { "value": "#1f2be0", "use": "所有文字、線條與裝飾：整套只有這一個墨色" },
+    "muted": { "value": "#5560e5", "use": "次要文字與斜體關鍵詞（淡一階的鈷藍）" },
+    "accent": { "value": "#1f2be0", "use": "強調色與墨色相同；圖表填色、圖示、節點" },
+    "surface": { "value": "#e6e0ce", "use": "卡片、表頭與程式碼區塊底（深一階的紙色）" },
+    "line": { "value": "#1f2be0", "use": "髮線、邊框、表格線，1.5px" },
+    "grid": { "value": "#dbd8de", "use": "方格紙格線（原版 10% 鈷藍，預先混色）" },
+    "faint": { "value": "#cac8de", "use": "圖表軌道、表格內線（原版 18% 鈷藍）" }
+  },
+  "typography": {
+    "display": {
+      "family": "'Newsreader', 'Noto Serif TC', 'Songti TC', 'PMingLiU', 'Source Han Serif TC', Georgia, serif",
+      "weight": 400
+    },
+    "body": {
+      "family": "'Hanken Grotesk', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": { "radius": 0 },
+  "decoration": {
+    "vocabulary": ["42px 方格紙格線", "上下 1.5px 髮線", "像素階梯掃描柱", "8×8 QR 小方塊", "直排等寬小字", "襯線斜體關鍵詞"],
+    "avoid": ["第二個顏色", "陰影", "圓角", "漸層", "粗體無襯線大標", "插圖"]
+  },
+  "source": {
+    "name": "beautiful-html-templates",
+    "url": "https://github.com/zarazhangrui/beautiful-html-templates/tree/main/templates/cobalt-grid",
+    "author": "Zara Zhang",
+    "license": "MIT",
+    "template": "cobalt-grid"
+  }
+}

@@ -1,0 +1,79 @@
+/* cobalt-grid/cover — geometry only. Ported from beautiful-html-templates/cobalt-grid s-cover (MIT); clamp() values resolved at 1920×1080. */
+[data-layout="cover"] [data-el="rule-top"] {
+  left: 69px;
+  top: 28px;
+  width: 1782px;
+  height: 2px;
+}
+
+[data-layout="cover"] [data-el="rule-bottom"] {
+  left: 69px;
+  top: 1056px;
+  width: 1782px;
+  height: 2px;
+}
+
+[data-layout="cover"] [data-el="pixel"] {
+  left: 1291px;
+  top: 65px;
+  width: 560px;
+  height: 885px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 69px;
+  top: 97px;
+  width: 1150px;
+  height: 300px;
+  font-size: 132px;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+[data-layout="cover"] [data-el="brand"] {
+  left: 69px;
+  top: 419px;
+  width: 1150px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 69px;
+  top: 459px;
+  width: 1150px;
+  height: 150px;
+  font-size: 44px;
+  line-height: 1.15;
+}
+
+[data-layout="cover"] [data-el="meta"] {
+  left: 1827px;
+  top: 190px;
+  width: 24px;
+  height: 700px;
+  font-size: 20px;
+  line-height: 24px;
+  writing-mode: vertical-rl;
+  text-align: center;
+}
+
+[data-layout="cover"] [data-el="cta"] {
+  left: 69px;
+  top: 934px;
+  width: 1083px;
+  height: 60px;
+  font-size: 24px;
+  line-height: 1.45;
+}
+
+[data-layout="cover"] [data-el="page"] {
+  left: 1734px;
+  top: 1004px;
+  width: 140px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: right;
+}

@@ -1,0 +1,33 @@
+{
+  "id": "closing-cta",
+  "name": "結尾：行動呼籲",
+  "description": "大標題、一句話、一個帶底線的行動呼籲，右側一團光暈與封面呼應。改成「謝謝聆聽」會失去「離開時只帶走一個動作」的收束。",
+  "content_relations": ["closing", "statement"],
+  "scene_roles": ["close"],
+  "density": { "max_chars": 180, "max_elements": 10 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "title": { "type": "text", "required": true, "hint": "收尾主張，一到兩行，二十字以內" },
+    "body": { "type": "text", "required": false, "hint": "一到兩行補充" },
+    "cta": { "type": "text", "required": false, "hint": "受眾離開時要做的一件事，一句" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "glow", "kind": "shape" },
+    { "id": "corner-tl", "kind": "shape" },
+    { "id": "corner-br", "kind": "shape" },
+    { "id": "brand", "kind": "text" },
+    { "id": "rule", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "body", "kind": "text" },
+    { "id": "cta", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "title": { "type": "text", "value": "下週做一份*真的*" },
+    "body": { "type": "text", "value": "用這套流程做一份真實提案，我們一起看結果。" },
+    "cta": { "type": "text", "value": "需要一位志願者提供題目，其餘由流程負責。" },
+    "page": { "type": "text", "value": "08 / 08" }
+  }
+}

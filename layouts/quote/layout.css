@@ -1,0 +1,68 @@
+[data-layout="quote"] [data-el="corner-tl"] {
+  left: 40px;
+  top: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="quote"] [data-el="corner-br"] {
+  left: 1840px;
+  top: 1000px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="quote"] [data-el="brand"] {
+  left: 96px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="quote"] [data-el="meta"] {
+  left: 1024px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="quote"] [data-el="bar"] {
+  left: 96px;
+  top: 300px;
+  width: 12px;
+  height: 420px;
+}
+
+[data-layout="quote"] [data-el="title"] {
+  left: 168px;
+  top: 300px;
+  width: 1560px;
+  height: 420px;
+  font-size: 80px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+[data-layout="quote"] [data-el="caption"] {
+  left: 168px;
+  top: 768px;
+  width: 1200px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="quote"] [data-el="page"] {
+  left: 1624px;
+  top: 992px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

@@ -1,0 +1,80 @@
+/* warm-keynote/data-table — geometry only. Adapted from a colleague's 1600×900 deck (×1.2), with permission. */
+
+[data-layout="data-table"] [data-el="kicker"] {
+  left: 101px;
+  top: 77px;
+  width: 1120px;
+  height: 41px;
+  font-size: 28px;
+  line-height: 41px;
+  padding-left: 20px;
+}
+
+[data-layout="data-table"] [data-el="meta"] {
+  left: 1558px;
+  top: 72px;
+  width: 261px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+}
+
+[data-layout="data-table"] [data-el="title"] {
+  left: 101px;
+  top: 140px;
+  width: 1718px;
+  height: 150px;
+  font-size: 55px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="data-table"] [data-el="subtitle"] {
+  left: 101px;
+  top: 318px;
+  width: 1718px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="data-table"] [data-el="table"] {
+  left: 101px;
+  top: 400px;
+  width: 1718px;
+  height: 450px;
+  font-size: 26px;
+  line-height: 1.5;
+  padding: 0;
+}
+
+[data-layout="data-table"] [data-el="caption"] {
+  left: 101px;
+  top: 920px;
+  width: 1718px;
+  height: 70px;
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+[data-layout="data-table"] [data-el="progress"] {
+  left: 31px;
+  top: 1050px;
+  width: 260px;
+  height: 6px;
+}
+
+[data-layout="data-table"] [data-el="page"] {
+  left: 1739px;
+  top: 1016px;
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 38px;
+  text-align: center;
+}
+
+[data-layout="data-table"] [data-el="table"] .table th, [data-layout="data-table"] [data-el="table"] .table td { padding: 16px 28px; }
+[data-layout="data-table"] [data-el="table"] .table th { font-size: 22px; line-height: 1.3; }
+

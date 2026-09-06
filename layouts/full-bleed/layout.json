@@ -1,0 +1,31 @@
+{
+  "id": "full-bleed",
+  "name": "全幅圖",
+  "description": "整頁一張圖，下方一塊半透明色帶壓著標題與說明。改成圖在左文在右會失去「先被畫面打到、再讀字」的順序。",
+  "content_relations": ["statement", "evidence"],
+  "scene_roles": ["hero", "pause", "evidence"],
+  "density": { "max_chars": 140, "max_elements": 5 },
+  "slots": {
+    "photo": { "type": "image", "required": true, "hint": "16:9 的圖，會以 cover 鋪滿整頁" },
+    "title": { "type": "text", "required": true, "hint": "一到兩行主張" },
+    "caption": { "type": "text", "required": false, "hint": "一行出處或說明" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "photo", "kind": "image" },
+    { "id": "scrim", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "caption", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "photo": {
+      "type": "image",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'><rect width='16' height='9' fill='%23cfc6b4'/><circle cx='12' cy='2.5' r='1.2' fill='%23c8102e'/><path d='M0 9 L4 4 L7 6.5 L10.5 3.5 L16 9 Z' fill='%236b665c'/></svg>",
+      "alt": "示意風景"
+    },
+    "title": { "type": "text", "value": "畫面自己會說話" },
+    "caption": { "type": "text", "value": "一張對的圖勝過三段說明；標題只負責指出該看哪裡。" },
+    "page": { "type": "text", "value": "02 / 08" }
+  }
+}

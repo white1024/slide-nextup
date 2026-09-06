@@ -1,0 +1,97 @@
+[data-layout="fact"] [data-el="corner-tl"] {
+  left: 40px;
+  top: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="fact"] [data-el="corner-br"] {
+  left: 1840px;
+  top: 1000px;
+  width: 40px;
+  height: 40px;
+}
+
+[data-layout="fact"] [data-el="brand"] {
+  left: 96px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+[data-layout="fact"] [data-el="meta"] {
+  left: 1024px;
+  top: 64px;
+  width: 800px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="fact"] [data-el="kicker"] {
+  left: 96px;
+  top: 250px;
+  width: 1200px;
+  height: 44px;
+  font-size: 32px;
+  line-height: 44px;
+}
+
+[data-layout="fact"] [data-el="rule"] {
+  left: 96px;
+  top: 318px;
+  width: 120px;
+  height: 10px;
+}
+
+[data-layout="fact"] [data-el="fact"] {
+  left: 96px;
+  top: 360px;
+  width: 1728px;
+  height: 520px;
+  font-size: 40px;
+  line-height: 1.3;
+}
+
+[data-layout="fact"] .metric {
+  justify-content: flex-start;
+}
+
+[data-layout="fact"] .metric-value {
+  font-size: 300px;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+[data-layout="fact"] .metric-label {
+  font-size: 48px;
+  line-height: 1.3;
+}
+
+[data-layout="fact"] .metric-delta {
+  font-size: 32px;
+  line-height: 1.4;
+  margin-top: 12px;
+}
+
+[data-layout="fact"] [data-el="caption"] {
+  left: 96px;
+  top: 920px;
+  width: 1400px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+[data-layout="fact"] [data-el="page"] {
+  left: 1624px;
+  top: 992px;
+  width: 200px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 32px;
+  text-align: right;
+}

@@ -1,0 +1,32 @@
+{
+  "id": "quote",
+  "name": "引言頁",
+  "description": "一句話佔滿畫面，左側一條色柱，下方一行出處；用來停頓或提問。改成一般標題頁會失去「整頁只有這一句」的重量。",
+  "content_relations": ["statement"],
+  "scene_roles": ["pause", "hero", "close"],
+  "density": { "max_chars": 140, "max_elements": 9 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "引言或提問，一到三行，四十字以內；可用 *關鍵詞* 強調" },
+    "caption": { "type": "text", "required": false, "hint": "出處或補一句，一行" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "corner-tl", "kind": "shape" },
+    { "id": "corner-br", "kind": "shape" },
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "bar", "kind": "shape" },
+    { "id": "title", "kind": "text" },
+    { "id": "caption", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "你上一次改簡報，改的是*內容*，還是版面？" },
+    "caption": { "type": "text", "value": "停三到五秒再翻頁。" },
+    "page": { "type": "text", "value": "07 / 08" }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "bento-big2",
+  "name": "Bento：一大加兩小",
+  "description": "左側一張大卡放主體（清單或一段），右側兩張小卡放補充或數字。改成三張等寬卡會失去「主次分明」的重量差。",
+  "content_relations": ["hierarchy", "list", "evidence"],
+  "scene_roles": ["evidence", "relationship"],
+  "density": { "max_chars": 420, "max_elements": 7 },
+  "slots": {
+    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
+    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
+    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
+    "main": { "type": ["list", "text"], "required": true, "hint": "主體：三到五條清單，或一段" },
+    "side-1": { "type": ["text", "metric"], "required": true, "hint": "補充一：短句或大數字" },
+    "side-2": { "type": ["text", "metric"], "required": false, "hint": "補充二；沒有就留空" },
+    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+  },
+  "elements": [
+    { "id": "brand", "kind": "text" },
+    { "id": "meta", "kind": "text" },
+    { "id": "title", "kind": "text" },
+    { "id": "main", "kind": "text" },
+    { "id": "side-1", "kind": "text" },
+    { "id": "side-2", "kind": "text" },
+    { "id": "page", "kind": "text" }
+  ],
+  "sample": {
+    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "title": { "type": "text", "value": "三輪版面修改裡，有兩輪是內容順序中途改變" },
+    "main": {
+      "type": "list",
+      "items": [
+        "六份簡報、二十四輪修改的逐輪紀錄",
+        "十六輪與版面有關，其中十一輪起因是內容順序調整",
+        "只有五輪是真的版面問題：字太小、圖放錯位",
+        "版面被改是結果，不是原因"
+      ]
+    },
+    "side-1": { "type": "metric", "value": "11", "label": "起因是順序調整的輪數", "delta": "十六輪版面修改中" },
+    "side-2": { "type": "text", "value": "先確認順序，這十一輪就不會發生。" },
+    "page": { "type": "text", "value": "03 / 08" }
+  }
+}
