@@ -884,7 +884,7 @@
 }
 
 .ed-float.is-docked[data-empty="true"]::before {
-  content: "點選元件開始編輯";
+  content: "Select an element to start editing";
   display: block;
   padding: 32px 0;
   color: var(--ed-muted);

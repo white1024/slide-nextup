@@ -34,13 +34,13 @@
     badge.textContent = text
     badge.dataset.state = text
   }
-  setStatus(cfg.warnings?.length ? `已連線 · ${cfg.warnings.length} 個警告` : '已連線')
+  setStatus(cfg.warnings?.length ? `Connected · ${cfg.warnings.length} warnings` : 'Connected')
   mount()
   document.addEventListener('deck:editmode', mount)
 
   function schedule() {
     dirty = true
-    setStatus('未儲存…')
+    setStatus('Unsaved…')
     clearTimeout(timer)
     timer = setTimeout(() => save(false), 1500)
   }
@@ -52,7 +52,7 @@
       return saving
     }
     const model = deck.exportModel()
-    // element steps (逐步顯示) live in slides[].elements; send them all so cleared steps are removed too
+    // element steps live in slides[].elements; send them all so cleared steps are removed too
     const steps = {}
     const enters = {}
     for (const s of model.slides)
@@ -77,7 +77,7 @@
       .then(async (res) => {
         if (res.status === 409) {
           const keepMine = window.confirm(
-            'deck.json 裡的覆寫在你載入之後被改過。\n確定：用你目前的版本覆蓋磁碟\n取消：放棄目前修改，重新載入磁碟上的版本',
+            'The overrides in deck.json changed after you loaded this page.\nOK: overwrite the file with your version\nCancel: discard your changes and reload the version on disk',
           )
           saving = null
           if (keepMine) return save(true)
@@ -86,17 +86,17 @@
           return false
         }
         if (!res.ok) {
-          setStatus(`儲存失敗（${res.status}）`)
+          setStatus(`Save failed (${res.status})`)
           return false
         }
         const json = await res.json()
         base = json.overridesHash
         if (!pending) dirty = false
-        setStatus(`已儲存 ${new Date().toLocaleTimeString()}`)
+        setStatus(`Saved ${new Date().toLocaleTimeString()}`)
         return true
       })
       .catch(() => {
-        setStatus('儲存失敗（連線）')
+        setStatus('Save failed (connection)')
         return false
       })
       .finally(() => {
@@ -123,7 +123,7 @@
     if (dirty) await save(false)
     location.reload()
   }
-  events.onerror = () => setStatus('與 dev server 斷線')
+  events.onerror = () => setStatus('Disconnected from the dev server')
 
   window.__dev = {
     save: () => save(false),

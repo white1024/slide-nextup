@@ -341,9 +341,9 @@
     draftBar.className = 'ed-draft'
     const when = new Date(d.at || Date.now()).toLocaleString()
     draftBar.innerHTML =
-      `<span>偵測到上次未存檔的編輯：<b>${escapeHtml(when)}</b></span>` +
-      `<button type="button" class="ed-btn ed-btn-primary" data-draft="restore">還原</button>` +
-      `<button type="button" class="ed-btn" data-draft="discard">丟棄</button>`
+      `<span>Unsaved edits from your last visit: <b>${escapeHtml(when)}</b></span>` +
+      `<button type="button" class="ed-btn ed-btn-primary" data-draft="restore">Restore</button>` +
+      `<button type="button" class="ed-btn" data-draft="discard">Discard</button>`
     draftBar.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-draft]')
       if (!btn) return
@@ -867,11 +867,11 @@
     spotBar.className = 'ed-spot-bar'
     spotBar.hidden = true
     spotBar.innerHTML = [
-      '<span class="ed-lbl">跳到</span>',
-      '<select data-spot-target title="點這個熱區跳到哪一頁"></select>',
-      '<input type="text" data-spot-label placeholder="說明（播放時滑過顯示）" title="說明">',
-      `<button type="button" class="ed-ibtn" data-spot-delete title="刪除這個熱區 (Delete)">${icon('trash')}</button>`,
-      `<button type="button" class="ed-ibtn" data-spot-done title="結束熱區編輯 (Esc)">${icon('close')}</button>`,
+      '<span class="ed-lbl">Go to</span>',
+      '<select data-spot-target title="Which page this hotspot jumps to"></select>',
+      '<input type="text" data-spot-label placeholder="Label (shown on hover during playback)" title="Label">',
+      `<button type="button" class="ed-ibtn" data-spot-delete title="Delete this hotspot (Delete)">${icon('trash')}</button>`,
+      `<button type="button" class="ed-ibtn" data-spot-done title="Finish editing hotspots (Esc)">${icon('close')}</button>`,
     ].join('')
     document.body.appendChild(spotBar)
     const target = spotBar.querySelector('[data-spot-target]')
@@ -1545,10 +1545,10 @@
     pagesPanel = document.createElement('aside')
     pagesPanel.className = 'ed-pages'
     pagesPanel.innerHTML = [
-      '<div class="ed-pages-head"><span class="ed-panel-title">投影片</span>',
-      '<span class="ed-pages-hint" title="點一下跳頁 · 拖曳或 ↑↓ 改播放順序 · 隱藏的頁不播放&#10;Ctrl+Shift+↑↓ 移動目前頁，Ctrl+Shift+H 隱藏／顯示">拖曳縮圖調整頁序</span></div>',
+      '<div class="ed-pages-head"><span class="ed-panel-title">Slides</span>',
+      '<span class="ed-pages-hint" title="Click to jump · drag or ↑↓ to reorder playback · hidden pages are skipped&#10;Ctrl+Shift+↑↓ moves the current page, Ctrl+Shift+H hides or shows it">Drag thumbnails to reorder</span></div>',
       '<ol class="ed-pages-list"></ol>',
-      '<div class="ed-pages-note" hidden>與敘事不同：播放順序或隱藏頁改過了。story.md 仍是正本；重做頁面時這裡會保留。</div>',
+      '<div class="ed-pages-note" hidden>Differs from the story: the playback order or hidden pages have changed. story.md is still the source of truth; regenerating pages keeps this.</div>',
     ].join('')
     document.body.appendChild(pagesPanel)
     const list = pagesPanel.querySelector('.ed-pages-list')
@@ -1610,13 +1610,13 @@
           const no = hidden ? '－' : pad2(eff.visible.indexOf(id) + 1)
           return (
             `<li data-page="${escapeHtml(id)}" draggable="true" class="${hidden ? 'is-hidden' : ''}"` +
-            ` title="${escapeHtml(id)}　${escapeHtml(pageTitle(id))}">` +
+            ` title="${escapeHtml(id)} · ${escapeHtml(pageTitle(id))}">` +
             `<span class="ed-page-no">${no}</span>` +
             '<div class="ed-thumb"></div>' +
             '<span class="ed-page-actions">' +
-            `<button type="button" data-page-action="up" title="往前">${icon('up')}</button>` +
-            `<button type="button" data-page-action="down" title="往後">${icon('down')}</button>` +
-            `<button type="button" data-page-action="toggle" title="${hidden ? '顯示' : '隱藏'}">${icon(hidden ? 'eye' : 'eyeOff')}<span>${hidden ? '顯示' : '隱藏'}</span></button>` +
+            `<button type="button" data-page-action="up" title="Move earlier">${icon('up')}</button>` +
+            `<button type="button" data-page-action="down" title="Move later">${icon('down')}</button>` +
+            `<button type="button" data-page-action="toggle" title="${hidden ? 'Show' : 'Hide'}">${icon(hidden ? 'eye' : 'eyeOff')}<span>${hidden ? 'Show' : 'Hide'}</span></button>` +
             '</span></li>'
           )
         })
@@ -1707,27 +1707,27 @@
     panel = document.createElement('div')
     panel.className = 'ed-panel ed-topbar'
     panel.innerHTML = [
-      '<div class="ed-tb-group ed-tb-mode"><span class="ed-dot"></span>編輯模式</div>',
+      '<div class="ed-tb-group ed-tb-mode"><span class="ed-dot"></span>Edit mode</div>',
       '<div class="ed-tb-sep"></div>',
       '<div class="ed-tb-group">',
-      `<button type="button" class="ed-btn" data-action="undo" title="復原 (Ctrl+Z)">${icon('undo')}<span>復原</span><kbd>Ctrl+Z</kbd></button>`,
-      `<button type="button" class="ed-btn" data-action="redo" title="重做 (Ctrl+Y)">${icon('redo')}<span>重做</span><kbd>Ctrl+Y</kbd></button>`,
+      `<button type="button" class="ed-btn" data-action="undo" title="Undo (Ctrl+Z)">${icon('undo')}<span>Undo</span><kbd>Ctrl+Z</kbd></button>`,
+      `<button type="button" class="ed-btn" data-action="redo" title="Redo (Ctrl+Y)">${icon('redo')}<span>Redo</span><kbd>Ctrl+Y</kbd></button>`,
       '</div>',
       '<div class="ed-tb-sep"></div>',
       '<div class="ed-tb-group">',
-      `<label class="ed-toggle" title="拖曳時吸附畫布邊緣、中心線與其他元件的邊"><input type="checkbox" data-toggle="snap" checked>${icon('magnet')}<span>貼齊</span></label>`,
-      `<label class="ed-toggle" title="顯示已隱藏的元件，讓它們可以被選取"><input type="checkbox" data-toggle="reveal">${icon('eye')}<span>顯示隱藏元件</span></label>`,
-      `<label class="ed-toggle" title="關掉後這份簡報播放時所有元件直接顯示、沒有逐步與進場，每按一下就換頁（寫進 deck.json；播放時按 M 可對這個瀏覽器臨時切換）"><input type="checkbox" data-toggle="motion"${model.motion === 'off' ? '' : ' checked'}>${icon('play')}<span>元件動畫</span></label>`,
-      `<label class="ed-toggle" title="把元件工具列固定在右側成一欄（所有欄位常駐展開），而不是跟著選取浮動；這是這台瀏覽器的偏好"><input type="checkbox" data-toggle="dock"${docked ? ' checked' : ''}>${icon('objRight')}<span>停靠工具列</span></label>`,
-      '<div class="ed-ctl ed-tb-select" title="換頁效果，寫進 deck.json；「主題預設」跟著主題包的來源模板"><span class="ed-lbl">換頁</span><select data-transition><option value="">主題預設</option><option value="none">直切</option><option value="fade">淡入</option><option value="push">推移</option><option value="lift">上浮</option></select></div>',
+      `<label class="ed-toggle" title="Snap to the canvas edges, centre lines and other elements while dragging"><input type="checkbox" data-toggle="snap" checked>${icon('magnet')}<span>Snap</span></label>`,
+      `<label class="ed-toggle" title="Show hidden elements so they can be selected"><input type="checkbox" data-toggle="reveal">${icon('eye')}<span>Show hidden</span></label>`,
+      `<label class="ed-toggle" title="When off, every element shows at once with no steps or entrances and each press turns the page (saved to deck.json; press M during playback to override it in this browser)"><input type="checkbox" data-toggle="motion"${model.motion === 'off' ? '' : ' checked'}>${icon('play')}<span>Element motion</span></label>`,
+      `<label class="ed-toggle" title="Dock the element toolbar as a column on the right with every field expanded, instead of floating next to the selection; a preference of this browser"><input type="checkbox" data-toggle="dock"${docked ? ' checked' : ''}>${icon('objRight')}<span>Dock toolbar</span></label>`,
+      '<div class="ed-ctl ed-tb-select" title="Page transition, saved to deck.json; “Theme default” follows the theme pack’s source template"><span class="ed-lbl">Transition</span><select data-transition><option value="">Theme default</option><option value="none">Cut</option><option value="fade">Fade</option><option value="push">Push</option><option value="lift">Lift</option></select></div>',
       '</div>',
       '<div class="ed-tb-sep"></div>',
-      `<button type="button" class="ed-btn" data-action="download" title="把目前的模型存成 deck.json">${icon('download')}<span>下載 deck.json</span></button>`,
-      `<button type="button" class="ed-btn" data-action="download-html" hidden title="把磁碟上這份簡報渲染成單一 HTML 檔（圖片內嵌），可離線開啟或寄給別人；未儲存的修改會先存檔">${icon('download')}<span>下載 deck.html</span></button>`,
+      `<button type="button" class="ed-btn" data-action="download" title="Save the current model as deck.json">${icon('download')}<span>Download deck.json</span></button>`,
+      `<button type="button" class="ed-btn" data-action="download-html" hidden title="Render the deck on disk into a single HTML file with images inlined, for offline viewing or sending; unsaved edits are saved first">${icon('download')}<span>Download deck.html</span></button>`,
       '<div class="ed-tb-spacer"></div>',
       '<div class="ed-tb-status" data-status></div>',
-      '<span class="ed-tb-help" title="點選元件拖曳或縮放 · Shift+點選或在空白處拖曳框選多個 · Ctrl+A 全選本頁 · 雙擊改文字 · 方向鍵微調（Shift 10px）· Delete 隱藏 · Esc 取消選取&#10;Ctrl+Z 復原 · Ctrl+Y 重做 · Ctrl+Alt+C 複製樣式 · Ctrl+Alt+V 貼上樣式 · Ctrl+Shift+↑↓ 移動目前頁 · Ctrl+Shift+H 隱藏／顯示目前頁 · E 離開">?</span>',
-      `<button type="button" class="ed-btn ed-btn-primary" data-action="exit" title="離開編輯模式，回到播放 (E)">${icon('play')}<span>投影</span><kbd>E</kbd></button>`,
+      '<span class="ed-tb-help" title="Click an element to drag or resize · Shift+click or drag on empty space to select several · Ctrl+A selects the page · double-click to edit text · arrow keys nudge (Shift: 10px) · Delete hides · Esc clears the selection&#10;Ctrl+Z undo · Ctrl+Y redo · Ctrl+Alt+C copy style · Ctrl+Alt+V paste style · Ctrl+Shift+↑↓ move the current page · Ctrl+Shift+H hide or show the current page · E leave">?</span>',
+      `<button type="button" class="ed-btn ed-btn-primary" data-action="exit" title="Leave edit mode and go back to playback (E)">${icon('play')}<span>Present</span><kbd>E</kbd></button>`,
     ].join('')
     document.body.appendChild(panel)
     panel.querySelector('[data-toggle="snap"]').addEventListener('change', (e) => {
@@ -1799,16 +1799,16 @@
     const display = cs.getPropertyValue('--font-display').trim()
     const body = cs.getPropertyValue('--font-body').trim()
     const opts = []
-    if (display) opts.push({ label: '主題標題字', value: display })
-    if (body && body !== display) opts.push({ label: '主題內文字', value: body })
+    if (display) opts.push({ label: 'Theme display font', value: display })
+    if (body && body !== display) opts.push({ label: 'Theme body font', value: body })
     opts.push(
       {
-        label: '思源黑體 Noto Sans TC',
+        label: 'Noto Sans TC',
         value: "'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       },
-      { label: '思源宋體 Noto Serif TC', value: "'Noto Serif TC', 'Songti TC', 'PMingLiU', serif" },
-      { label: '系統無襯線', value: "system-ui, -apple-system, 'Segoe UI', sans-serif" },
-      { label: '等寬', value: "ui-monospace, 'Cascadia Code', Consolas, monospace" },
+      { label: 'Noto Serif TC', value: "'Noto Serif TC', 'Songti TC', 'PMingLiU', serif" },
+      { label: 'System sans-serif', value: "system-ui, -apple-system, 'Segoe UI', sans-serif" },
+      { label: 'Monospace', value: "ui-monospace, 'Cascadia Code', Consolas, monospace" },
     )
     return opts
   }
@@ -1828,7 +1828,7 @@
       )
       .join('')
     const clear = withClear
-      ? `<button type="button" class="ed-chip ed-chip-clear" data-swatch-for="${prop}" data-color="" title="清除">${icon('close')}</button>`
+      ? `<button type="button" class="ed-chip ed-chip-clear" data-swatch-for="${prop}" data-color="" title="Clear">${icon('close')}</button>`
       : ''
     return chips + clear
   }
@@ -1844,71 +1844,71 @@
     float.innerHTML = [
       '<div class="ed-float-row ed-float-main">',
       '<span class="ed-key" data-field="key"></span>',
-      `<div class="ed-ctl ed-text-only"><span class="ed-lbl">字體</span><select class="ed-font" data-style="fontFamily" title="字體"><option value="">預設</option>${fonts.map((f) => `<option value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</option>`).join('')}</select></div>`,
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">字級</span>',
-      `<button type="button" class="ed-ibtn" data-size-step="-2" title="字級 −2">${icon('minus')}</button>`,
-      '<input type="number" class="ed-num" data-style="fontSize" step="1" min="8" title="字級（px）">',
-      `<button type="button" class="ed-ibtn" data-size-step="2" title="字級 +2">${icon('plus')}</button>`,
-      '<input type="range" class="ed-range" data-style-range="fontSize" min="12" max="240" step="1" title="字級">',
+      `<div class="ed-ctl ed-text-only"><span class="ed-lbl">Font</span><select class="ed-font" data-style="fontFamily" title="Font"><option value="">Default</option>${fonts.map((f) => `<option value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</option>`).join('')}</select></div>`,
+      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Size</span>',
+      `<button type="button" class="ed-ibtn" data-size-step="-2" title="Size −2">${icon('minus')}</button>`,
+      '<input type="number" class="ed-num" data-style="fontSize" step="1" min="8" title="Size (px)">',
+      `<button type="button" class="ed-ibtn" data-size-step="2" title="Size +2">${icon('plus')}</button>`,
+      '<input type="range" class="ed-range" data-style-range="fontSize" min="12" max="240" step="1" title="Size">',
       '</div>',
-      `<div class="ed-ctl ed-text-only"><span class="ed-lbl">字重</span><select data-style="fontWeight" title="字重"><option value="">預設</option>${weights.map((w) => `<option value="${w}">${w}</option>`).join('')}</select></div>`,
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">行高</span><input type="number" class="ed-num" data-style="lineHeight" step="0.05" min="0.5" placeholder="預設" title="行高（倍數）"></div>',
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">字距</span><input type="number" class="ed-num" data-style="letterSpacing" step="0.5" placeholder="預設" title="字距（px）"></div>',
-      `<label class="ed-btn ed-file ed-image-only" title="換成本機的圖片檔">${icon('image')}<span>換圖</span><input type="file" accept="image/*" data-image id="ed-image"></label>`,
-      `<button type="button" class="ed-btn ed-image-only" data-action="hotspots" title="熱區：在圖上按住拖出一個框就是點擊跳頁的區域；拖曳或拉角落調整、在框下選目標頁；Esc 結束">${icon('spot')}<span>熱區</span></button>`,
-      `<button type="button" class="ed-ibtn" data-action="hide" data-state="visible" title="隱藏選取的元件 (Delete)">${icon('eyeOff')}</button>`,
-      `<button type="button" class="ed-ibtn" data-action="more" title="位置、大小、逐步顯示、排列、展開內容與更多" aria-expanded="false">${icon('more')}</button>`,
+      `<div class="ed-ctl ed-text-only"><span class="ed-lbl">Weight</span><select data-style="fontWeight" title="Weight"><option value="">Default</option>${weights.map((w) => `<option value="${w}">${w}</option>`).join('')}</select></div>`,
+      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Line height</span><input type="number" class="ed-num" data-style="lineHeight" step="0.05" min="0.5" placeholder="auto" title="Line height (multiplier)"></div>',
+      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Spacing</span><input type="number" class="ed-num" data-style="letterSpacing" step="0.5" placeholder="auto" title="Letter spacing (px)"></div>',
+      `<label class="ed-btn ed-file ed-image-only" title="Replace with an image file from this computer">${icon('image')}<span>Replace image</span><input type="file" accept="image/*" data-image id="ed-image"></label>`,
+      `<button type="button" class="ed-btn ed-image-only" data-action="hotspots" title="Hotspots: press and drag on the image to draw a click-to-jump area; drag or pull a corner to adjust, pick the target page under the box; Esc to finish">${icon('spot')}<span>Hotspots</span></button>`,
+      `<button type="button" class="ed-ibtn" data-action="hide" data-state="visible" title="Hide the selected elements (Delete)">${icon('eyeOff')}</button>`,
+      `<button type="button" class="ed-ibtn" data-action="more" title="Position, size, reveal step, arrange, details and more" aria-expanded="false">${icon('more')}</button>`,
       '</div>',
       '<div class="ed-float-row ed-float-style ed-text-only">',
-      '<div class="ed-ctl ed-seg" title="粗體／斜體／底線">',
-      `<button type="button" class="ed-ibtn" data-toggle-style="fontWeight" data-value="700" title="粗體">${icon('bold')}</button>`,
-      `<button type="button" class="ed-ibtn" data-toggle-style="fontStyle" data-value="italic" title="斜體">${icon('italic')}</button>`,
-      `<button type="button" class="ed-ibtn" data-toggle-style="textDecoration" data-value="underline" title="底線">${icon('underline')}</button>`,
+      '<div class="ed-ctl ed-seg" title="Bold, italic, underline">',
+      `<button type="button" class="ed-ibtn" data-toggle-style="fontWeight" data-value="700" title="Bold">${icon('bold')}</button>`,
+      `<button type="button" class="ed-ibtn" data-toggle-style="fontStyle" data-value="italic" title="Italic">${icon('italic')}</button>`,
+      `<button type="button" class="ed-ibtn" data-toggle-style="textDecoration" data-value="underline" title="Underline">${icon('underline')}</button>`,
       '</div>',
-      '<div class="ed-ctl ed-seg" data-seg="textAlign" title="文字對齊">',
-      `<button type="button" class="ed-ibtn" data-seg-value="left" title="靠左">${icon('alignLeft')}</button>`,
-      `<button type="button" class="ed-ibtn" data-seg-value="center" title="置中">${icon('alignCenter')}</button>`,
-      `<button type="button" class="ed-ibtn" data-seg-value="right" title="靠右">${icon('alignRight')}</button>`,
+      '<div class="ed-ctl ed-seg" data-seg="textAlign" title="Text alignment">',
+      `<button type="button" class="ed-ibtn" data-seg-value="left" title="Align left">${icon('alignLeft')}</button>`,
+      `<button type="button" class="ed-ibtn" data-seg-value="center" title="Centre">${icon('alignCenter')}</button>`,
+      `<button type="button" class="ed-ibtn" data-seg-value="right" title="Align right">${icon('alignRight')}</button>`,
       '</div>',
-      `<div class="ed-ctl ed-chips"><span class="ed-lbl">文字色</span>${chipRow('color', colours, true)}<label class="ed-swatch" title="自訂文字色"><input type="color" data-style="color" id="ed-color"></label></div>`,
-      `<div class="ed-ctl ed-chips"><span class="ed-lbl">底色</span>${chipRow('background', colours, true)}<label class="ed-swatch" data-swatch="background" title="自訂底色"><input type="color" data-style="background" id="ed-background"></label></div>`,
+      `<div class="ed-ctl ed-chips"><span class="ed-lbl">Text</span>${chipRow('color', colours, true)}<label class="ed-swatch" title="Custom text colour"><input type="color" data-style="color" id="ed-color"></label></div>`,
+      `<div class="ed-ctl ed-chips"><span class="ed-lbl">Background</span>${chipRow('background', colours, true)}<label class="ed-swatch" data-swatch="background" title="Custom background colour"><input type="color" data-style="background" id="ed-background"></label></div>`,
       '</div>',
-      '<div class="ed-float-row ed-data-only"><label class="ed-content-lbl">內容<small>每行一筆；圖表「標籤｜數值」、表格用「|」分欄、圖示寫名稱、分頁籤以「## 標籤」起一個面板</small><textarea data-content rows="5" spellcheck="false"></textarea></label></div>',
-      '<div class="ed-float-row ed-details-only"><label class="ed-content-lbl">展開內容<small>播放時點這個元件展開的內容；一行一段，清空就取消展開</small><textarea data-details rows="3" spellcheck="false"></textarea></label></div>',
+      '<div class="ed-float-row ed-data-only"><label class="ed-content-lbl">Content<small>One item per line; charts as “label | value”, tables with “|” between cells, icons by name, tabs open a panel with “## label”</small><textarea data-content rows="5" spellcheck="false"></textarea></label></div>',
+      '<div class="ed-float-row ed-details-only"><label class="ed-content-lbl">Details<small>Expands when this element is clicked during playback; one paragraph per line, clear it to remove</small><textarea data-details rows="3" spellcheck="false"></textarea></label></div>',
       '<div class="ed-float-row ed-float-arrange">',
-      '<div class="ed-ctl ed-seg" title="對齊">',
-      `<button type="button" class="ed-ibtn" data-align="left" title="靠左對齊">${icon('objLeft')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="centerX" title="水平置中">${icon('objCenterX')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="right" title="靠右對齊">${icon('objRight')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="top" title="靠上對齊">${icon('objTop')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="middle" title="垂直置中">${icon('objMiddle')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="bottom" title="靠下對齊">${icon('objBottom')}</button>`,
+      '<div class="ed-ctl ed-seg" title="Align">',
+      `<button type="button" class="ed-ibtn" data-align="left" title="Align left">${icon('objLeft')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="centerX" title="Centre horizontally">${icon('objCenterX')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="right" title="Align right">${icon('objRight')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="top" title="Align top">${icon('objTop')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="middle" title="Centre vertically">${icon('objMiddle')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="bottom" title="Align bottom">${icon('objBottom')}</button>`,
       '</div>',
-      '<div class="ed-ctl ed-seg" title="等距分佈（三個以上）">',
-      `<button type="button" class="ed-ibtn" data-distribute="h" title="水平等距">${icon('distH')}</button>`,
-      `<button type="button" class="ed-ibtn" data-distribute="v" title="垂直等距">${icon('distV')}</button>`,
+      '<div class="ed-ctl ed-seg" title="Distribute evenly (three or more)">',
+      `<button type="button" class="ed-ibtn" data-distribute="h" title="Distribute horizontally">${icon('distH')}</button>`,
+      `<button type="button" class="ed-ibtn" data-distribute="v" title="Distribute vertically">${icon('distV')}</button>`,
       '</div>',
-      '<label class="ed-toggle" title="對齊到整張投影片而不是選取範圍（只選一個時一律對投影片）"><input type="checkbox" data-align-slide><span>對投影片</span></label>',
-      '<div class="ed-ctl ed-seg" title="層次">',
-      `<button type="button" class="ed-ibtn" data-z="front" title="移到最上層">${icon('front')}</button>`,
-      `<button type="button" class="ed-ibtn" data-z="back" title="移到最下層">${icon('back')}</button>`,
+      '<label class="ed-toggle" title="Align to the whole slide instead of the selection (a single element always aligns to the slide)"><input type="checkbox" data-align-slide><span>To slide</span></label>',
+      '<div class="ed-ctl ed-seg" title="Stacking order">',
+      `<button type="button" class="ed-ibtn" data-z="front" title="Bring to front">${icon('front')}</button>`,
+      `<button type="button" class="ed-ibtn" data-z="back" title="Send to back">${icon('back')}</button>`,
       '</div>',
-      `<button type="button" class="ed-btn" data-action="copy-style" title="複製選取元件的樣式覆寫 (Ctrl+Alt+C)">${icon('brush')}<span>複製樣式</span></button>`,
-      `<button type="button" class="ed-btn" data-action="paste-style" title="把複製的樣式套到選取的元件 (Ctrl+Alt+V)">${icon('paste')}<span>貼上樣式</span></button>`,
+      `<button type="button" class="ed-btn" data-action="copy-style" title="Copy the selected element’s style overrides (Ctrl+Alt+C)">${icon('brush')}<span>Copy style</span></button>`,
+      `<button type="button" class="ed-btn" data-action="paste-style" title="Apply the copied style to the selected elements (Ctrl+Alt+V)">${icon('paste')}<span>Paste style</span></button>`,
       '</div>',
       '<div class="ed-float-row ed-float-more" hidden>',
       '<div class="ed-ctl"><span class="ed-lbl">X</span><input type="number" class="ed-num" data-prop="x" step="1"></div>',
       '<div class="ed-ctl"><span class="ed-lbl">Y</span><input type="number" class="ed-num" data-prop="y" step="1"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">寬</span><input type="number" class="ed-num" data-prop="w" step="1" min="20"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">高</span><input type="number" class="ed-num" data-prop="h" step="1" min="20"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">旋轉</span><input type="number" class="ed-num" data-prop="rotation" step="1" placeholder="0"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">層次</span><input type="number" class="ed-num" data-prop="z" step="1" placeholder="預設"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">透明度</span><input type="range" class="ed-range" data-style="opacity" min="0" max="1" step="0.05" title="透明度"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">圓角</span><input type="number" class="ed-num" data-style="borderRadius" step="1" min="0" placeholder="預設" title="圓角（px）"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl" title="逐步顯示：按第幾次「下一步」才出現；空白或 0 表示一開始就顯示">步驟</span><input type="number" class="ed-num" data-el-step step="1" min="0" placeholder="0"></div>',
-      `<div class="ed-ctl"><span class="ed-lbl" title="到達步驟時怎麼進場；「主題預設」依元件角色決定">進場</span><select data-el-enter><option value="">主題預設</option>${ENTER_OPTIONS.map((v) => `<option value="${v}">${v}</option>`).join('')}</select></div>`,
-      `<button type="button" class="ed-btn" data-action="add-details" title="給這個元件加上播放時點擊展開的內容">${icon('plus')}<span>展開內容</span></button>`,
-      `<button type="button" class="ed-btn" data-action="reset" title="刪除選取元件的全部覆寫，回到生成時的樣子">${icon('reset')}<span>重設覆寫</span></button>`,
+      '<div class="ed-ctl"><span class="ed-lbl" title="Width (px)">W</span><input type="number" class="ed-num" data-prop="w" step="1" min="20"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl" title="Height (px)">H</span><input type="number" class="ed-num" data-prop="h" step="1" min="20"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl">Rotate</span><input type="number" class="ed-num" data-prop="rotation" step="1" placeholder="0"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl">Layer</span><input type="number" class="ed-num" data-prop="z" step="1" placeholder="auto"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl">Opacity</span><input type="range" class="ed-range" data-style="opacity" min="0" max="1" step="0.05" title="Opacity"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl">Radius</span><input type="number" class="ed-num" data-style="borderRadius" step="1" min="0" placeholder="auto" title="Corner radius (px)"></div>',
+      '<div class="ed-ctl"><span class="ed-lbl" title="Reveal step: which press of “next” shows this element; blank or 0 means visible from the start">Step</span><input type="number" class="ed-num" data-el-step step="1" min="0" placeholder="0"></div>',
+      `<div class="ed-ctl"><span class="ed-lbl" title="How it enters when its step is reached; “Theme default” depends on the element’s role">Entrance</span><select data-el-enter><option value="">Theme default</option>${ENTER_OPTIONS.map((v) => `<option value="${v}">${v}</option>`).join('')}</select></div>`,
+      `<button type="button" class="ed-btn" data-action="add-details" title="Add content that expands when this element is clicked during playback">${icon('plus')}<span>Details</span></button>`,
+      `<button type="button" class="ed-btn" data-action="reset" title="Remove every override on the selected elements and go back to the generated state">${icon('reset')}<span>Reset overrides</span></button>`,
       '</div>',
     ].join('')
     document.body.appendChild(float)
@@ -2083,7 +2083,7 @@
     float.dataset.kind = kind
     float.dataset.count = String(selection.length)
     float.querySelector('[data-field="key"]').textContent = many
-      ? `${p.slideId} · ${selection.length} 個元件`
+      ? `${p.slideId} · ${selection.length} elements`
       : `${p.slideId} / ${p.elId}`
     for (const n of float.querySelectorAll('.ed-text-only')) n.hidden = !anyText
     for (const n of float.querySelectorAll('.ed-image-only')) n.hidden = many || kind !== 'image'
@@ -2116,7 +2116,7 @@
     const hiddenAll = allHidden()
     const eye = float.querySelector('[data-action="hide"]')
     eye.dataset.state = hiddenAll ? 'hidden' : 'visible'
-    eye.title = hiddenAll ? '顯示選取的元件' : '隱藏選取的元件 (Delete)'
+    eye.title = hiddenAll ? 'Show the selected elements' : 'Hide the selected elements (Delete)'
     eye.innerHTML = icon(hiddenAll ? 'eye' : 'eyeOff')
     eye.classList.toggle('is-on', hiddenAll)
     for (const b of float.querySelectorAll('[data-distribute]')) b.disabled = selection.length < 3
@@ -2194,7 +2194,7 @@
           select.appendChild(custom)
         }
         custom.value = value
-        custom.textContent = `自訂：${value.slice(0, 24)}`
+        custom.textContent = `Custom: ${value.slice(0, 24)}`
       }
       select.value = value
     }

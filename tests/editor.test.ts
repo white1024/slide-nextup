@@ -628,7 +628,7 @@ describe('editor mode', () => {
       getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim(),
     )
     const select = page.locator('.ed-float select[data-style="fontFamily"]')
-    expect(await select.locator('option').nth(1).textContent()).toBe('主題標題字')
+    expect(await select.locator('option').nth(1).textContent()).toBe('Theme display font')
     await select.selectOption({ index: 1 })
     expect((await overrideOf('s5/body'))?.style?.fontFamily).toBe(display)
     await select.selectOption('')
@@ -655,7 +655,7 @@ describe('editor mode', () => {
     expect(await selected()).toEqual({ slideId: 's2', elId: 'card-3' })
     expect(await page.locator('.ed-box.is-multi').count()).toBe(1)
     expect(await page.locator('.ed-box-thin').count()).toBe(3)
-    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('s2 · 3 個元件')
+    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('s2 · 3 elements')
     // arrow keys move all three
     const ys = () =>
       page.evaluate(() =>

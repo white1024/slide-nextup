@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "以敘事為核心的簡報生成框架與工作流：agent 先與使用者確認敘事，再生成可在瀏覽器內完整編輯的 HTML 簡報。",
+  "description": "Narrative-first slide decks: an agent confirms the story with you, then generates an HTML deck you can fully edit in the browser.",
   "engines": {
     "node": ">=24",
     "pnpm": ">=10"

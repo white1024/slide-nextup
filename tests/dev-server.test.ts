@@ -83,7 +83,7 @@ describe('dev server', () => {
     expect(after.overrides['s1/title']).toEqual(before.overrides['s1/title'])
     expect(readFileSync(deckFile, 'utf8')).toBe(stringifyDeck(after))
     await page.waitForFunction(() =>
-      document.querySelector('.dev-status')?.textContent?.startsWith('已儲存'),
+      document.querySelector('.dev-status')?.textContent?.startsWith('Saved'),
     )
   })
 

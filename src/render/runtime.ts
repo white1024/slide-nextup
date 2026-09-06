@@ -304,7 +304,7 @@ export const RUNTIME_JS = `(() => {
     document.body.classList.add('deck-presenter');
     const aside = document.createElement('aside');
     aside.className = 'presenter-aside';
-    aside.innerHTML = '<div class="presenter-label">下一頁</div><div class="presenter-next-stage"></div><div class="presenter-position"></div><div class="presenter-label">講稿</div><div class="presenter-notes"></div><div class="presenter-timer">00:00</div>';
+    aside.innerHTML = '<div class="presenter-label">Next</div><div class="presenter-next-stage"></div><div class="presenter-position"></div><div class="presenter-label">Notes</div><div class="presenter-notes"></div><div class="presenter-timer">00:00</div>';
     document.body.appendChild(aside);
     const nextStage = aside.querySelector('.presenter-next-stage');
     const notes = aside.querySelector('.presenter-notes');
@@ -327,8 +327,8 @@ export const RUNTIME_JS = `(() => {
         nextStage.appendChild(clone);
       }
       const slide = model.slides[current];
-      notes.textContent = (slide && slide.notes) || '（這一頁沒有講稿）';
-      position.textContent = (current + 1) + ' / ' + slides.length + (stepsOf(current) ? '　步驟 ' + step + ' / ' + stepsOf(current) : '');
+      notes.textContent = (slide && slide.notes) || '(No notes for this slide)';
+      position.textContent = (current + 1) + ' / ' + slides.length + (stepsOf(current) ? ' · step ' + step + ' / ' + stepsOf(current) : '');
     }
     document.addEventListener('deck:change', refresh);
     window.addEventListener('resize', refresh);
@@ -595,7 +595,7 @@ export const RUNTIME_JS = `(() => {
         if (staticNow()) return;
         e.preventDefault();
         setMotion(motionOff, true);
-        toast(motionOff ? '元件動畫：關（按 M 恢復）' : '元件動畫：開');
+        toast(motionOff ? 'Element motion: off (press M to restore)' : 'Element motion: on');
         return;
     }
     if (/^[0-9]$/.test(e.key)) {

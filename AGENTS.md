@@ -30,4 +30,4 @@
 
 - 規則寫在程式碼與測試裡（`src/`、`tests/`），skills 只描述流程，不重述細節。
 - 第一階段只輸出 HTML；`pnpm qa` 用 headless Chromium 檢查溢出、重疊、字級下限、密度。
-- 範例：`examples/tidewatch-progress/`（一份走完整流程的示範簡報）、`examples/story.sample.md`。
+- 範例：`examples/tidewatch-progress/`（已確認敘事並生成 deck.json 的示範簡報，附 design.json 與 assets）、`examples/story.sample.md`。

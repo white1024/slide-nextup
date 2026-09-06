@@ -635,7 +635,7 @@ describe('element motion switch', () => {
       attr: 'off',
       stored: 'off',
     })
-    expect(await page.locator('.deck-toast').textContent()).toContain('關')
+    expect(await page.locator('.deck-toast').textContent()).toContain('off')
     await page.keyboard.press('m')
     expect(await state()).toMatchObject({
       motion: true,
