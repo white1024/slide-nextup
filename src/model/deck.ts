@@ -168,35 +168,38 @@ function describeAjvError(e: ErrorObject): DeckError {
     case 'required':
       return {
         path,
-        message: `缺少必要欄位 \`${(e.params as { missingProperty: string }).missingProperty}\``,
+        message: `missing required field \`${(e.params as { missingProperty: string }).missingProperty}\``,
       }
     case 'additionalProperties':
       return {
         path,
-        message: `不允許的欄位 \`${(e.params as { additionalProperty: string }).additionalProperty}\``,
+        message: `field \`${(e.params as { additionalProperty: string }).additionalProperty}\` is not allowed`,
       }
     case 'enum':
       return {
         path,
-        message: `值必須是 ${(e.params as { allowedValues: unknown[] }).allowedValues.map((v) => JSON.stringify(v)).join(' | ')}`,
+        message: `value must be ${(e.params as { allowedValues: unknown[] }).allowedValues.map((v) => JSON.stringify(v)).join(' | ')}`,
       }
     case 'const':
       return {
         path,
-        message: `值必須是 ${JSON.stringify((e.params as { allowedValue: unknown }).allowedValue)}`,
+        message: `value must be ${JSON.stringify((e.params as { allowedValue: unknown }).allowedValue)}`,
       }
     case 'pattern':
-      return { path, message: `格式不符（${(e.params as { pattern: string }).pattern}）` }
+      return {
+        path,
+        message: `does not match the pattern (${(e.params as { pattern: string }).pattern})`,
+      }
     case 'propertyNames':
       return {
         path,
-        message: `鍵 \`${(e.params as { propertyName: string }).propertyName}\` 格式不符`,
+        message: `key \`${(e.params as { propertyName: string }).propertyName}\` does not match the pattern`,
       }
     case 'oneOf':
       return {
         path,
         message:
-          'slot 必須是 text | list | image | metric | chart | table | code | icon | tabs 其中一種，且欄位齊全',
+          'a slot must be one of text | list | image | metric | chart | table | code | icon | tabs, with all of its fields',
       }
     default:
       return { path, message: e.message ?? e.keyword }
@@ -213,7 +216,7 @@ function crossCheck(deck: Deck): DeckError[] {
     if (slideIndex.has(slide.id)) {
       errors.push({
         path: `/slides/${i}/id`,
-        message: `頁面 id \`${slide.id}\` 重複（第一次在 /slides/${slideIndex.get(slide.id)}）`,
+        message: `duplicate slide id \`${slide.id}\` (first at /slides/${slideIndex.get(slide.id)})`,
       })
     } else {
       slideIndex.set(slide.id, i)
@@ -224,7 +227,7 @@ function crossCheck(deck: Deck): DeckError[] {
       if (elements.has(el.id)) {
         errors.push({
           path: `/slides/${i}/elements/${j}/id`,
-          message: `頁面 \`${slide.id}\` 的元件 id \`${el.id}\` 重複`,
+          message: `duplicate element id \`${el.id}\` in slide \`${slide.id}\``,
         })
       } else {
         elements.set(el.id, el.kind)
@@ -236,7 +239,7 @@ function crossCheck(deck: Deck): DeckError[] {
       if (!elements.has(slotId)) {
         errors.push({
           path: `/slides/${i}/slots/${slotId}`,
-          message: `頁面 \`${slide.id}\` 的 slot \`${slotId}\` 不在 elements 裡；每個 slot 都必須對應一個同名元件`,
+          message: `slot \`${slotId}\` of slide \`${slide.id}\` is not in elements; every slot must have an element of the same id`,
         })
       }
     }
@@ -249,7 +252,7 @@ function crossCheck(deck: Deck): DeckError[] {
       if (!known.has(h.target))
         errors.push({
           path: `${path}/${j}/target`,
-          message: `熱區指向不存在的頁面 \`${h.target}\``,
+          message: `hotspot points to non-existent slide \`${h.target}\``,
         })
     })
   }
@@ -264,40 +267,43 @@ function crossCheck(deck: Deck): DeckError[] {
     const [slideId, elementId] = key.split('/') as [string, string]
     const elements = elementsBySlide.get(slideId)
     if (!elements) {
-      errors.push({ path: `/overrides/${key}`, message: `覆寫指向不存在的頁面 \`${slideId}\`` })
+      errors.push({
+        path: `/overrides/${key}`,
+        message: `override points to non-existent slide \`${slideId}\``,
+      })
       continue
     }
     const kind = elements.get(elementId)
     if (!kind) {
       errors.push({
         path: `/overrides/${key}`,
-        message: `覆寫指向頁面 \`${slideId}\` 裡不存在的元件 \`${elementId}\``,
+        message: `override points to non-existent element \`${elementId}\` in slide \`${slideId}\``,
       })
       continue
     }
     if (override.text !== undefined && kind !== 'text') {
       errors.push({
         path: `/overrides/${key}/text`,
-        message: `\`text\` 覆寫只能用在 kind 為 text 的元件，\`${elementId}\` 是 ${kind}`,
+        message: `a \`text\` override can only apply to an element of kind text, \`${elementId}\` is ${kind}`,
       })
     }
     if (override.src !== undefined && kind !== 'image') {
       errors.push({
         path: `/overrides/${key}/src`,
-        message: `\`src\` 覆寫只能用在 kind 為 image 的元件，\`${elementId}\` 是 ${kind}`,
+        message: `a \`src\` override can only apply to an element of kind image, \`${elementId}\` is ${kind}`,
       })
     }
     if (override.details !== undefined && kind !== 'text') {
       errors.push({
         path: `/overrides/${key}/details`,
-        message: `\`details\` 覆寫只能用在 kind 為 text 的元件，\`${elementId}\` 是 ${kind}`,
+        message: `a \`details\` override can only apply to an element of kind text, \`${elementId}\` is ${kind}`,
       })
     }
     if (override.hotspots !== undefined) {
       if (kind !== 'image') {
         errors.push({
           path: `/overrides/${key}/hotspots`,
-          message: `\`hotspots\` 覆寫只能用在 kind 為 image 的元件，\`${elementId}\` 是 ${kind}`,
+          message: `a \`hotspots\` override can only apply to an element of kind image, \`${elementId}\` is ${kind}`,
         })
       } else checkHotspots(override.hotspots, `/overrides/${key}/hotspots`)
     }
@@ -314,7 +320,7 @@ function crossCheck(deck: Deck): DeckError[] {
         if (!known.has(id))
           errors.push({
             path: `/pages/${field}/${i}`,
-            message: `頁面編排指向不存在的頁面 \`${id}\``,
+            message: `page arrangement points to non-existent slide \`${id}\``,
           })
       })
     }
@@ -350,7 +356,7 @@ export function parseDeck(text: string): ValidateResult {
   } catch (err) {
     return {
       ok: false,
-      errors: [{ path: '/', message: `不是合法 JSON：${(err as Error).message}` }],
+      errors: [{ path: '/', message: `not valid JSON: ${(err as Error).message}` }],
     }
   }
   return validateDeck(json)

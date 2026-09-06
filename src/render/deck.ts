@@ -62,13 +62,13 @@ export function resolveAsset(src: string, opts: RenderDeckOptions, warnings: str
   if (isRemote(src)) return src
   const abs = isAbsolute(src) ? src : resolve(opts.deckDir, src)
   if (!existsSync(abs)) {
-    warnings.push(`找不到圖片 ${src}（解析為 ${abs}）`)
+    warnings.push(`image ${src} not found (resolved to ${abs})`)
     return src
   }
   if (opts.inlineAssets) {
     const mime = MIME[extname(abs).toLowerCase()]
     if (!mime) {
-      warnings.push(`不認得的圖片格式 ${src}，保留原路徑`)
+      warnings.push(`unrecognised image format ${src}, path kept as is`)
     } else {
       return `data:${mime};base64,${readFileSync(abs).toString('base64')}`
     }
@@ -99,39 +99,44 @@ export function checkSlideAgainstLayout(
   const inSlide = new Map(slide.elements.map((e) => [e.id, e.kind]))
   for (const [id, kind] of declared) {
     const k = inSlide.get(id)
-    if (!k) problems.push(`頁面 \`${slide.id}\` 缺少版型 \`${layout.id}\` 的元件 \`${id}\``)
+    if (!k)
+      problems.push(`slide \`${slide.id}\` is missing element \`${id}\` of layout \`${layout.id}\``)
     else if (k !== kind)
       problems.push(
-        `頁面 \`${slide.id}\` 的元件 \`${id}\` 是 ${k}，版型 \`${layout.id}\` 宣告為 ${kind}`,
+        `element \`${id}\` of slide \`${slide.id}\` is ${k}, layout \`${layout.id}\` declares ${kind}`,
       )
   }
   for (const id of inSlide.keys()) {
     if (!declared.has(id))
-      problems.push(`頁面 \`${slide.id}\` 有版型 \`${layout.id}\` 沒有的元件 \`${id}\``)
+      problems.push(
+        `slide \`${slide.id}\` has element \`${id}\` that layout \`${layout.id}\` does not`,
+      )
   }
   for (const [slotId, slot] of Object.entries(slide.slots)) {
     const decl = layout.json.slots[slotId]
     if (!decl)
       problems.push(
-        `頁面 \`${slide.id}\` 的 slot \`${slotId}\` 不在版型 \`${layout.id}\` 的 slots 裡`,
+        `slot \`${slotId}\` of slide \`${slide.id}\` is not among the slots of layout \`${layout.id}\``,
       )
     else {
       const accepted = Array.isArray(decl.type) ? decl.type : [decl.type]
       if (!accepted.includes(slot.type))
         problems.push(
-          `頁面 \`${slide.id}\` 的 slot \`${slotId}\` 是 ${slot.type}，版型只接受 ${accepted.join(' | ')}`,
+          `slot \`${slotId}\` of slide \`${slide.id}\` is ${slot.type}, the layout only accepts ${accepted.join(' | ')}`,
         )
     }
   }
   for (const [slotId, decl] of Object.entries(layout.json.slots)) {
     if (decl.required && !(slotId in slide.slots))
-      problems.push(`頁面 \`${slide.id}\` 缺少版型 \`${layout.id}\` 的必要 slot \`${slotId}\``)
+      problems.push(
+        `slide \`${slide.id}\` is missing required slot \`${slotId}\` of layout \`${layout.id}\``,
+      )
   }
   // content expands only behind a role the theme paints as a box (the panel copies that look)
   const roles = layoutRoles(layout)
   const boxed = (id: string) => DETAILS_ROLES.has(roles.get(id) ?? '')
   const notBoxed = (id: string) =>
-    `頁面 \`${slide.id}\` 的 \`${id}\` 帶 details，但它的 role 是 ${roles.get(id) ?? '（無）'}；只有 ${[...DETAILS_ROLES].join('、')} 這些有底框的元件可以展開`
+    `\`${id}\` on slide \`${slide.id}\` carries details but its role is ${roles.get(id) ?? '(none)'}; only the boxed roles ${[...DETAILS_ROLES].join(', ')} can expand`
   for (const [slotId, slot] of Object.entries(slide.slots)) {
     if ('details' in slot && slot.details && !boxed(slotId)) problems.push(notBoxed(slotId))
   }
@@ -211,7 +216,9 @@ export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderD
     })
   })
   if (problems.length > 0) {
-    throw new Error(`deck 與版型不一致：\n${problems.map((p) => `  - ${p}`).join('\n')}`)
+    throw new Error(
+      `deck does not match its layouts:\n${problems.map((p) => `  - ${p}`).join('\n')}`,
+    )
   }
 
   const css = [

@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "ink-paper",
-  "name": "墨與紙",
-  "description": "暖紙底、墨色文字、單一朱紅強調色。襯線標題配無襯線內文，只用細線與色塊裝飾，沒有漸層與陰影。",
+  "name": "Ink and Paper",
+  "description": "Warm paper, ink text, a single vermilion accent. Serif headings with sans-serif body text, decoration limited to thin rules and colour blocks, no gradients or shadows.",
   "colors": {
-    "paper": { "value": "#f4efe6", "use": "頁面底色" },
-    "ink": { "value": "#1b1a17", "use": "主要文字；反相頁的底色" },
-    "muted": { "value": "#6b665c", "use": "副標、說明、次要文字" },
-    "accent": { "value": "#c8102e", "use": "唯一強調色：kicker、關鍵數字、CTA、分隔線、列表記號" },
-    "surface": { "value": "#ebe3d3", "use": "卡片與面板底色" },
-    "line": { "value": "#cfc6b4", "use": "細線、邊框、分隔" }
+    "paper": { "value": "#f4efe6", "use": "page background" },
+    "ink": { "value": "#1b1a17", "use": "primary text; background of inverted pages" },
+    "muted": { "value": "#6b665c", "use": "subtitles, captions, secondary text" },
+    "accent": { "value": "#c8102e", "use": "the only accent: kicker, key numbers, CTA, dividers, list markers" },
+    "surface": { "value": "#ebe3d3", "use": "card and panel background" },
+    "line": { "value": "#cfc6b4", "use": "thin rules, borders, dividers" }
   },
   "typography": {
     "display": {
@@ -23,7 +23,7 @@
   },
   "spacing": { "radius": 4 },
   "decoration": {
-    "vocabulary": ["細線分隔", "單一朱紅色條", "放大的數字", "大面積留白"],
-    "avoid": ["漸層", "陰影", "圓角卡片牆", "右側制式插圖", "Inter 或 Roboto"]
+    "vocabulary": ["thin-rule dividers", "a single vermilion bar", "enlarged numbers", "generous white space"],
+    "avoid": ["gradients", "shadows", "walls of rounded cards", "stock illustration on the right", "Inter or Roboto"]
   }
 }

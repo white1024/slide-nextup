@@ -81,7 +81,9 @@ export function rethemeDeck(
           slots[slotId] = { type: 'list', items: [] }
           report.filledRequired.push(`${slide.id}/${slotId}`)
         } else {
-          report.droppedSlots.push(`${slide.id}/${slotId}（必要，型別 ${kinds.join('|')}，請補上）`)
+          report.droppedSlots.push(
+            `${slide.id}/${slotId} (required, type ${kinds.join('|')}, fill it in)`,
+          )
         }
       }
     }

@@ -44,8 +44,8 @@ export interface StorySlide {
   evidence: string[]
   notes: string
   /**
-   * Optional chapter name (a skeleton item), e.g. 「骨架」. Pages that share a chapter share its
-   * number; the scaffold turns it into the chapter label 「01 — 骨架」 on layouts with a kicker.
+   * Optional chapter name (a skeleton item), e.g. `骨架`. Pages that share a chapter share its
+   * number; the scaffold turns it into the chapter label `01 — 骨架` on layouts with a kicker.
    */
   chapter?: string
   /** 1-based line of the slide heading in the source file. */
@@ -138,7 +138,7 @@ export function parseStory(text: string): ParseResult {
 
   // ---- frontmatter -------------------------------------------------------
   if ((lines[0] ?? '').trim() !== '---') {
-    error('frontmatter/missing', 1, '檔案必須以 `---` 開頭的 YAML frontmatter 開始')
+    error('frontmatter/missing', 1, 'the file must start with a YAML frontmatter opened by `---`')
     return { story: null, diagnostics }
   }
   let fmEnd = -1
@@ -149,7 +149,7 @@ export function parseStory(text: string): ParseResult {
     }
   }
   if (fmEnd === -1) {
-    error('frontmatter/unterminated', 1, 'frontmatter 沒有結尾的 `---`')
+    error('frontmatter/unterminated', 1, 'frontmatter has no closing `---`')
     return { story: null, diagnostics }
   }
 
@@ -157,11 +157,11 @@ export function parseStory(text: string): ParseResult {
   try {
     rawMeta = parseYaml(lines.slice(1, fmEnd).join('\n'))
   } catch (err) {
-    error('frontmatter/yaml', 2, `frontmatter 不是合法 YAML：${(err as Error).message}`)
+    error('frontmatter/yaml', 2, `frontmatter is not valid YAML: ${(err as Error).message}`)
     return { story: null, diagnostics }
   }
   if (!isRecord(rawMeta)) {
-    error('frontmatter/shape', 2, 'frontmatter 必須是鍵值對')
+    error('frontmatter/shape', 2, 'frontmatter must be a key-value mapping')
     return { story: null, diagnostics }
   }
 
@@ -169,7 +169,11 @@ export function parseStory(text: string): ParseResult {
   for (const key of META_STRING_KEYS) {
     const v = rawMeta[key]
     if (typeof v !== 'string' || v.trim() === '') {
-      error('frontmatter/field', metaLine(key), `frontmatter 缺少必要欄位 \`${key}\`（非空字串）`)
+      error(
+        'frontmatter/field',
+        metaLine(key),
+        `frontmatter is missing the required field \`${key}\` (non-empty string)`,
+      )
     }
   }
   const duration = rawMeta.duration_minutes
@@ -177,21 +181,21 @@ export function parseStory(text: string): ParseResult {
     error(
       'frontmatter/field',
       metaLine('duration_minutes'),
-      '`duration_minutes` 必須是大於 0 的數字',
+      '`duration_minutes` must be a number greater than 0',
     )
   }
   if (!DENSITIES.includes(rawMeta.density as Density)) {
     error(
       'frontmatter/enum',
       metaLine('density'),
-      `\`density\` 必須是 ${DENSITIES.join(' | ')}，目前是 ${JSON.stringify(rawMeta.density ?? null)}`,
+      `\`density\` must be ${DENSITIES.join(' | ')}, currently ${JSON.stringify(rawMeta.density ?? null)}`,
     )
   }
   if (!NARRATIVE_PATTERNS.includes(rawMeta.narrative_pattern as NarrativePattern)) {
     error(
       'frontmatter/enum',
       metaLine('narrative_pattern'),
-      `\`narrative_pattern\` 必須是 ${NARRATIVE_PATTERNS.join(' | ')}，目前是 ${JSON.stringify(rawMeta.narrative_pattern ?? null)}`,
+      `\`narrative_pattern\` must be ${NARRATIVE_PATTERNS.join(' | ')}, currently ${JSON.stringify(rawMeta.narrative_pattern ?? null)}`,
     )
   }
 
@@ -213,9 +217,9 @@ export function parseStory(text: string): ParseResult {
   for (const key of ['goal', 'thesis', 'skeleton'] as const) {
     const body = sectionBody(SECTION_HEADINGS[key])
     if (!body) {
-      error('section/missing', fmEnd + 1, `缺少章節 \`## ${SECTION_HEADINGS[key]}\``)
+      error('section/missing', fmEnd + 1, `missing section \`## ${SECTION_HEADINGS[key]}\``)
     } else if (body.text === '') {
-      warning('section/empty', body.from, `章節 \`## ${SECTION_HEADINGS[key]}\` 是空的`)
+      warning('section/empty', body.from, `section \`## ${SECTION_HEADINGS[key]}\` is empty`)
       sections[key] = ''
     } else {
       sections[key] = body.text
@@ -223,7 +227,7 @@ export function parseStory(text: string): ParseResult {
   }
   const slidesBody = sectionBody(SECTION_HEADINGS.slides)
   if (!slidesBody) {
-    error('section/missing', fmEnd + 1, `缺少章節 \`## ${SECTION_HEADINGS.slides}\``)
+    error('section/missing', fmEnd + 1, `missing section \`## ${SECTION_HEADINGS.slides}\``)
   }
 
   // ---- slides ------------------------------------------------------------
@@ -238,16 +242,16 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/heading',
           i + 1,
-          '逐頁標題格式必須是 `### <id> | <標題>`，id 只能用英數、底線、連字號',
+          'a slide heading must be `### <id> | <title>`, and the id can only use letters, digits, underscores and hyphens',
         )
         continue
       }
       const title = (m[2] ?? '').trim()
-      if (title === '') error('slide/title', i + 1, `頁面 \`${m[1]}\` 缺少標題`)
+      if (title === '') error('slide/title', i + 1, `slide \`${m[1]}\` is missing a title`)
       headings.push({ line: i, id: m[1], title })
     }
     if (headings.length === 0) {
-      error('slide/none', slidesBody.from + 1, '`## 逐頁` 底下沒有任何 `### <id> | <標題>` 頁面')
+      error('slide/none', slidesBody.from + 1, 'no `### <id> | <title>` slides under `## 逐頁`')
     }
 
     const seen = new Map<string, number>()
@@ -260,7 +264,7 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/duplicate-id',
           headingLine,
-          `頁面 id \`${h.id}\` 重複（第一次出現在第 ${seen.get(h.id)} 行）`,
+          `duplicate slide id \`${h.id}\` (first seen on line ${seen.get(h.id)})`,
         )
       } else {
         seen.set(h.id, headingLine)
@@ -273,12 +277,16 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/yaml',
           headingLine,
-          `頁面 \`${h.id}\` 的欄位無法解析：${(err as Error).message}`,
+          `cannot parse the fields of slide \`${h.id}\`: ${(err as Error).message}`,
         )
         return
       }
       if (!isRecord(fields)) {
-        error('slide/shape', headingLine, `頁面 \`${h.id}\` 的欄位必須是 \`- key: value\` 清單`)
+        error(
+          'slide/shape',
+          headingLine,
+          `the fields of slide \`${h.id}\` must be a \`- key: value\` list`,
+        )
         return
       }
       const fieldLine = (key: string) => findKeyLine(lines, from, to, key)
@@ -288,7 +296,7 @@ export function parseStory(text: string): ParseResult {
           warning(
             'slide/unknown-field',
             fieldLine(key),
-            `頁面 \`${h.id}\` 有未知欄位 \`${key}\`，會被忽略`,
+            `slide \`${h.id}\` has an unrecognised field \`${key}\`, which will be ignored`,
           )
         }
       }
@@ -300,7 +308,7 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/enum',
           fieldLine('scene_role'),
-          `頁面 \`${h.id}\` 的 \`scene_role\` 必須是 ${SCENE_ROLES.join(' | ')}，目前是 ${JSON.stringify(role ?? null)}`,
+          `\`scene_role\` of slide \`${h.id}\` must be ${SCENE_ROLES.join(' | ')}, currently ${JSON.stringify(role ?? null)}`,
         )
       }
       const intensity = fields.intensity
@@ -309,7 +317,7 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/field',
           fieldLine('intensity'),
-          `頁面 \`${h.id}\` 的 \`intensity\` 必須是 1 到 5 的整數，目前是 ${JSON.stringify(intensity ?? null)}`,
+          `\`intensity\` of slide \`${h.id}\` must be an integer from 1 to 5, currently ${JSON.stringify(intensity ?? null)}`,
         )
       }
       const relation = fields.content_relation
@@ -318,7 +326,7 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/enum',
           fieldLine('content_relation'),
-          `頁面 \`${h.id}\` 的 \`content_relation\` 必須是 ${CONTENT_RELATIONS.join(' | ')}，目前是 ${JSON.stringify(relation ?? null)}`,
+          `\`content_relation\` of slide \`${h.id}\` must be ${CONTENT_RELATIONS.join(' | ')}, currently ${JSON.stringify(relation ?? null)}`,
         )
       }
       const message = fields.message
@@ -327,14 +335,14 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/field',
           fieldLine('message'),
-          `頁面 \`${h.id}\` 缺少 \`message\`（一句話，非空字串）`,
+          `slide \`${h.id}\` is missing \`message\` (one sentence, non-empty string)`,
         )
       } else if (message.includes('\n')) {
         ok = false
         error(
           'message/single',
           fieldLine('message'),
-          `頁面 \`${h.id}\` 的 \`message\` 只能是一句話，不能多行`,
+          `\`message\` of slide \`${h.id}\` must be a single sentence, not multiple lines`,
         )
       }
       const evidence = normaliseEvidence(fields.evidence)
@@ -343,13 +351,13 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/field',
           fieldLine('evidence'),
-          `頁面 \`${h.id}\` 的 \`evidence\` 必須是字串或字串清單`,
+          `\`evidence\` of slide \`${h.id}\` must be a string or a list of strings`,
         )
       }
       const notes = fields.notes
       if (notes !== undefined && notes !== null && typeof notes !== 'string') {
         ok = false
-        error('slide/field', fieldLine('notes'), `頁面 \`${h.id}\` 的 \`notes\` 必須是字串`)
+        error('slide/field', fieldLine('notes'), `\`notes\` of slide \`${h.id}\` must be a string`)
       }
       const chapter = fields.chapter
       if (chapter !== undefined && chapter !== null && typeof chapter !== 'string') {
@@ -357,11 +365,15 @@ export function parseStory(text: string): ParseResult {
         error(
           'slide/field',
           fieldLine('chapter'),
-          `頁面 \`${h.id}\` 的 \`chapter\` 必須是字串（章節名，例如「骨架」）`,
+          `\`chapter\` of slide \`${h.id}\` must be a string (a chapter name, e.g. \`骨架\`)`,
         )
       } else if (typeof chapter === 'string' && /\n/.test(chapter.trim())) {
         ok = false
-        error('slide/field', fieldLine('chapter'), `頁面 \`${h.id}\` 的 \`chapter\` 必須是單行`)
+        error(
+          'slide/field',
+          fieldLine('chapter'),
+          `\`chapter\` of slide \`${h.id}\` must be a single line`,
+        )
       }
 
       if (!ok) return
@@ -423,7 +435,7 @@ export function checkStory(story: Story): Diagnostic[] {
     error(
       'rhythm/pause',
       lowest.line,
-      `整份簡報沒有任何一頁強度 ≤ 2 的停頓；最低的是 \`${lowest.id}\`（${lowest.intensity}）。把它降到 1 或 2，或插入一頁 pause`,
+      `no slide in the deck pauses at intensity <= 2; the lowest is \`${lowest.id}\` (${lowest.intensity}). Lower it to 1 or 2, or insert a pause slide`,
     )
   }
   const highest = slides.reduce((a, b) => (b.intensity > a.intensity ? b : a))
@@ -431,7 +443,7 @@ export function checkStory(story: Story): Diagnostic[] {
     error(
       'rhythm/peak',
       highest.line,
-      `整份簡報沒有任何一頁強度 ≥ 4 的高峰；最高的是 \`${highest.id}\`（${highest.intensity}）。至少要有一頁是 4 或 5`,
+      `no slide in the deck peaks at intensity >= 4; the highest is \`${highest.id}\` (${highest.intensity}). At least one slide must be 4 or 5`,
     )
   }
 
@@ -444,7 +456,7 @@ export function checkStory(story: Story): Diagnostic[] {
       error(
         'rhythm/run',
         cur.line,
-        `\`${cur.scene_role}\` 已連續第 4 頁（從 \`${(slides[i - 3] as StorySlide).id}\` 到 \`${cur.id}\`）；同一 scene_role 最多連續 3 頁，中間換一種角色`,
+        `\`${cur.scene_role}\` runs for a 4th consecutive slide (from \`${(slides[i - 3] as StorySlide).id}\` to \`${cur.id}\`); the same scene_role can run for at most 3 slides, switch roles in between`,
       )
     }
   }
@@ -455,14 +467,14 @@ export function checkStory(story: Story): Diagnostic[] {
       warning(
         'message/single',
         s.line,
-        `\`${s.id}\` 的 message 看起來不只一句話（${terminators} 個句號類標點）；一頁只講一件事`,
+        `the message of \`${s.id}\` looks like more than one sentence (${terminators} sentence terminators); one slide says one thing`,
       )
     }
     if (s.content_relation === 'evidence' && s.evidence.length === 0) {
       warning(
         'evidence/missing',
         s.line,
-        `\`${s.id}\` 是 evidence 頁但沒有填 evidence；證據頁要寫出要放的事實、數據或圖`,
+        `\`${s.id}\` is an evidence slide but has no evidence; an evidence slide must name the facts, figures or charts it will show`,
       )
     }
   }
@@ -471,14 +483,14 @@ export function checkStory(story: Story): Diagnostic[] {
     warning(
       'structure/open',
       first.line,
-      `第一頁 \`${first.id}\` 的 scene_role 是 ${first.scene_role}，通常第一頁應該是 hero`,
+      `the first slide \`${first.id}\` has scene_role ${first.scene_role}; the first slide is usually hero`,
     )
   }
   if (last.scene_role !== 'close') {
     warning(
       'structure/close',
       last.line,
-      `最後一頁 \`${last.id}\` 的 scene_role 是 ${last.scene_role}，通常最後一頁應該是 close`,
+      `the last slide \`${last.id}\` has scene_role ${last.scene_role}; the last slide is usually close`,
     )
   }
 
@@ -488,7 +500,7 @@ export function checkStory(story: Story): Diagnostic[] {
     warning(
       'pacing/pages',
       first.line,
-      `${meta.duration_minutes} 分鐘的簡報以每頁 1 到 2 分鐘估算，建議 ${minPages} 到 ${maxPages} 頁；目前 ${slides.length} 頁`,
+      `a ${meta.duration_minutes}-minute deck at 1 to 2 minutes per slide suggests ${minPages} to ${maxPages} slides; currently ${slides.length}`,
     )
   }
 

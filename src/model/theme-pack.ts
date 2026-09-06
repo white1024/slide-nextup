@@ -67,11 +67,12 @@ export interface ExportResult {
 
 export function exportTheme(id: string, opts: ExportOptions = {}): ExportResult {
   const found = findTheme(id, opts.lookup)
-  if (!found) throw new Error(`找不到主題 \`${id}\``)
+  if (!found) throw new Error(`theme \`${id}\` not found`)
   const files = walk(found.dir)
   const out = resolve(opts.out ?? join(PROJECT_ROOT, 'artifacts', 'themes', `${id}.zip`))
   const kind = out.toLowerCase().endsWith('.zip') ? 'zip' : 'dir'
-  if (existsSync(out) && !opts.force) throw new Error(`${out} 已存在；加 --force 才覆蓋`)
+  if (existsSync(out) && !opts.force)
+    throw new Error(`${out} already exists; add --force to overwrite it`)
   const check = runThemeCheck(id, opts.lookup)
   if (kind === 'zip') {
     mkdirSync(dirname(out), { recursive: true })
@@ -149,12 +150,12 @@ function stage(source: string, scratch: string): { id: string; dir: string; file
   const themesDir = join(scratch, 'themes')
   mkdirSync(themesDir, { recursive: true })
   const src = resolve(source)
-  if (!existsSync(src)) throw new Error(`找不到 ${src}`)
+  if (!existsSync(src)) throw new Error(`${src} not found`)
   if (statSync(src).isDirectory()) {
-    if (!existsSync(join(src, 'theme.json'))) throw new Error(`${src} 裡沒有 theme.json`)
+    if (!existsSync(join(src, 'theme.json'))) throw new Error(`${src} has no theme.json`)
     const json = JSON.parse(readFileSync(join(src, 'theme.json'), 'utf8')) as { id?: unknown }
     if (typeof json.id !== 'string' || !/^[a-z][a-z0-9-]*$/.test(json.id))
-      throw new Error('theme.json 的 id 不是合法的主題 id')
+      throw new Error('the id in theme.json is not a valid theme id')
     const dir = join(themesDir, json.id)
     const files = walk(src)
     for (const f of files) {
@@ -164,20 +165,21 @@ function stage(source: string, scratch: string): { id: string; dir: string; file
     return { id: json.id, dir, files }
   }
   const entries = readZip(readFileSync(src))
-  if (entries.length === 0) throw new Error('zip 是空的')
+  if (entries.length === 0) throw new Error('the zip is empty')
   // every entry sits under one top-level folder named after the theme; a flat zip is accepted too
   const tops = new Set(entries.map((e) => e.name.split('/')[0] as string))
   const flat = entries.some((e) => e.name === 'theme.json')
   const top = flat ? null : tops.size === 1 ? [...tops][0] : null
-  if (!flat && !top) throw new Error(`zip 裡要只有一個主題資料夾，現在有：${[...tops].join('、')}`)
+  if (!flat && !top)
+    throw new Error(`the zip must hold exactly one theme folder, it has: ${[...tops].join(', ')}`)
   const strip = (name: string) => (top ? name.slice(top.length + 1) : name)
   const manifest = entries.find((e) => strip(e.name) === 'theme.json')
-  if (!manifest) throw new Error('zip 裡沒有 theme.json')
+  if (!manifest) throw new Error('the zip has no theme.json')
   const json = JSON.parse(Buffer.from(manifest.data).toString('utf8')) as { id?: unknown }
   if (typeof json.id !== 'string' || !/^[a-z][a-z0-9-]*$/.test(json.id))
-    throw new Error('theme.json 的 id 不是合法的主題 id')
+    throw new Error('the id in theme.json is not a valid theme id')
   if (top && top !== json.id)
-    throw new Error(`zip 的資料夾叫 ${top}，theme.json 的 id 卻是 ${json.id}`)
+    throw new Error(`the zip's folder is called ${top} but the id in theme.json is ${json.id}`)
   const dir = join(themesDir, json.id)
   const files: string[] = []
   for (const e of entries) {
@@ -212,7 +214,7 @@ export async function importTheme(source: string, opts: ImportOptions): Promise<
         ok: false,
         stage: 'exists',
         id,
-        message: `${dest} 已經有這個主題；加 --force 才覆蓋`,
+        message: `${dest} already has this theme; add --force to overwrite it`,
       }
     }
     // the scratch copy wins the lookup as a "user directory" theme; the deck folder is left out so
@@ -225,7 +227,7 @@ export async function importTheme(source: string, opts: ImportOptions): Promise<
         ok: false,
         stage: 'check',
         id,
-        message: `theme:check 有 ${check.errors} 個錯誤`,
+        message: `theme:check reported ${check.errors} errors`,
         check,
       }
     }
@@ -242,7 +244,7 @@ export async function importTheme(source: string, opts: ImportOptions): Promise<
         ok: false,
         stage: 'qa',
         id,
-        message: `theme:qa 有 ${qa.errors} 個錯誤、${qa.warnings} 個警告`,
+        message: `theme:qa reported ${qa.errors} errors, ${qa.warnings} warnings`,
         check,
         qa,
       }
@@ -267,5 +269,7 @@ export function parseImportTarget(value: string | undefined): ImportTarget {
     const deckDir = existsSync(p) && statSync(p).isDirectory() ? p : dirname(p)
     return { kind: 'deck', deckDir }
   }
-  throw new Error(`--to 只接受 repo、user 或 deck:<deck.json|資料夾>，看不懂 \`${value}\``)
+  throw new Error(
+    `--to accepts only repo, user or deck:<deck.json|folder>, cannot parse \`${value}\``,
+  )
 }

@@ -131,12 +131,15 @@ export function isHoverSelector(selector: string): boolean {
 }
 
 const THEME_SELECTOR_FORBIDDEN: Array<[RegExp, string]> = [
-  [/data-layout/, '主題選擇器不得綁定版型（data-layout）'],
-  [/data-slide/, '主題選擇器不得綁定特定頁面（data-slide）'],
-  [/data-el\s*[=~|^$*]?=/, '主題選擇器不得綁定元件 id（data-el=…）；請用 data-role'],
-  [/:nth-/, '主題選擇器不得用 :nth-*，那是在偷偷選特定位置的元件'],
-  [/(^|[\s>+~,])#/, '主題選擇器不得用 #id'],
-  [/(^|[\s>+~,])\*(\s|$|[{,])/, '主題選擇器不得用 universal *'],
+  [/data-layout/, 'theme selectors must not bind to a layout (data-layout)'],
+  [/data-slide/, 'theme selectors must not bind to a specific slide (data-slide)'],
+  [
+    /data-el\s*[=~|^$*]?=/,
+    'theme selectors must not bind to an element id (data-el=...); use data-role',
+  ],
+  [/:nth-/, 'theme selectors must not use :nth-*, which quietly picks elements by position'],
+  [/(^|[\s>+~,])#/, 'theme selectors must not use #id'],
+  [/(^|[\s>+~,])\*(\s|$|[{,])/, 'theme selectors must not use the universal *'],
 ]
 
 const LENGTH_UNIT = /\d(px|rem|em|vw|vh|%)\b/
@@ -278,7 +281,7 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
         ...base,
         severity: 'error',
         property: d.property,
-        message: '不得使用 !important；需要它就表示 ownership 已經失效',
+        message: '!important is not allowed; needing it means ownership has already broken down',
       })
     }
     const cls = classifyProperty(d.property)
@@ -297,14 +300,14 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
           ...base,
           severity: 'error',
           property: d.property,
-          message: `幾何屬性 \`${d.property}\` 只能由版型（layout.css）決定${HOVER_ONLY.has(d.property.toLowerCase()) ? '（hover 規則裡才可以用它做抬起或微放大）' : ''}`,
+          message: `geometry property \`${d.property}\` can only be set by the layout (layout.css)${HOVER_ONLY.has(d.property.toLowerCase()) ? ' (only a hover rule may use it for a lift or a slight scale)' : ''}`,
         })
       } else if (cls === 'forbidden') {
         issues.push({
           ...base,
           severity: 'error',
           property: d.property,
-          message: `\`${d.property}\` 不屬於主題或版型；\`font\` 請改用 longhand，其餘屬於編輯器／播放器`,
+          message: `\`${d.property}\` belongs to neither theme nor layout; use longhands instead of \`font\`, the rest belongs to the editor/player`,
         })
       } else if (cls === 'custom') {
         if (LENGTH_UNIT.test(d.value) && !APPEARANCE_VAR_NAME.test(d.property)) {
@@ -312,7 +315,7 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
             ...base,
             severity: 'error',
             property: d.property,
-            message: `自訂變數 \`${d.property}\` 帶長度值，等於用變數偷渡幾何`,
+            message: `custom property \`${d.property}\` carries a length, which smuggles geometry through a variable`,
           })
         }
       } else if (cls === 'unknown') {
@@ -320,7 +323,7 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
           ...base,
           severity: 'warning',
           property: d.property,
-          message: `\`${d.property}\` 不在 ownership 清單內，請確認它只影響外觀`,
+          message: `\`${d.property}\` is not in the ownership list; confirm it only affects appearance`,
         })
       }
     } else {
@@ -328,7 +331,7 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
         issues.push({
           ...base,
           severity: 'error',
-          message: '版型不得宣告 @font-face；字型屬於主題',
+          message: 'layouts must not declare @font-face; fonts belong to the theme',
         })
         continue
       }
@@ -337,28 +340,28 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
           ...base,
           severity: 'error',
           property: d.property,
-          message: `外觀屬性 \`${d.property}\` 只能由主題（theme.css）決定`,
+          message: `appearance property \`${d.property}\` can only be set by the theme (theme.css)`,
         })
       } else if (cls === 'forbidden') {
         issues.push({
           ...base,
           severity: 'error',
           property: d.property,
-          message: `\`${d.property}\` 不屬於主題或版型；\`font\` 請改用 longhand，其餘屬於編輯器／播放器`,
+          message: `\`${d.property}\` belongs to neither theme nor layout; use longhands instead of \`font\`, the rest belongs to the editor/player`,
         })
       } else if (cls === 'custom') {
         issues.push({
           ...base,
           severity: 'error',
           property: d.property,
-          message: `版型不得定義自訂變數 \`${d.property}\`；token 屬於主題`,
+          message: `layouts must not define custom property \`${d.property}\`; tokens belong to the theme`,
         })
       } else if (cls === 'unknown') {
         issues.push({
           ...base,
           severity: 'warning',
           property: d.property,
-          message: `\`${d.property}\` 不在 ownership 清單內，請確認它只影響幾何`,
+          message: `\`${d.property}\` is not in the ownership list; confirm it only affects geometry`,
         })
       }
     }
@@ -393,7 +396,7 @@ export function lintThemeHover(css: string): CssLintIssue[] {
           severity: 'error',
           line,
           selector,
-          message: `hover 規則必須以 ${HOVER_GATE} 開頭，靜態模式與編輯模式才關得掉`,
+          message: `hover rules must start with ${HOVER_GATE} so static and edit modes can switch them off`,
         })
       }
       if (roles.length === 0) {
@@ -401,7 +404,8 @@ export function lintThemeHover(css: string): CssLintIssue[] {
           severity: 'error',
           line,
           selector,
-          message: 'hover 規則只能透過 data-role 選元件（可再加 data-tone 或後代元素）',
+          message:
+            'hover rules can only pick elements by data-role (data-tone or descendant elements may be added)',
         })
       }
     }
@@ -412,7 +416,7 @@ export function lintThemeHover(css: string): CssLintIssue[] {
         severity: 'error',
         line: 0,
         selector: `[data-role="${role}"]`,
-        message: `主題定了 ${role} 的外觀，卻沒有 ${HOVER_GATE} [data-role="${role}"]:hover 的狀態；播放時元件要對滑鼠有回應`,
+        message: `the theme styles ${role} but has no ${HOVER_GATE} [data-role="${role}"]:hover state; elements must respond to the mouse during playback`,
       })
     }
   }
@@ -434,7 +438,7 @@ export function lintLayoutScope(css: string, layoutId: string): CssLintIssue[] {
           severity: 'error',
           line: d.line,
           selector: d.selector,
-          message: `版型選擇器必須以 ${scope} 開頭，才不會影響其他版型`,
+          message: `layout selectors must start with ${scope} so they do not affect other layouts`,
         })
       }
     }

@@ -102,12 +102,12 @@ describe('story → deck scaffolding', () => {
       expect(s.slots.brand, s.id).toBeUndefined()
       expect(s.slots.kicker, s.id).toBeUndefined()
     }
-    expect(r.warnings.filter((w) => w.includes('meta 留空'))).toHaveLength(1)
-    expect(r.warnings.filter((w) => w.includes('brand 留空'))).toHaveLength(1)
-    expect(r.warnings.find((w) => w.includes('meta 留空'))).toContain('s3、s5')
+    expect(r.warnings.filter((w) => w.includes('meta is left empty'))).toHaveLength(1)
+    expect(r.warnings.filter((w) => w.includes('brand is left empty'))).toHaveLength(1)
+    expect(r.warnings.find((w) => w.includes('meta is left empty'))).toContain('s3, s5')
     // the sample story's labels are short, so no furniture is reported empty
     const short = scaffold({ choices: { s3: 'process', s5: 'fact' } })
-    expect(short.warnings.filter((w) => w.includes('留空'))).toEqual([])
+    expect(short.warnings.filter((w) => w.includes('left empty'))).toEqual([])
     expect(short.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: '週會提案' })
     expect(short.deck.slides[2]?.slots.brand).toEqual({
       type: 'text',

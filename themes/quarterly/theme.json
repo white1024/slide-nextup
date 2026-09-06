@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "quarterly",
-  "name": "季刊紙本",
-  "description": "週末早晨攤開的季刊：米紙底帶微噪點、masthead 式的頂欄小字、墨色粗細線、700 字重明體大標，關鍵詞換成斜體磚紅。卡片不上底色，只有一條墨線在上緣。",
+  "name": "Quarterly Print",
+  "description": "A quarterly spread open on a weekend morning: cream paper with faint grain, masthead-style small text in the top bar, thick and thin ink rules, 700-weight Ming-style serif headings, keywords in brick-red italic. Cards have no fill, only an ink rule along the top.",
   "colors": {
-    "paper": { "value": "#f6f0e3", "use": "頁面底色（米紙）" },
-    "ink": { "value": "#1a1a1a", "use": "主要文字、墨線；反相頁的底色" },
-    "muted": { "value": "#4a4a4a", "use": "副標、說明" },
-    "accent": { "value": "#a0392b", "use": "唯一強調色：kicker、關鍵詞、節點、CTA" },
-    "surface": { "value": "#efe7d4", "use": "面板底色（很少用）" },
-    "line": { "value": "#d8cfbb", "use": "淡分隔線、內框" }
+    "paper": { "value": "#f6f0e3", "use": "page background (cream paper)" },
+    "ink": { "value": "#1a1a1a", "use": "primary text, ink rules; background of inverted pages" },
+    "muted": { "value": "#4a4a4a", "use": "subtitles, captions" },
+    "accent": { "value": "#a0392b", "use": "the only accent: kicker, keywords, nodes, CTA" },
+    "surface": { "value": "#efe7d4", "use": "panel background (rarely used)" },
+    "line": { "value": "#d8cfbb", "use": "faint dividers, inner frames" }
   },
   "typography": {
     "display": {
@@ -23,7 +23,7 @@
   },
   "spacing": { "radius": 0 },
   "decoration": {
-    "vocabulary": ["masthead 頂欄", "墨色細線", "紙張噪點", "斜體磚紅關鍵詞", "無底卡片加上緣線", "淡色水印數字"],
-    "avoid": ["深色底", "光暈", "圓角", "飽和彩色", "無襯線大標"]
+    "vocabulary": ["masthead top bar", "thin ink rules", "paper grain", "brick-red italic keywords", "fill-less cards with a top rule", "pale watermark numerals"],
+    "avoid": ["dark backgrounds", "glows", "rounded corners", "saturated colour", "sans-serif headings"]
   }
 }

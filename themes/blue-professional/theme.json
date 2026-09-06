@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
   "id": "blue-professional",
-  "name": "藍色專業",
-  "description": "顧問報告的節制：暖米紙底、唯一的電光鈷藍、墨黑標題與灰色說明；Space Grotesk 標題配 Inter 內文，中文落到 Noto Sans TC／微軟正黑。卡片是淡藍底加 1.5px 半透明邊框與 12px 圓角，沒有實色邊框與陰影。每頁左上是藍色大寫的 eyebrow、右上是淡藍圓角標籤、左下頁碼、底邊一條隨頁數前進的 3px 進度條；數字一律鈷藍，流程是編號的藍圓與淡色連線，行動呼籲是唯一的實心藍膠囊。移植自 beautiful-html-templates 的 blue-professional。",
+  "name": "Blue Professional",
+  "description": "The restraint of a consulting report: warm cream paper, a single electric cobalt, ink-black headings and grey captions; Space Grotesk headings with Inter body text, CJK falling back to Noto Sans TC or Microsoft JhengHei. Cards are a pale blue tint with a 1.5px translucent border and 12px radius, no solid borders or shadows. Every page has a blue uppercase eyebrow top left, a pale blue rounded tag top right, the page number bottom left and a 3px progress bar along the bottom edge that advances with the page count; numbers are always cobalt, processes are numbered blue circles joined by faint lines, and the call to action is the only solid blue pill. Ported from beautiful-html-templates’ blue-professional.",
   "colors": {
-    "paper": { "value": "#fdfae7", "use": "頁面底色（暖米紙）" },
-    "ink": { "value": "#111111", "use": "主要文字；反相頁用鈷藍當底" },
-    "muted": { "value": "#6b6b6b", "use": "副標、說明、內文" },
-    "accent": { "value": "#1e2bfa", "use": "唯一強調色：短線、eyebrow、數字、進度條、圖表、圖示、流程節點、行動呼籲" },
-    "surface": { "value": "#f4f2e8", "use": "卡片、表格、頁籤與程式碼區塊底（原版 4% 鈷藍淡底，預先與紙色混色）" },
-    "line": { "value": "#d0d1eb", "use": "卡片邊框、表格線、圓環、流程連線（原版 20% 鈷藍）" },
-    "tint": { "value": "#ebe9e9", "use": "封面斜切面、標籤底、主張框底、圖表軌道（原版 8% 鈷藍）" },
-    "light": { "value": "#9a9a9a", "use": "封面 meta 行、頁碼、數據格的脈絡行" },
-    "positive": { "value": "#059669", "use": "正向數值" },
-    "negative": { "value": "#dc2626", "use": "負向數值" }
+    "paper": { "value": "#fdfae7", "use": "page background (warm cream paper)" },
+    "ink": { "value": "#111111", "use": "primary text; inverted pages use cobalt as the background" },
+    "muted": { "value": "#6b6b6b", "use": "subtitles, captions, body text" },
+    "accent": { "value": "#1e2bfa", "use": "the only accent: short rules, eyebrow, numbers, progress bar, charts, icons, process nodes, call to action" },
+    "surface": { "value": "#f4f2e8", "use": "card, table, tab and code block background (the original’s 4% cobalt tint, pre-blended with the paper)" },
+    "line": { "value": "#d0d1eb", "use": "card borders, table rules, rings, process connectors (the original’s 20% cobalt)" },
+    "tint": { "value": "#ebe9e9", "use": "cover diagonal panel, tag background, statement box background, chart track (the original’s 8% cobalt)" },
+    "light": { "value": "#9a9a9a", "use": "cover meta line, page number, context line of stat cells" },
+    "positive": { "value": "#059669", "use": "positive values" },
+    "negative": { "value": "#dc2626", "use": "negative values" }
   },
   "typography": {
     "display": {
@@ -27,8 +27,8 @@
   },
   "spacing": { "radius": 12 },
   "decoration": {
-    "vocabulary": ["斜切淡色面", "3×3 小點陣", "60×4 鈷藍短線", "淡藍圓角卡片", "底部 3px 進度條", "大寫 eyebrow 加圓角標籤", "編號藍圓與淡色連線", "淡藍底加藍色左線的主張框", "同心細圓環", "實心藍膠囊按鈕"],
-    "avoid": ["實色邊框卡片", "陰影", "第二個強調色", "漸層", "插圖", "置中大標（封面與內頁；引言與結尾例外）"]
+    "vocabulary": ["diagonal pale panel", "3×3 dot cluster", "60×4 cobalt rule", "pale blue rounded cards", "3px bottom progress bar", "uppercase eyebrow with rounded tag", "numbered blue circles with faint connectors", "statement box on a pale blue tint with a blue left rule", "concentric thin rings", "solid blue pill button"],
+    "avoid": ["solid-bordered cards", "shadows", "a second accent colour", "gradients", "illustrations", "centred headings (cover and body pages; quote and closing are the exception)"]
   },
   "motion": {
     "transition": "push",

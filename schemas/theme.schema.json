@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://slide-workflow.local/schemas/theme.schema.json",
   "title": "Theme",
-  "description": "themes/<id>/theme.json：主題只描述視覺語言。色彩以「用途」命名，字級與位置不屬於主題。",
+  "description": "themes/<id>/theme.json: a theme describes the visual language only. Colours are named by purpose; font sizes and positions do not belong to a theme.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,12 +19,12 @@
     "schemaVersion": {
       "type": "integer",
       "minimum": 1,
-      "description": "theme.json 的格式版本；這個引擎認得 1（pnpm theme:check 會對）"
+      "description": "Format version of theme.json; this engine understands 1 (pnpm theme:check verifies it)"
     },
     "engine": {
       "type": "string",
       "minLength": 1,
-      "description": "需要的引擎版本範圍（semver：>=0.1.0、^0.1.0、0.1.x、>=1.0.0 <2.0.0），對 package.json 的 version；沒寫就不限"
+      "description": "Required engine version range (semver: >=0.1.0, ^0.1.0, 0.1.x, >=1.0.0 <2.0.0), checked against the version in package.json; absent means any"
     },
     "id": {
       "type": "string",
@@ -128,7 +128,7 @@
     },
     "motion": {
       "type": "object",
-      "description": "播放時的進場節奏：元件沒指定 enter 時依 data-role 取預設；stagger 是同一步驟內元件依序延遲的毫秒數，duration 是一次進場的毫秒數。靜態模式一律關閉",
+      "description": "Entrance rhythm during playback: elements without an explicit enter take the default for their data-role; stagger is the delay in milliseconds between elements of one step, duration the length of one entrance. Always off in static mode",
       "additionalProperties": false,
       "properties": {
         "default": {
@@ -152,13 +152,13 @@
         },
         "transition": {
           "enum": ["none", "fade", "push", "lift"],
-          "description": "這套主題預設的換頁效果（deck.json 沒寫 transition 時用）；移植的主題包填來源模板的家族。沒寫就是 fade"
+          "description": "This theme’s default page transition (used when deck.json has none); ported packs use the family of their source template. Absent means fade"
         }
       }
     },
     "source": {
       "type": "object",
-      "description": "移植自外部模板時的來源與授權；開源時 THIRD_PARTY_NOTICES.md 要對得上",
+      "description": "Source and licence when ported from an external template; THIRD_PARTY_NOTICES.md must match it",
       "additionalProperties": false,
       "required": [
         "name",
@@ -186,7 +186,7 @@
         "template": {
           "type": "string",
           "minLength": 1,
-          "description": "原專案裡的模板 slug"
+          "description": "The template’s slug in the original project"
         }
       }
     }

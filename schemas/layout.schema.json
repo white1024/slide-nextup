@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://slide-workflow.local/schemas/layout.schema.json",
   "title": "Layout",
-  "description": "layouts/<id>/layout.json：版型只描述結構。slots 是 agent 要填的內容槽位，elements 是編輯器可操作的元件；兩者的 id 必須與 layout.html 的 data-slot / data-el 一致。",
+  "description": "layouts/<id>/layout.json: a layout describes structure only. slots are the content slots the agent fills, elements are what the editor can manipulate; both sets of ids must match data-slot / data-el in layout.html.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -22,7 +22,7 @@
     "description": {
       "type": "string",
       "minLength": 1,
-      "description": "一句話說明這個版型適合什麼內容關係，以及「改成普通 grid 會失去什麼」"
+      "description": "One sentence on which content relation this layout suits and what would be lost by using a plain grid instead"
     },
     "content_relations": {
       "type": "array",
@@ -55,7 +55,7 @@
         "required": ["type", "required"],
         "properties": {
           "type": {
-            "description": "可接受的 slot 型別；一個或多個（例如卡片同時接受 text 與 metric）",
+            "description": "Accepted slot types, one or more (a card may accept both text and metric)",
             "oneOf": [
               { "enum": ["text", "list", "image", "metric", "chart", "table", "code", "icon", "tabs"] },
               {
@@ -86,7 +86,7 @@
     },
     "sample": {
       "type": "object",
-      "description": "預覽與測試用的範例內容；鍵必須是 slots 之一",
+      "description": "Sample content for previews and tests; keys must be slots",
       "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
       "additionalProperties": {
         "$ref": "https://slide-workflow.local/schemas/deck.schema.json#/definitions/slot"

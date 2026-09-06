@@ -91,20 +91,24 @@ export function checkLayout(layout: Layout): CheckIssue[] {
     issues.push({
       severity: 'error',
       file: jsonFile,
-      message: `id \`${json.id}\` 與目錄名 \`${layout.id}\` 不同`,
+      message: `id \`${json.id}\` differs from the folder name \`${layout.id}\``,
     })
   }
 
   const declared = new Map(json.elements.map((e) => [e.id, e.kind]))
   const dupes = json.elements.map((e) => e.id).filter((id, i, all) => all.indexOf(id) !== i)
   for (const id of new Set(dupes)) {
-    issues.push({ severity: 'error', file: jsonFile, message: `elements 裡的 id \`${id}\` 重複` })
+    issues.push({
+      severity: 'error',
+      file: jsonFile,
+      message: `duplicate id \`${id}\` in elements`,
+    })
   }
   if (json.elements.length > json.density.max_elements) {
     issues.push({
       severity: 'warning',
       file: jsonFile,
-      message: `elements 有 ${json.elements.length} 個，超過自己宣告的 density.max_elements ${json.density.max_elements}`,
+      message: `${json.elements.length} elements, over its own density.max_elements ${json.density.max_elements}`,
     })
   }
 
@@ -114,13 +118,13 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       issues.push({
         severity: 'error',
         file: jsonFile,
-        message: `slot \`${slotId}\` 沒有同名的 element`,
+        message: `slot \`${slotId}\` has no element of the same name`,
       })
     } else if (kind === 'shape') {
       issues.push({
         severity: 'error',
         file: jsonFile,
-        message: `slot \`${slotId}\` 對應的 element 是 shape；有內容的元件必須是 text 或 image`,
+        message: `the element for slot \`${slotId}\` is a shape; an element with content must be text or image`,
       })
     } else {
       for (const t of Array.isArray(slot.type) ? slot.type : [slot.type]) {
@@ -128,7 +132,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
           issues.push({
             severity: 'error',
             file: jsonFile,
-            message: `slot \`${slotId}\` 型別 ${t} 需要 kind 為 ${SLOT_KIND[t]} 的 element，目前是 ${kind}`,
+            message: `slot \`${slotId}\` type ${t} needs an element of kind ${SLOT_KIND[t]}, got ${kind}`,
           })
         }
       }
@@ -139,7 +143,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       issues.push({
         severity: 'error',
         file: jsonFile,
-        message: `sample 的 \`${key}\` 不是 slots 之一`,
+        message: `sample key \`${key}\` is not one of the slots`,
       })
   }
   for (const [slotId, slot] of Object.entries(json.slots)) {
@@ -147,7 +151,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       issues.push({
         severity: 'warning',
         file: jsonFile,
-        message: `必要 slot \`${slotId}\` 在 sample 裡沒有範例內容`,
+        message: `required slot \`${slotId}\` has no sample content`,
       })
     }
   }
@@ -158,7 +162,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       severity: 'error',
       file: htmlFile,
       line: 1,
-      message: '根元素必須是 <section class="slide" data-layout="<id>">',
+      message: 'the root element must be <section class="slide" data-layout="<id>">',
     })
   } else {
     const rootId = /data-layout="([^"]+)"/.exec(layout.html)?.[1]
@@ -167,7 +171,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: 1,
-        message: `根元素的 data-layout 是 \`${rootId}\`，應為 \`${layout.id}\``,
+        message: `the root element's data-layout is \`${rootId}\`, expected \`${layout.id}\``,
       })
     }
   }
@@ -180,7 +184,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
           severity: 'error',
           file: htmlFile,
           line: e.line,
-          message: `data-slot="${e.slot}" 必須放在有 data-el 的元件上`,
+          message: `data-slot="${e.slot}" must sit on an element that has data-el`,
         })
       continue
     }
@@ -189,7 +193,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: e.line,
-        message: `data-el="${e.el}" 出現超過一次`,
+        message: `data-el="${e.el}" appears more than once`,
       })
       continue
     }
@@ -199,7 +203,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: e.line,
-        message: `data-el="${e.el}" 沒有在 layout.json 的 elements 宣告`,
+        message: `data-el="${e.el}" is not declared in layout.json elements`,
       })
     }
     if (e.slot !== undefined && e.slot !== e.el) {
@@ -207,7 +211,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: e.line,
-        message: `data-slot="${e.slot}" 必須與同元件的 data-el="${e.el}" 相同`,
+        message: `data-slot="${e.slot}" must match the same element's data-el="${e.el}"`,
       })
     }
     if (e.role === undefined) {
@@ -215,7 +219,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: e.line,
-        message: `data-el="${e.el}" 缺少 data-role；主題只靠 role 上色`,
+        message: `data-el="${e.el}" is missing data-role; themes paint by role alone`,
       })
     }
   }
@@ -224,7 +228,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       issues.push({
         severity: 'error',
         file: htmlFile,
-        message: `layout.json 宣告了 element \`${id}\`，但 layout.html 沒有 data-el="${id}"`,
+        message: `layout.json declares element \`${id}\` but layout.html has no data-el="${id}"`,
       })
   }
   for (const slotId of Object.keys(json.slots)) {
@@ -234,7 +238,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
         severity: 'error',
         file: htmlFile,
         line: e.line,
-        message: `slot \`${slotId}\` 的元件缺少 data-slot="${slotId}"`,
+        message: `the element for slot \`${slotId}\` is missing data-slot="${slotId}"`,
       })
     }
   }
@@ -243,12 +247,16 @@ export function checkLayout(layout: Layout): CheckIssue[] {
   for (const p of scan.placeholders) counts.set(p, (counts.get(p) ?? 0) + 1)
   for (const [p, n] of counts) {
     if (!(p in json.slots))
-      issues.push({ severity: 'error', file: htmlFile, message: `佔位符 {{${p}}} 不是任何 slot` })
+      issues.push({
+        severity: 'error',
+        file: htmlFile,
+        message: `placeholder {{${p}}} is not a slot`,
+      })
     else if (n > 1)
       issues.push({
         severity: 'error',
         file: htmlFile,
-        message: `佔位符 {{${p}}} 出現 ${n} 次，只能一次`,
+        message: `placeholder {{${p}}} appears ${n} times, only once allowed`,
       })
   }
   for (const slotId of Object.keys(json.slots)) {
@@ -256,7 +264,7 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       issues.push({
         severity: 'error',
         file: htmlFile,
-        message: `slot \`${slotId}\` 沒有 {{${slotId}}} 佔位符`,
+        message: `slot \`${slotId}\` has no {{${slotId}}} placeholder`,
       })
   }
 
@@ -276,7 +284,7 @@ export function checkTheme(theme: Theme): CheckIssue[] {
     issues.push({
       severity: 'error',
       file: jsonFile,
-      message: `id \`${theme.json.id}\` 與目錄名 \`${theme.id}\` 不同`,
+      message: `id \`${theme.json.id}\` differs from the folder name \`${theme.id}\``,
     })
   }
   issues.push(...cssIssues(`${theme.dir}/theme.css`, lintCss(theme.css, 'theme')))

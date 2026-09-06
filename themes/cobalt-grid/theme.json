@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "id": "cobalt-grid",
-  "name": "鈷藍方格",
-  "description": "日系趨勢報告的兩色系統：暖米紙底、電光鈷藍當唯一的墨，整頁鋪 42px 方格紙格線。Newsreader 襯線大標（中文落 Noto Serif TC／新細明體）、Hanken Grotesk 內文、DM Mono 家具。招牌裝飾是右側像素階梯的直線掃描柱與上下兩條 1.5px 髮線；沒有陰影、沒有圓角、沒有第二個顏色。移植自 beautiful-html-templates 的 cobalt-grid。",
+  "name": "Cobalt Grid",
+  "description": "A two-colour system in the manner of a Japanese trend report: warm cream paper with electric cobalt as the only ink, and a 42px graph-paper grid over the whole page. Newsreader serif headings (CJK falls back to Noto Serif TC or PMingLiU), Hanken Grotesk body text, DM Mono furniture. The signature decoration is a pixel-stair scan column on the right and two 1.5px hairlines top and bottom; no shadows, no rounded corners, no second colour. Ported from beautiful-html-templates’ cobalt-grid.",
   "colors": {
-    "paper": { "value": "#f0ebde", "use": "頁面底色（暖米紙）" },
-    "ink": { "value": "#1f2be0", "use": "所有文字、線條與裝飾：整套只有這一個墨色" },
-    "muted": { "value": "#5560e5", "use": "次要文字與斜體關鍵詞（淡一階的鈷藍）" },
-    "accent": { "value": "#1f2be0", "use": "強調色與墨色相同；圖表填色、圖示、節點" },
-    "surface": { "value": "#e6e0ce", "use": "卡片、表頭與程式碼區塊底（深一階的紙色）" },
-    "line": { "value": "#1f2be0", "use": "髮線、邊框、表格線，1.5px" },
-    "grid": { "value": "#dbd8de", "use": "方格紙格線（原版 10% 鈷藍，預先混色）" },
-    "faint": { "value": "#cac8de", "use": "圖表軌道、表格內線（原版 18% 鈷藍）" }
+    "paper": { "value": "#f0ebde", "use": "page background (warm cream paper)" },
+    "ink": { "value": "#1f2be0", "use": "all text, lines and decoration: the one ink of the whole system" },
+    "muted": { "value": "#5560e5", "use": "secondary text and italic keywords (cobalt one step lighter)" },
+    "accent": { "value": "#1f2be0", "use": "the accent is the same as the ink; chart fills, icons, nodes" },
+    "surface": { "value": "#e6e0ce", "use": "card, table header and code block background (paper one step darker)" },
+    "line": { "value": "#1f2be0", "use": "hairlines, borders, table rules, 1.5px" },
+    "grid": { "value": "#dbd8de", "use": "graph-paper grid lines (the original’s 10% cobalt, pre-blended)" },
+    "faint": { "value": "#cac8de", "use": "chart tracks, inner table rules (the original’s 18% cobalt)" }
   },
   "typography": {
     "display": {
@@ -25,8 +25,8 @@
   },
   "spacing": { "radius": 0 },
   "decoration": {
-    "vocabulary": ["42px 方格紙格線", "上下 1.5px 髮線", "像素階梯掃描柱", "8×8 QR 小方塊", "直排等寬小字", "襯線斜體關鍵詞"],
-    "avoid": ["第二個顏色", "陰影", "圓角", "漸層", "粗體無襯線大標", "插圖"]
+    "vocabulary": ["42px graph-paper grid", "1.5px hairlines top and bottom", "pixel-stair scan column", "8×8 QR-like block", "vertical monospace small text", "serif italic keywords"],
+    "avoid": ["a second colour", "shadows", "rounded corners", "gradients", "bold sans-serif headings", "illustrations"]
   },
   "source": {
     "name": "beautiful-html-templates",

@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
   "id": "creative-mode",
-  "name": "創意模式",
-  "description": "新粗獷主義的編輯海報：暖米紙底、4px 墨黑邊框、硬邊位移陰影，四個飽和強調色（森林綠、桃紅、橘、黃）。Archivo Black 全大寫大標（中文落到微軟正黑粗體）、Space Grotesk 內文、JetBrains Mono 家具。全部平塗色塊，沒有漸層、沒有圓角、沒有柔和。移植自 beautiful-html-templates 的 creative-mode。",
+  "name": "Creative Mode",
+  "description": "A neo-brutalist editorial poster: warm cream paper, 4px ink-black borders, hard offset shadows and four saturated accents (forest green, hot pink, orange, yellow). Archivo Black uppercase headings (CJK falls back to bold Microsoft JhengHei), Space Grotesk body text, JetBrains Mono furniture. Everything is flat colour blocks: no gradients, no rounded corners, nothing soft. Ported from beautiful-html-templates’ creative-mode.",
   "colors": {
-    "paper": { "value": "#efe9d9", "use": "頁面底色（暖米紙）" },
-    "ink": { "value": "#0f0f0f", "use": "文字、4px 邊框、硬邊陰影；反相頁底色" },
-    "muted": { "value": "#2a2a2a", "use": "內文與說明（ink-2）" },
-    "accent": { "value": "#e85a1f", "use": "橘：標題第二行、關鍵詞、硬邊陰影的第一層" },
-    "surface": { "value": "#e4dcc4", "use": "卡片、表頭與程式碼區塊底（深一階的紙色）" },
-    "line": { "value": "#0f0f0f", "use": "邊框與表格線，4px 或 2px 墨黑" },
-    "green": { "value": "#1f8a4c", "use": "海報色塊、圖表填色、流程節點" },
-    "green2": { "value": "#136636", "use": "綠的深一階" },
-    "pink": { "value": "#f06ca8", "use": "開關方塊、標記色塊" },
-    "pink2": { "value": "#d14e8b", "use": "桃紅的深一階（開關下緣）" },
-    "pink3": { "value": "#fbd0e3", "use": "開關把手的淺粉" },
-    "yellow": { "value": "#f5c518", "use": "圓形裝飾、光暈替代、第四個強調" }
+    "paper": { "value": "#efe9d9", "use": "page background (warm cream paper)" },
+    "ink": { "value": "#0f0f0f", "use": "text, 4px borders, hard shadows; background of inverted pages" },
+    "muted": { "value": "#2a2a2a", "use": "body text and captions (ink-2)" },
+    "accent": { "value": "#e85a1f", "use": "orange: second heading line, keywords, first layer of the hard shadow" },
+    "surface": { "value": "#e4dcc4", "use": "card, table header and code block background (paper one step darker)" },
+    "line": { "value": "#0f0f0f", "use": "borders and table rules, 4px or 2px ink black" },
+    "green": { "value": "#1f8a4c", "use": "poster blocks, chart fills, process nodes" },
+    "green2": { "value": "#136636", "use": "green one step darker" },
+    "pink": { "value": "#f06ca8", "use": "toggle blocks, marker blocks" },
+    "pink2": { "value": "#d14e8b", "use": "pink one step darker (toggle underside)" },
+    "pink3": { "value": "#fbd0e3", "use": "pale pink of the toggle knob" },
+    "yellow": { "value": "#f5c518", "use": "circular ornaments, stand-in for glows, the fourth accent" }
   },
   "typography": {
     "display": {
@@ -29,8 +29,8 @@
   },
   "spacing": { "radius": 0 },
   "decoration": {
-    "vocabulary": ["4px 墨黑邊框", "24px 硬邊位移陰影", "綠底海報框", "桃紅開關方塊", "60×3 墨線加大寫等寬 tagline", "底部等寬頁尾"],
-    "avoid": ["漸層", "圓角", "柔和陰影", "細線", "襯線", "低飽和配色"]
+    "vocabulary": ["4px ink-black borders", "24px hard offset shadow", "green poster frame", "hot pink toggle block", "60×3 ink rule with an uppercase monospace tagline", "monospace footer"],
+    "avoid": ["gradients", "rounded corners", "soft shadows", "thin rules", "serifs", "desaturated palettes"]
   },
   "source": {
     "name": "beautiful-html-templates",

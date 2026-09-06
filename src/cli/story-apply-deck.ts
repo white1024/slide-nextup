@@ -12,10 +12,10 @@ const target = args.find((a) => !a.startsWith('--'))
 if (!target) {
   console.error(
     [
-      '用法：pnpm story:apply-deck <deck.json> [--dry-run]',
-      '  把 deck.json 的頁面編排（pages：播放順序與隱藏頁）寫回 story.md：逐頁段落依播放順序重排、隱藏的頁移除。',
-      '  寫回後敘事需要重新確認（pnpm story:confirm），再重做頁面時 deck:scaffold 會清空對應的頁面編排。',
-      '  --dry-run 只印出會改成什麼，不寫檔。',
+      'Usage: pnpm story:apply-deck <deck.json> [--dry-run]',
+      '  Write the page arrangement of deck.json (pages: playback order and hidden slides) back into story.md: the per-slide sections are reordered to the playback order and hidden slides are removed.',
+      '  After writing back the story needs confirming again (pnpm story:confirm); the next deck:scaffold then clears the matching page arrangement.',
+      '  --dry-run only prints what would change, without writing.',
     ].join('\n'),
   )
   process.exit(2)
@@ -30,7 +30,7 @@ if (!parsed.ok) {
 const deck = parsed.deck
 const storyFile = resolve(dirname(deckFile), deck.story?.path ?? 'story.md')
 if (!existsSync(storyFile)) {
-  console.log(`✖ 找不到敘事文件 ${storyFile}（deck.json 的 story.path）`)
+  console.log(`✖ story file ${storyFile} not found (story.path of deck.json)`)
   process.exit(1)
 }
 const rel = (f: string) => relative(process.cwd(), f).replace(/\\/g, '/')
@@ -39,7 +39,7 @@ const loaded = loadStory(storyText)
 if (loaded.hasErrors || !loaded.story) {
   for (const d of loaded.diagnostics)
     console.log(`✖ ${rel(storyFile)}:${d.line}  [${d.rule}] ${d.message}`)
-  console.log('敘事文件本身沒有通過檢查，先修正再寫回')
+  console.log('the story file itself failed its checks; fix it before writing back')
   process.exit(1)
 }
 const story = loaded.story
@@ -47,35 +47,38 @@ const ids = story.slides.map((s) => s.id)
 const deckIds = deck.slides.map((s) => s.id)
 if (deckIds.join('\u0000') !== ids.join('\u0000')) {
   console.log(
-    `⚠ deck.json 的頁面（${deckIds.join(', ')}）與敘事（${ids.join(', ')}）不同；以敘事為準，編排裡不存在的頁面會被忽略`,
+    `⚠ the slides of deck.json (${deckIds.join(', ')}) differ from the story (${ids.join(', ')}); the story wins, slides in the arrangement that do not exist are ignored`,
   )
 }
 if (!deck.pages || followsStory(ids, deck.pages)) {
-  console.log('頁面編排與敘事一致（沒有換序、沒有隱藏頁），沒有東西要寫回')
+  console.log(
+    'the page arrangement matches the story (no reordering, no hidden slides), nothing to write back',
+  )
   process.exit(0)
 }
 
 const before = effectiveOrder(ids, undefined).order
 const result = applyPagesToStory(storyText, story, deck.pages)
 const titleOf = (id: string) => story.slides.find((s) => s.id === id)?.title ?? ''
-console.log(`${story.meta.title}：${rel(storyFile)}`)
-console.log(`  敘事順序  ${before.join(' → ')}`)
-console.log(`  播放順序  ${result.order.join(' → ')}`)
-for (const r of result.removed) console.log(`  － 移除隱藏頁 ${r.id}｜${r.title}`)
-for (const id of result.unknown) console.log(`  ⚠ 編排裡的 ${id} 不在敘事裡，忽略`)
+console.log(`${story.meta.title}: ${rel(storyFile)}`)
+console.log(`  story order     ${before.join(' → ')}`)
+console.log(`  playback order  ${result.order.join(' → ')}`)
+for (const r of result.removed) console.log(`  － removed hidden slide ${r.id}｜${r.title}`)
+for (const id of result.unknown)
+  console.log(`  ⚠ ${id} in the arrangement is not in the story, ignored`)
 const moved = result.order.filter(
   (id, i) => before.filter((b) => !result.removed.some((r) => r.id === b))[i] !== id,
 )
 if (moved.length > 0)
-  console.log(`  ↕ 換位的頁：${moved.map((id) => `${id}｜${titleOf(id)}`).join('、')}`)
+  console.log(`  ↕ slides that moved: ${moved.map((id) => `${id}｜${titleOf(id)}`).join(', ')}`)
 
 if (dryRun) {
-  console.log('（--dry-run：沒有寫檔）')
+  console.log('(--dry-run, nothing written)')
   process.exit(0)
 }
 
 writeFileSync(storyFile, result.text, 'utf8')
-console.log(`已寫回 ${rel(storyFile)}`)
+console.log(`written back to ${rel(storyFile)}`)
 const after = loadStory(result.text)
 for (const d of after.diagnostics)
   console.log(
@@ -83,19 +86,19 @@ for (const d of after.diagnostics)
   )
 const errors = after.diagnostics.filter((d) => d.severity === 'error').length
 console.log(
-  `story:check ${errors === 0 ? '通過' : '未通過'}：${errors} 個錯誤，${after.diagnostics.length - errors} 個警告`,
+  `story:check ${errors === 0 ? 'passed' : 'failed'}: ${errors} errors, ${after.diagnostics.length - errors} warnings`,
 )
 console.log(
-  `⚠ 「## ${SECTION_HEADINGS.skeleton}」沒有自動改：${result.removed.length > 0 ? '移除的頁若在骨架裡有對應章節，' : ''}請自行核對章節順序與內容`,
+  `⚠ "## ${SECTION_HEADINGS.skeleton}" was not changed automatically: ${result.removed.length > 0 ? 'if a removed slide has a matching section in the skeleton, ' : ''}check the section order and content yourself`,
 )
 const status = confirmationStatus(storyFile, result.text)
 console.log(`✖ ${describeStatus(status)}`)
 console.log(
   [
-    '下一步：',
-    `  1. 把新的逐頁摘要拿給使用者看，同意後 pnpm story:confirm ${rel(storyFile)}`,
-    `  2. pnpm deck:scaffold ${rel(storyFile)} --slide <重做的頁>（或整份）：敘事順序已等於播放順序，scaffold 會清空 pages.order，隱藏頁的 pages.hidden 因頁面不在敘事裡而移除`,
-    `  3. pnpm render ${rel(join(dirname(deckFile), 'deck.json'))} 後播放順序不變`,
+    'next steps:',
+    `  1. show the user the new per-slide summary; once approved, pnpm story:confirm ${rel(storyFile)}`,
+    `  2. pnpm deck:scaffold ${rel(storyFile)} --slide <slides to redo> (or the whole deck): the story order now equals the playback order, so scaffold clears pages.order, and pages.hidden entries go because those slides are no longer in the story`,
+    `  3. pnpm render ${rel(join(dirname(deckFile), 'deck.json'))}; the playback order stays the same`,
   ].join('\n'),
 )
 process.exit(errors === 0 ? 0 : 1)

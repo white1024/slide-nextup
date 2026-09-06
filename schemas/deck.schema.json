@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://slide-workflow.local/schemas/deck.schema.json",
   "title": "Deck",
-  "description": "deck.json：渲染器、瀏覽器編輯器與 agent 共用的單一來源。slides[] 由 agent 產生，overrides 由編輯器寫入，兩者不重疊。",
+  "description": "deck.json: the single source shared by the renderer, the browser editor and the agent. slides[] is produced by the agent, overrides are written by the editor; the two never overlap.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "id", "title", "theme", "canvas", "slides", "overrides"],
@@ -12,7 +12,7 @@
     "title": { "type": "string", "minLength": 1 },
     "theme": {
       "$ref": "#/definitions/id",
-      "description": "主題 id，對應 themes/<id>/"
+      "description": "Theme id, resolved to themes/<id>/"
     },
     "canvas": {
       "type": "object",
@@ -25,15 +25,15 @@
     },
     "transition": {
       "enum": ["none", "fade", "push", "lift", "slide-left"],
-      "description": "換頁效果：fade 交叉淡入、push 兩頁一起推移（往回翻反向）、lift 新頁上浮蓋上、none 直切；slide-left 是舊名，播放時等於 push。沒有這個欄位就用主題 theme.json 的 motion.transition，再沒有就 fade。靜態模式（?static=1、QA、匯出）一律無轉場"
+      "description": "Page transition: fade cross-fades, push moves both pages together (reversed when going back), lift floats the new page over the old, none cuts; slide-left is the old name and plays as push. Without this field the theme’s motion.transition applies, and failing that fade. Static mode (?static=1, QA, export) never transitions"
     },
     "motion": {
       "enum": ["on", "off"],
-      "description": "元件動畫的總開關：off 時播放不逐步、不進場，每按一下就換頁（換頁轉場照舊）。播放時按 M 可對這個瀏覽器臨時切換，不改這個值"
+      "description": "Master switch for element motion: off means no reveal steps and no entrances during playback, every press turns the page (page transitions still apply). Pressing M during playback overrides it for this browser without changing this value"
     },
     "story": {
       "type": "object",
-      "description": "這份簡報所依據的 story.md；sha256 用來偵測敘事是否已經變更",
+      "description": "The story.md this deck was built from; the sha256 detects whether the story has changed since",
       "additionalProperties": false,
       "required": ["path", "sha256"],
       "properties": {
@@ -48,13 +48,13 @@
     },
     "overrides": {
       "type": "object",
-      "description": "手動編輯的覆寫，鍵為 slideId/elementId。agent 重新生成頁面時不得改動這裡",
+      "description": "Manual overrides keyed by slideId/elementId. The agent must not touch these when regenerating slides",
       "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*/[A-Za-z][A-Za-z0-9_-]*$" },
       "additionalProperties": { "$ref": "#/definitions/override" }
     },
     "pages": {
       "type": "object",
-      "description": "頁面層覆寫：播放順序與隱藏頁，由編輯器寫入。story.md 仍是敘事正本；沒列在 order 裡的頁依敘事順序插回原相對位置",
+      "description": "Slide-level overrides: playback order and hidden slides, written by the editor. story.md remains the source of the narrative; slides missing from order are inserted back at their relative position in story order",
       "additionalProperties": false,
       "properties": {
         "order": {
@@ -80,17 +80,17 @@
         "id": { "$ref": "#/definitions/id" },
         "layout": {
           "$ref": "#/definitions/id",
-          "description": "版型 id，對應 layouts/<id>/（主題可在 themes/<theme>/layouts/<id>/ 提供同名覆蓋）"
+          "description": "Layout id, resolved to layouts/<id>/ (a theme may override it with themes/<theme>/layouts/<id>/)"
         },
         "slots": {
           "type": "object",
-          "description": "版型宣告的內容槽位；每個鍵必須是本頁 elements 之一",
+          "description": "The content slots declared by the layout; every key must be one of this slide’s elements",
           "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
           "additionalProperties": { "$ref": "#/definitions/slot" }
         },
         "elements": {
           "type": "array",
-          "description": "版型宣告的可編輯元件，生成時從版型物化到這裡，讓 deck.json 自描述",
+          "description": "The editable elements declared by the layout, materialised here at generation time so deck.json describes itself",
           "minItems": 1,
           "items": { "$ref": "#/definitions/element" }
         },
@@ -107,17 +107,17 @@
         "step": {
           "type": "integer",
           "minimum": 1,
-          "description": "逐步顯示：按第幾次「下一步」才出現；沒有就一開始就可見"
+          "description": "Reveal step: which press of “next” shows the element; absent means visible from the start"
         },
         "enter": {
           "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe"],
-          "description": "到達 step 時的進場方式；沒有就用主題 motion 依 data-role 的預設。只對有 step 的元件有作用"
+          "description": "Entrance used when the step is reached; absent means the theme’s motion default for the data-role. Only affects elements with a step"
         }
       }
     },
     "hotspot": {
       "type": "object",
-      "description": "圖片上的熱區：以圖片框的百分比定位，播放時點擊跳到 target 頁",
+      "description": "A hotspot on an image: positioned in percentages of the image box, clicking it during playback jumps to the target slide",
       "additionalProperties": false,
       "required": ["target", "x", "y", "w", "h"],
       "properties": {
@@ -138,7 +138,7 @@
           "properties": {
             "type": { "const": "text" },
             "value": { "type": "string" },
-            "details": { "$ref": "#/definitions/slot", "description": "點擊展開的完整內容；收合是預設，QA 只量收合狀態" }
+            "details": { "$ref": "#/definitions/slot", "description": "The full content shown on click; collapsed is the default and QA measures only the collapsed state" }
           }
         },
         {
@@ -176,7 +176,7 @@
         },
         {
           "type": "object",
-          "description": "圖表：渲染器畫成內嵌 SVG；bar 與 line 用整個 series，donut 與 progress 用第一筆對 max（預設 100）；toggle 讓播放時圖例可點，關掉的項目不計入比例",
+          "description": "Chart: rendered as inline SVG; bar and line use the whole series, donut and progress use the first point against max (default 100); toggle makes the legend clickable during playback, and switched-off items leave the proportions",
           "additionalProperties": false,
           "required": ["type", "kind", "series"],
           "properties": {
@@ -203,7 +203,7 @@
         },
         {
           "type": "object",
-          "description": "分頁籤：同一個框裡的多個面板，播放時點頁籤切換；靜態模式與 QA 只看第一個面板",
+          "description": "Tabs: several panels in one box, switched by clicking a tab during playback; static mode and QA only see the first panel",
           "additionalProperties": false,
           "required": ["type", "panels"],
           "properties": {
@@ -226,7 +226,7 @@
         },
         {
           "type": "object",
-          "description": "表格：header 選填；每列欄數不必相等，渲染器照原樣輸出",
+          "description": "Table: header is optional; rows need not have equal cell counts, the renderer outputs them as given",
           "additionalProperties": false,
           "required": ["type", "rows"],
           "properties": {
@@ -241,7 +241,7 @@
         },
         {
           "type": "object",
-          "description": "程式碼：純等寬文字，不做語法上色；lang 只是標籤",
+          "description": "Code: plain monospace text without syntax colouring; lang is only a label",
           "additionalProperties": false,
           "required": ["type", "value"],
           "properties": {
@@ -252,7 +252,7 @@
         },
         {
           "type": "object",
-          "description": "圖示：內建圖示集裡的名稱（Lucide 子集，見 src/render/icons.ts）",
+          "description": "Icon: a name from the built-in icon set (a Lucide subset, see src/render/icons.ts)",
           "additionalProperties": false,
           "required": ["type", "name"],
           "properties": {
@@ -274,10 +274,10 @@
         "rotation": { "type": "number" },
         "z": { "type": "integer" },
         "hidden": { "type": "boolean" },
-        "text": { "type": "string", "description": "只允許 kind 為 text 的元件" },
-        "src": { "type": "string", "minLength": 1, "description": "只允許 kind 為 image 的元件" },
-        "details": { "type": "string", "description": "展開內容的文字形式（規則同 text 覆寫）；空字串表示拿掉展開內容。只允許 kind 為 text 的元件" },
-        "hotspots": { "type": "array", "maxItems": 12, "items": { "$ref": "#/definitions/hotspot" }, "description": "取代圖片的熱區；空陣列表示沒有熱區。只允許 kind 為 image 的元件" },
+        "text": { "type": "string", "description": "Only for elements whose kind is text" },
+        "src": { "type": "string", "minLength": 1, "description": "Only for elements whose kind is image" },
+        "details": { "type": "string", "description": "The details as text (same rules as the text override); an empty string removes the details. Only for elements whose kind is text" },
+        "hotspots": { "type": "array", "maxItems": 12, "items": { "$ref": "#/definitions/hotspot" }, "description": "Replaces the image’s hotspots; an empty array means none. Only for elements whose kind is image" },
         "style": {
           "type": "object",
           "additionalProperties": false,

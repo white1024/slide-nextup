@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
   "id": "warm-keynote",
-  "name": "暖色 Keynote",
-  "description": "暖米紙底鋪 48px 淡格線、深褐色文字、青綠色當唯一強調色，橘紅色專門表示後果與風險。白色玻璃卡片（32px 圓角、大而軟的陰影）、膠囊形流程節點、章節頭的青綠短豎條加等寬字、Inter 900 的大數字、玻璃容器裡的表格。標題與內文都是 Noto Sans TC（本機字型），拉丁與數字用 Inter，家具用 JetBrains Mono。風格取自友人的內部簡報（已同意，不需署名），內容一概不用。",
+  "name": "Warm Keynote",
+  "description": "Warm cream paper with a faint 48px grid, dark brown text, teal as the only accent and orange-red reserved for consequences and risks. White glass cards (32px radius, large soft shadows), pill-shaped process nodes, section heads with a short teal bar and monospace text, Inter 900 big numbers, tables inside glass containers. Headings and body are Noto Sans TC (a local font), Latin and numerals use Inter, furniture uses JetBrains Mono. The style comes from a friend’s internal deck (with their consent, no attribution required); none of its content is used.",
   "colors": {
-    "paper": { "value": "#fdfbf7", "use": "頁面底色（暖米紙），格線疊在上面" },
-    "ink": { "value": "#43302b", "use": "標題與主要文字（深褐）；反相頁底色" },
-    "muted": { "value": "#8a7969", "use": "說明、註記、家具小字" },
-    "accent": { "value": "#14b8a6", "use": "唯一強調色：豎條、短線、關鍵詞、節點、圖表、進度" },
-    "surface": { "value": "#ffffff", "use": "玻璃卡片底（實際以 85% 透明度疊在紙上）" },
-    "line": { "value": "#e6dcc4", "use": "細線、表格線、膠囊邊框、頁籤" },
-    "ink2": { "value": "#5b443d", "use": "副標與內文（比 ink 淡一階）" },
-    "faint": { "value": "#b8a994", "use": "最淡的文字、箭頭、提示" },
-    "accent2": { "value": "#0e8578", "use": "深一階的青綠：關鍵詞、章節字、圖示、大數字" },
-    "accentsoft": { "value": "#e6f4ef", "use": "青綠淡底：標籤、引言框、節點光暈（原版 10% 青綠預先混色）" },
-    "alert": { "value": "#b4552f", "use": "橘紅：後果、風險、警示的文字與圓形箭頭" },
-    "alertsoft": { "value": "#f6eae3", "use": "橘紅淡底：後果卡片（原版 10% 橘紅預先混色）" },
-    "shell": { "value": "#f5efe1", "use": "反相頁的文字；舞台外框色" },
-    "surface3": { "value": "#f0e9d8", "use": "沉底卡片、表頭、程式碼底、圖表軌道" },
-    "good": { "value": "#3f7d58", "use": "正向：勾號、在範圍內" },
-    "warn": { "value": "#a6752a", "use": "警告：自建項目的記號" }
+    "paper": { "value": "#fdfbf7", "use": "page background (warm cream paper), the grid sits on top" },
+    "ink": { "value": "#43302b", "use": "headings and primary text (dark brown); background of inverted pages" },
+    "muted": { "value": "#8a7969", "use": "captions, notes, small furniture text" },
+    "accent": { "value": "#14b8a6", "use": "the only accent: bars, short rules, keywords, nodes, charts, progress" },
+    "surface": { "value": "#ffffff", "use": "glass card background (laid over the paper at 85% opacity)" },
+    "line": { "value": "#e6dcc4", "use": "thin rules, table rules, pill borders, tabs" },
+    "ink2": { "value": "#5b443d", "use": "subtitles and body text (ink one step lighter)" },
+    "faint": { "value": "#b8a994", "use": "the faintest text, arrows, hints" },
+    "accent2": { "value": "#0e8578", "use": "teal one step darker: keywords, section labels, icons, big numbers" },
+    "accentsoft": { "value": "#e6f4ef", "use": "pale teal tint: tags, quote boxes, node glow (the original’s 10% teal, pre-blended)" },
+    "alert": { "value": "#b4552f", "use": "orange-red: text and circular arrows for consequences, risks and warnings" },
+    "alertsoft": { "value": "#f6eae3", "use": "pale orange-red tint: consequence cards (the original’s 10% orange-red, pre-blended)" },
+    "shell": { "value": "#f5efe1", "use": "text on inverted pages; the stage frame colour" },
+    "surface3": { "value": "#f0e9d8", "use": "sunk cards, table headers, code background, chart tracks" },
+    "good": { "value": "#3f7d58", "use": "positive: ticks, within range" },
+    "warn": { "value": "#a6752a", "use": "warning: marker for self-built items" }
   },
   "typography": {
     "display": {
@@ -33,8 +33,8 @@
   },
   "spacing": { "radius": 32 },
   "decoration": {
-    "vocabulary": ["48px 暖色格線", "白色玻璃卡片加軟陰影", "膠囊流程節點", "青綠短豎條章節頭", "Inter 900 大數字", "橘紅後果卡", "底部頁籤與頁碼膠囊"],
-    "avoid": ["硬邊框", "深色底", "第三個強調色", "襯線", "漸層", "銳角"]
+    "vocabulary": ["48px warm grid", "white glass cards with soft shadows", "pill process nodes", "section heads with a short teal bar", "Inter 900 big numbers", "orange-red consequence cards", "bottom tabs and page-number pill"],
+    "avoid": ["hard borders", "dark backgrounds", "a third accent colour", "serifs", "gradients", "sharp corners"]
   },
   "motion": {
     "transition": "lift",

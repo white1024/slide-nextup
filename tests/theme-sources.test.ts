@@ -143,7 +143,7 @@ describe('theme lookup order', () => {
       ),
     )
     expect(() => loadLayout('nope', 'ext-blue', { userThemesDir: userDir })).toThrow(
-      /找過：.*ext-blue.*layouts.*nope.*、.*layouts.*nope/,
+      /searched: .*ext-blue.*layouts.*nope.*, .*layouts.*nope/,
     )
   })
 })
@@ -173,7 +173,7 @@ describe('external themes flow through render, retheme, QA and the dev server', 
     expect(external.html).toContain('/* ext-blue cover */')
     expect(() =>
       renderDeckDocument(ext, { deckDir: tmp, outDir: tmp, userThemesDir: null }),
-    ).toThrow(/找不到主題 `ext-blue`；找過：/)
+    ).toThrow(/theme `ext-blue` not found; searched: /)
   })
 
   it('rethemes onto a user-directory theme and marks its own layout as a pack layout', () => {

@@ -213,16 +213,16 @@ describe('interactive slots in the deck model', () => {
     expect(errors).toEqual(
       expect.arrayContaining([
         expect.stringContaining(
-          '/slides/8/slots/photo/hotspots/0/target 熱區指向不存在的頁面 `nope`',
+          '/slides/8/slots/photo/hotspots/0/target hotspot points to non-existent slide `nope`',
         ),
         expect.stringContaining(
-          '/overrides/s9/photo/hotspots/0/target 熱區指向不存在的頁面 `gone`',
+          '/overrides/s9/photo/hotspots/0/target hotspot points to non-existent slide `gone`',
         ),
         expect.stringContaining(
-          '/overrides/s9/title/hotspots `hotspots` 覆寫只能用在 kind 為 image',
+          '/overrides/s9/title/hotspots a `hotspots` override can only apply to an element of kind image',
         ),
         expect.stringContaining(
-          '/overrides/s1/backdrop/details `details` 覆寫只能用在 kind 為 text',
+          '/overrides/s1/backdrop/details a `details` override can only apply to an element of kind text',
         ),
       ]),
     )
@@ -264,7 +264,9 @@ describe('scaffold suggests details before a split', () => {
     // a layout without a boxed role gets no details suggestion, only the advice to split
     const plain = scaffoldDeck({ ...input, choices: { [listSlide.id]: 'statement' } })
     expect(plain.detailsSuggested).toEqual([])
-    expect(plain.warnings.some((w) => w.includes(listSlide.id) && w.includes('拆頁'))).toBe(true)
+    expect(
+      plain.warnings.some((w) => w.includes(listSlide.id) && w.includes('split the slide')),
+    ).toBe(true)
     expect(result.warnings.some((w) => w.includes(listSlide.id) && w.includes('details'))).toBe(
       true,
     )

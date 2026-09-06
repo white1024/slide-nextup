@@ -71,7 +71,7 @@ describe('layout contract violations', () => {
     })
     const msgs = checkLayout(l).map((i) => i.message)
     expect(
-      msgs.some((m) => m.includes('data-el="extra"') && m.includes('沒有在 layout.json')),
+      msgs.some((m) => m.includes('data-el="extra"') && m.includes('not declared in layout.json')),
     ).toBe(true)
   })
 
@@ -90,7 +90,7 @@ describe('layout contract violations', () => {
       x.css += '\n[data-layout="cover"] [data-el="title"] { color: red; }'
     })
     const msgs = checkLayout(l).map((i) => i.message)
-    expect(msgs.some((m) => m.includes('color') && m.includes('主題'))).toBe(true)
+    expect(msgs.some((m) => m.includes('color') && m.includes('theme'))).toBe(true)
   })
 
   it('scanLayoutHtml reports elements, slots, roles and placeholders', () => {

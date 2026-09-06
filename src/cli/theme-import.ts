@@ -8,11 +8,11 @@ const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h') || args.length === 0) {
   console.log(
     [
-      '用法：pnpm theme:import <dir|file.zip> [--to user|repo|deck:<deck.json|dir>] [--force]',
-      '  解開到暫存目錄 → theme:check（含 lint）→ theme:qa（Playwright）→ 全過才複製到目標；任一關失敗就不寫任何東西。',
-      '  --to user（預設）放進 $SLIDE_NEXTUP_HOME/themes 或 ~/.slide-nextup/themes；repo 放進這個 repo 的 themes/；',
-      '  deck:<deck.json> 放進那份 deck 自己的 themes/。同 id 已存在會拒絕，--force 才覆蓋。',
-      '  匯入不下載字型（theme.css 引用的網路字型照放）；theme.json 有 source 時會提醒補 THIRD_PARTY_NOTICES.md。',
+      'Usage: pnpm theme:import <dir|file.zip> [--to user|repo|deck:<deck.json|dir>] [--force]',
+      '  Unpack into a temp directory → theme:check (including lint) → theme:qa (Playwright) → copy to the target only when everything passes; if any gate fails nothing is written.',
+      "  --to user (default) puts it in $SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes; repo puts it in this repo's themes/;",
+      "  deck:<deck.json> puts it in that deck's own themes/. An existing pack with the same id is refused; --force overwrites it.",
+      '  Importing does not download fonts (web fonts referenced by theme.css are kept as is); when theme.json has a source you are reminded to add a THIRD_PARTY_NOTICES.md entry.',
     ].join('\n'),
   )
   process.exit(args.length === 0 ? 2 : 0)
@@ -20,16 +20,16 @@ if (args.includes('--help') || args.includes('-h') || args.length === 0) {
 const toIndex = args.indexOf('--to')
 const source = args.find((a, i) => !a.startsWith('-') && !(toIndex !== -1 && i === toIndex + 1))
 if (!source) {
-  console.error('缺少來源（資料夾或 zip）')
+  console.error('missing source (folder or zip)')
   process.exit(2)
 }
 
 const STAGE_LABEL = {
-  unpack: '解開',
-  exists: '目標',
+  unpack: 'unpack',
+  exists: 'target',
   check: 'theme:check',
   qa: 'theme:qa',
-  copy: '複製到',
+  copy: 'copy to',
 } as const
 
 let to: ReturnType<typeof parseImportTarget>
@@ -51,16 +51,16 @@ try {
   if (!result.ok) {
     if (result.check) console.log(formatThemeCheck(result.check))
     if (result.qa) console.log(formatQaReport(result.qa))
-    console.log(`✖ ${STAGE_LABEL[result.stage]}：${result.message}；沒有寫入任何東西`)
+    console.log(`✖ ${STAGE_LABEL[result.stage]}: ${result.message}; nothing written`)
     process.exit(1)
   }
   console.log(formatThemeCheck(result.check))
   console.log(
-    `theme:qa ${result.qa.slides.length} 頁零錯誤零警告；${result.files.length} 個檔案 → ${relative(process.cwd(), result.dest).replace(/\\/g, '/')}`,
+    `theme:qa ${result.qa.slides.length} slides with zero errors and zero warnings; ${result.files.length} files → ${relative(process.cwd(), result.dest).replace(/\\/g, '/')}`,
   )
   if (result.source) {
     console.log(
-      `ℹ 這套主題移植自 ${result.source.name}（${result.source.author}，${result.source.license}）：${result.source.url}；分享或開源時請在 THIRD_PARTY_NOTICES.md 補一條`,
+      `ℹ this theme was ported from ${result.source.name} (${result.source.author}, ${result.source.license}): ${result.source.url}; add an entry to THIRD_PARTY_NOTICES.md before sharing or open-sourcing`,
     )
   }
   process.exit(0)

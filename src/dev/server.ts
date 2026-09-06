@@ -195,7 +195,8 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
   }
 
   const save = async (req: IncomingMessage, res: ServerResponse) => {
-    if (!requestAllowed(req, expectedHost)) return sendJson(res, 403, { error: '只接受同源請求' })
+    if (!requestAllowed(req, expectedHost))
+      return sendJson(res, 403, { error: 'same-origin requests only' })
     let body: {
       overrides?: unknown
       steps?: unknown
@@ -207,13 +208,13 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
     try {
       body = JSON.parse(await readBody(req)) as typeof body
     } catch {
-      return sendJson(res, 400, { error: '請求不是合法 JSON' })
+      return sendJson(res, 400, { error: 'request body is not valid JSON' })
     }
     const current = readDeck()
     const currentHash = hashJson(editable(current))
     if (!body.force && body.base !== currentHash) {
       return sendJson(res, 409, {
-        error: '磁碟上的覆寫比你載入時新',
+        error: 'the overrides on disk are newer than the ones you loaded',
         overrides: current.overrides,
         overridesHash: currentHash,
       })
@@ -275,7 +276,10 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
     }
     const validation = validateDeck(candidate)
     if (!validation.ok)
-      return sendJson(res, 400, { error: '覆寫沒有通過驗證', problems: validation.errors })
+      return sendJson(res, 400, {
+        error: 'overrides failed validation',
+        problems: validation.errors,
+      })
     const text = stringifyDeck(validation.deck)
     lastWrittenHash = createHash('sha256').update(text).digest('hex')
     const tmp = `${deckFile}.tmp`

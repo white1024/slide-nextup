@@ -50,10 +50,10 @@ export function writeConfirmation(
 export function describeStatus(status: ConfirmStatus): string {
   switch (status.state) {
     case 'confirmed':
-      return `已確認（${status.confirmation.confirmedAt}，${status.confirmation.slides} 頁）`
+      return `confirmed (${status.confirmation.confirmedAt}, ${status.confirmation.slides} slides)`
     case 'stale':
-      return `敘事文件在確認（${status.confirmation.confirmedAt}）之後被修改過，需要重新確認`
+      return `the story file was modified after it was confirmed (${status.confirmation.confirmedAt}), confirm it again`
     case 'missing':
-      return '尚未確認：先把逐頁摘要拿給使用者看，取得同意後執行 pnpm story:confirm'
+      return 'not confirmed: show the user the per-slide summary first, then run pnpm story:confirm once they agree'
   }
 }

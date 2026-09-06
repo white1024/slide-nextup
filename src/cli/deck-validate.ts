@@ -9,7 +9,7 @@ const args = process.argv.slice(2)
 const write = args.includes('--write')
 const target = args.find((a) => !a.startsWith('--'))
 if (!target) {
-  console.error('用法：pnpm deck:validate <deck.json> [--write]')
+  console.error('Usage: pnpm deck:validate <deck.json> [--write]')
   process.exit(2)
 }
 
@@ -19,16 +19,16 @@ const result = parseDeck(text)
 
 if (!result.ok) {
   for (const e of result.errors) console.log(`✖ ${target} ${e.path}  ${e.message}`)
-  console.log(`未通過：${result.errors.length} 個錯誤`)
+  console.log(`failed: ${result.errors.length} errors`)
   process.exit(1)
 }
 
 const deck = result.deck
 const canonical = stringifyDeck(deck)
 const overrideCount = Object.keys(deck.overrides).length
-console.log(`${deck.title}（${deck.id} · theme ${deck.theme}）`)
+console.log(`${deck.title} (${deck.id} · theme ${deck.theme})`)
 console.log(
-  `${deck.slides.length} 頁，${overrideCount} 筆覆寫${deck.story ? `，story ${deck.story.path} ${deck.story.sha256.slice(0, 8)}` : ''}`,
+  `${deck.slides.length} slides, ${overrideCount} overrides${deck.story ? `, story ${deck.story.path} ${deck.story.sha256.slice(0, 8)}` : ''}`,
 )
 for (const s of deck.slides) {
   const slots = Object.keys(s.slots).length
@@ -49,7 +49,7 @@ for (const s of deck.slides) {
 }
 if (problems.length > 0) {
   for (const p of problems) console.log(`✖ ${p}`)
-  console.log(`未通過：與版型不一致 ${problems.length} 處`)
+  console.log(`failed: ${problems.length} mismatches with the layouts`)
   process.exit(1)
 }
 
@@ -57,16 +57,18 @@ const ids = deck.slides.map((s) => s.id)
 if (deck.pages && !followsStory(ids, deck.pages)) {
   const eff = effectiveOrder(ids, deck.pages)
   console.log(
-    `⚠ 頁面編排與敘事不同：播放順序 ${eff.visible.join(' → ')}${eff.hidden.length ? `；隱藏 ${eff.hidden.join('、')}` : ''}（story.md 仍是正本，重做頁面時會保留這份編排）`,
+    `⚠ page arrangement differs from the story: playback order ${eff.visible.join(' → ')}${eff.hidden.length ? `; hidden ${eff.hidden.join(', ')}` : ''} (story.md is still the source of truth; the arrangement is kept when slides are redone)`,
   )
 }
 
 if (canonical !== text) {
   if (write) {
     writeFileSync(file, canonical, 'utf8')
-    console.log('已寫回標準格式')
+    console.log('written back in canonical format')
   } else {
-    console.log('⚠ 檔案不是標準格式（鍵順序或縮排不同）；加 --write 可寫回標準格式')
+    console.log(
+      '⚠ the file is not in canonical format (key order or indentation differs); add --write to write it back canonically',
+    )
   }
 }
-console.log('通過')
+console.log('passed')

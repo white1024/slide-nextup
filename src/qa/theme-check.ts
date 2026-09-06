@@ -63,7 +63,7 @@ function compare(a: Triple, b: Triple): number {
 function comparator(v: Triple, clause: string): boolean {
   if (clause === '*' || clause === 'x') return true
   const m = /^(>=|<=|>|<|\^|~|=)?v?(\d+)(?:\.(\d+|x|\*))?(?:\.(\d+|x|\*))?$/.exec(clause)
-  if (!m) throw new Error(`看不懂的版本範圍 \`${clause}\``)
+  if (!m) throw new Error(`unrecognised version range \`${clause}\``)
   const op = m[1] ?? '='
   const major = Number(m[2])
   const minor = m[3] !== undefined && /^\d+$/.test(m[3]) ? Number(m[3]) : null
@@ -104,7 +104,7 @@ function comparator(v: Triple, clause: string): boolean {
  */
 export function satisfies(version: string, range: string): boolean {
   const v = parseVersion(version)
-  if (!v) throw new Error(`看不懂的版本號 \`${version}\``)
+  if (!v) throw new Error(`unrecognised version number \`${version}\``)
   const alternatives = range
     .split('||')
     .map((s) => s.trim())
@@ -186,7 +186,7 @@ export function runThemeCheck(
     issues.push({
       severity: 'error',
       file: jsonFile,
-      message: `schemaVersion ${json.schemaVersion} 不是這個引擎認得的 ${THEME_SCHEMA_VERSION}`,
+      message: `schemaVersion ${json.schemaVersion} is not the ${THEME_SCHEMA_VERSION} this engine understands`,
     })
   }
   if (json.engine !== undefined) {
@@ -196,7 +196,7 @@ export function runThemeCheck(
         issues.push({
           severity: 'error',
           file: jsonFile,
-          message: `主題要求引擎 ${json.engine}，這裡是 ${version}`,
+          message: `theme requires engine ${json.engine}, this is ${version}`,
         })
       }
     } catch (err) {
@@ -224,7 +224,7 @@ export function runThemeCheck(
       severity: 'warning',
       file: `${theme.dir}/layouts`,
       message:
-        '只有封面的比稿主題包：核心版型還沒補齊，deck 的其他頁會退回通用版型（選定後再移植整套）',
+        'cover-only pitch theme pack: the core layouts are not in yet, so the other slides of a deck fall back to the generic layouts (port the full set once it is chosen)',
     })
   } else if (packIds.length > 0) {
     report.coreChecked = true
@@ -233,7 +233,7 @@ export function runThemeCheck(
         issues.push({
           severity: 'error',
           file: `${theme.dir}/layouts/${coreId}`,
-          message: `缺少核心版型 \`${coreId}\`（deck 會退回通用版型，換主題時看起來弱一截）`,
+          message: `missing core layout \`${coreId}\` (the deck falls back to the generic layout, which looks a notch weaker after a theme switch)`,
         })
         continue
       }
@@ -247,7 +247,7 @@ export function runThemeCheck(
           issues.push({
             severity: 'error',
             file,
-            message: `核心版型 \`${coreId}\` 缺少核心槽位 \`${slotId}\`（名稱要與通用版型相同，可多不可少）`,
+            message: `core layout \`${coreId}\` is missing core slot \`${slotId}\` (names must match the generic layout; extras are fine, omissions are not)`,
           })
           continue
         }
@@ -257,7 +257,7 @@ export function runThemeCheck(
           issues.push({
             severity: 'error',
             file,
-            message: `核心槽位 \`${slotId}\` 的型別少了 ${missing.join('、')}（通用版型接受 ${slotTypes(ref.type).join('|')}）`,
+            message: `core slot \`${slotId}\` type lacks ${missing.join(', ')} (the generic layout accepts ${slotTypes(ref.type).join('|')})`,
           })
         }
       }
@@ -274,7 +274,7 @@ export function runThemeCheck(
       issues.push({
         severity: 'warning',
         file: cssFile,
-        message: `版型用到 role \`${role}\`，theme.css 沒有任何 [data-role="${role}"] 規則`,
+        message: `layouts use role \`${role}\` but theme.css has no [data-role="${role}"] rule`,
       })
     }
   }
@@ -283,9 +283,9 @@ export function runThemeCheck(
 
 export function formatThemeCheck(report: ThemeCheckReport, root = PROJECT_ROOT): string {
   const lines: string[] = []
-  const where = report.dir ? report.dir.replace(root, '.').replace(/\\/g, '/') : '（找不到）'
+  const where = report.dir ? report.dir.replace(root, '.').replace(/\\/g, '/') : '(not found)'
   lines.push(
-    `主題 ${report.theme} ${where}${report.packLayouts.length ? ` · ${report.packLayouts.length} 個主題內版型${report.coreChecked ? '，核心版型已檢查' : ''}` : ' · 沒有主題內版型，只驗清單與 theme.css'}`,
+    `theme ${report.theme} ${where}${report.packLayouts.length ? ` · ${report.packLayouts.length} pack layouts${report.coreChecked ? ', core layouts checked' : ''}` : ' · no pack layouts, only the manifest and theme.css checked'}`,
   )
   for (const i of report.issues) {
     const file = i.file.replace(root, '.').replace(/\\/g, '/')
@@ -294,7 +294,7 @@ export function formatThemeCheck(report: ThemeCheckReport, root = PROJECT_ROOT):
     )
   }
   lines.push(
-    `  ${report.errors === 0 ? '通過' : '未通過'}：${report.errors} 個錯誤，${report.warnings} 個警告`,
+    `  ${report.errors === 0 ? 'passed' : 'failed'}: ${report.errors} errors, ${report.warnings} warnings`,
   )
   return lines.join('\n')
 }

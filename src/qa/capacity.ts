@@ -104,11 +104,11 @@ export function checkHint(hint: string, cap: TextCapacity): string | null {
     const lines = lim.perLine ? 1 : (lim.lines ?? cap.lines)
     const room = cap.charsPerLine * lines
     if (lim.chars > room) {
-      return `提示寫${lim.perLine ? '每行' : ''} ${lim.chars} 字，框只放得下每行 ${cap.charsPerLine} 字${lim.perLine ? '' : ` × ${lines} 行 = ${room} 字`}（內容寬 ${cap.contentW}px ÷ ${cap.fontSize}px）`
+      return `hint says ${lim.chars} characters${lim.perLine ? ' per line' : ''}, the box only holds ${cap.charsPerLine} characters per line${lim.perLine ? '' : ` × ${lines} lines = ${room} characters`} (content width ${cap.contentW}px ÷ ${cap.fontSize}px)`
     }
   }
   if (lim.lines !== undefined && !lim.perItem && lim.lines > cap.lines) {
-    return `提示寫 ${lim.lines} 行，框只放得下 ${cap.lines} 行（內容高 ${cap.contentH}px ÷ 行高 ${cap.lineHeight}px）`
+    return `hint says ${lim.lines} lines, the box only holds ${cap.lines} lines (content height ${cap.contentH}px ÷ line height ${cap.lineHeight}px)`
   }
   return null
 }

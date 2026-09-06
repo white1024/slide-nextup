@@ -39,7 +39,7 @@ let checked = 0
 
 if (files.length > 0) {
   if (owner !== 'theme' && owner !== 'layout') {
-    console.error('對單一 CSS 檔案 lint 時必須指定 --as theme 或 --as layout')
+    console.error('linting a single CSS file requires --as theme or --as layout')
     process.exit(2)
   }
   for (const f of files) {
@@ -55,7 +55,7 @@ if (files.length > 0) {
   }
 } else {
   for (const t of listThemes(lookup)) {
-    if (t.origin !== 'repo') console.log(`主題 ${t.id} 來自${describeOrigin(t.origin)}：${t.dir}`)
+    if (t.origin !== 'repo') console.log(`theme ${t.id} from ${describeOrigin(t.origin)}: ${t.dir}`)
     errors += print(checkTheme(loadTheme(t.id, lookup)))
     checked++
     for (const layoutId of listThemeLayoutIds(t.id, lookup)) {
@@ -69,5 +69,5 @@ if (files.length > 0) {
   }
 }
 
-console.log(`${errors === 0 ? '通過' : '未通過'}：檢查 ${checked} 項，${errors} 個錯誤`)
+console.log(`${errors === 0 ? 'passed' : 'failed'}: ${checked} checked, ${errors} errors`)
 process.exit(errors === 0 ? 0 : 1)

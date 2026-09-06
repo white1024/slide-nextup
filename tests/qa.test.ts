@@ -53,7 +53,7 @@ describe('deck QA', () => {
     expect(report.warnings).toBe(0)
     expect(report.slides).toHaveLength(8)
     expect(report.durationMs).toBeLessThan(30_000)
-    expect(formatQaReport(report)).toContain('通過：0 個錯誤')
+    expect(formatQaReport(report)).toContain('passed: 0 errors')
   }, 60_000)
 
   it('skips hidden pages and says so', async () => {
@@ -63,7 +63,7 @@ describe('deck QA', () => {
     expect(report.slides.map((s) => s.id)).not.toContain('s2')
     expect(report.slides).toHaveLength(7)
     expect(report.skipped).toEqual(['s2'])
-    expect(formatQaReport(report)).toContain('略過隱藏頁：s2')
+    expect(formatQaReport(report)).toContain('skipped hidden slides: s2')
   }, 60_000)
 
   it('catches overflow, overlap, small type and density in the broken deck', async () => {
@@ -77,8 +77,8 @@ describe('deck QA', () => {
     expect(rules(report, 's4')).toContain('overflow:evidence')
     expect(report.errors).toBeGreaterThanOrEqual(5)
     const text = formatQaReport(report)
-    expect(text).toContain('未通過')
-    expect(text).toContain('[overlap] title: 文字元件 title 與 body 重疊')
+    expect(text).toContain('failed')
+    expect(text).toContain('[overlap] title: text elements title and body overlap')
   }, 60_000)
 
   it('fails geometry-invariant when the theme moves boxes with a transform', async () => {

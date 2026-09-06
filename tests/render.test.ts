@@ -75,7 +75,7 @@ describe('renderDeckDocument', () => {
       cards,
     ).filter((p) => p.includes('details'))
     expect(titled).toHaveLength(1)
-    expect(titled[0]).toMatch(/`title`.*role 是 title.*card/)
+    expect(titled[0]).toMatch(/`title`.*role is title.*card/)
     // overrides too, on this slide only; a card is fine
     const overridden = checkSlideAgainstLayout(slide, cards, {
       [`${slide.id}/title`]: { details: '更多' },
@@ -113,7 +113,7 @@ describe('renderDeckDocument', () => {
     ).toMatch(/^data:image\/png;base64,iVBOR/)
     expect(warnings).toEqual([])
     expect(resolveAsset('missing.png', opts, warnings)).toBe('missing.png')
-    expect(warnings[0]).toContain('找不到圖片 missing.png')
+    expect(warnings[0]).toContain('image missing.png not found')
   })
 })
 

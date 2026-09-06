@@ -102,12 +102,12 @@ export function summariseOverflow(boxes: ElementBox[]): string[] {
       b.y + b.h > CANVAS_H + TOLERANCE
     ) {
       problems.push(
-        `${where} 超出 1920×1080 畫布（${Math.round(b.x)},${Math.round(b.y)} ${Math.round(b.w)}×${Math.round(b.h)}）`,
+        `${where} outside the 1920×1080 canvas (${Math.round(b.x)},${Math.round(b.y)} ${Math.round(b.w)}×${Math.round(b.h)})`,
       )
     }
     if (b.hasText && (b.scrollH > b.h + TOLERANCE || b.scrollW > b.w + TOLERANCE)) {
       problems.push(
-        `${where} 文字溢出元件框（內容 ${b.scrollW}×${b.scrollH}，框 ${Math.round(b.w)}×${Math.round(b.h)}）`,
+        `${where} text overflows the element box (content ${b.scrollW}×${b.scrollH}, box ${Math.round(b.w)}×${Math.round(b.h)})`,
       )
     }
   }

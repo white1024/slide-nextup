@@ -59,7 +59,7 @@ const args = process.argv.slice(2)
 const requireConfirmed = args.includes('--require-confirmed')
 const target = args.find((a) => !a.startsWith('--'))
 if (!target) {
-  console.error('用法：pnpm story:check <story.md> [--require-confirmed]')
+  console.error('Usage: pnpm story:check <story.md> [--require-confirmed]')
   process.exit(2)
 }
 const file = resolve(target)
@@ -68,12 +68,12 @@ const result = loadStory(text)
 
 if (result.story) {
   const m = result.story.meta
-  console.log(`${m.title}（${m.duration_minutes} 分鐘 · ${m.density} · ${m.narrative_pattern}）`)
-  console.log(`核心主張：${m.core_message}`)
+  console.log(`${m.title} (${m.duration_minutes} min · ${m.density} · ${m.narrative_pattern})`)
+  console.log(`core message: ${m.core_message}`)
   console.log('')
   console.log(renderTable(result.story))
   console.log('')
-  console.log(`節奏  ${renderRhythm(result.story)}`)
+  console.log(`rhythm  ${renderRhythm(result.story)}`)
   console.log('')
 }
 
@@ -81,7 +81,7 @@ for (const d of result.diagnostics) console.log(renderDiagnostic(target, d))
 
 const errors = result.diagnostics.filter((d) => d.severity === 'error').length
 const warnings = result.diagnostics.length - errors
-console.log(`${errors === 0 ? '通過' : '未通過'}：${errors} 個錯誤，${warnings} 個警告`)
+console.log(`${errors === 0 ? 'passed' : 'failed'}: ${errors} errors, ${warnings} warnings`)
 if (result.hasErrors) process.exit(1)
 
 if (requireConfirmed) {

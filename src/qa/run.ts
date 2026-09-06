@@ -159,7 +159,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'error',
           slide: slide.id,
           element: b.el,
-          message: `超出畫布：${Math.round(b.x)},${Math.round(b.y)} ${Math.round(b.w)}×${Math.round(b.h)}`,
+          message: `outside the canvas: ${Math.round(b.x)},${Math.round(b.y)} ${Math.round(b.w)}×${Math.round(b.h)}`,
         })
       }
       if (b.hasText && (b.scrollH > b.h + TOL || b.scrollW > b.w + TOL)) {
@@ -168,7 +168,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'error',
           slide: slide.id,
           element: b.el,
-          message: `文字溢出元件框：內容 ${b.scrollW}×${b.scrollH}，框 ${Math.round(b.w)}×${Math.round(b.h)}`,
+          message: `text overflows the element box: content ${b.scrollW}×${b.scrollH}, box ${Math.round(b.w)}×${Math.round(b.h)}`,
         })
       }
       const floor = minFontFor(b.role, minFont)
@@ -178,7 +178,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'error',
           slide: slide.id,
           element: b.el,
-          message: `字級 ${b.fontSize}px 低於下限 ${floor}px${floor < minFont ? `（${b.role} 家具）` : ''}`,
+          message: `font size ${b.fontSize}px below the minimum ${floor}px${floor < minFont ? ` (${b.role} furniture)` : ''}`,
         })
       }
     }
@@ -194,7 +194,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'warning',
           slide: slide.id,
           element: i.el,
-          message: `內部文字最小字級 ${i.minInner}px 低於 ${innerFloor}px`,
+          message: `smallest inner text ${i.minInner}px below ${innerFloor}px`,
         })
       }
     }
@@ -210,7 +210,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
             severity: 'error',
             slide: slide.id,
             element: p.el,
-            message: `文字元件 ${p.el} 與 ${q.el} 重疊`,
+            message: `text elements ${p.el} and ${q.el} overlap`,
           })
         }
       }
@@ -222,7 +222,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
         rule: 'density',
         severity: 'error',
         slide: slide.id,
-        message: `文字 ${chars} 字，超過版型 ${slide.layout} 的上限 ${layout.json.density.max_chars} 字`,
+        message: `${chars} characters of text, over the limit of ${layout.json.density.max_chars} for layout ${slide.layout}`,
       })
     }
 
@@ -241,7 +241,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'error',
           slide: slide.id,
           element: b.el,
-          message: `主題 CSS 讓元件幾何移動了 ${drift.toFixed(1)}px；主題只能改外觀`,
+          message: `theme CSS moved the element geometry by ${drift.toFixed(1)}px; a theme may only change appearance`,
         })
       }
     }
@@ -272,9 +272,9 @@ export function writeQaReport(report: QaReport, root = PROJECT_ROOT): string {
 
 export function formatQaReport(report: QaReport): string {
   const lines: string[] = [
-    `${report.title}（${report.deck}）· ${report.slides.length} 頁 · ${report.durationMs} ms`,
+    `${report.title} (${report.deck}) · ${report.slides.length} slides · ${report.durationMs} ms`,
   ]
-  if (report.skipped?.length) lines.push(`－ 略過隱藏頁：${report.skipped.join('、')}`)
+  if (report.skipped?.length) lines.push(`- skipped hidden slides: ${report.skipped.join(', ')}`)
   for (const s of report.slides) {
     if (s.findings.length === 0) {
       lines.push(`✓ ${s.id.padEnd(6)} ${s.layout}`)
@@ -290,7 +290,7 @@ export function formatQaReport(report: QaReport): string {
     }
   }
   lines.push(
-    `${report.errors === 0 ? '通過' : '未通過'}：${report.errors} 個錯誤，${report.warnings} 個警告`,
+    `${report.errors === 0 ? 'passed' : 'failed'}: ${report.errors} errors, ${report.warnings} warnings`,
   )
   return lines.join('\n')
 }

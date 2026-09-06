@@ -31,12 +31,12 @@ const target = args.find((a, i) => !a.startsWith('-') && !consumed.has(i))
 if (!target) {
   console.error(
     [
-      '用法：pnpm deck:scaffold <story.md> [--theme id] [--layouts s1=cover,s4=comparison] [--slide s3] [--from slide.json] [--reset-overrides] [--force] [-o deck.json]',
-      '  --layouts        指定某幾頁的版型，其餘依敘事自動選',
-      '  --slide          只重新生成這一頁，其他頁沿用既有 deck.json；手動覆寫一律保留',
-      '  --from           用 agent 寫好的單頁 JSON 取代該頁（需與 --slide 同用）',
-      '  --reset-overrides 清掉重新生成頁面的手動覆寫',
-      '  --force          跳過「敘事已確認」的關卡（只在使用者明確要求時使用）',
+      'Usage: pnpm deck:scaffold <story.md> [--theme id] [--layouts s1=cover,s4=comparison] [--slide s3] [--from slide.json] [--reset-overrides] [--force] [-o deck.json]',
+      '  --layouts        pin the layout of certain slides; the rest are chosen from the story',
+      '  --slide          regenerate only this slide, keeping the others from the existing deck.json; manual overrides are always kept',
+      '  --from           replace that slide with a single-slide JSON written by the agent (requires --slide)',
+      '  --reset-overrides clear the manual overrides of the regenerated slides',
+      '  --force          skip the "story confirmed" gate (only when the user explicitly asks for it)',
     ].join('\n'),
   )
   process.exit(2)
@@ -47,13 +47,15 @@ const storyText = readFileSync(storyFile, 'utf8')
 const loaded = loadStory(storyText)
 if (loaded.hasErrors || !loaded.story) {
   for (const d of loaded.diagnostics) console.log(`✖ ${target}:${d.line}  [${d.rule}] ${d.message}`)
-  console.log('敘事文件未通過檢查，先修正再生成')
+  console.log('the story file failed its checks; fix it before scaffolding')
   process.exit(1)
 }
 const status = confirmationStatus(storyFile, storyText)
 if (status.state !== 'confirmed' && !flag('--force')) {
   console.log(`✖ ${describeStatus(status)}`)
-  console.log('未確認的敘事不能生成頁面；這是流程的關卡，不是提醒')
+  console.log(
+    'an unconfirmed story cannot be scaffolded; this is a gate in the workflow, not a reminder',
+  )
   process.exit(1)
 }
 
@@ -63,7 +65,7 @@ if (existsSync(outFile)) {
   const parsed = parseDeck(readFileSync(outFile, 'utf8'))
   if (!parsed.ok) {
     for (const e of parsed.errors) console.log(`✖ ${outFile} ${e.path}  ${e.message}`)
-    console.log('既有的 deck.json 無法解析；修好它或換一個輸出路徑')
+    console.log('the existing deck.json cannot be parsed; fix it or choose another output path')
     process.exit(1)
   }
   existing = parsed.deck
@@ -90,7 +92,7 @@ const choices: Record<string, string> = {}
 for (const pair of (opt('--layouts') ?? '').split(',').filter(Boolean)) {
   const [slideId, layoutId] = pair.split('=')
   if (!slideId || !layoutId) {
-    console.log(`✖ --layouts 的格式是 s1=cover,s2=cards，看不懂 \`${pair}\``)
+    console.log(`✖ --layouts takes the form s1=cover,s2=cards; cannot parse \`${pair}\``)
     process.exit(2)
   }
   choices[slideId] = layoutId
@@ -101,12 +103,12 @@ const replacements: Record<string, Slide> = {}
 const from = opt('--from')
 if (from) {
   if (only?.length !== 1) {
-    console.log('✖ --from 需要搭配單一 --slide <id>')
+    console.log('✖ --from requires a single --slide <id>')
     process.exit(2)
   }
   const slide = JSON.parse(readFileSync(resolve(from), 'utf8')) as Slide
   if (slide.id !== only[0]) {
-    console.log(`✖ ${from} 裡的 id 是 \`${slide.id}\`，與 --slide ${only[0]} 不同`)
+    console.log(`✖ the id in ${from} is \`${slide.id}\`, which differs from --slide ${only[0]}`)
     process.exit(2)
   }
   replacements[slide.id] = slide
@@ -142,42 +144,49 @@ if (flag('--reset-overrides')) {
 const validation = validateDeck(result.deck)
 if (!validation.ok) {
   for (const e of validation.errors) console.log(`✖ ${e.path}  ${e.message}`)
-  console.log('生成的 deck 沒有通過驗證（通常是必要 slot 還沒有內容）；已寫出檔案供修正')
+  console.log(
+    'the scaffolded deck failed validation (usually a required slot has no content yet); the file was written for you to fix',
+  )
 }
 writeFileSync(outFile, stringifyDeck(result.deck), 'utf8')
 
 console.log(
-  `${result.deck.title}：${result.deck.slides.length} 頁 → ${relative(process.cwd(), outFile).replace(/\\/g, '/')}`,
+  `${result.deck.title}: ${result.deck.slides.length} slides → ${relative(process.cwd(), outFile).replace(/\\/g, '/')}`,
 )
 for (const [id, layout] of Object.entries(result.chosen)) console.log(`  ${id.padEnd(6)} ${layout}`)
 const overrideCount = Object.keys(result.deck.overrides).length
 if (existing) {
   console.log(
-    `覆寫：保留 ${result.kept.length} 筆，孤兒 ${result.orphaned.length} 筆，共 ${overrideCount} 筆`,
+    `overrides: ${result.kept.length} kept, ${result.orphaned.length} orphaned, ${overrideCount} in total`,
   )
   for (const k of result.orphaned)
-    console.log(`  ⚠ ${k} 指向的元件已不存在（保留在檔案裡；--reset-overrides 可清除）`)
+    console.log(
+      `  ⚠ ${k} points at an element that no longer exists (kept in the file; --reset-overrides clears it)`,
+    )
   if (result.overridesDropped.length > 0)
     console.log(
-      `  ⚠ ${result.overridesDropped.join('、')} 指向的頁面已不在敘事裡，覆寫已隨頁面移除`,
+      `  ⚠ ${result.overridesDropped.join(', ')} point at slides no longer in the story; the overrides were removed with the slides`,
     )
   if (result.pagesDropped.length > 0)
-    console.log(`  ⚠ 頁面編排裡的 ${result.pagesDropped.join('、')} 已不在敘事裡，已移除`)
+    console.log(
+      `  ⚠ ${result.pagesDropped.join(', ')} in the page arrangement are no longer in the story, removed`,
+    )
   if (result.pagesCleared.length > 0)
     console.log(
-      `  頁面編排的 ${result.pagesCleared.join('、')} 已與敘事一致，已清空${result.deck.pages ? '' : '（pages 已移除，播放順序不變）'}`,
+      `  page arrangement for ${result.pagesCleared.join(', ')} now matches the story, cleared${result.deck.pages ? '' : ' (pages removed, playback order unchanged)'}`,
     )
   if (result.stepsKept.length > 0 || result.stepsDropped.length > 0) {
     console.log(
-      `逐步顯示：保留 ${result.stepsKept.length} 筆，丟棄 ${result.stepsDropped.length} 筆`,
+      `reveal steps: ${result.stepsKept.length} kept, ${result.stepsDropped.length} dropped`,
     )
-    for (const k of result.stepsDropped) console.log(`  ⚠ ${k} 的元件在新版型裡不存在，step 已丟棄`)
+    for (const k of result.stepsDropped)
+      console.log(`  ⚠ the element of ${k} does not exist in the new layout, step dropped`)
   }
 }
 if (result.stepsAuto.length > 0) {
   const pages = new Set(result.stepsAuto.map((k) => k.split('/')[0]))
   console.log(
-    `逐步顯示：自動替 ${pages.size} 頁排了 ${result.stepsAuto.length} 個元件（編輯器面板可改；重做該頁時保留你改過的）`,
+    `reveal steps: ${result.stepsAuto.length} elements sequenced automatically across ${pages.size} slides (editable in the editor panel; your edits are kept when the slide is redone)`,
   )
 }
 for (const w of result.warnings) console.log(`⚠ ${w}`)

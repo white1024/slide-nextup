@@ -168,7 +168,7 @@ describe('writing the deck’s page-level overrides back into story.md', () => {
     expect(readFileSync(storyFile, 'utf8')).toBe(storyText)
     const real = run()
     expect(real.code).toBe(0)
-    expect(real.out).toContain('已寫回')
+    expect(real.out).toContain('written back')
     expect(real.out).toContain('story:confirm')
     expect(headings(readFileSync(storyFile, 'utf8')).slice(0, 3)).toEqual(['s2', 's1', 's3'])
     // nothing left to write back once the story matches
@@ -182,6 +182,6 @@ describe('writing the deck’s page-level overrides back into story.md', () => {
     )
     const same = run()
     expect(same.code).toBe(0)
-    expect(same.out).toContain('沒有東西要寫回')
+    expect(same.out).toContain('nothing to write back')
   })
 })

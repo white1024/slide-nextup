@@ -8,11 +8,11 @@ const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
   console.log(
     [
-      '用法：pnpm theme:qa [--theme <id>] [--deck <deck.json|dir>] [layout…]',
-      '  每個版型用它自己的 sample 填滿、組成一份 deck，跑完整 QA（溢出、重疊、字級下限、密度、幾何不變）。',
-      '  不給 --theme 就跑全部主題包；後面接版型 id 可只看那幾個。任何 error 或 warning 都算失敗。',
-      '  主題從 deck 資料夾（--deck）、使用者目錄（$SLIDE_NEXTUP_HOME/themes 或 ~/.slide-nextup/themes）與 repo 依序找。',
-      '  報告寫到 artifacts/qa/theme-<id>.json。',
+      'Usage: pnpm theme:qa [--theme <id>] [--deck <deck.json|dir>] [layout…]',
+      '  Fill every layout with its own sample, assemble them into one deck and run the full QA (overflow, overlap, minimum font size, density, geometry unchanged).',
+      '  Without --theme every theme pack is run; trailing layout ids restrict the run to those. Any error or warning counts as a failure.',
+      '  Themes are searched in the deck folder (--deck), the user directory ($SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes) and the repo, in that order.',
+      '  The report is written to artifacts/qa/theme-<id>.json.',
     ].join('\n'),
   )
   process.exit(0)
@@ -27,7 +27,7 @@ const only = args.filter(
 )
 const known = listThemeIds(lookup)
 if (themeId !== undefined && !known.includes(themeId)) {
-  console.log(`✖ 沒有主題包 \`${themeId ?? ''}\`；可用：${known.join('、')}`)
+  console.log(`✖ no theme pack \`${themeId ?? ''}\`; available: ${known.join(', ')}`)
   process.exit(2)
 }
 const themes = themeId ? [themeId] : known
@@ -38,14 +38,14 @@ for (const id of themes) {
   const report = await runThemeQa(id, { browser, only, deckDir: lookup.deckDir })
   console.log(formatQaReport(report))
   const out = writeQaReport(report)
-  console.log(`報告：${relative(process.cwd(), out).replace(/\\/g, '/')}\n`)
+  console.log(`report: ${relative(process.cwd(), out).replace(/\\/g, '/')}\n`)
   if (report.errors > 0 || report.warnings > 0) failed++
 }
 await browser.close()
 
 console.log(
   failed === 0
-    ? `${themes.length} 套主題包的版型範例全部通過：零錯誤、零警告`
-    : `${failed} 套主題包的版型範例有錯誤或警告；警告在這裡也算失敗，因為 sample 是版型自己的示範`,
+    ? `layout samples of all ${themes.length} theme packs passed: zero errors, zero warnings`
+    : `layout samples of ${failed} theme packs have errors or warnings; warnings count as failures here because the sample is the layout's own showcase`,
 )
 process.exit(failed === 0 ? 0 : 1)

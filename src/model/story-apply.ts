@@ -49,7 +49,8 @@ export function applyPagesToStory(
 
   const lines = storyText.replace(/\r\n?/g, '\n').split('\n')
   const sectionStart = lines.findIndex((l) => SLIDES_HEADING.test(l))
-  if (sectionStart === -1) throw new Error(`story.md 沒有 \`## ${SECTION_HEADINGS.slides}\` 章節`)
+  if (sectionStart === -1)
+    throw new Error(`story.md has no \`## ${SECTION_HEADINGS.slides}\` section`)
   let sectionEnd = lines.length
   for (let i = sectionStart + 1; i < lines.length; i++) {
     if (/^##\s+/.test(lines[i] ?? '')) {

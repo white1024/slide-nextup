@@ -73,14 +73,16 @@ describe('the zip reader and writer', () => {
   })
 
   it('refuses paths that would escape the target folder', () => {
-    expect(() => writeZip([{ name: '../x', data: Buffer.alloc(1) }])).toThrow(/不能有這種路徑/)
+    expect(() => writeZip([{ name: '../x', data: Buffer.alloc(1) }])).toThrow(
+      /cannot contain such a path/,
+    )
     const zip = writeZip([{ name: 'ok/x', data: Buffer.alloc(1) }])
     // the name lives in the local header and in the central directory; poison both copies
     const bad = Buffer.from(zip)
     for (let i = bad.indexOf('ok/x'); i !== -1; i = bad.indexOf('ok/x', i + 1))
       bad.write('../x', i, 'utf8')
-    expect(() => readZip(bad)).toThrow(/不安全的路徑/)
-    expect(() => readZip(Buffer.from('not a zip at all'))).toThrow(/不是 zip/)
+    expect(() => readZip(bad)).toThrow(/unsafe path/)
+    expect(() => readZip(Buffer.from('not a zip at all'))).toThrow(/not a zip/)
   })
 })
 
@@ -106,10 +108,12 @@ describe('theme:export', () => {
     expect(readFileSync(join(dirOut, 'theme.json'), 'utf8')).toBe(
       readFileSync(join(PROJECT_ROOT, 'themes', 'warm-keynote', 'theme.json'), 'utf8'),
     )
-    expect(() => exportTheme('warm-keynote', { lookup: REPO, out: zipOut })).toThrow(/已存在/)
+    expect(() => exportTheme('warm-keynote', { lookup: REPO, out: zipOut })).toThrow(
+      /already exists/,
+    )
     expect(exportTheme('warm-keynote', { lookup: REPO, out: zipOut, force: true }).kind).toBe('zip')
     expect(() => exportTheme('nope', { lookup: REPO, out: join(tmp, 'x.zip') })).toThrow(
-      /找不到主題/,
+      /theme `nope` not found/,
     )
   })
 })
@@ -122,7 +126,7 @@ describe('theme:import', () => {
       kind: 'deck',
       deckDir: join(tmp, 'd'),
     })
-    expect(() => parseImportTarget('cloud')).toThrow(/--to 只接受/)
+    expect(() => parseImportTarget('cloud')).toThrow(/--to accepts only/)
     expect(importDestination('x', { kind: 'user' }, { userThemesDir: '/u' })).toBe(join('/u', 'x'))
     expect(importDestination('x', { kind: 'repo' }, { root: '/r' })).toBe(join('/r', 'themes', 'x'))
     expect(importDestination('x', { kind: 'deck', deckDir: '/d' })).toBe(
@@ -227,7 +231,7 @@ describe('theme:import', () => {
       browser,
     })
     expect(r1).toMatchObject({ ok: false, stage: 'unpack' })
-    if (!r1.ok) expect(r1.message).toMatch(/資料夾叫 other/)
+    if (!r1.ok) expect(r1.message).toMatch(/folder is called other/)
     writeFileSync(bad, writeZip([{ name: 'x/theme.css', data: Buffer.from('') }]))
     const r2 = await importTheme(bad, {
       to: { kind: 'user' },
@@ -235,6 +239,6 @@ describe('theme:import', () => {
       browser,
     })
     expect(r2).toMatchObject({ ok: false, stage: 'unpack' })
-    if (!r2.ok) expect(r2.message).toMatch(/沒有 theme.json/)
+    if (!r2.ok) expect(r2.message).toMatch(/no theme.json/)
   })
 })

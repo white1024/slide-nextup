@@ -28,12 +28,15 @@ if (json) {
 }
 
 console.log(
-  `主題：${themes.map((t) => (t.origin === 'repo' ? t.id : `${t.id}（${describeOrigin(t.origin)}）`)).join('、')}`,
+  `themes: ${themes.map((t) => (t.origin === 'repo' ? t.id : `${t.id} (${describeOrigin(t.origin)})`)).join(', ')}`,
 )
-if (themeId) console.log(`版型清單依主題 ${themeId}：主題自帶的版型會蓋掉同名的通用版型`)
+if (themeId)
+  console.log(
+    `layouts for theme ${themeId}: the theme's own layouts override generic layouts of the same id`,
+  )
 else
   console.log(
-    '加 --theme <id> 可看該主題自帶的版型；--deck <deck.json> 會連 deck 資料夾裡的主題一起找',
+    'add --theme <id> to see the layouts a theme brings; --deck <deck.json> also searches the deck folder for themes',
   )
 console.log('')
 for (const l of layouts) {
@@ -42,11 +45,11 @@ for (const l of layouts) {
   console.log(
     `  scene_roles: ${l.scene_roles.join(', ')}   content_relations: ${l.content_relations.join(', ')}`,
   )
-  console.log(`  density: ≤${l.density.max_chars} 字、≤${l.density.max_elements} 元件`)
+  console.log(`  density: ≤${l.density.max_chars} chars, ≤${l.density.max_elements} elements`)
   for (const [slotId, s] of Object.entries(l.slots)) {
     const types = Array.isArray(s.type) ? s.type.join('|') : s.type
     console.log(
-      `  slot ${slotId.padEnd(12)} ${types.padEnd(12)} ${s.required ? '必要' : '選填'}${s.hint ? `  ${s.hint}` : ''}`,
+      `  slot ${slotId.padEnd(12)} ${types.padEnd(12)} ${s.required ? 'required' : 'optional'}${s.hint ? `  ${s.hint}` : ''}`,
     )
   }
   console.log('')

@@ -175,12 +175,12 @@ export function findTheme(id: string, lookup?: Lookup): ThemeEntry | null {
 }
 
 const ORIGIN_LABEL: Record<ThemeOrigin, string> = {
-  deck: 'deck 資料夾',
-  user: '使用者目錄',
+  deck: 'deck folder',
+  user: 'user directory',
   repo: 'repo',
 }
 
-/** 「使用者目錄」 and friends, for messages that say where a theme came from. */
+/** "user directory" and friends, for messages that say where a theme came from. */
 export function describeOrigin(origin: ThemeOrigin): string {
   return ORIGIN_LABEL[origin]
 }
@@ -202,7 +202,7 @@ export function loadTheme(id: string, lookup?: Lookup): Theme {
   const found = findTheme(id, lookup)
   if (!found) {
     const searched = themeSearchDirs(lookup).map((s) => join(s.dir, id))
-    throw new Error(`找不到主題 \`${id}\`；找過：${searched.join('、')}`)
+    throw new Error(`theme \`${id}\` not found; searched: ${searched.join(', ')}`)
   }
   return {
     id,
@@ -217,7 +217,7 @@ export function loadLayout(id: string, themeId?: string, lookup?: Lookup): Layou
   const jsonFile = join(dir, 'layout.json')
   if (!existsSync(jsonFile)) {
     const searched = themeId ? [join(themeDir(themeId, lookup), 'layouts', id), dir] : [dir]
-    throw new Error(`找不到版型 \`${id}\`；找過：${searched.join('、')}`)
+    throw new Error(`layout \`${id}\` not found; searched: ${searched.join(', ')}`)
   }
   return {
     id,

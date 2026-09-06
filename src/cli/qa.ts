@@ -5,7 +5,7 @@ import { formatQaReport, runDeckQa, writeQaReport } from '../qa/run.ts'
 
 const target = process.argv.slice(2).find((a) => !a.startsWith('-'))
 if (!target) {
-  console.error('用法：pnpm qa <deck.json | deck.html>')
+  console.error('Usage: pnpm qa <deck.json | deck.html>')
   process.exit(2)
 }
 
@@ -15,7 +15,9 @@ let deck: Deck
 if (file.endsWith('.html')) {
   const m = /<script type="application\/json" id="deck-model">([\s\S]*?)<\/script>/.exec(text)
   if (!m?.[1]) {
-    console.log('✖ 這份 HTML 沒有內嵌 deck 模型；請用 pnpm render 產生的檔案，或直接給 deck.json')
+    console.log(
+      '✖ this HTML has no embedded deck model; use a file produced by pnpm render, or pass deck.json directly',
+    )
     process.exit(1)
   }
   const parsed = parseDeck(m[1])
@@ -36,5 +38,5 @@ if (file.endsWith('.html')) {
 const report = await runDeckQa(deck, { deckDir: dirname(file) })
 console.log(formatQaReport(report))
 const out = writeQaReport(report)
-console.log(`報告：${relative(process.cwd(), out).replace(/\\/g, '/')}`)
+console.log(`report: ${relative(process.cwd(), out).replace(/\\/g, '/')}`)
 process.exit(report.errors === 0 ? 0 : 1)

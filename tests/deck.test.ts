@@ -157,7 +157,7 @@ describe('schema-level validation', () => {
   it('rejects an override key that is not slideId/elementId', () => {
     const deck = sample()
     deck.overrides.s1 = { x: 1 }
-    expect(errorsOf(deck).some((e) => e.includes('s1') && e.includes('格式'))).toBe(true)
+    expect(errorsOf(deck).some((e) => e.includes('s1') && e.includes('pattern'))).toBe(true)
   })
 
   it('accepts italic and underline style overrides and rejects other values', () => {
@@ -179,7 +179,7 @@ describe('cross-reference validation', () => {
   it('rejects duplicate slide ids', () => {
     const deck = sample()
     ;(deck.slides[3] as Slide).id = 's2'
-    expect(errorsOf(deck)).toContain('/slides/3/id 頁面 id `s2` 重複（第一次在 /slides/1）')
+    expect(errorsOf(deck)).toContain('/slides/3/id duplicate slide id `s2` (first at /slides/1)')
   })
 
   it('rejects duplicate element ids and slots without an element', () => {
@@ -197,8 +197,10 @@ describe('cross-reference validation', () => {
     deck.overrides['s9/title'] = { x: 1 }
     deck.overrides['s1/nothing'] = { y: 1 }
     const errs = errorsOf(deck)
-    expect(errs).toContain('/overrides/s9/title 覆寫指向不存在的頁面 `s9`')
-    expect(errs).toContain('/overrides/s1/nothing 覆寫指向頁面 `s1` 裡不存在的元件 `nothing`')
+    expect(errs).toContain('/overrides/s9/title override points to non-existent slide `s9`')
+    expect(errs).toContain(
+      '/overrides/s1/nothing override points to non-existent element `nothing` in slide `s1`',
+    )
   })
 
   it('rejects text overrides on shapes and src overrides on text', () => {
@@ -224,7 +226,7 @@ describe('cross-reference validation', () => {
     const json = JSON.parse(brokenText) as Deck
     ;(json.slides[2] as Slide).id = 's3'
     const errs = errorsOf(json)
-    expect(errs.some((e) => e.startsWith('/slides/1/id') && e.includes('重複'))).toBe(true)
+    expect(errs.some((e) => e.startsWith('/slides/1/id') && e.includes('duplicate'))).toBe(true)
     expect(errs.some((e) => e.startsWith('/slides/0/slots/ghost'))).toBe(true)
     expect(errs.some((e) => e.startsWith('/overrides/s1/missing'))).toBe(true)
     expect(errs.some((e) => e.startsWith('/overrides/s9/title'))).toBe(true)
@@ -279,7 +281,9 @@ describe('page-level overrides (playback order and hidden slides)', () => {
     expect(Object.keys(out).slice(-2)).toEqual(['overrides', 'pages'])
     expect(out.pages).toEqual({ order: ['s3', 's1'], hidden: ['s2'] })
     deck.pages = { order: ['s3', 'nope'] }
-    expect(errorsOf(deck)).toEqual(['/pages/order/1 頁面編排指向不存在的頁面 `nope`'])
+    expect(errorsOf(deck)).toEqual([
+      '/pages/order/1 page arrangement points to non-existent slide `nope`',
+    ])
     deck.pages = { order: ['s1', 's1'] }
     expect(errorsOf(deck).some((e) => e.startsWith('/pages/order'))).toBe(true)
     deck.pages = { hidden: [] }

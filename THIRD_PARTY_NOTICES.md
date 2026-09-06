@@ -1,17 +1,17 @@
-# 第三方素材與授權聲明
+# Third-party notices
 
-本專案的部分主題與版型移植自開源專案；以下逐項列出來源、作者與授權。移植不是逐位元組複製：版型幾何重寫成本專案的 layout.css 契約，外觀規則重寫成 theme.css，並依 MIT 授權保留原作者的著作權聲明。開源本專案時，這個檔案要一併保留。
+Some of this project's themes and layouts are ported from open-source projects; each source, author and licence is listed below. A port is not a byte-for-byte copy: layout geometry is rewritten into this project's layout.css contract and appearance rules into theme.css, and the original copyright notice is kept as the MIT licence requires. This file ships with the project when it is published.
 
-## beautiful-html-templates（Zara Zhang，MIT）
+## beautiful-html-templates (Zara Zhang, MIT)
 
-- 來源：<https://github.com/zarazhangrui/beautiful-html-templates>
-- 相關專案：<https://github.com/zarazhangrui/frontend-slides>（同作者，MIT；模板索引與流程的出處）
-- 移植的模板（各對應 `themes/<id>/`，theme.json 的 `source` 欄位記錄原始 slug）：
+- Source: <https://github.com/zarazhangrui/beautiful-html-templates>
+- Related: <https://github.com/zarazhangrui/frontend-slides> (same author, MIT; the origin of the template index and workflow)
+- Ported templates (each maps to `themes/<id>/`; the `source` field of theme.json records the original slug):
   - `blue-professional` ← templates/blue-professional
   - `cobalt-grid` ← templates/cobalt-grid
   - `creative-mode` ← templates/creative-mode
 
-授權全文：
+Full licence text:
 
 ```
 MIT License
@@ -37,24 +37,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 字型（SIL Open Font License 1.1）
+## Fonts (SIL Open Font License 1.1)
 
-移植的主題以 `@font-face` 引用 Google Fonts 提供的字型檔（僅拉丁子集；中文字落到系統字型）。這些字型都採 OFL 1.1，允許在網頁與文件中嵌入、引用與再散布，但不得單獨以字型名稱販售。
+The ported themes reference font files served by Google Fonts through `@font-face` (Latin subsets only; CJK text falls back to system fonts). All of them are licensed under the OFL 1.1, which permits embedding, referencing and redistribution in web pages and documents but not selling the fonts by themselves.
 
-| 字型 | 作者 | 用在 |
+| Font | Author | Used in |
 |---|---|---|
-| Space Grotesk | Florian Karsten | blue-professional（標題）、creative-mode（內文） |
-| Inter | Rasmus Andersson | blue-professional（內文） |
-| Newsreader | Production Type | cobalt-grid（標題） |
-| Hanken Grotesk | Alfredo Marco Pradil, Hanken Design Co. | cobalt-grid（內文） |
-| DM Mono | Colophon Foundry | cobalt-grid（家具） |
-| Archivo Black | Omnibus-Type | creative-mode（標題） |
-| JetBrains Mono | JetBrains | creative-mode（家具） |
+| Space Grotesk | Florian Karsten | blue-professional (headings), creative-mode (body) |
+| Inter | Rasmus Andersson | blue-professional (body) |
+| Newsreader | Production Type | cobalt-grid (headings) |
+| Hanken Grotesk | Alfredo Marco Pradil, Hanken Design Co. | cobalt-grid (body) |
+| DM Mono | Colophon Foundry | cobalt-grid (furniture) |
+| Archivo Black | Omnibus-Type | creative-mode (headings) |
+| JetBrains Mono | JetBrains | creative-mode (furniture) |
 
-## 圖示
+## Icons
 
-- Lucide（ISC）：`src/render/icons.ts` 內嵌的圖示子集，<https://lucide.dev>。
+- Lucide (ISC): the icon subset embedded by `src/render/icons.ts`, <https://lucide.dev>.
 
-## warm-keynote（私人簡報，經作者同意）
+## warm-keynote (a private deck, used with its author's consent)
 
-`themes/warm-keynote/` 的風格取自一位友人的內部簡報（2026-09-05 經作者同意，作者表明不需署名）。只取視覺系統（色彩、字型搭配、元件語彙、版型構圖），CSS 全部依本專案契約重寫，簡報內容一概未使用。字型 Inter 與 JetBrains Mono 同上表（OFL）。
+The style of `themes/warm-keynote/` comes from a friend's internal presentation (consent given on 2026-09-05; the author asked not to be credited). Only the visual system was taken (colours, font pairing, component vocabulary, layout composition); all CSS was rewritten under this project's contract and none of the deck's content was used. The fonts Inter and JetBrains Mono are covered by the table above (OFL).

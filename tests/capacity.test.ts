@@ -105,10 +105,10 @@ describe('measured capacity', () => {
     const step = box(198, 66, 26, 33.8)
     expect(checkHint('步驟名，每行七字以內、兩行以內', step)).toBeNull()
     expect(checkHint('步驟名，兩行以內、十字以內', step)).toBeNull()
-    expect(checkHint('步驟名，每行十字以內', step)).toMatch(/每行 10 字/)
-    expect(checkHint('三行以內', step)).toMatch(/3 行/)
+    expect(checkHint('步驟名，每行十字以內', step)).toMatch(/10 characters per line/)
+    expect(checkHint('三行以內', step)).toMatch(/3 lines/)
     const lede = box(1718, 60, 32, 51.2)
-    expect(checkHint('一到兩行導語，六十字以內', lede)).toMatch(/2 行/)
+    expect(checkHint('一到兩行導語，六十字以內', lede)).toMatch(/2 lines/)
     expect(checkHint('一行導語，五十字以內', lede)).toBeNull()
     // lines about items (每條一行) are not lines of the box
     expect(checkHint('三到五條支撐；每條一行', lede)).toBeNull()

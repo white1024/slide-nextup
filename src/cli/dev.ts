@@ -7,13 +7,15 @@ const portIndex = args.indexOf('--port')
 const port = portIndex === -1 ? 4321 : Number(args[portIndex + 1])
 const target = args.find((a, i) => !a.startsWith('-') && (portIndex === -1 || i !== portIndex + 1))
 if (!target || !existsSync(resolve(target))) {
-  console.error('用法：pnpm dev <deck.json> [--port 4321]')
+  console.error('Usage: pnpm dev <deck.json> [--port 4321]')
   process.exit(2)
 }
 
 const server = await createDevServer({ deckFile: resolve(target), port })
-console.log(`${server.url}/?edit=1   （只綁 127.0.0.1；編輯會在停手 1.5 秒後自動寫回 ${target}）`)
-console.log('Ctrl+C 結束')
+console.log(
+  `${server.url}/?edit=1   (bound to 127.0.0.1 only; edits are written back to ${target} 1.5 s after you stop)`,
+)
+console.log('Ctrl+C to stop')
 
 const stop = async () => {
   await server.close()

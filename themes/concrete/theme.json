@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "concrete",
-  "name": "混凝土與橘",
-  "description": "包浩斯與瑞士國際主義：水泥灰底帶細點陣、墨黑 900 字重大標、整塊橘色幾何（實心圓、色條）、黑框卡片配橘色左緣，家具用等寬字。關鍵詞不斜體，直接換成橘色。",
+  "name": "Concrete and Orange",
+  "description": "Bauhaus and the Swiss International Style: concrete grey paper with a fine dot grid, ink-black 900-weight headings, solid orange geometry (discs, bars), black-bordered cards with an orange left edge, monospace furniture. Keywords are not italic; they simply turn orange.",
   "colors": {
-    "paper": { "value": "#d9d9d6", "use": "頁面底色（水泥灰）" },
-    "ink": { "value": "#111111", "use": "主要文字、黑框；反相頁的底色" },
-    "muted": { "value": "#4f5350", "use": "副標、說明" },
-    "accent": { "value": "#ff5a1f", "use": "唯一強調色：實心圓、色條、關鍵詞、卡片左緣、節點" },
-    "surface": { "value": "#e8e8e5", "use": "卡片底色" },
-    "line": { "value": "#b9bab6", "use": "細線" }
+    "paper": { "value": "#d9d9d6", "use": "page background (concrete grey)" },
+    "ink": { "value": "#111111", "use": "primary text, black borders; background of inverted pages" },
+    "muted": { "value": "#4f5350", "use": "subtitles, captions" },
+    "accent": { "value": "#ff5a1f", "use": "the only accent: discs, bars, keywords, card left edges, nodes" },
+    "surface": { "value": "#e8e8e5", "use": "card background" },
+    "line": { "value": "#b9bab6", "use": "thin rules" }
   },
   "typography": {
     "display": {
@@ -23,7 +23,7 @@
   },
   "spacing": { "radius": 0 },
   "decoration": {
-    "vocabulary": ["實心橘色圓", "黑框卡片", "橘色左緣", "3px 黑角標", "細點陣底", "等寬家具"],
-    "avoid": ["光暈", "圓角", "襯線", "漸層", "陰影"]
+    "vocabulary": ["solid orange discs", "black-bordered cards", "orange left edge", "3px black corner marks", "fine dot-grid background", "monospace furniture"],
+    "avoid": ["glows", "rounded corners", "serifs", "gradients", "shadows"]
   }
 }

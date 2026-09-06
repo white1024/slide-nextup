@@ -25,7 +25,7 @@ export function sampleDeck(themeId: string, lookup?: Lookup, only?: string[]): D
   return {
     schemaVersion: 1,
     id: `theme-${themeId}`,
-    title: `主題包 ${themeId} 的版型範例`,
+    title: `layout samples of theme pack ${themeId}`,
     theme: themeId,
     canvas: { width: 1920, height: 1080 },
     transition: 'none',

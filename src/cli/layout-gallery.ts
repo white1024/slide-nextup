@@ -58,12 +58,12 @@ for (const id of only.length > 0 ? only : listLayoutIdsFor(themeId, lookup)) {
     const hint = layout.json.slots[cap.el]?.hint
     capacities.push({ layout: id, ...cap, hint })
     rows.push(
-      `${cap.el.padEnd(12)} ${cap.contentW}×${cap.contentH}px @${cap.fontSize}px ≈ 每行 ${cap.charsPerLine} 字 × ${cap.lines} 行${hint ? `  「${hint}」` : ''}`,
+      `${cap.el.padEnd(12)} ${cap.contentW}×${cap.contentH}px @${cap.fontSize}px ≈ ${cap.charsPerLine} chars/line × ${cap.lines} lines${hint ? `  "${hint}"` : ''}`,
     )
     const bad = hint ? checkHint(hint, cap) : null
     if (bad) {
       hintProblems++
-      problems.push(`${cap.el} 的提示「${hint}」放不下：${bad}`)
+      problems.push(`the hint "${hint}" of ${cap.el} does not fit: ${bad}`)
     }
   }
   failures += problems.length
@@ -79,7 +79,7 @@ const capacityFile = join(outDir, `capacity-${themeId}.json`)
 writeFileSync(capacityFile, `${JSON.stringify(capacities, null, 2)}\n`, 'utf8')
 console.log(
   failures === 0
-    ? `全部版型無溢出，提示的字數都放得下（容量表 → ${capacityFile}）`
-    : `${failures - hintProblems} 個溢出問題，${hintProblems} 個提示的字數放不下（容量表 → ${capacityFile}）`,
+    ? `no layout overflows and every hint fits (capacity table → ${capacityFile})`
+    : `${failures - hintProblems} overflow problems, ${hintProblems} hints that do not fit (capacity table → ${capacityFile})`,
 )
 process.exit(failures === 0 ? 0 : 1)

@@ -52,7 +52,7 @@ export function writeZip(entries: ZipEntry[], now = new Date()): Buffer {
   let offset = 0
   for (const e of entries) {
     if (e.name.startsWith('/') || e.name.split('/').includes('..'))
-      throw new Error(`zip 裡不能有這種路徑：${e.name}`)
+      throw new Error(`a zip cannot contain such a path: ${e.name}`)
     const name = Buffer.from(e.name, 'utf8')
     const raw = Buffer.from(e.data)
     const deflated = raw.length > 0 ? deflateRawSync(raw) : raw
@@ -116,15 +116,17 @@ export function readZip(archive: Uint8Array): ZipEntry[] {
       break
     }
   }
-  if (endAt < 0) throw new Error('這不是 zip 檔（找不到結尾記錄）')
+  if (endAt < 0) throw new Error('not a zip file (end record not found)')
   const count = buf.readUInt16LE(endAt + 10)
   const cdSize = buf.readUInt32LE(endAt + 12)
   const cdOffset = buf.readUInt32LE(endAt + 16)
-  if (cdOffset + cdSize > endAt) throw new Error('zip 的目錄超出檔案範圍')
+  if (cdOffset + cdSize > endAt)
+    throw new Error("the zip's central directory runs past the end of the file")
   const out: ZipEntry[] = []
   let p = cdOffset
   for (let n = 0; n < count; n++) {
-    if (buf.readUInt32LE(p) !== CENTRAL) throw new Error('zip 的目錄記錄壞了')
+    if (buf.readUInt32LE(p) !== CENTRAL)
+      throw new Error('corrupt central directory record in the zip')
     const flags = buf.readUInt16LE(p + 8)
     const method = buf.readUInt16LE(p + 10)
     const crc = buf.readUInt32LE(p + 16)
@@ -138,16 +140,19 @@ export function readZip(archive: Uint8Array): ZipEntry[] {
     p += 46 + nameLen + extraLen + commentLen
     if (name.endsWith('/')) continue
     if (name.startsWith('/') || /^[A-Za-z]:/.test(name) || name.split('/').includes('..'))
-      throw new Error(`zip 裡有不安全的路徑：${name}`)
-    if (flags & 0x0008) throw new Error(`zip 用了資料描述符（${name}），這裡不支援`)
-    if (buf.readUInt32LE(local) !== LOCAL) throw new Error(`zip 的檔案記錄壞了：${name}`)
+      throw new Error(`unsafe path in the zip: ${name}`)
+    if (flags & 0x0008)
+      throw new Error(`the zip uses data descriptors (${name}), which are not supported here`)
+    if (buf.readUInt32LE(local) !== LOCAL)
+      throw new Error(`corrupt local file record in the zip: ${name}`)
     const dataAt = local + 30 + buf.readUInt16LE(local + 26) + buf.readUInt16LE(local + 28)
     const body = buf.subarray(dataAt, dataAt + csize)
     let data: Buffer
     if (method === STORE) data = Buffer.from(body)
     else if (method === DEFLATE) data = inflateRawSync(body)
-    else throw new Error(`zip 用了不支援的壓縮方式 ${method}（${name}）`)
-    if (data.length !== usize || crc32(data) !== crc) throw new Error(`zip 裡的 ${name} 內容損壞`)
+    else throw new Error(`the zip uses unsupported compression method ${method} (${name})`)
+    if (data.length !== usize || crc32(data) !== crc)
+      throw new Error(`${name} in the zip is corrupt`)
     out.push({ name, data })
   }
   return out

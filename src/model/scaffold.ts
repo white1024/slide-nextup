@@ -92,7 +92,7 @@ export function firstClause(text: string): string {
   return (idx === -1 ? text : text.slice(0, idx)).trim()
 }
 
-/** A title's series name: what comes before a subtitle separator (「：」, ": ", " — ", " | "). */
+/** A title's series name: what comes before a subtitle separator ("：", ": ", " — ", " | "). */
 export function seriesName(title: string): string {
   const idx = title.search(SERIES_END)
   return (idx === -1 ? title : title.slice(0, idx)).trim()
@@ -127,7 +127,7 @@ export function furnitureDefaults(story: Story): FurnitureDefaults {
 }
 
 /**
- * Chapter labels 「01 — 骨架」 for every slide whose story entry names a chapter; chapters are
+ * Chapter labels `01 — 骨架` for every slide whose story entry names a chapter; chapters are
  * numbered in order of first appearance, so pages that share a chapter share its number.
  */
 export function chapterLabels(story: Story): Map<string, string> {
@@ -186,7 +186,7 @@ export function slotsFor(
     if (right.title) put('right-title', text(right.title))
     if (right.items.length) put('right-items', { type: 'list', items: right.items })
   }
-  put('photo', { type: 'image', src: IMAGE_PLACEHOLDER, alt: '待替換的圖片' })
+  put('photo', { type: 'image', src: IMAGE_PLACEHOLDER, alt: 'placeholder image, to be replaced' })
   return out
 }
 
@@ -274,7 +274,7 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
     const unknown = [...only].filter((id) => !known.has(id))
     if (unknown.length > 0) {
       throw new Error(
-        `敘事裡沒有頁面 \`${unknown.join('`、`')}\`；可用的 id：${[...known].join(', ')}`,
+        `the story has no slide \`${unknown.join('`, `')}\`; available ids: ${[...known].join(', ')}`,
       )
     }
   }
@@ -296,34 +296,39 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
     }
     const layoutId = input.choices?.[s.id] ?? autoLayout(s)
     const layout = input.layouts.get(layoutId)
-    if (!layout) throw new Error(`頁面 \`${s.id}\` 指定的版型 \`${layoutId}\` 不存在`)
+    if (!layout)
+      throw new Error(`layout \`${layoutId}\` chosen for slide \`${s.id}\` does not exist`)
     chosen[s.id] = layoutId
     const slots = slotsFor(s, layout, input.story)
     for (const [slotId, decl] of Object.entries(layout.slots)) {
       if (decl.required && !(slotId in slots)) {
         warnings.push(
-          `頁面 \`${s.id}\`（${layoutId}）的必要 slot \`${slotId}\` 無法從敘事自動填入，請補上`,
+          `slide \`${s.id}\` (${layoutId}): required slot \`${slotId}\` cannot be filled from the story, fill it in`,
         )
       }
     }
     if ('photo' in slots)
-      warnings.push(`頁面 \`${s.id}\`（${layoutId}）的 photo 目前是佔位圖，請換成真實圖片`)
+      warnings.push(
+        `slide \`${s.id}\` (${layoutId}): photo is a placeholder, replace it with a real image`,
+      )
     // too much evidence for the layout: suggest details (content behind a click) before splitting
     // the page — a suggestion only, the slots are left as the story wrote them
     const chars = slotChars(slots)
     if (chars > layout.density.max_chars) {
       const roles = input.roles?.get(layoutId)
-      const over = `頁面 \`${s.id}\`（${layoutId}）從敘事填入約 ${chars} 字，超過版型上限 ${layout.density.max_chars} 字`
+      const over = `slide \`${s.id}\` (${layoutId}): about ${chars} characters filled from the story, over the layout's limit of ${layout.density.max_chars}`
       // only a boxed role can expand, so the advice depends on what the layout offers
       const canExpand =
         !roles || Object.keys(layout.slots).some((id) => DETAILS_ROLES.has(roles.get(id) ?? ''))
       if (canExpand) {
         detailsSuggested.push(s.id)
         warnings.push(
-          `${over}：先考慮把細節放進卡片的 details（播放時點擊展開，QA 只量收合狀態），不夠再回敘事拆頁`,
+          `${over}: consider moving the detail into the cards' details first (expanded by a click during playback, QA measures only the collapsed state), and split the slide in the story if that is not enough`,
         )
       } else {
-        warnings.push(`${over}；這個版型沒有可展開的卡片，請回敘事拆頁或換成有卡片的版型`)
+        warnings.push(
+          `${over}; this layout has no expandable cards, split the slide in the story or switch to a layout with cards`,
+        )
       }
     }
     if ('meta' in layout.slots && !furniture.occasion) emptyMeta.push(s.id)
@@ -362,12 +367,12 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
 
   if (emptyMeta.length > 0) {
     warnings.push(
-      `occasion 的第一句「${firstClause(input.story.meta.occasion)}」超過 ${FURNITURE_MAX_UNITS} 個字，${emptyMeta.join('、')} 的 meta 留空：把 occasion 的第一句改短，或在 deck.json 填四到十個字的場合`,
+      `the first clause of occasion "${firstClause(input.story.meta.occasion)}" is over ${FURNITURE_MAX_UNITS} characters, so meta is left empty on ${emptyMeta.join(', ')}: shorten the first clause of occasion, or put a four-to-ten-character occasion in deck.json`,
     )
   }
   if (emptyBrand.length > 0) {
     warnings.push(
-      `title 的系列名「${seriesName(input.story.meta.title)}」超過 ${BRAND_MAX_UNITS} 個字，${emptyBrand.join('、')} 的 brand 留空：用「系列名：副標」的寫法，或在 deck.json 填簡短的系列名`,
+      `the series name of title "${seriesName(input.story.meta.title)}" is over ${BRAND_MAX_UNITS} characters, so brand is left empty on ${emptyBrand.join(', ')}: write the title as "series name: subtitle", or put a short series name in deck.json`,
     )
   }
 

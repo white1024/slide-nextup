@@ -73,8 +73,8 @@ describe('semver ranges for the engine field', () => {
     expect(satisfies('1.5.0', '>=1.0.0 <2.0.0')).toBe(true)
     expect(satisfies('2.0.0', '>=1.0.0 <2.0.0')).toBe(false)
     expect(satisfies('3.0.0', '^1.0.0 || ^3.0.0')).toBe(true)
-    expect(() => satisfies('0.1.0', 'latest')).toThrow(/看不懂的版本範圍/)
-    expect(() => satisfies('abc', '*')).toThrow(/看不懂的版本號/)
+    expect(() => satisfies('0.1.0', 'latest')).toThrow(/unrecognised version range/)
+    expect(() => satisfies('abc', '*')).toThrow(/unrecognised version number/)
   })
 })
 
@@ -116,7 +116,7 @@ describe('theme:check on the shipped themes', () => {
       expect(
         report.issues.map((i) => i.message),
         id,
-      ).toContainEqual(expect.stringMatching(/只有封面的比稿主題包/))
+      ).toContainEqual(expect.stringMatching(/cover-only pitch theme pack/))
     }
   })
 
@@ -146,7 +146,7 @@ describe('theme:check catches a broken pack', () => {
     const report = runThemeCheck('bp-no-quote', lookup)
     expect(report.origin).toBe('user')
     expect(report.errors).toBe(1)
-    expect(report.issues[0]?.message).toMatch(/缺少核心版型 `quote`/)
+    expect(report.issues[0]?.message).toMatch(/missing core layout `quote`/)
   })
 
   it('a renamed core slot', () => {
@@ -170,7 +170,7 @@ describe('theme:check catches a broken pack', () => {
     })
     const report = runThemeCheck('bp-renamed', lookup)
     expect(report.issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/核心版型 `cards` 缺少核心槽位 `card-3`/),
+      expect.stringMatching(/core layout `cards` is missing core slot `card-3`/),
     ])
   })
 
@@ -184,7 +184,7 @@ describe('theme:check catches a broken pack', () => {
     })
     const report = runThemeCheck('bp-narrow', lookup)
     expect(report.issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/核心槽位 `evidence` 的型別少了 list/),
+      expect.stringMatching(/core slot `evidence` type lacks list/),
     ])
   })
 
@@ -196,7 +196,7 @@ describe('theme:check catches a broken pack', () => {
     )
     const report = runThemeCheck('bp-v2', lookup)
     expect(report.issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/schemaVersion 2 不是這個引擎認得的 1/),
+      expect.stringMatching(/schemaVersion 2 is not the 1 this engine understands/),
     ])
   })
 
@@ -218,14 +218,14 @@ describe('theme:check catches a broken pack', () => {
       }),
     )
     expect(runThemeCheck('bp-engine', lookup).issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/主題要求引擎 >=99\.0\.0，這裡是 /),
+      expect.stringMatching(/theme requires engine >=99\.0\.0, this is /),
     ])
     expect(runThemeCheck('bp-engine', lookup, { engine: '99.1.0' }).errors).toBe(0)
     editJson(join(userDir, 'bp-engine', 'theme.json'), (json) => {
       json.engine = 'latest'
     })
     expect(runThemeCheck('bp-engine', lookup).issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/看不懂的版本範圍 `latest`/),
+      expect.stringMatching(/unrecognised version range `latest`/),
     ])
   })
 
@@ -240,7 +240,7 @@ describe('theme:check catches a broken pack', () => {
     const report = runThemeCheck('bp-mute', lookup)
     expect(report.errors).toBe(0)
     expect(report.issues.map((i) => i.message)).toEqual([
-      expect.stringMatching(/role `entry`，theme.css 沒有任何 \[data-role="entry"\] 規則/),
+      expect.stringMatching(/role `entry` but theme.css has no \[data-role="entry"\] rule/),
     ])
   })
 
@@ -248,6 +248,6 @@ describe('theme:check catches a broken pack', () => {
     const report = runThemeCheck('nope', { userThemesDir: userDir })
     expect(report.origin).toBeNull()
     expect(report.errors).toBe(1)
-    expect(report.issues[0]?.message).toMatch(/找不到主題 `nope`；找過：/)
+    expect(report.issues[0]?.message).toMatch(/theme `nope` not found; searched: /)
   })
 })
