@@ -1,5 +1,5 @@
 import { relative } from 'node:path'
-import { chromium } from 'playwright'
+import { launchChromium } from '../qa/browser.ts'
 import { formatQaReport, writeQaReport } from '../qa/run.ts'
 import { runThemeQa } from '../qa/theme-qa.ts'
 import { deckDirOfPath, listThemeIds } from '../render/assets.ts'
@@ -11,7 +11,7 @@ if (args.includes('--help') || args.includes('-h')) {
       'Usage: pnpm theme:qa [--theme <id>] [--deck <deck.json|dir>] [layout…]',
       '  Fill every layout with its own sample, assemble them into one deck and run the full QA (overflow, overlap, minimum font size, density, geometry unchanged).',
       '  Without --theme every theme pack is run; trailing layout ids restrict the run to those. Any error or warning counts as a failure.',
-      '  Themes are searched in the deck folder (--deck), the user directory ($SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes) and the repo, in that order.',
+      '  Themes are searched in the deck folder (--deck), the workspace (the current folder), the user directory ($SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes) and the repo, in that order.',
       '  The report is written to artifacts/qa/theme-<id>.json.',
     ].join('\n'),
   )
@@ -32,7 +32,7 @@ if (themeId !== undefined && !known.includes(themeId)) {
 }
 const themes = themeId ? [themeId] : known
 
-const browser = await chromium.launch({ headless: true })
+const browser = await launchChromium()
 let failed = 0
 for (const id of themes) {
   const report = await runThemeQa(id, { browser, only, deckDir: lookup.deckDir })

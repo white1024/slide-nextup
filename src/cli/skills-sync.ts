@@ -1,9 +1,9 @@
-import { join } from 'node:path'
-import { PROJECT_ROOT } from '../render/assets.ts'
+import { resolve } from 'node:path'
 import { checkSkills, isClean, syncSkills } from '../skills/sync.ts'
 
-const source = join(PROJECT_ROOT, '.agents', 'skills')
-const target = join(PROJECT_ROOT, '.claude', 'skills')
+// the workspace's own copies: the repo when developing, the folder `init` wrote otherwise
+const source = resolve('.agents', 'skills')
+const target = resolve('.claude', 'skills')
 const mode = process.argv[2] === 'check' ? 'check' : 'sync'
 
 if (mode === 'sync') {

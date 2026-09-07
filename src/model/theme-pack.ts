@@ -69,7 +69,7 @@ export function exportTheme(id: string, opts: ExportOptions = {}): ExportResult 
   const found = findTheme(id, opts.lookup)
   if (!found) throw new Error(`theme \`${id}\` not found`)
   const files = walk(found.dir)
-  const out = resolve(opts.out ?? join(PROJECT_ROOT, 'artifacts', 'themes', `${id}.zip`))
+  const out = resolve(opts.out ?? join('artifacts', 'themes', `${id}.zip`))
   const kind = out.toLowerCase().endsWith('.zip') ? 'zip' : 'dir'
   if (existsSync(out) && !opts.force)
     throw new Error(`${out} already exists; add --force to overwrite it`)
@@ -91,7 +91,11 @@ export function exportTheme(id: string, opts: ExportOptions = {}): ExportResult 
   return { id, from: found.dir, out, kind, files, check }
 }
 
-export type ImportTarget = { kind: 'repo' } | { kind: 'user' } | { kind: 'deck'; deckDir: string }
+export type ImportTarget =
+  | { kind: 'repo' }
+  | { kind: 'workspace' }
+  | { kind: 'user' }
+  | { kind: 'deck'; deckDir: string }
 
 export interface ImportOptions {
   to: ImportTarget
@@ -99,6 +103,8 @@ export interface ImportOptions {
   root?: string
   /** the user directory's themes folder for target `user` (default from the environment) */
   userThemesDir?: string
+  /** the workspace folder for target `workspace` (default the working directory) */
+  workspaceDir?: string
   /** an already running browser for the QA gate (the caller closes it) */
   browser?: Browser
   /** called as each gate starts, for a CLI to narrate */
@@ -133,11 +139,13 @@ export type ImportResult = ImportSuccess | ImportFailure
 export function importDestination(
   id: string,
   to: ImportTarget,
-  opts: { root?: string; userThemesDir?: string } = {},
+  opts: { root?: string; userThemesDir?: string; workspaceDir?: string } = {},
 ): string {
   switch (to.kind) {
     case 'repo':
       return join(opts.root ?? PROJECT_ROOT, 'themes', id)
+    case 'workspace':
+      return join(resolve(opts.workspaceDir ?? process.cwd()), 'themes', id)
     case 'user':
       return join(opts.userThemesDir ?? userThemesDir(), id)
     case 'deck':
@@ -217,9 +225,13 @@ export async function importTheme(source: string, opts: ImportOptions): Promise<
         message: `${dest} already has this theme; add --force to overwrite it`,
       }
     }
-    // the scratch copy wins the lookup as a "user directory" theme; the deck folder is left out so
+    // the scratch copy wins the lookup as a "user directory" theme; the deck folder and the workspace are left out so
     // a same-id theme there cannot stand in for the one being checked
-    const lookup: AssetLookup = { root: opts.root, userThemesDir: join(scratch, 'themes') }
+    const lookup: AssetLookup = {
+      root: opts.root,
+      workspaceDir: null,
+      userThemesDir: join(scratch, 'themes'),
+    }
     say('check', id)
     const check = runThemeCheck(id, lookup)
     if (check.errors > 0) {
@@ -264,12 +276,13 @@ export async function importTheme(source: string, opts: ImportOptions): Promise<
 export function parseImportTarget(value: string | undefined): ImportTarget {
   if (value === undefined || value === 'user') return { kind: 'user' }
   if (value === 'repo') return { kind: 'repo' }
+  if (value === 'workspace') return { kind: 'workspace' }
   if (value.startsWith('deck:')) {
     const p = resolve(value.slice('deck:'.length))
     const deckDir = existsSync(p) && statSync(p).isDirectory() ? p : dirname(p)
     return { kind: 'deck', deckDir }
   }
   throw new Error(
-    `--to accepts only repo, user or deck:<deck.json|folder>, cannot parse \`${value}\``,
+    `--to accepts only user, workspace, repo or deck:<deck.json|folder>, cannot parse \`${value}\``,
   )
 }

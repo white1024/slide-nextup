@@ -1,0 +1,15 @@
+# dependencies and rendered output
+node_modules/
+dist/
+decks/*/deck.html
+
+# transient outputs of qa, galleries, previews and theme exports
+artifacts/qa/
+artifacts/layout-gallery/
+artifacts/preflight/
+artifacts/design/
+artifacts/themes/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

@@ -1,6 +1,6 @@
 import { relative } from 'node:path'
-import { chromium } from 'playwright'
 import { importTheme, parseImportTarget } from '../model/theme-pack.ts'
+import { launchChromium } from '../qa/browser.ts'
 import { formatQaReport } from '../qa/run.ts'
 import { formatThemeCheck } from '../qa/theme-check.ts'
 
@@ -8,9 +8,9 @@ const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h') || args.length === 0) {
   console.log(
     [
-      'Usage: pnpm theme:import <dir|file.zip> [--to user|repo|deck:<deck.json|dir>] [--force]',
+      'Usage: pnpm theme:import <dir|file.zip> [--to user|workspace|repo|deck:<deck.json|dir>] [--force]',
       '  Unpack into a temp directory → theme:check (including lint) → theme:qa (Playwright) → copy to the target only when everything passes; if any gate fails nothing is written.',
-      "  --to user (default) puts it in $SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes; repo puts it in this repo's themes/;",
+      "  --to user (default) puts it in $SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes; workspace puts it in the current folder's themes/; repo puts it in the slide-nextup repo's themes/;",
       "  deck:<deck.json> puts it in that deck's own themes/. An existing pack with the same id is refused; --force overwrites it.",
       '  Importing does not download fonts (web fonts referenced by theme.css are kept as is); when theme.json has a source you are reminded to add a THIRD_PARTY_NOTICES.md entry.',
     ].join('\n'),
@@ -40,7 +40,7 @@ try {
   process.exit(2)
 }
 
-const browser = await chromium.launch({ headless: true })
+const browser = await launchChromium()
 try {
   const result = await importTheme(source, {
     to,

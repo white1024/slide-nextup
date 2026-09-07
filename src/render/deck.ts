@@ -15,7 +15,6 @@ import {
   layoutRoles,
   loadLayout,
   loadTheme,
-  PROJECT_ROOT,
   type ThemeJson,
   themeCssVariables,
 } from './assets.ts'
@@ -271,7 +270,7 @@ ${EDITOR_JS}
   return { html, warnings }
 }
 
-export function defaultOutputPath(deck: Deck, root = PROJECT_ROOT): string {
+export function defaultOutputPath(deck: Deck, root = process.cwd()): string {
   return resolve(root, 'dist', `${deck.id}.html`)
 }
 

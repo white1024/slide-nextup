@@ -10,7 +10,7 @@ if (args.includes('--help') || args.includes('-h') || args.length === 0) {
       'Usage: pnpm theme:export <id> [-o <dir|file.zip>] [--deck <deck.json|dir>] [--force]',
       '  Copy the theme pack folder (theme.json, theme.css, layouts/, generators) as is into a folder, or pack it into one zip (default artifacts/themes/<id>.zip).',
       "  Runs theme:check first and prints its report; errors do not stop the export, but the recipient's import will be blocked.",
-      '  Themes are searched in the deck folder (--deck), the user directory and the repo, in that order.',
+      '  Themes are searched in the deck folder (--deck), the workspace, the user directory and the repo, in that order.',
     ].join('\n'),
   )
   process.exit(args.length === 0 ? 2 : 0)

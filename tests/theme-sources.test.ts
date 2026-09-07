@@ -204,3 +204,62 @@ describe('external themes flow through render, retheme, QA and the dev server', 
     }
   }, 30_000)
 })
+
+// The workspace (the folder `init` made, or wherever a command runs) is a fourth place, between
+// the deck folder and the user directory; when the workspace is the repo itself its themes/ is
+// the repo entry and is not listed twice.
+describe('workspace themes', () => {
+  it('searches the workspace themes/ after the deck folder and before the user directory', () => {
+    const ws = mkdtempSync(join(tmpdir(), 'slide-ws-'))
+    copyTheme(join(PROJECT_ROOT, 'themes', 'ink-paper'), join(ws, 'themes', 'ws-red'), (j) => {
+      j.id = 'ws-red'
+      j.name = 'Workspace theme'
+      setAccent(j, '#c02020')
+    })
+    const dirs = themeSearchDirs({ deckDir, workspaceDir: ws, userThemesDir: userDir })
+    expect(dirs.map((d) => d.origin)).toEqual(['deck', 'workspace', 'user', 'repo'])
+    expect(findTheme('ws-red', { workspaceDir: ws, userThemesDir: null })).toMatchObject({
+      origin: 'workspace',
+      dir: join(ws, 'themes', 'ws-red'),
+    })
+    expect(loadTheme('ws-red', { workspaceDir: ws, userThemesDir: null }).json.id).toBe('ws-red')
+    expect(listThemeIds({ workspaceDir: ws, userThemesDir: null })).toContain('ws-red')
+    // the same id in the user directory loses to the workspace copy
+    copyTheme(join(PROJECT_ROOT, 'themes', 'ink-paper'), join(userDir, 'ws-red'), (j) => {
+      j.id = 'ws-red'
+      setAccent(j, '#2020c0')
+    })
+    expect(findTheme('ws-red', { workspaceDir: ws, userThemesDir: userDir })?.origin).toBe(
+      'workspace',
+    )
+    // the repo as workspace, and no workspace at all
+    expect(
+      themeSearchDirs({ workspaceDir: PROJECT_ROOT, userThemesDir: null }).map((d) => d.origin),
+    ).toEqual(['repo'])
+    expect(
+      themeSearchDirs({ workspaceDir: null, userThemesDir: null }).map((d) => d.origin),
+    ).toEqual(['repo'])
+    rmSync(ws, { recursive: true, force: true })
+  })
+})
+
+// A lookup that names another root is a self-contained tree (the QA tests copy the repo into a
+// temp folder and patch a theme there): the working directory is not implied as its workspace,
+// or the real theme would shadow the patched copy.
+describe('workspace themes and another root', () => {
+  it('does not imply the working directory for a lookup with its own root', () => {
+    const elsewhere = mkdtempSync(join(tmpdir(), 'slide-root-'))
+    expect(themeSearchDirs({ root: elsewhere, userThemesDir: null }).map((d) => d.origin)).toEqual([
+      'repo',
+    ])
+    expect(themeSearchDirs({ root: elsewhere, userThemesDir: null })[0]?.dir).toBe(
+      join(elsewhere, 'themes'),
+    )
+    expect(
+      themeSearchDirs({ root: elsewhere, workspaceDir: elsewhere, userThemesDir: null }).map(
+        (d) => d.origin,
+      ),
+    ).toEqual(['repo'])
+    rmSync(elsewhere, { recursive: true, force: true })
+  })
+})

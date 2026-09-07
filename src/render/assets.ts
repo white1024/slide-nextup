@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { dirname, join, resolve } from 'node:path'
+import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Ajv } from 'ajv'
 import type { Enter, Slot } from '../model/deck.ts'
@@ -114,8 +114,9 @@ export const validateLayoutJson = ajv.compile(
 
 /**
  * Where a theme is looked for, highest priority first: the deck's own folder
- * (`<deckDir>/themes/<id>`), the user's directory (`$SLIDE_NEXTUP_HOME/themes`, else
- * `~/.slide-nextup/themes`), then the repo's `themes/`. The first copy found wins, and a
+ * (`<deckDir>/themes/<id>`), the workspace's `themes/` (the working directory, implied only for
+ * lookups rooted at the package), the user's directory (`$SLIDE_NEXTUP_HOME/themes`, else
+ * `~/.slide-nextup/themes`), then the package's `themes/`. The first copy found wins, and a
  * theme's own layouts are read from that copy; the generic layouts stay in the repo's
  * `layouts/`. A bare string is the repo root alone, which is what the older call sites pass.
  */
@@ -123,12 +124,14 @@ export interface AssetLookup {
   root?: string
   /** the deck's directory; a theme under <deckDir>/themes/ wins over every other copy */
   deckDir?: string
+  /** the workspace's themes folder's parent: undefined is the working directory, null turns it off */
+  workspaceDir?: string | null
   /** the user directory's themes folder: undefined reads the environment, null turns it off */
   userThemesDir?: string | null
 }
 export type Lookup = string | AssetLookup
 
-export type ThemeOrigin = 'deck' | 'user' | 'repo'
+export type ThemeOrigin = 'deck' | 'workspace' | 'user' | 'repo'
 
 export interface ThemeSearchDir {
   origin: ThemeOrigin
@@ -159,6 +162,15 @@ export function themeSearchDirs(lookup?: Lookup): ThemeSearchDir[] {
   const l = normaliseLookup(lookup)
   const dirs: ThemeSearchDir[] = []
   if (l.deckDir) dirs.push({ origin: 'deck', dir: join(resolve(l.deckDir), 'themes') })
+  // the workspace (the folder `init` made, or wherever the command runs); when that is the repo
+  // itself its themes/ is the repo entry below, not a second copy of it. A lookup that names another
+  // root is a self-contained tree (tests, staging), so the working directory is not implied for it.
+  const implied = relative(l.root, PROJECT_ROOT) === '' ? process.cwd() : null
+  const workspace = l.workspaceDir === undefined ? implied : l.workspaceDir
+  if (workspace) {
+    const dir = join(resolve(workspace), 'themes')
+    if (relative(dir, join(l.root, 'themes')) !== '') dirs.push({ origin: 'workspace', dir })
+  }
   const user = l.userThemesDir === undefined ? userThemesDir() : l.userThemesDir
   if (user) dirs.push({ origin: 'user', dir: resolve(user) })
   dirs.push({ origin: 'repo', dir: join(l.root, 'themes') })
@@ -176,6 +188,7 @@ export function findTheme(id: string, lookup?: Lookup): ThemeEntry | null {
 
 const ORIGIN_LABEL: Record<ThemeOrigin, string> = {
   deck: 'deck folder',
+  workspace: 'workspace',
   user: 'user directory',
   repo: 'repo',
 }

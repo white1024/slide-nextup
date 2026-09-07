@@ -9,7 +9,7 @@ if (args.includes('--help') || args.includes('-h')) {
       '  Check in one go whether a theme pack is fit to share: schemaVersion and engine in theme.json, schema and CSS ownership (same as theme:lint),',
       '  elements/slots/html of every pack layout consistent, the ten core layouts and core slots all present (only for packs with their own layouts),',
       '  theme.css has at least one rule for every role the layouts use (missing ones are warnings). Exits with status 1 on any error.',
-      '  Themes are searched in the deck folder (--deck), the user directory ($SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes) and the repo, in that order.',
+      '  Themes are searched in the deck folder (--deck), the workspace (the current folder), the user directory ($SLIDE_NEXTUP_HOME/themes or ~/.slide-nextup/themes) and the repo, in that order.',
     ].join('\n'),
   )
   process.exit(0)

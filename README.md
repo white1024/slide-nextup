@@ -22,31 +22,44 @@ slide-nextup is a deck-generation workflow driven by a coding agent (Claude Code
 - **One self-contained HTML file.** Keyboard navigation, step reveals, entrance animations, page transitions, a presenter window with notes and a timer, and interactive slots (expandable details, image hotspots, chart legend toggles, tabs). No build step and no server needed to present.
 - **Full in-browser editing.** Drag, resize, rotate, double-click to edit text, swap images, change fonts and colours, multi-select with alignment and distribution, undo and redo. With the dev server running, edits autosave to `deck.json`; without it, a draft is kept in the browser.
 - **Automated quality checks.** Headless Chromium measures every page for overflow, overlapping text, minimum font sizes, density and theme geometry, for a deck or for every layout of a theme pack.
-- **Portable theme packs.** A theme is a folder (`theme.json`, `theme.css`, `layouts/`) that can be exported as a zip and imported elsewhere, after passing the same checks. Themes are resolved from the deck folder, a user directory or the repo.
+- **Portable theme packs.** A theme is a folder (`theme.json`, `theme.css`, `layouts/`) that can be exported as a zip and imported elsewhere, after passing the same checks. Themes are resolved from the deck folder, the workspace's `themes/`, a user directory or the package.
 - **Two agent platforms, one set of skills.** The process skills live once in `.agents/skills/`; the Claude Code mirror is generated and drift-checked.
 
 ## Getting started
 
-You need Node.js 24 or newer and pnpm 10 or newer. Node ships corepack, so `corepack enable pnpm` is enough: it fetches the pnpm version pinned in `package.json` on first use.
+You need Node.js 24 or newer and pnpm 10 or newer (Node 24 ships corepack, so `corepack enable pnpm` is enough there; otherwise `npm install -g pnpm`). slide-nextup is an npm package: `init` creates a workspace for your decks and pins the package in it, so the tool lives in that workspace's `node_modules` and every workspace can be on its own version.
 
 ```bash
+npx slide-nextup init my-decks   # package.json, AGENTS.md, the skills, decks/, themes/
+cd my-decks
 pnpm install
-pnpm browsers:install   # downloads the Chromium used for QA and previews (once)
-pnpm preflight          # checks node, pnpm, playwright and chromium
+pnpm browsers:install            # the Chromium used for QA and previews (once per Playwright version)
+pnpm preflight                   # checks node, pnpm, playwright and chromium
 ```
 
 > [!NOTE]
 > `pnpm doctor` is a pnpm built-in and has nothing to do with this project; `pnpm preflight` is the check you want.
 
-Render the bundled example and open it with the editor:
+Then open the folder in Claude Code or Codex and ask for a presentation. The agent follows the workspace's `AGENTS.md` (written from [templates/AGENTS.md](templates/AGENTS.md)) and the skills below. Every deck command in this README (`pnpm dev`, `pnpm render`, `pnpm qa` and the rest of the Commands table) is a script that `init` wrote into the workspace's `package.json`; `slide-nextup <command>` is the same thing. Only the test, lint, type-check and build commands under Development belong to the repo.
+
+To see a finished deck first, add `--example` to `init` (it also works later, inside the workspace: `npx slide-nextup init --example`). It copies the bundled `tidewatch-progress` deck, a confirmed story with its generated `deck.json`, into `decks/`:
 
 ```bash
-pnpm render examples/tidewatch-progress/deck.json -o dist/tidewatch.html
-pnpm dev examples/tidewatch-progress/deck.json     # http://127.0.0.1:4321, press E to edit
-pnpm qa examples/tidewatch-progress/deck.json      # report in artifacts/qa/
+pnpm dev decks/tidewatch-progress/deck.json                                      # http://127.0.0.1:4321, press E to edit
+pnpm render decks/tidewatch-progress/deck.json -o decks/tidewatch-progress/deck.html
+pnpm qa decks/tidewatch-progress/deck.json                                       # report in artifacts/qa/
 ```
 
-To make a deck of your own, open the repo in Claude Code or Codex and ask for a presentation. The agent follows [AGENTS.md](AGENTS.md) and the skills below.
+What `init` writes, and what it leaves alone:
+
+- `package.json`: one script per command (all but `init`) and `slide-nextup` pinned to the exact version as a devDependency. An existing file keeps its other fields and scripts.
+- `AGENTS.md` and `CLAUDE.md`: the agent's entry points, from the package's templates. Existing ones are kept unless you pass `--force`.
+- `.agents/skills/`: the four slide skills, the canonical copies; `.claude/skills/` is the generated mirror for Claude Code (`pnpm skills:check` catches drift).
+- `decks/` for your decks and `themes/` for theme packs of your own; a pack in the workspace's `themes/` is found before the user directory and the package's own themes.
+- `.gitignore` for `node_modules`, `dist/`, rendered `deck.html` files and the QA, gallery, preview and theme-export outputs under `artifacts/`.
+
+To upgrade, `pnpm add -D slide-nextup@latest` (the version is pinned exactly, so a plain `pnpm update` stays where it is) and then `pnpm exec slide-nextup init --update`: it refreshes the skills, the scripts and the pin, and never touches `AGENTS.md` or your decks.
+
 
 ## How it works
 
@@ -67,6 +80,7 @@ A story is a Markdown file with a YAML frontmatter (`title`, `audience`, `occasi
 
 | Command | What it does |
 | --- | --- |
+| `slide-nextup init [<dir>] [--example] [--update] [--force] [--package <spec>]` | Creates a workspace (see Getting started) or, with `--update`, refreshes its skills, scripts and pinned version. `--example` copies the bundled deck into `decks/`; `--package` pins a tarball or folder instead of this version. Run it with `npx slide-nextup init` before the package is installed anywhere. |
 | `pnpm dev <deck.json> [--port 4321]` | Local preview and editing, bound to 127.0.0.1. Edits are written back to `deck.json` 1.5 s after you stop; file changes reload the page. The edit toolbar's **Download deck.html** renders the deck on disk into one HTML file with images inlined (the same as `pnpm render --inline-assets`). |
 | `pnpm render <deck.json> [-o out.html] [--inline-assets]` | Renders `deck.json` into a self-contained HTML file: fixed-canvas scaling, keyboard navigation, the model embedded. |
 | `pnpm qa <deck.json \| deck.html>` | Checks overflow, overlap, minimum font sizes, density and theme geometry in headless Chromium; the report goes to `artifacts/qa/`. |
@@ -82,7 +96,7 @@ A story is a Markdown file with a YAML frontmatter (`title`, `audience`, `occasi
 | `pnpm theme:qa [--theme id] [layout…]` | Builds a deck from every layout's own sample and runs the full QA; errors and warnings both fail. Report in `artifacts/qa/theme-<id>.json`. |
 | `pnpm theme:check [--theme id] [--deck <deck.json>]` | One-shot fitness report for sharing a theme pack: `schemaVersion` and `engine`, everything `theme:lint` checks, layout structure, the core layouts and their core slots for packs that ship layouts (a cover-only pack gets a warning instead), and a `theme.css` rule for every role (missing roles are warnings). Exit code 1 on errors. |
 | `pnpm theme:export <id> [-o <dir\|file.zip>] [--deck <deck.json>] [--force]` | Copies a theme pack as a folder or zips it (default `artifacts/themes/<id>.zip`), with the `theme:check` report and a file list; check findings are printed, not blocking. |
-| `pnpm theme:import <dir\|file.zip> [--to user\|repo\|deck:<deck.json>] [--force]` | Unpacks into a temporary directory and copies the pack into the user directory (default), the repo or a deck folder only after `theme:check` and `theme:qa` pass. Nothing is written if either fails; an existing id needs `--force`. |
+| `pnpm theme:import <dir\|file.zip> [--to user\|workspace\|repo\|deck:<deck.json>] [--force]` | Unpacks into a temporary directory and copies the pack into the user directory (default), the workspace's `themes/`, the repo or a deck folder only after `theme:check` and `theme:qa` pass. Nothing is written if either fails; an existing id needs `--force`. |
 | `pnpm layout:gallery [--theme id] [--capacity] [--deck <deck.json>] [-o dir] [layout…]` | Screenshots every layout with its sample content into `artifacts/layout-gallery/` (theme `ink-paper` unless given), checks for overflow and measures how many characters and lines each text box holds against the slot hints (`--capacity` prints the table). |
 | `pnpm skills:sync` / `pnpm skills:check` | Mirrors `.agents/skills` into `.claude/skills`; the check catches drift. |
 
@@ -90,7 +104,7 @@ A story is a Markdown file with a YAML frontmatter (`title`, `audience`, `occasi
 
 Open a rendered deck and press `E` (or add `?edit=1` to the URL) to enter edit mode:
 
-- Click an element to drag it, pull a handle to resize, double-click to edit text. The floating toolbar keeps its controls in fixed groups: text (font, size, bold / italic / underline, alignment), text style (weight, line height, letter spacing, text colour and fill picked from the theme's palette) and element (hide, copy and paste style, reset to generated); behind **More** sit position and size, appearance (opacity, corner radius), arrange, animation (appears on click, entrance effect) and expandable content. Every number field has a slider, and **Side panel** in the top bar keeps the same toolbar open as a column on the right.
+- Click an element to drag it, pull a handle to resize, double-click to edit text. The floating toolbar keeps its controls in fixed groups: text (font, size, bold / italic / underline, alignment), text style (weight, line height, letter spacing, text colour and fill picked from the theme's palette) and element (hide, copy and paste style, reset to generated); behind **More** sit position and size, appearance (opacity, corner radius), arrange, animation (appears on click, entrance effect) and expandable content. Font size, line height, letter spacing, opacity and corner radius each pair a number field with a slider, and **Side panel** in the top bar keeps the same toolbar open as a column on the right.
 - `Shift`+click or drag on empty space to select several elements, `Ctrl+A` for the page; the toolbar then aligns and distributes them.
 - `Delete` hides an element, `Ctrl+Z` / `Ctrl+Y` undo and redo, `Ctrl+Alt+C` / `Ctrl+Alt+V` copy and paste a style, `Esc` clears the selection, `E` returns to playback.
 - The slide rail on the left reorders pages by drag or `Ctrl+Shift+↑↓` and hides them with `Ctrl+Shift+H`; hidden pages are skipped in playback.
@@ -102,7 +116,7 @@ During playback, `P` opens the presenter window (next slide, notes, position, ti
 
 ## Themes and layouts
 
-Themes are looked up in three places, first match wins: the deck's own folder (`decks/<id>/themes/<theme>/`), the user directory (`$SLIDE_NEXTUP_HOME/themes/`, or `~/.slide-nextup/themes/` when the variable is unset), then the repo's `themes/`. Commands that take a `deck.json` (`render`, `qa`, `deck:validate`, `deck:retheme`, `pnpm dev`) start from its folder; `deck:scaffold` and `design:preview` start from the story's folder (for scaffold, the folder of `-o` when given). `theme:lint`, `theme:qa`, `theme:check`, `theme:export`, `layouts` and `layout:gallery` only look at a deck folder when you pass `--deck <deck.json>`. Generic layouts always come from the repo's `layouts/`.
+Themes are looked up in four places, first match wins: the deck's own folder (`decks/<id>/themes/<theme>/`), the workspace's `themes/` (the folder the command runs in; in the slide-nextup repo itself that is the repo's own `themes/`, listed once), the user directory (`$SLIDE_NEXTUP_HOME/themes/`, or `~/.slide-nextup/themes/` when the variable is unset), then the package's `themes/` (the repo's, when developing). Commands that take a `deck.json` (`render`, `qa`, `deck:validate`, `deck:retheme`, `pnpm dev`) start from its folder; `deck:scaffold` and `design:preview` start from the story's folder (for scaffold, the folder of `-o` when given). `theme:lint`, `theme:qa`, `theme:check`, `theme:export`, `layouts` and `layout:gallery` only look at a deck folder when you pass `--deck <deck.json>`. Generic layouts always come from the repo's `layouts/`.
 
 ### Adding a layout
 
@@ -110,20 +124,26 @@ When no layout fits (a timeline, a four-quadrant grid), a layout is three files 
 
 ### Sharing a theme pack
 
-A theme pack is one folder: `theme.json` (with `schemaVersion` and an optional `engine` range), `theme.css`, `layouts/<id>/` triples and any generator it comes with. `pnpm theme:export <id>` produces `artifacts/themes/<id>.zip` (or `-o <folder>`). `pnpm theme:import <zip or folder>` installs into the user directory by default so every deck can use it; `--to deck:<deck.json>` limits it to one deck, `--to repo` puts it under version control. The import runs `theme:check` and `theme:qa` in a temporary directory first and writes nothing if either fails.
+A theme pack is one folder: `theme.json` (with `schemaVersion` and an optional `engine` range), `theme.css`, `layouts/<id>/` triples and any generator it comes with. `pnpm theme:export <id>` produces `artifacts/themes/<id>.zip` (or `-o <folder>`). `pnpm theme:import <zip or folder>` installs into the user directory by default so every deck can use it; `--to workspace` keeps it with the workspace (found before the user directory), `--to deck:<deck.json>` limits it to one deck, `--to repo` puts it into the slide-nextup repo itself. The import runs `theme:check` and `theme:qa` in a temporary directory first and writes nothing if either fails.
 
 > [!TIP]
 > A theme ported from someone else's template has a `source` field in `theme.json`; after importing one, add an entry to `THIRD_PARTY_NOTICES.md`.
 
 ## Development
 
+Clone the repository to work on slide-nextup itself. There the same commands run straight from the sources (`node src/cli/<name>.ts`; Node strips the types), and the tests, lint and type check are:
+
 ```bash
+git clone https://github.com/white1024/slide-nextup.git && cd slide-nextup
+pnpm install && pnpm browsers:install
 pnpm test        # vitest, including browser tests in headless Chromium
 pnpm check       # biome lint and format
 pnpm typecheck   # tsc --noEmit
 ```
 
-Examples: `examples/tidewatch-progress/` is a confirmed story with its design choice, generated `deck.json` and assets, ready for the render, dev and QA commands above; `examples/story.sample.md` passes `story:check`, while `examples/story.broken-fields.md` and `examples/story.broken-rhythm.md` show the two kinds of failure.
+Examples: `examples/tidewatch-progress/` is a confirmed story with its design choice, generated `deck.json` and assets (the deck that `init --example` copies); `examples/story.sample.md` passes `story:check`, while `examples/story.broken-fields.md` and `examples/story.broken-rhythm.md` show the two kinds of failure.
+
+The package ships `dist/`, built by `pnpm build` (tsc plus the editor and runtime files copied next to the compiled modules), because Node does not strip types under `node_modules`. `npm pack` and `npm publish` build it first (`prepack`); the tarball is a few hundred files and about a quarter of a megabyte (the end-to-end transcript below records the exact numbers of the last run). `node tools/e2e-package.mjs` packs the tarball, creates a workspace from it in a temp folder, installs it and runs the workspace scripts through the bin, writing a transcript to `artifacts/demo/npm-package/`.
 
 ## License
 

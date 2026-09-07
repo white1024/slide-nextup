@@ -1,10 +1,11 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { type Browser, chromium, type Page } from 'playwright'
+import type { Browser, Page } from 'playwright'
 import type { Deck } from '../model/deck.ts'
 import { effectiveOrder } from '../model/pages.js'
 import { loadLayout, PROJECT_ROOT } from '../render/assets.ts'
 import { renderDeckDocument } from '../render/deck.ts'
+import { launchChromium } from './browser.ts'
 import { type ElementBox, measureSlide, minFontFor, waitForFit } from './measure.ts'
 
 export type QaRule =
@@ -126,7 +127,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
     omitThemeCss: true,
   }).html
 
-  const browser = opts.browser ?? (await chromium.launch({ headless: true }))
+  const browser = opts.browser ?? (await launchChromium())
   const page = await browser.newPage({ viewport: { width: CANVAS_W, height: CANVAS_H } })
   await page.setContent(themed)
   await waitForFit(page)
@@ -267,7 +268,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
   }
 }
 
-export function writeQaReport(report: QaReport, root = PROJECT_ROOT): string {
+export function writeQaReport(report: QaReport, root = process.cwd()): string {
   const dir = join(root, 'artifacts', 'qa')
   mkdirSync(dir, { recursive: true })
   const file = join(dir, `${report.deck}.json`)

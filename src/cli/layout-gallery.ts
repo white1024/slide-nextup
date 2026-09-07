@@ -1,16 +1,10 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { chromium } from 'playwright'
+import { launchChromium } from '../qa/browser.ts'
 import { checkHint, measureCapacity, type TextCapacity } from '../qa/capacity.ts'
 import { measureSlide, summariseOverflow, waitForFit } from '../qa/measure.ts'
-import {
-  deckDirOfPath,
-  listLayoutIdsFor,
-  loadLayout,
-  loadTheme,
-  PROJECT_ROOT,
-} from '../render/assets.ts'
+import { deckDirOfPath, listLayoutIdsFor, loadLayout, loadTheme } from '../render/assets.ts'
 import { renderPreviewDocument } from '../render/preview.ts'
 
 const args = process.argv.slice(2)
@@ -29,11 +23,11 @@ const lookup = { deckDir: deckIndex === -1 ? undefined : deckDirOfPath(args[deck
 const theme = loadTheme(themeId, lookup)
 const outDir =
   outIndex === -1
-    ? join(PROJECT_ROOT, 'artifacts', 'layout-gallery')
-    : resolve(args[outIndex + 1] ?? join(PROJECT_ROOT, 'artifacts', 'layout-gallery'))
+    ? resolve('artifacts', 'layout-gallery')
+    : resolve(args[outIndex + 1] ?? join('artifacts', 'layout-gallery'))
 mkdirSync(outDir, { recursive: true })
 
-const browser = await chromium.launch({ headless: true })
+const browser = await launchChromium()
 const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
 let failures = 0
 let hintProblems = 0

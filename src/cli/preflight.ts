@@ -3,12 +3,15 @@ import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
+import { launchChromium } from '../qa/browser.ts'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
+/** A dependency's version, whether this is the repo (node_modules/ below), a pnpm install (siblings) or a hoisted install. */
 function readVersion(pkgDir: string): string {
-  const file = join(root, 'node_modules', pkgDir, 'package.json')
-  if (!existsSync(file)) return '(not installed)'
+  const candidates = [join(root, 'node_modules', pkgDir), join(root, '..', pkgDir)]
+  const file = candidates.map((d) => join(d, 'package.json')).find((f) => existsSync(f))
+  if (!file) return '(not installed)'
   return (JSON.parse(readFileSync(file, 'utf8')) as { version: string }).version
 }
 
@@ -32,9 +35,9 @@ const rows: Array<[string, string]> = [
 
 let chromiumStatus = 'skipped'
 try {
-  const outDir = join(root, 'artifacts', 'preflight')
+  const outDir = resolve('artifacts', 'preflight')
   mkdirSync(outDir, { recursive: true })
-  const browser = await chromium.launch({ headless: true })
+  const browser = await launchChromium()
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
   await page.setContent(
     '<!doctype html><title>preflight</title><body style="margin:0;background:#123;color:#fff;font:64px sans-serif;display:grid;place-items:center;height:100vh">slide-nextup preflight</body>',

@@ -361,10 +361,12 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
   const watchers: FSWatcher[] = []
   // external themes reload the page too: the deck folder (recursive) already covers decks/<id>/themes/
   const userDir = opts.userThemesDir === undefined ? userThemesDir() : opts.userThemesDir
+  const workspaceThemes = resolve('themes')
   const watched = [
     deckDir,
     join(root, 'themes'),
     join(root, 'layouts'),
+    ...(relative(workspaceThemes, join(root, 'themes')) === '' ? [] : [workspaceThemes]),
     ...(userDir ? [userDir] : []),
   ]
   for (const dir of watched) {

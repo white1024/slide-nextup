@@ -1,9 +1,49 @@
 {
   "name": "slide-nextup",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "Narrative-first slide decks: an agent confirms the story with you, then generates an HTML deck you can fully edit in the browser.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/white1024/slide-nextup.git"
+  },
+  "homepage": "https://github.com/white1024/slide-nextup#readme",
+  "bugs": {
+    "url": "https://github.com/white1024/slide-nextup/issues"
+  },
+  "keywords": [
+    "slides",
+    "presentation",
+    "deck",
+    "html",
+    "claude-code",
+    "codex",
+    "agent",
+    "skills",
+    "narrative"
+  ],
+  "bin": {
+    "slide-nextup": "bin/slide-nextup.mjs"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "layouts",
+    "themes",
+    "schemas",
+    "templates",
+    "examples/tidewatch-progress",
+    "examples/story.sample.md",
+    ".agents/skills/slide-brief",
+    ".agents/skills/slide-story",
+    ".agents/skills/slide-design",
+    ".agents/skills/slide-build",
+    "README.md",
+    "LICENSE",
+    "ATTRIBUTIONS.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
   "engines": {
     "node": ">=24",
     "pnpm": ">=10"
@@ -11,6 +51,8 @@
   "packageManager": "pnpm@11.25.0",
   "scripts": {
     "preflight": "node src/cli/preflight.ts",
+    "build": "node tools/build.mjs",
+    "prepack": "node tools/build.mjs",
     "render": "node src/cli/render.ts",
     "qa": "node src/cli/qa.ts",
     "dev": "node src/cli/dev.ts",
@@ -42,12 +84,12 @@
     "@biomejs/biome": "^2.5.12",
     "@types/node": "^24.13.3",
     "lucide-static": "^1.40.0",
-    "playwright": "^1.62.1",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   },
   "dependencies": {
     "ajv": "^8.20.0",
+    "playwright": "^1.62.1",
     "yaml": "^2.9.0"
   }
 }
