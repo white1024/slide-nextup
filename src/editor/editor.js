@@ -7,8 +7,11 @@
  *
  * Chrome: a fixed top toolbar (undo/redo, toggles, download, leave), a slide
  * rail on the left with live thumbnails (playback order and hidden pages) and
- * a floating toolbar that follows the selection. Rarely used fields (position,
- * size, reveal step, entrance) sit behind the toolbar's "more" button.
+ * a floating toolbar that follows the selection. Its controls sit in fixed
+ * groups (text, text style, element, position and size, appearance, arrange,
+ * animation, expandable content); the last five open behind the "more" button
+ * when floating and are always open when the toolbar is docked as a side panel.
+ * Colours are picked from a palette that lists the theme's tokens by name.
  * Several elements can be selected at once (Shift+click, marquee, Ctrl+A);
  * style changes, moves, alignment and distribution then apply to all of them.
  * Without a dev server, every change is also kept as a localStorage draft that
@@ -385,7 +388,9 @@
   } catch (_) {
     docked = false
   }
-  let askedFor = null // { key, what: 'details' }: a big row the user asked for from "more"
+  let detailsOpen = null // { key, open }: the expandable-content box opened or closed by hand
+  let palette = null // the colour palette that is open: { prop, key }
+  const palettes = {} // prop → palette node, kept on the body so no panel can clip it
   // hotspot mode: an image's jump regions are drawn, moved, resized and retargeted on the picture
   let spot = null // { slideId, elId, index } while it is on; index is the selected region or null
   let spotBox = null // overlay box with corner handles around the selected region
@@ -446,6 +451,13 @@
     float.remove()
     pagesPanel.remove()
     if (spotBar) spotBar.remove()
+    closePalette()
+    document.removeEventListener('pointerdown', onDocPointerDown, true)
+    for (const prop of Object.keys(palettes)) {
+      palettes[prop].remove()
+      delete palettes[prop]
+    }
+    detailsOpen = null
     overlay = box = multi = marquee = guides = panel = float = pagesPanel = null
     spotBox = spotBar = null
     document.body.classList.remove('ed-active', 'ed-reveal')
@@ -1472,6 +1484,11 @@
       pasteStyle()
       return
     }
+    if (palette && e.key === 'Escape') {
+      handled()
+      closePalette()
+      return
+    }
     if (spot) {
       // hotspot mode owns Esc, Delete and the arrows: they act on the region, never the picture
       if (e.key === 'Escape') {
@@ -1715,11 +1732,11 @@
       '</div>',
       '<div class="ed-tb-sep"></div>',
       '<div class="ed-tb-group">',
-      `<label class="ed-toggle" title="Snap to the canvas edges, centre lines and other elements while dragging"><input type="checkbox" data-toggle="snap" checked>${icon('magnet')}<span>Snap</span></label>`,
-      `<label class="ed-toggle" title="Show hidden elements so they can be selected"><input type="checkbox" data-toggle="reveal">${icon('eye')}<span>Show hidden</span></label>`,
-      `<label class="ed-toggle" title="When off, every element shows at once with no steps or entrances and each press turns the page (saved to deck.json; press M during playback to override it in this browser)"><input type="checkbox" data-toggle="motion"${model.motion === 'off' ? '' : ' checked'}>${icon('play')}<span>Element motion</span></label>`,
-      `<label class="ed-toggle" title="Dock the element toolbar as a column on the right with every field expanded, instead of floating next to the selection; a preference of this browser"><input type="checkbox" data-toggle="dock"${docked ? ' checked' : ''}>${icon('objRight')}<span>Dock toolbar</span></label>`,
-      '<div class="ed-ctl ed-tb-select" title="Page transition, saved to deck.json; “Theme default” follows the theme pack’s source template"><span class="ed-lbl">Transition</span><select data-transition><option value="">Theme default</option><option value="none">Cut</option><option value="fade">Fade</option><option value="push">Push</option><option value="lift">Lift</option></select></div>',
+      `<label class="ed-toggle" title="While dragging, snap to the slide edges, the centre lines and other elements"><input type="checkbox" data-toggle="snap" checked>${icon('magnet')}<span>Snap to guides</span></label>`,
+      `<label class="ed-toggle" title="Show the hidden elements so they can be selected again"><input type="checkbox" data-toggle="reveal">${icon('eye')}<span>Show hidden items</span></label>`,
+      `<label class="ed-toggle" title="Elements appear step by step with their entrance effects. When off, every element shows at once and each press turns the page (saved to deck.json; press M during playback to override it in this browser)"><input type="checkbox" data-toggle="motion"${model.motion === 'off' ? '' : ' checked'}>${icon('play')}<span>Animations</span></label>`,
+      `<label class="ed-toggle" title="Keep the element toolbar as a panel on the right with every group open, instead of floating next to the selection; remembered by this browser"><input type="checkbox" data-toggle="dock"${docked ? ' checked' : ''}>${icon('objRight')}<span>Side panel</span></label>`,
+      '<div class="ed-ctl ed-tb-select" title="How one slide changes to the next, saved to deck.json; “Theme default” follows the theme pack’s source template"><span class="ed-lbl">Slide transition</span><select data-transition><option value="">Theme default</option><option value="none">None</option><option value="fade">Fade</option><option value="push">Slide</option><option value="lift">Rise</option></select></div>',
       '</div>',
       '<div class="ed-tb-sep"></div>',
       `<button type="button" class="ed-btn" data-action="download" title="Save the current model as deck.json">${icon('download')}<span>Download deck.json</span></button>`,
@@ -1785,9 +1802,15 @@
         if (rule.selectorText !== ':root') continue
         for (let i = 0; i < rule.style.length; i++) {
           const name = rule.style[i]
-          if (!name.startsWith('--color-') || seen.has(name)) continue
+          if (!name.startsWith('--color-') || name.endsWith('-use') || seen.has(name)) continue
           seen.add(name)
-          out.push({ name: name.slice(8), value: rule.style.getPropertyValue(name).trim() })
+          // the renderer writes each token's purpose next to it as a CSS string (--color-<name>-use)
+          const use = rule.style
+            .getPropertyValue(`${name}-use`)
+            .trim()
+            .replace(/^"(.*)"$/s, '$1')
+            .replace(/\\(["\\])/g, '$1')
+          out.push({ name: name.slice(8), value: rule.style.getPropertyValue(name).trim(), use })
         }
       }
     }
@@ -1816,21 +1839,77 @@
   // ---- floating toolbar (follows the selection) ------------------------------------
 
   const fields = {}
-  const ENTER_OPTIONS = ['fade-up', 'fade', 'scale-in', 'slide-left', 'slide-right', 'wipe']
-  const SWATCH_LIMIT = 8
+  let themeColours = [] // the theme's --color-* tokens, read once when the toolbar is built
+  const ENTER_OPTIONS = [
+    ['fade-up', 'Fade up'],
+    ['fade', 'Fade'],
+    ['scale-in', 'Zoom in'],
+    ['slide-left', 'Slide left'],
+    ['slide-right', 'Slide right'],
+    ['wipe', 'Wipe'],
+  ]
+  // number field + slider pairs: the slider's range, the number field's floor, the scale between
+  // the shown unit and the override (opacity is shown as a percentage), the decimals shown, and
+  // whether only text elements take the value
+  const RANGES = {
+    fontSize: { min: 12, max: 240, step: 1, floor: 8, text: true },
+    lineHeight: { min: 0.8, max: 2.4, step: 0.05, floor: 0.5, text: true, digits: 2 },
+    letterSpacing: { min: -2, max: 20, step: 0.5, text: true, digits: 1 },
+    opacity: { min: 0, max: 100, step: 5, floor: 0, scale: 100 },
+    borderRadius: { min: 0, max: 80, step: 1, floor: 0 },
+  }
 
-  function chipRow(prop, colours, withClear) {
-    const chips = colours
-      .slice(0, SWATCH_LIMIT)
-      .map(
+  /** A number field with a slider beside it; the font size also gets −2 / +2 buttons. */
+  function sliderCtl(prop, label, title, cls) {
+    const r = RANGES[prop]
+    const scale = r.scale ? ` data-scale="${r.scale}"` : ''
+    const floor = r.floor == null ? '' : ` min="${r.floor}"`
+    const stepper = (d) =>
+      prop === 'fontSize'
+        ? `<button type="button" class="ed-ibtn" data-size-step="${d}" title="${d < 0 ? 'Smaller (−2)' : 'Larger (+2)'}">${icon(d < 0 ? 'minus' : 'plus')}</button>`
+        : ''
+    return (
+      `<div class="ed-ctl ed-slider${cls ? ` ${cls}` : ''}"><span class="ed-lbl">${label}</span>` +
+      stepper(-2) +
+      `<input type="number" class="ed-num" data-style="${prop}"${scale}${floor} step="${r.step}" title="${title}">` +
+      stepper(2) +
+      `<input type="range" class="ed-range" data-style-range="${prop}"${scale} min="${r.min}" max="${r.max}" step="${r.step}" title="${title}">` +
+      '</div>'
+    )
+  }
+
+  /** A button showing the current colour of one property; it opens that property's palette. */
+  const colourCtl = (prop, label, title) =>
+    `<div class="ed-ctl ed-colour-ctl"><span class="ed-lbl">${label}</span><button type="button" class="ed-colour" data-palette="${prop}" title="${title}" aria-haspopup="dialog" aria-expanded="false"><span class="ed-colour-dot"></span><span class="ed-colour-name">Default</span>${icon('down')}</button></div>`
+
+  /** The palette of one property: every theme colour by name, the theme default, a custom colour. */
+  function buildPalette(prop, label, colours) {
+    const node = document.createElement('div')
+    node.className = 'ed-palette'
+    node.hidden = true
+    node.dataset.palette = prop
+    node.innerHTML = [
+      `<div class="ed-pal-head"><span>${label}</span><button type="button" class="ed-ibtn" data-pal-close title="Close">${icon('close')}</button></div>`,
+      '<div class="ed-pal-list">',
+      ...colours.map(
         (c) =>
-          `<button type="button" class="ed-chip" data-swatch-for="${prop}" data-color="${escapeHtml(c.value)}" title="${escapeHtml(c.name)}" style="--chip:${escapeHtml(c.value)}"></button>`,
-      )
-      .join('')
-    const clear = withClear
-      ? `<button type="button" class="ed-chip ed-chip-clear" data-swatch-for="${prop}" data-color="" title="Clear">${icon('close')}</button>`
-      : ''
-    return chips + clear
+          `<button type="button" class="ed-chip" data-swatch-for="${prop}" data-color="${escapeHtml(c.value)}" title="${escapeHtml(c.value)}" style="--chip:${escapeHtml(c.value)}"><i></i><span>${escapeHtml(c.name)}</span><small>${escapeHtml(c.use || '')}</small></button>`,
+      ),
+      '</div>',
+      '<div class="ed-pal-foot">',
+      `<button type="button" class="ed-chip ed-chip-clear" data-swatch-for="${prop}" data-color="" title="Remove the colour override and use the theme’s colour"><i>${icon('close')}</i><span>Theme default</span></button>`,
+      `<label class="ed-swatch" title="Pick any colour"><input type="color" data-style="${prop}" id="ed-${prop}"><span>Custom…</span></label>`,
+      '</div>',
+    ].join('')
+    node.addEventListener('click', (e) => {
+      const btn = e.target.closest('button')
+      if (!btn) return
+      if ('palClose' in btn.dataset) closePalette()
+      else if (btn.dataset.swatchFor && selection.length)
+        applyStyle({ [btn.dataset.swatchFor]: btn.dataset.color || null }, true)
+    })
+    document.body.appendChild(node)
+    return node
   }
 
   function buildFloat() {
@@ -1839,101 +1918,125 @@
     float.hidden = true
     applyDock()
     const weights = ['300', '400', '500', '600', '700', '800', '900']
-    const colours = themeColors()
+    themeColours = themeColors()
     const fonts = fontOptions()
     float.innerHTML = [
-      '<div class="ed-float-row ed-float-main">',
+      // 1. text: the font and its size (an image gets its own tools here)
+      '<div class="ed-float-row ed-float-main" data-title="Text">',
       '<span class="ed-key" data-field="key"></span>',
       `<div class="ed-ctl ed-text-only"><span class="ed-lbl">Font</span><select class="ed-font" data-style="fontFamily" title="Font"><option value="">Default</option>${fonts.map((f) => `<option value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</option>`).join('')}</select></div>`,
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Size</span>',
-      `<button type="button" class="ed-ibtn" data-size-step="-2" title="Size −2">${icon('minus')}</button>`,
-      '<input type="number" class="ed-num" data-style="fontSize" step="1" min="8" title="Size (px)">',
-      `<button type="button" class="ed-ibtn" data-size-step="2" title="Size +2">${icon('plus')}</button>`,
-      '<input type="range" class="ed-range" data-style-range="fontSize" min="12" max="240" step="1" title="Size">',
-      '</div>',
-      `<div class="ed-ctl ed-text-only"><span class="ed-lbl">Weight</span><select data-style="fontWeight" title="Weight"><option value="">Default</option>${weights.map((w) => `<option value="${w}">${w}</option>`).join('')}</select></div>`,
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Line height</span><input type="number" class="ed-num" data-style="lineHeight" step="0.05" min="0.5" placeholder="auto" title="Line height (multiplier)"></div>',
-      '<div class="ed-ctl ed-text-only"><span class="ed-lbl">Spacing</span><input type="number" class="ed-num" data-style="letterSpacing" step="0.5" placeholder="auto" title="Letter spacing (px)"></div>',
-      `<label class="ed-btn ed-file ed-image-only" title="Replace with an image file from this computer">${icon('image')}<span>Replace image</span><input type="file" accept="image/*" data-image id="ed-image"></label>`,
-      `<button type="button" class="ed-btn ed-image-only" data-action="hotspots" title="Hotspots: press and drag on the image to draw a click-to-jump area; drag or pull a corner to adjust, pick the target page under the box; Esc to finish">${icon('spot')}<span>Hotspots</span></button>`,
-      `<button type="button" class="ed-ibtn" data-action="hide" data-state="visible" title="Hide the selected elements (Delete)">${icon('eyeOff')}</button>`,
-      `<button type="button" class="ed-ibtn" data-action="more" title="Position, size, reveal step, arrange, details and more" aria-expanded="false">${icon('more')}</button>`,
-      '</div>',
-      '<div class="ed-float-row ed-float-style ed-text-only">',
-      '<div class="ed-ctl ed-seg" title="Bold, italic, underline">',
+      sliderCtl('fontSize', 'Size', 'Font size (px)', 'ed-text-only'),
+      '<div class="ed-ctl ed-seg ed-text-only" title="Bold, italic, underline">',
       `<button type="button" class="ed-ibtn" data-toggle-style="fontWeight" data-value="700" title="Bold">${icon('bold')}</button>`,
       `<button type="button" class="ed-ibtn" data-toggle-style="fontStyle" data-value="italic" title="Italic">${icon('italic')}</button>`,
       `<button type="button" class="ed-ibtn" data-toggle-style="textDecoration" data-value="underline" title="Underline">${icon('underline')}</button>`,
       '</div>',
-      '<div class="ed-ctl ed-seg" data-seg="textAlign" title="Text alignment">',
-      `<button type="button" class="ed-ibtn" data-seg-value="left" title="Align left">${icon('alignLeft')}</button>`,
-      `<button type="button" class="ed-ibtn" data-seg-value="center" title="Centre">${icon('alignCenter')}</button>`,
-      `<button type="button" class="ed-ibtn" data-seg-value="right" title="Align right">${icon('alignRight')}</button>`,
+      '<div class="ed-ctl ed-seg ed-text-only" data-seg="textAlign" title="Text alignment">',
+      `<button type="button" class="ed-ibtn" data-seg-value="left" title="Align text left">${icon('alignLeft')}</button>`,
+      `<button type="button" class="ed-ibtn" data-seg-value="center" title="Centre text">${icon('alignCenter')}</button>`,
+      `<button type="button" class="ed-ibtn" data-seg-value="right" title="Align text right">${icon('alignRight')}</button>`,
       '</div>',
-      `<div class="ed-ctl ed-chips"><span class="ed-lbl">Text</span>${chipRow('color', colours, true)}<label class="ed-swatch" title="Custom text colour"><input type="color" data-style="color" id="ed-color"></label></div>`,
-      `<div class="ed-ctl ed-chips"><span class="ed-lbl">Background</span>${chipRow('background', colours, true)}<label class="ed-swatch" data-swatch="background" title="Custom background colour"><input type="color" data-style="background" id="ed-background"></label></div>`,
+      `<label class="ed-btn ed-file ed-image-only" title="Replace with an image file from this computer">${icon('image')}<span>Replace image</span><input type="file" accept="image/*" data-image id="ed-image"></label>`,
+      `<button type="button" class="ed-btn ed-image-only" data-action="hotspots" title="Clickable areas: press and drag on the image to draw an area that jumps to another slide when clicked; drag or pull a corner to adjust, pick the target slide under the box; Esc to finish">${icon('spot')}<span>Clickable areas</span></button>`,
       '</div>',
-      '<div class="ed-float-row ed-data-only"><label class="ed-content-lbl">Content<small>One item per line; charts as “label | value”, tables with “|” between cells, icons by name, tabs open a panel with “## label”</small><textarea data-content rows="5" spellcheck="false"></textarea></label></div>',
-      '<div class="ed-float-row ed-details-only"><label class="ed-content-lbl">Details<small>Expands when this element is clicked during playback; one paragraph per line, clear it to remove</small><textarea data-details rows="3" spellcheck="false"></textarea></label></div>',
-      '<div class="ed-float-row ed-float-arrange">',
-      '<div class="ed-ctl ed-seg" title="Align">',
-      `<button type="button" class="ed-ibtn" data-align="left" title="Align left">${icon('objLeft')}</button>`,
+      // 2. text style: weight, spacing and colours
+      '<div class="ed-float-row ed-float-style ed-text-only" data-title="Text style">',
+      `<div class="ed-ctl"><span class="ed-lbl">Weight</span><select data-style="fontWeight" title="Font weight"><option value="">Default</option>${weights.map((w) => `<option value="${w}">${w}</option>`).join('')}</select></div>`,
+      sliderCtl('lineHeight', 'Line height', 'Line height, as a multiple of the font size'),
+      sliderCtl('letterSpacing', 'Letter spacing', 'Space between letters (px)'),
+      colourCtl('color', 'Text colour', 'Text colour: one of the theme colours, or a custom one'),
+      colourCtl(
+        'background',
+        'Fill',
+        'Fill behind the element: one of the theme colours, or a custom one',
+      ),
+      '</div>',
+      // 3. content boxes: data slots edit their rows here; expandable content when the element has some
+      '<div class="ed-float-row ed-data-only ed-titled" data-title="Content"><label class="ed-content-lbl"><small>One item per line; charts as “label | value”, tables with “|” between cells, icons by name, tabs open a panel with “## label”</small><textarea data-content rows="5" spellcheck="false"></textarea></label></div>',
+      `<div class="ed-float-row ed-details-only ed-titled" data-title="Expandable content"><label class="ed-content-lbl"><small>Opens when this element is clicked during playback; one paragraph per line, clear it to remove</small><textarea data-details rows="3" spellcheck="false"></textarea></label><button type="button" class="ed-ibtn ed-row-close" data-action="close-details" title="Close this box (the content stays)">${icon('close')}</button></div>`,
+      // 4. element: what applies to any element
+      '<div class="ed-float-row ed-float-element" data-title="Element">',
+      `<button type="button" class="ed-ibtn" data-action="hide" data-state="visible" title="Hide the selected elements (Delete)">${icon('eyeOff')}<span>Hide</span></button>`,
+      `<button type="button" class="ed-btn" data-action="copy-style" title="Copy the selected element’s style (Ctrl+Alt+C)">${icon('brush')}<span>Copy style</span></button>`,
+      `<button type="button" class="ed-btn" data-action="paste-style" title="Apply the copied style to the selected elements (Ctrl+Alt+V)">${icon('paste')}<span>Paste style</span></button>`,
+      `<button type="button" class="ed-btn" data-action="reset" title="Remove every change made to the selected elements in the editor and go back to the generated slide">${icon('reset')}<span>Reset to generated</span></button>`,
+      `<button type="button" class="ed-ibtn" data-action="more" title="More: position and size, appearance, arrange, animation, expandable content" aria-expanded="false">${icon('more')}</button>`,
+      '</div>',
+      // 5. arrange: several elements against each other, or one against the slide
+      '<div class="ed-float-row ed-float-arrange ed-titled" data-title="Arrange">',
+      '<div class="ed-ctl ed-seg" title="Align the selected elements">',
+      `<button type="button" class="ed-ibtn" data-align="left" title="Align left edges">${icon('objLeft')}</button>`,
       `<button type="button" class="ed-ibtn" data-align="centerX" title="Centre horizontally">${icon('objCenterX')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="right" title="Align right">${icon('objRight')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="top" title="Align top">${icon('objTop')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="right" title="Align right edges">${icon('objRight')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="top" title="Align top edges">${icon('objTop')}</button>`,
       `<button type="button" class="ed-ibtn" data-align="middle" title="Centre vertically">${icon('objMiddle')}</button>`,
-      `<button type="button" class="ed-ibtn" data-align="bottom" title="Align bottom">${icon('objBottom')}</button>`,
+      `<button type="button" class="ed-ibtn" data-align="bottom" title="Align bottom edges">${icon('objBottom')}</button>`,
       '</div>',
-      '<div class="ed-ctl ed-seg" title="Distribute evenly (three or more)">',
-      `<button type="button" class="ed-ibtn" data-distribute="h" title="Distribute horizontally">${icon('distH')}</button>`,
-      `<button type="button" class="ed-ibtn" data-distribute="v" title="Distribute vertically">${icon('distV')}</button>`,
+      '<div class="ed-ctl ed-seg" title="Space evenly (three or more elements)">',
+      `<button type="button" class="ed-ibtn" data-distribute="h" title="Space evenly, left to right">${icon('distH')}</button>`,
+      `<button type="button" class="ed-ibtn" data-distribute="v" title="Space evenly, top to bottom">${icon('distV')}</button>`,
       '</div>',
-      '<label class="ed-toggle" title="Align to the whole slide instead of the selection (a single element always aligns to the slide)"><input type="checkbox" data-align-slide><span>To slide</span></label>',
-      '<div class="ed-ctl ed-seg" title="Stacking order">',
+      '<div class="ed-ctl ed-seg" title="Which element is in front">',
       `<button type="button" class="ed-ibtn" data-z="front" title="Bring to front">${icon('front')}</button>`,
       `<button type="button" class="ed-ibtn" data-z="back" title="Send to back">${icon('back')}</button>`,
       '</div>',
-      `<button type="button" class="ed-btn" data-action="copy-style" title="Copy the selected element’s style overrides (Ctrl+Alt+C)">${icon('brush')}<span>Copy style</span></button>`,
-      `<button type="button" class="ed-btn" data-action="paste-style" title="Apply the copied style to the selected elements (Ctrl+Alt+V)">${icon('paste')}<span>Paste style</span></button>`,
+      '<label class="ed-toggle" title="Align to the whole slide instead of to the selection (a single element always aligns to the slide)"><input type="checkbox" data-align-slide><span>Align to slide</span></label>',
       '</div>',
-      '<div class="ed-float-row ed-float-more" hidden>',
-      '<div class="ed-ctl"><span class="ed-lbl">X</span><input type="number" class="ed-num" data-prop="x" step="1"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">Y</span><input type="number" class="ed-num" data-prop="y" step="1"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl" title="Width (px)">W</span><input type="number" class="ed-num" data-prop="w" step="1" min="20"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl" title="Height (px)">H</span><input type="number" class="ed-num" data-prop="h" step="1" min="20"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">Rotate</span><input type="number" class="ed-num" data-prop="rotation" step="1" placeholder="0"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">Layer</span><input type="number" class="ed-num" data-prop="z" step="1" placeholder="auto"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">Opacity</span><input type="range" class="ed-range" data-style="opacity" min="0" max="1" step="0.05" title="Opacity"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl">Radius</span><input type="number" class="ed-num" data-style="borderRadius" step="1" min="0" placeholder="auto" title="Corner radius (px)"></div>',
-      '<div class="ed-ctl"><span class="ed-lbl" title="Reveal step: which press of “next” shows this element; blank or 0 means visible from the start">Step</span><input type="number" class="ed-num" data-el-step step="1" min="0" placeholder="0"></div>',
-      `<div class="ed-ctl"><span class="ed-lbl" title="How it enters when its step is reached; “Theme default” depends on the element’s role">Entrance</span><select data-el-enter><option value="">Theme default</option>${ENTER_OPTIONS.map((v) => `<option value="${v}">${v}</option>`).join('')}</select></div>`,
-      `<button type="button" class="ed-btn" data-action="add-details" title="Add content that expands when this element is clicked during playback">${icon('plus')}<span>Details</span></button>`,
-      `<button type="button" class="ed-btn" data-action="reset" title="Remove every override on the selected elements and go back to the generated state">${icon('reset')}<span>Reset overrides</span></button>`,
+      // 6. behind "more" when floating, always open when docked
+      '<div class="ed-float-more" hidden>',
+      '<div class="ed-float-row ed-float-geometry ed-titled" data-title="Position and size">',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">X</span><input type="number" class="ed-num" data-prop="x" step="1" title="Left edge (px)"></div>',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">Y</span><input type="number" class="ed-num" data-prop="y" step="1" title="Top edge (px)"></div>',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">Width</span><input type="number" class="ed-num" data-prop="w" step="1" min="20" title="Width (px)"></div>',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">Height</span><input type="number" class="ed-num" data-prop="h" step="1" min="20" title="Height (px)"></div>',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">Rotation</span><input type="number" class="ed-num" data-prop="rotation" step="1" placeholder="0" title="Rotation (degrees)"></div>',
+      '<div class="ed-ctl ed-half"><span class="ed-lbl">Layer order</span><input type="number" class="ed-num" data-prop="z" step="1" placeholder="auto" title="Which element is in front: a higher number is in front of a lower one"></div>',
+      '</div>',
+      '<div class="ed-float-row ed-float-look ed-titled" data-title="Appearance">',
+      sliderCtl('opacity', 'Opacity', 'Opacity (%)'),
+      sliderCtl('borderRadius', 'Corner radius', 'Corner radius (px)'),
+      '</div>',
+      '<div class="ed-float-row ed-float-motion ed-titled" data-title="Animation">',
+      '<div class="ed-ctl"><span class="ed-lbl">Appears on click</span><input type="number" class="ed-num" data-el-step step="1" min="0" placeholder="0" title="Which press of “next” shows this element; blank or 0 means it is there from the start"></div>',
+      `<div class="ed-ctl"><span class="ed-lbl">Entrance effect</span><select data-el-enter title="How the element comes in when its turn comes; “Theme default” depends on the element’s role"><option value="">Theme default</option>${ENTER_OPTIONS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></div>`,
+      '</div>',
+      '<div class="ed-float-row ed-float-expand ed-titled" data-title="Expandable content">',
+      `<button type="button" class="ed-btn" data-action="add-details" title="Content that opens when this element is clicked during playback">${icon('plus')}<span>Add expandable content</span></button>`,
+      '</div>',
       '</div>',
     ].join('')
     document.body.appendChild(float)
+    palettes.color = buildPalette('color', 'Text colour', themeColours)
+    palettes.background = buildPalette('background', 'Fill', themeColours)
 
-    for (const input of float.querySelectorAll('[data-prop],[data-style]')) {
+    const bindField = (input) => {
       fields[input.dataset.prop ? `prop:${input.dataset.prop}` : `style:${input.dataset.style}`] =
         input
-      const handler = () => onFieldChange(input)
-      input.addEventListener('change', handler)
+      input.addEventListener('change', () => onFieldChange(input))
       if (input.type === 'color' || input.type === 'range')
         input.addEventListener('input', () => onFieldInput(input))
     }
-    const sizeRange = float.querySelector('[data-style-range="fontSize"]')
-    sizeRange.addEventListener('input', () => {
-      if (!selection.length) return
-      forSelection((slideId, elId) => {
-        if (kindOf(slideId, elId) === 'text')
-          set(slideId, elId, { style: { fontSize: Number(sizeRange.value) } })
+    for (const input of float.querySelectorAll('[data-prop],[data-style]')) bindField(input)
+    for (const n of Object.values(palettes))
+      for (const input of n.querySelectorAll('[data-style]')) bindField(input)
+    // sliders: live while dragging, one history step on release
+    for (const range of float.querySelectorAll('[data-style-range]')) {
+      const prop = range.dataset.styleRange
+      const spec = RANGES[prop]
+      range.addEventListener('input', () => {
+        if (!selection.length) return
+        const v = fieldValue(range)
+        forSelection((slideId, elId) => {
+          if (spec.text && kindOf(slideId, elId) !== 'text') return
+          set(slideId, elId, { style: { [prop]: v } })
+        })
+        fields[`style:${prop}`].value = range.value
       })
-      fields['style:fontSize'].value = sizeRange.value
-    })
-    sizeRange.addEventListener('change', () => {
-      commit()
-      refreshPanel()
-    })
+      range.addEventListener('change', () => {
+        commit()
+        refreshPanel()
+      })
+    }
     float.querySelector('[data-align-slide]').addEventListener('change', (e) => {
       alignToSlide = e.target.checked
     })
@@ -1955,12 +2058,12 @@
         commit()
         refreshPanel()
       } else if (d.action === 'hide') toggleHidden()
-      else if (d.action === 'add-details') {
-        // the big textarea row shows only on request (or when the element already has details)
+      else if (d.action === 'add-details' || d.action === 'close-details') {
+        // the box shows on request (or when the element already has content); a close keeps the content
         const p = primary()
-        askedFor = { key: keyOf(p.slideId, p.elId), what: 'details' }
+        detailsOpen = { key: keyOf(p.slideId, p.elId), open: d.action === 'add-details' }
         refreshPanel()
-        float.querySelector('[data-details]').focus()
+        if (d.action === 'add-details') float.querySelector('[data-details]').focus()
       } else if (d.action === 'hotspots') {
         const p = primary()
         if (spot && spot.slideId === p.slideId && spot.elId === p.elId) leaveSpotMode()
@@ -1970,14 +2073,132 @@
         refreshPanel()
       } else if (d.action === 'copy-style') copyStyle()
       else if (d.action === 'paste-style') pasteStyle()
-      else if (d.sizeStep) stepFontSize(Number(d.sizeStep))
+      else if (d.palette) {
+        if (palette && palette.prop === d.palette) closePalette()
+        else openPalette(d.palette)
+      } else if (d.sizeStep) stepFontSize(Number(d.sizeStep))
       else if (d.segValue) toggleStyleValue(btn.closest('[data-seg]').dataset.seg, d.segValue)
       else if (d.toggleStyle) toggleStyleValue(d.toggleStyle, d.value)
-      else if (d.swatchFor) applyStyle({ [d.swatchFor]: d.color || null }, true)
       else if (d.align) alignSelection(d.align, alignToSlide)
       else if (d.distribute) distributeSelection(d.distribute)
       else if (d.z) zOrder(d.z)
     })
+    document.addEventListener('pointerdown', onDocPointerDown, true)
+  }
+
+  // ---- colour palette -------------------------------------------------------------
+
+  /** Open the palette of one property under its button; the other one goes away. */
+  function openPalette(prop) {
+    const node = palettes[prop]
+    const p = primary()
+    if (!node || !p || !float) return
+    if (palette && palette.prop !== prop) closePalette()
+    palette = { prop, key: keyOf(p.slideId, p.elId) }
+    node.hidden = false
+    float.querySelector(`[data-palette="${prop}"]`)?.setAttribute('aria-expanded', 'true')
+    refreshPalette()
+    positionPalette()
+  }
+
+  function closePalette() {
+    if (!palette) return
+    palettes[palette.prop].hidden = true
+    float?.querySelector(`[data-palette="${palette.prop}"]`)?.setAttribute('aria-expanded', 'false')
+    palette = null
+  }
+
+  /** A press outside the open palette and its button closes it (the press still does its job). */
+  function onDocPointerDown(e) {
+    if (!palette) return
+    const node = palettes[palette.prop]
+    const btn = float?.querySelector(`[data-palette="${palette.prop}"]`)
+    if (node.contains(e.target) || btn?.contains(e.target)) return
+    closePalette()
+  }
+
+  /** Below its button, left-aligned; above it when the bottom would run out; kept on screen. */
+  function positionPalette() {
+    if (!palette || !float) return
+    const node = palettes[palette.prop]
+    const btn = float.querySelector(`[data-palette="${palette.prop}"]`)
+    if (!btn) return
+    const r = btn.getBoundingClientRect()
+    const pw = node.offsetWidth
+    const ph = node.offsetHeight
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const left = Math.max(8, Math.min(vw - pw - 8, r.left))
+    let top = r.bottom + 6
+    if (top + ph > vh - 8) top = Math.max(8, r.top - ph - 6)
+    node.style.left = `${Math.round(left)}px`
+    node.style.top = `${Math.round(top)}px`
+  }
+
+  /** Mark the current colour in the open palette. */
+  function refreshPalette() {
+    if (!palette) return
+    const p = primary()
+    if (!p) return
+    const o = overrides[keyOf(p.slideId, p.elId)] || {}
+    const cur = o.style ? o.style[palette.prop] : undefined
+    for (const c of palettes[palette.prop].querySelectorAll('.ed-chip[data-color]'))
+      c.classList.toggle(
+        'is-on',
+        c.dataset.color === ''
+          ? cur == null
+          : cur != null && String(cur).toLowerCase() === c.dataset.color.toLowerCase(),
+      )
+  }
+
+  /** The colour buttons show the colour the page renders and name the theme token it matches. */
+  function refreshColourButtons(cs, style) {
+    for (const btn of float.querySelectorAll('[data-palette]')) {
+      const prop = btn.dataset.palette
+      const v = style[prop]
+      const rendered = prop === 'color' ? toHex(cs.color) : toHex(cs.backgroundColor)
+      const value = v != null ? String(v) : rendered
+      const token = value
+        ? themeColours.find((c) => c.value.toLowerCase() === value.toLowerCase())
+        : null
+      btn.style.setProperty('--chip', value || 'transparent')
+      btn.classList.toggle('is-unset', !value)
+      let name = 'None'
+      if (token) name = token.name
+      else if (v != null) name = 'Custom'
+      else if (value) name = 'Default'
+      btn.querySelector('.ed-colour-name').textContent = name
+    }
+  }
+
+  /** "Page 3" by playback position, as the rail numbers it; a hidden page has no number. */
+  function pageLabel(slideId) {
+    const eff = deck.pages()
+    const n = eff.visible.indexOf(slideId)
+    return n >= 0 ? `Page ${n + 1}` : 'Hidden page'
+  }
+
+  /** The value the page renders for a slider property: the override when set, else the computed style. */
+  function effectiveStyle(el, cs, style, prop, kind) {
+    if (style[prop] != null) return Number(style[prop])
+    if (prop === 'fontSize') return kind === 'text' ? effectiveFontSize(el, {}) : 0
+    if (prop === 'lineHeight') {
+      const lh = Number.parseFloat(cs.lineHeight)
+      const fs = Number.parseFloat(cs.fontSize)
+      return Number.isFinite(lh) && fs ? lh / fs : 1.2
+    }
+    if (prop === 'letterSpacing') return Number.parseFloat(cs.letterSpacing) || 0
+    if (prop === 'opacity') return Number.parseFloat(cs.opacity)
+    if (prop === 'borderRadius') return Number.parseFloat(cs.borderTopLeftRadius) || 0
+    return 0
+  }
+
+  /** A slider value in the units the field shows, rounded to the field's precision. */
+  function shown(prop, value) {
+    const r = RANGES[prop]
+    const v = (r.scale ? value * r.scale : value) || 0
+    const f = 10 ** (r.digits || 0)
+    return String(Math.round(v * f) / f)
   }
 
   /** The effective font size: the override when set, otherwise what the page renders. */
@@ -2011,7 +2232,11 @@
   function fieldValue(input) {
     if (input.type === 'checkbox') return input.checked ? true : null
     if (input.value === '') return null
-    if (input.type === 'number' || input.type === 'range') return Number(input.value)
+    if (input.type === 'number' || input.type === 'range') {
+      const n = Number(input.value)
+      // a field shown in other units than the override keeps (opacity as a percentage)
+      return input.dataset.scale ? n / Number(input.dataset.scale) : n
+    }
     if (input.dataset.style === 'fontWeight') return Number(input.value)
     return input.value
   }
@@ -2065,14 +2290,17 @@
     const p = primary()
     const el = selectedElement()
     if (!p || !el) {
+      closePalette()
       // the docked column stays, with a placeholder, so the stage does not jump around
       float.hidden = !docked
       if (docked) float.dataset.empty = 'true'
       return
     }
     delete float.dataset.empty
+    const key = keyOf(p.slideId, p.elId)
+    if (palette && palette.key !== key) closePalette()
     const kind = kindOf(p.slideId, p.elId)
-    const o = overrides[keyOf(p.slideId, p.elId)] || {}
+    const o = overrides[key] || {}
     const slot = slotOf(p.slideId, p.elId)
     const isData = kind === 'text' && !!slot && DATA_SLOT_TYPES.has(slot.type)
     const many = selection.length > 1
@@ -2083,29 +2311,34 @@
     float.dataset.kind = kind
     float.dataset.count = String(selection.length)
     float.querySelector('[data-field="key"]').textContent = many
-      ? `${p.slideId} · ${selection.length} elements`
-      : `${p.slideId} / ${p.elId}`
+      ? `${pageLabel(p.slideId)} · ${selection.length} elements`
+      : `${pageLabel(p.slideId)} · ${p.elId}`
+    const mainRow = float.querySelector('.ed-float-main')
+    mainRow.dataset.title = anyText ? 'Text' : kind === 'image' ? 'Image' : 'Selection'
     for (const n of float.querySelectorAll('.ed-text-only')) n.hidden = !anyText
     for (const n of float.querySelectorAll('.ed-image-only')) n.hidden = many || kind !== 'image'
     float.querySelector('.ed-data-only').hidden = many || !isData
-    // details ride on boxed plain content (text, list, metric); hotspots on images. Both rows are
-    // big, so they show only when the element already has some, or behind the "more" button
+    // expandable content rides on boxed plain content (text, list, metric). Its box is big, so it
+    // shows when the element already has some or when asked for from "more", and closes on request
     const canDetail =
       !many &&
       kind === 'text' &&
       (!slot || DETAILS_TYPES.has(slot.type)) &&
       DETAILS_ROLES.has(el.dataset.role || '')
     const hasDetails = canDetail && (o.details != null || Boolean(slot?.details))
-    const asked = (what) => askedFor?.what === what && askedFor.key === keyOf(p.slideId, p.elId)
-    float.querySelector('.ed-details-only').hidden = !(
-      canDetail &&
-      (hasDetails || asked('details'))
-    )
-    float.querySelector('[data-action="add-details"]').hidden = !canDetail || hasDetails
-    // the hotspot button (an image-only control) lights up while its mode is on for this picture
+    const detailsShown =
+      canDetail && (detailsOpen && detailsOpen.key === key ? detailsOpen.open : hasDetails)
+    float.querySelector('.ed-details-only').hidden = !detailsShown
+    float.querySelector('.ed-float-expand').hidden = !canDetail || detailsShown
+    const addDetails = float.querySelector('[data-action="add-details"]')
+    addDetails.hidden = !canDetail || detailsShown
+    addDetails.querySelector('span').textContent = hasDetails
+      ? 'Edit expandable content'
+      : 'Add expandable content'
+    // the clickable-areas button (an image-only control) lights up while its mode is on for this picture
     const spotOn = Boolean(spot && !many && spot.slideId === p.slideId && spot.elId === p.elId)
     float.querySelector('[data-action="hotspots"]').classList.toggle('is-on', spotOn)
-    // docked: every row is open and the "more" button has nothing left to reveal
+    // docked: every group is open and the "more" button has nothing left to reveal
     float.querySelector('.ed-float-arrange').hidden = !(many || moreOpen || docked)
     float.querySelector('.ed-float-more').hidden = !(moreOpen || docked)
     const more = float.querySelector('[data-action="more"]')
@@ -2117,7 +2350,7 @@
     const eye = float.querySelector('[data-action="hide"]')
     eye.dataset.state = hiddenAll ? 'hidden' : 'visible'
     eye.title = hiddenAll ? 'Show the selected elements' : 'Hide the selected elements (Delete)'
-    eye.innerHTML = icon(hiddenAll ? 'eye' : 'eyeOff')
+    eye.innerHTML = `${icon(hiddenAll ? 'eye' : 'eyeOff')}<span>${hiddenAll ? 'Show' : 'Hide'}</span>`
     eye.classList.toggle('is-on', hiddenAll)
     for (const b of float.querySelectorAll('[data-distribute]')) b.disabled = selection.length < 3
     const alignSlideToggle = float.querySelector('[data-align-slide]')
@@ -2141,41 +2374,39 @@
     }
     const g = geometryOf(el)
     const cs = getComputedStyle(el)
+    const style = o.style || {}
     for (const [name, input] of Object.entries(fields)) {
       const [group, prop] = name.split(':')
-      let v = group === 'prop' ? o[prop] : o.style ? o.style[prop] : undefined
+      let v = group === 'prop' ? o[prop] : style[prop]
       if (group === 'prop' && v == null && prop in g) v = g[prop]
       if (input.type === 'checkbox') input.checked = Boolean(v)
       else if (input.type === 'color') {
-        // no override: show what the page renders, so the swatch is never a blind #000000
+        // no override: show what the page renders, so the picker never opens on a blind #000000
         const rendered = prop === 'color' ? toHex(cs.color) : toHex(cs.backgroundColor)
         const hex = typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : rendered
         input.value = hex || '#ffffff'
-        input.closest('.ed-swatch')?.classList.toggle('is-unset', v == null && !rendered)
-      } else if (prop === 'fontSize' && v == null && kind === 'text') {
-        input.value = String(effectiveFontSize(el, o))
+      } else if (RANGES[prop]) {
+        // the field shows what the page renders, so its slider starts from the real value
+        if (document.activeElement !== input)
+          input.value = shown(prop, effectiveStyle(el, cs, style, prop, kind))
       } else if (input.tagName === 'SELECT' && prop === 'fontFamily') {
         setFontSelect(input, v)
       } else input.value = v == null ? '' : String(v)
     }
+    for (const range of float.querySelectorAll('[data-style-range]')) {
+      const prop = range.dataset.styleRange
+      range.value = shown(prop, effectiveStyle(el, cs, style, prop, kind))
+    }
     if (kind === 'text') {
-      float.querySelector('[data-style-range="fontSize"]').value = String(effectiveFontSize(el, o))
-      const style = o.style || {}
       for (const b of float.querySelectorAll('[data-seg-value]'))
         b.classList.toggle('is-on', b.dataset.segValue === style.textAlign)
       for (const b of float.querySelectorAll('[data-toggle-style]'))
         b.classList.toggle('is-on', String(style[b.dataset.toggleStyle]) === b.dataset.value)
-      for (const c of float.querySelectorAll('.ed-chip[data-color]')) {
-        const cur = style[c.dataset.swatchFor]
-        c.classList.toggle(
-          'is-on',
-          c.dataset.color === ''
-            ? cur == null
-            : String(cur).toLowerCase() === c.dataset.color.toLowerCase(),
-        )
-      }
     }
+    refreshColourButtons(cs, style)
+    refreshPalette()
     positionFloat()
+    positionPalette()
   }
 
   /** A fontFamily override that is none of the listed fonts shows up as its own option. */
@@ -2201,35 +2432,57 @@
     if (custom && select.value !== custom.value) custom.remove()
   }
 
-  /** Below the selection box, centred; above it when the bottom would run out; pinned when neither fits. */
+  /**
+   * Below the selection box, centred; above it when the bottom would run out. When neither side
+   * has the room for every open group, the toolbar takes the bigger side and scrolls inside it,
+   * so it never overlaps the element it edits; pinned to the bottom edge only when even that fails.
+   */
   function positionFloat() {
     if (!float) return
     if (docked) {
       // the column is placed by CSS; nothing here may move it
       float.style.left = ''
       float.style.top = ''
+      float.style.maxHeight = ''
       float.dataset.placement = 'docked'
       return
     }
     if (float.hidden || !box || box.hidden) return
     const r = box.getBoundingClientRect()
-    const fw = float.offsetWidth
-    const fh = float.offsetHeight
     const vw = window.innerWidth
     const vh = window.innerHeight
     const minLeft = (pagesPanel ? pagesPanel.offsetWidth : 0) + 8
     const minTop = (panel ? panel.offsetHeight : 0) + 8
-    const left = Math.max(minLeft, Math.min(vw - fw - 8, r.left + r.width / 2 - fw / 2))
-    let top = r.bottom + 12
-    let placement = 'below'
-    if (top + fh > vh - 8) {
+    float.style.maxHeight = ''
+    let fh = float.offsetHeight
+    const fw = float.offsetWidth
+    const below = vh - 8 - (r.bottom + 12)
+    const above = r.top - 12 - minTop
+    let top
+    let placement
+    if (fh <= below) {
+      top = r.bottom + 12
+      placement = 'below'
+    } else if (fh <= above) {
       top = r.top - fh - 12
       placement = 'above'
-    }
-    if (top < minTop) {
+    } else if (Math.max(below, above) >= 120) {
+      float.style.maxHeight = `${Math.floor(Math.max(below, above))}px`
+      fh = float.offsetHeight
+      if (below >= above) {
+        top = r.bottom + 12
+        placement = 'below'
+      } else {
+        top = r.top - fh - 12
+        placement = 'above'
+      }
+    } else {
+      float.style.maxHeight = `${Math.max(120, vh - minTop - 8)}px`
+      fh = float.offsetHeight
       top = vh - fh - 8
       placement = 'pinned'
     }
+    const left = Math.max(minLeft, Math.min(vw - fw - 8, r.left + r.width / 2 - fw / 2))
     float.style.left = `${Math.round(left)}px`
     float.style.top = `${Math.round(top)}px`
     float.dataset.placement = placement
@@ -2391,6 +2644,19 @@
       return docked
     },
     setDocked,
+    /** The colour palette of one property ('color' or 'background'); tests and screenshots use it. */
+    openPalette,
+    closePalette,
+    get paletteOpen() {
+      return palette ? palette.prop : null
+    },
+    /** Open or close the expandable-content box of the primary selection by hand. */
+    setDetailsOpen(on) {
+      const p = primary()
+      if (!p) return
+      detailsOpen = { key: keyOf(p.slideId, p.elId), open: Boolean(on) }
+      refreshPanel()
+    },
     /** Hotspot mode on an image: its jump regions are drawn and adjusted on the picture. */
     hotspots: {
       enter(elId, slideId) {

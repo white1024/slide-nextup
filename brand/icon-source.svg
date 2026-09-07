@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- slide-nextup icon source. Regenerate brand/icon.png with `node tools/render-icon.mjs`.
+       Same visual language as the Agent NextUp and Claude Switch icons: an accent gradient
+       rounded square with a white line glyph (24-unit grid, stroke 2, round caps and joins),
+       here a slide on its stand. -->
+  <defs>
+    <linearGradient id="bg" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#6b63e8"/>
+      <stop offset="1" stop-color="#4a42c0"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="228" fill="url(#sheen)"/>
+  <g transform="translate(152 152) scale(30)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="12" rx="2"/>
+    <path d="M12 16v2M8 21l4-3 4 3"/>
+  </g>
+</svg>

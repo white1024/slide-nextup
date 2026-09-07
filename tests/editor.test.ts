@@ -52,9 +52,13 @@ interface DeckApi {
     setSnap: (on: boolean) => void
     setRevealHidden: (on: boolean) => void
     setMore: (on: boolean) => void
-    themeColors: () => Array<{ name: string; value: string }>
+    themeColors: () => Array<{ name: string; value: string; use: string }>
     docked: boolean
     setDocked: (on: boolean) => void
+    paletteOpen: string | null
+    openPalette: (prop: string) => void
+    closePalette: () => void
+    setDetailsOpen: (on: boolean) => void
     hotspots: {
       enter: (elId: string, slideId?: string) => void
       leave: () => void
@@ -556,8 +560,8 @@ describe('editor mode', () => {
     expect(r.f.right).toBeLessThanOrEqual(r.vw)
     expect(r.f.bottom).toBeLessThanOrEqual(r.vh)
     // it names the element and shows the controls for its kind
-    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('s1 / title')
-    expect(await page.locator('#ed-color').isVisible()).toBe(true)
+    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('Page 1 · title')
+    expect(await page.locator('.ed-float [data-palette="color"]').isVisible()).toBe(true)
     expect(
       await page
         .locator('.ed-float .ed-image-only')
@@ -615,17 +619,33 @@ describe('editor mode', () => {
     await page.evaluate(() => window.__deck.editor.select('body'))
     const colours = await page.evaluate(() => window.__deck.editor.themeColors())
     expect(colours.length).toBeGreaterThan(3)
-    const chips = page.locator(
-      '.ed-float .ed-chip[data-swatch-for="color"][data-color]:not([data-color=""])',
-    )
-    expect(await chips.count()).toBe(Math.min(8, colours.length))
+    // one button per property shows the current colour; its palette lists every theme token by name
+    const btn = page.locator('.ed-float [data-palette="color"]')
+    expect(await btn.isVisible()).toBe(true)
+    expect(await page.evaluate(() => window.__deck.editor.paletteOpen)).toBeNull()
+    await btn.click()
+    expect(await page.evaluate(() => window.__deck.editor.paletteOpen)).toBe('color')
+    const pal = page.locator('.ed-palette[data-palette="color"]')
+    expect(await pal.isVisible()).toBe(true)
+    const chips = pal.locator('.ed-chip[data-swatch-for="color"][data-color]:not([data-color=""])')
+    expect(await chips.count()).toBe(colours.length)
     const first = await chips.first().getAttribute('data-color')
     expect(first).toBe(colours[0]?.value)
+    expect(await chips.first().locator('span').textContent()).toBe(colours[0]?.name)
+    expect(await chips.first().locator('small').textContent()).toBe(colours[0]?.use)
     await chips.first().click()
     expect((await overrideOf('s5/body'))?.style?.color).toBe(first)
     expect(await chips.first().getAttribute('class')).toContain('is-on')
-    await page.locator('.ed-float .ed-chip-clear[data-swatch-for="color"]').click()
+    expect(await btn.locator('.ed-colour-name').textContent()).toBe(colours[0]?.name)
+    // the palette stays open for another pick; "theme default" removes the override
+    expect(await page.evaluate(() => window.__deck.editor.paletteOpen)).toBe('color')
+    await pal.locator('.ed-chip-clear[data-swatch-for="color"]').click()
     expect((await overrideOf('s5/body'))?.style?.color).toBeUndefined()
+    // Esc closes it; the custom picker lives inside it (#ed-color, exercised above)
+    await page.keyboard.press('Escape')
+    expect(await page.evaluate(() => window.__deck.editor.paletteOpen)).toBeNull()
+    expect(await pal.isHidden()).toBe(true)
+    expect(await page.locator('#ed-color').count()).toBe(1)
     // fonts: the first option is the theme's display font, read from --font-display
     const display = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim(),
@@ -637,6 +657,62 @@ describe('editor mode', () => {
     await select.selectOption('')
     expect((await overrideOf('s5/body'))?.style?.fontFamily).toBeUndefined()
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+  })
+
+  it('pairs a slider with every number field; opacity is shown as a percentage', async () => {
+    await goTo('s5')
+    await page.evaluate(() => window.__deck.editor.select('body'))
+    await openMore()
+    // the fields show what the page renders, so a slider starts from the real value
+    const lh = page.locator('.ed-float [data-style="lineHeight"]')
+    const lhRange = page.locator('.ed-float [data-style-range="lineHeight"]')
+    expect(Number(await lh.inputValue())).toBeGreaterThan(0.5)
+    expect(await lhRange.inputValue()).toBe(await lh.inputValue())
+    await lhRange.fill('1.6')
+    await lhRange.dispatchEvent('input')
+    await lhRange.dispatchEvent('change')
+    expect((await overrideOf('s5/body'))?.style?.lineHeight).toBe(1.6)
+    expect(await lh.inputValue()).toBe('1.6')
+    // opacity: the field and slider say 60, the override is 0.6
+    const op = page.locator('.ed-float [data-style="opacity"]')
+    expect(await op.inputValue()).toBe('100')
+    await op.fill('60')
+    await op.dispatchEvent('change')
+    expect((await overrideOf('s5/body'))?.style?.opacity).toBe(0.6)
+    expect(await page.locator('.ed-float [data-style-range="opacity"]').inputValue()).toBe('60')
+    expect(
+      await page.evaluate(
+        () =>
+          getComputedStyle(document.querySelector('[data-slide="s5"] [data-el="body"]') as Element)
+            .opacity,
+      ),
+    ).toBe('0.6')
+    for (const prop of ['letterSpacing', 'borderRadius'])
+      expect(await page.locator(`.ed-float [data-style-range="${prop}"]`).count()).toBe(1)
+    // the toolbar names its groups and the element's page
+    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('Page 5 · body')
+    expect(
+      await page.evaluate(() =>
+        Array.from(document.querySelectorAll('.ed-float .ed-float-row[data-title]')).map(
+          (r) => (r as HTMLElement).dataset.title,
+        ),
+      ),
+    ).toEqual([
+      'Text',
+      'Text style',
+      'Content',
+      'Expandable content',
+      'Element',
+      'Arrange',
+      'Position and size',
+      'Appearance',
+      'Animation',
+      'Expandable content',
+    ])
+    await page.evaluate(() => window.__deck.editor.undo())
+    await page.evaluate(() => window.__deck.editor.undo())
+    expect((await overrideOf('s5/body'))?.style?.opacity).toBeUndefined()
+    await page.evaluate(() => window.__deck.editor.setMore(false))
   })
 
   it('selects several elements with Shift, a marquee and Ctrl+A, then aligns and distributes them', async () => {
@@ -658,7 +734,9 @@ describe('editor mode', () => {
     expect(await selected()).toEqual({ slideId: 's2', elId: 'card-3' })
     expect(await page.locator('.ed-box.is-multi').count()).toBe(1)
     expect(await page.locator('.ed-box-thin').count()).toBe(3)
-    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('s2 · 3 elements')
+    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe(
+      'Page 2 · 3 elements',
+    )
     // arrow keys move all three
     const ys = () =>
       page.evaluate(() =>
@@ -934,7 +1012,7 @@ describe('editor mode', () => {
     const c = await centerOf('s1', 'title')
     await page.mouse.click(c.x, c.y)
     expect(await selected()).toEqual({ slideId: 's1', elId: 'title' })
-    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('s1 / title')
+    expect(await page.locator('.ed-float [data-field="key"]').textContent()).toBe('Page 1 · title')
     expect(await page.locator('.ed-float .ed-float-more').isVisible()).toBe(true)
     expect(await page.locator('.ed-float .ed-float-arrange').isVisible()).toBe(true)
     expect(await page.locator('.ed-float [data-action="more"]').isVisible()).toBe(false)

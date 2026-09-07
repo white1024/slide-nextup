@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="brand/icon.png" width="96" height="96" alt="slide-nextup icon" />
+
 # slide-nextup
 
 *Narrative-first slide decks: your agent confirms the story, then generates an HTML deck you edit in the browser*
@@ -88,15 +90,15 @@ A story is a Markdown file with a YAML frontmatter (`title`, `audience`, `occasi
 
 Open a rendered deck and press `E` (or add `?edit=1` to the URL) to enter edit mode:
 
-- Click an element to drag it, pull a handle to resize, double-click to edit text, and use the floating toolbar for font, size, weight, colours, alignment, opacity, corner radius, reveal step and entrance.
+- Click an element to drag it, pull a handle to resize, double-click to edit text. The floating toolbar keeps its controls in fixed groups: text (font, size, bold / italic / underline, alignment), text style (weight, line height, letter spacing, text colour and fill picked from the theme's palette) and element (hide, copy and paste style, reset to generated); behind **More** sit position and size, appearance (opacity, corner radius), arrange, animation (appears on click, entrance effect) and expandable content. Every number field has a slider, and **Side panel** in the top bar keeps the same toolbar open as a column on the right.
 - `Shift`+click or drag on empty space to select several elements, `Ctrl+A` for the page; the toolbar then aligns and distributes them.
 - `Delete` hides an element, `Ctrl+Z` / `Ctrl+Y` undo and redo, `Ctrl+Alt+C` / `Ctrl+Alt+V` copy and paste a style, `Esc` clears the selection, `E` returns to playback.
 - The slide rail on the left reorders pages by drag or `Ctrl+Shift+↑↓` and hides them with `Ctrl+Shift+H`; hidden pages are skipped in playback.
-- Interactive content is edited in place: **Details** adds content that expands when a boxed element (a card, stat, tint, alert or sunk panel) is clicked and only appears for those, **Hotspots** lets you draw click-to-jump areas on an image, and the content field takes charts (`label | value`), tables (`|` between cells), icons by name and tabs (`## label` opens a panel).
+- Interactive content is edited in place: **Expandable content** adds content that opens when a boxed element (a card, stat, tint, alert or sunk panel) is clicked and only appears for those, **Clickable areas** lets you draw click-to-jump areas on an image, and the content field takes charts (`label | value`), tables (`|` between cells), icons by name and tabs (`## label` opens a panel).
 
-Position, size, style, text, details and hotspots are stored as `overrides` in the embedded model; reveal steps and entrances go to the slide's elements, page order and hidden pages to `pages`, and the motion and transition switches to the deck itself. Generated content is never rewritten from the DOM. `window.__deck.exportModel()` returns the model, and **Download deck.json** saves it as a file at any time; with the dev server running, edits are also written to disk automatically.
+Position, size, style, text, details and hotspots are stored as `overrides` in the embedded model; reveal steps and entrances go to the slide's elements, page order and hidden pages to `pages`, and the **Animations** and **Slide transition** switches in the top bar to the deck itself. Generated content is never rewritten from the DOM. `window.__deck.exportModel()` returns the model, and **Download deck.json** saves it as a file at any time; with the dev server running, edits are also written to disk automatically.
 
-During playback, `P` opens the presenter window (next slide, notes, position, timer), `M` switches element motion off or on for this browser, and `?static=1` shows every element with no transitions, which is also what QA measures. The page's `lang` attribute follows the deck: `lang` in deck.json, which the scaffold copies from the story's frontmatter or guesses from the script of the text (`zh-Hant`, `ja`, `ko` or `en`). Themes may define hover states for cards, pills, calls to action, table rows and images; the player adds chart tooltips, image lightboxes and `[text](url)` links.
+During playback, `P` opens the presenter window (next slide, notes, position, timer), `M` switches the animations off or on for this browser, and `?static=1` shows every element with no transitions, which is also what QA measures. The page's `lang` attribute follows the deck: `lang` in deck.json, which the scaffold copies from the story's frontmatter or guesses from the script of the text (`zh-Hant`, `ja`, `ko` or `en`). Themes may define hover states for cards, pills, calls to action, table rows and images; the player adds chart tooltips, image lightboxes and `[text](url)` links.
 
 ## Themes and layouts
 

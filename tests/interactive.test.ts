@@ -611,6 +611,16 @@ describe('interactive slots while playing, and their default state elsewhere', (
     expect(
       await page.getAttribute('.deck-stage > [data-slide="s5"] [data-el="card-2"]', 'data-details'),
     ).toBe('true')
+    // the box closes on request and keeps the content; the button then reads "edit" and reopens it
+    await page.locator('.ed-float [data-action="close-details"]').click()
+    expect(await detailsBox.isHidden()).toBe(true)
+    expect((await model()).overrides['s5/card-2']?.details).toBe('補充一句')
+    const addDetails = page.locator('.ed-float [data-action="add-details"]')
+    expect(await addDetails.isVisible()).toBe(true)
+    expect(await addDetails.textContent()).toBe('Edit expandable content')
+    await addDetails.click()
+    await detailsBox.waitFor({ state: 'visible' })
+    expect(await detailsBox.inputValue()).toBe('補充一句')
     await page.evaluate(() => window.__deck.editor.undo())
     await page.evaluate(() => window.__deck.editor.setMore(false))
     // hotspots are edited on the picture: draw one, retarget and label it, move it, delete it

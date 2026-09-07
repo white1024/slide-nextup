@@ -280,7 +280,14 @@ export function deckDirOfPath(p: string): string {
 /** Theme tokens as CSS custom properties; the only bridge between theme.json and theme.css. */
 export function themeCssVariables(theme: ThemeJson): string {
   const lines: string[] = []
-  for (const [name, c] of Object.entries(theme.colors)) lines.push(`  --color-${name}: ${c.value};`)
+  for (const [name, c] of Object.entries(theme.colors)) {
+    lines.push(`  --color-${name}: ${c.value};`)
+    // the editor's colour palette shows what each token is for; a CSS string so it rides the same channel
+    if (c.use)
+      lines.push(
+        `  --color-${name}-use: "${c.use.replace(/[\\"]/g, '\\$&').replace(/\s+/g, ' ')}";`,
+      )
+  }
   lines.push(`  --font-display: ${theme.typography.display.family};`)
   lines.push(`  --font-display-weight: ${theme.typography.display.weight};`)
   lines.push(`  --font-body: ${theme.typography.body.family};`)
