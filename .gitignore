@@ -21,3 +21,7 @@ Thumbs.db
 *.log
 decks/*/deck.html
 artifacts/design/
+
+# real decks are the author's own work, not part of the project (examples/ carries the fixtures)
+decks/*
+!decks/.gitkeep
