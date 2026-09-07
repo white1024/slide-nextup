@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>slide-nextup</title>
+<meta name="description" content="Narrative-first slide decks for Claude Code and Codex: the agent confirms the story with you, then generates one HTML deck you can fully edit in the browser.">
+<link rel="icon" href="assets/icon-128.png" type="image/png">
+<link rel="canonical" href="https://white1024.github.io/slide-nextup/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="slide-nextup">
+<meta property="og:description" content="Narrative-first slide decks for Claude Code and Codex: the agent confirms the story with you, then generates one HTML deck you can fully edit in the browser.">
+<meta property="og:url" content="https://white1024.github.io/slide-nextup/">
+<meta property="og:image" content="https://white1024.github.io/slide-nextup/assets/slide-01-s1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap">
+<style>
+  :root {
+    --bg: #f6f5fa;
+    --panel: #ffffff;
+    --panel-2: #eeedf5;
+    --ink: #1a1930;
+    --ink-2: #4b4a63;
+    --muted: #767490;
+    --rule: #dcdae8;
+    --accent: #4f47c8;
+    --accent-ink: #ffffff;
+    --accent-soft: #e6e4f8;
+    --gate: #9c5b10;
+    --gate-soft: #f7e8d2;
+    --ok: #2f7d5b;
+    --shadow: 0 24px 60px rgba(26, 25, 48, 0.16), 0 2px 6px rgba(26, 25, 48, 0.08);
+    --display: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --body: "IBM Plex Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121120;
+      --panel: #1a1929;
+      --panel-2: #222136;
+      --ink: #ecebf6;
+      --ink-2: #b9b7cc;
+      --muted: #8b899f;
+      --rule: #2e2d42;
+      --accent: #9b95f3;
+      --accent-ink: #14132a;
+      --accent-soft: #2a2850;
+      --gate: #e5a453;
+      --gate-soft: #3a2c16;
+      --ok: #6cc59a;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121120;
+    --panel: #1a1929;
+    --panel-2: #222136;
+    --ink: #ecebf6;
+    --ink-2: #b9b7cc;
+    --muted: #8b899f;
+    --rule: #2e2d42;
+    --accent: #9b95f3;
+    --accent-ink: #14132a;
+    --accent-soft: #2a2850;
+    --gate: #e5a453;
+    --gate-soft: #3a2c16;
+    --ok: #6cc59a;
+    --shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  img { max-width: 100%; height: auto; display: block; }
+  code, kbd, pre { font-family: var(--mono); font-size: 0.92em; }
+  p code, li code, td code, dd code {
+    background: var(--panel-2);
+    padding: 0.08em 0.38em;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  kbd {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 0.05em 0.4em;
+    font-size: 0.85em;
+    color: var(--ink-2);
+  }
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    line-height: 1.1;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(2.5rem, 5.4vw, 4.25rem); font-optical-sizing: auto; }
+  h2 { font-size: clamp(1.75rem, 3vw, 2.375rem); }
+  h3 { font-size: 1.3rem; line-height: 1.25; }
+  h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  p { margin: 0; }
+  .lede { font-size: 1.15rem; color: var(--ink-2); max-width: 36em; }
+  .measure { max-width: 62ch; }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .stack-lg { display: flex; flex-direction: column; gap: 32px; }
+
+  /* nav */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .brand:hover { text-decoration: none; }
+  .nav-links { display: none; gap: 22px; margin-left: auto; font-size: 0.92rem; }
+  .nav-links a { color: var(--ink-2); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav .gh { margin-left: auto; }
+  @media (min-width: 900px) {
+    .nav-links { display: flex; }
+    .nav .gh { margin-left: 0; }
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .btn:hover { text-decoration: none; border-color: var(--muted); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { border-color: var(--accent); filter: brightness(1.06); }
+  .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* hero */
+  .hero { padding: 64px 0 40px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: center; }
+  @media (min-width: 960px) {
+    .hero { padding: 88px 0 56px; }
+    .hero .wrap { grid-template-columns: minmax(0, 11fr) minmax(0, 12fr); gap: 56px; }
+  }
+  .hero-copy { display: flex; flex-direction: column; gap: 24px; }
+  .install {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 10px 10px 10px 16px;
+    max-width: 480px;
+  }
+  .install code { flex: 1; min-width: 0; font-size: 0.95rem; overflow-x: auto; white-space: nowrap; color: var(--ink); }
+  .install code::before { content: "$ "; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .fine { font-size: 0.85rem; color: var(--muted); }
+
+  .hero-visual { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .window {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .window-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--muted);
+    background: var(--panel-2);
+  }
+  .window-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--rule); }
+  .story-card pre {
+    margin: 0;
+    padding: 16px 18px;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    color: var(--ink-2);
+    overflow-x: auto;
+  }
+  .story-card .k { color: var(--ink); font-weight: 500; }
+  .story-card .v { color: var(--accent); }
+  .story-card .h { color: var(--ink); font-weight: 500; }
+  .story-card .gate-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--gate);
+    background: var(--gate-soft);
+  }
+  .story-card .gate-line strong { font-weight: 500; }
+  .deck-shot img { width: 100%; }
+  @media (min-width: 960px) {
+    .hero-visual { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 0; align-content: center; }
+    .story-card { grid-column: 1 / 8; grid-row: 1; z-index: 1; }
+    .deck-shot { grid-column: 3 / 11; grid-row: 2; margin-top: -10px; z-index: 2; }
+  }
+
+  /* rhythm strip */
+  .rhythm-section { padding: 40px 0 72px; }
+  .rhythm-head { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+  .rhythm-head h2 { font-size: 1.5rem; }
+  .rhythm-head p { color: var(--ink-2); max-width: 46em; font-size: 0.95rem; }
+  .rhythm {
+    display: grid;
+    grid-template-columns: auto repeat(8, minmax(0, 1fr));
+    gap: 0 8px;
+    align-items: end;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+  }
+  .rhythm .axis {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    height: 132px;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    padding-right: 10px;
+    text-align: right;
+  }
+  .rhythm .axis span { align-self: start; line-height: 1; transform: translateY(-40%); }
+  .beat { display: grid; grid-template-rows: 132px auto auto; gap: 8px 0; align-items: end; }
+  .beat .bar {
+    height: calc(var(--i) / 5 * 100%);
+    background: var(--accent);
+    border-radius: 3px 3px 0 0;
+    transform-origin: bottom;
+    animation: grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--n) * 55ms);
+    opacity: calc(0.45 + var(--i) * 0.14);
+  }
+  @keyframes grow { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) { .beat .bar { animation: none; } }
+  .beat .id { font-family: var(--mono); font-size: 0.78rem; color: var(--ink); }
+  .beat .role { font-size: 0.74rem; color: var(--muted); letter-spacing: 0.02em; }
+  .beat.gate-beat .id::after { content: ""; }
+  .rhythm-note { margin-top: 12px; font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 600px) {
+    .rhythm { gap: 0 4px; }
+    .beat .role { display: none; }
+  }
+
+  /* sections */
+  .section { border-top: 1px solid var(--rule); padding: 64px 0; }
+  .section .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 56px; }
+  @media (min-width: 900px) {
+    .section { padding: 88px 0; }
+    .section .wrap { grid-template-columns: 220px minmax(0, 1fr); }
+    .section .label { position: sticky; top: 84px; align-self: start; }
+  }
+  .label { display: flex; flex-direction: column; gap: 10px; }
+  .label p { font-size: 0.9rem; color: var(--muted); max-width: 26em; }
+  .section-body { display: flex; flex-direction: column; gap: 32px; }
+  .section-body > p, .section-body > .measure { color: var(--ink-2); }
+
+  /* pillars */
+  .pillars { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  @media (min-width: 760px) { .pillars { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; } }
+  .pillar { display: flex; flex-direction: column; gap: 12px; border-top: 2px solid var(--ink); padding-top: 18px; }
+  .pillar p { color: var(--ink-2); font-size: 0.95rem; }
+  .pillar .how { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+
+  /* flow */
+  .flow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; counter-reset: step; }
+  @media (min-width: 760px) { .flow { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; } }
+  .step {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .step strong { font-weight: 600; font-size: 1rem; }
+  .step p { font-size: 0.88rem; color: var(--ink-2); }
+  .step .out { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-top: auto; padding-top: 8px; }
+  .step.gate { border-color: var(--gate); background: var(--gate-soft); }
+  .step.gate::before { color: var(--gate); content: counter(step) " · you"; }
+  .step.gate p { color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .table-wrap { overflow-x: auto; }
+  th, td { text-align: left; vertical-align: top; padding: 12px 14px 12px 0; border-bottom: 1px solid var(--rule); }
+  th { font-weight: 600; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  td:first-child { white-space: nowrap; }
+  td { color: var(--ink-2); }
+  td strong { color: var(--ink); font-weight: 600; }
+
+  .figure { display: flex; flex-direction: column; gap: 10px; }
+  .figure figcaption { font-size: 0.85rem; color: var(--muted); }
+  .figure .window { box-shadow: var(--shadow); }
+  .keys { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px 32px; margin: 0; }
+  @media (min-width: 760px) { .keys { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .keys div { display: flex; flex-direction: column; gap: 4px; }
+  .keys dt { font-weight: 600; font-size: 0.95rem; }
+  .keys dd { margin: 0; font-size: 0.9rem; color: var(--ink-2); }
+
+  pre.term {
+    margin: 0;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: var(--ink-2);
+  }
+  pre.term .ok { color: var(--ok); }
+  pre.term .err { color: var(--gate); }
+  pre.term .cmd { color: var(--ink); }
+  pre.term .dim { color: var(--muted); }
+  .checks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px 28px; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 760px) { .checks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .checks li { display: flex; flex-direction: column; gap: 3px; font-size: 0.92rem; color: var(--ink-2); }
+  .checks strong { color: var(--ink); font-weight: 600; }
+
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @media (min-width: 760px) { .gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .gallery figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .gallery img {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--panel);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+  .gallery figure:hover img { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .gallery figcaption { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .two-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 40px; }
+  @media (min-width: 760px) { .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .two-col h3 { margin-bottom: 8px; }
+  .two-col p { color: var(--ink-2); font-size: 0.95rem; }
+
+  .codeblock { position: relative; }
+  .codeblock .copy { position: absolute; top: 10px; right: 10px; }
+  .prompt-box {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--ink-2);
+    font-family: var(--body);
+    margin: 0;
+  }
+  .req { display: flex; flex-wrap: wrap; gap: 8px; }
+  .req span {
+    font-size: 0.82rem;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--ink-2);
+    background: var(--panel);
+  }
+
+  .faq { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+  .faq details { border-bottom: 1px solid var(--rule); }
+  .faq summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 18px 0;
+    font-weight: 500;
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--mono); color: var(--muted); font-size: 1.2rem; line-height: 1; }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { padding: 0 0 20px; color: var(--ink-2); max-width: 66ch; }
+
+  .footer { border-top: 1px solid var(--rule); padding: 40px 0 56px; font-size: 0.88rem; color: var(--muted); }
+  .footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center; }
+  .footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+  .footer nav a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/icon-128.png" alt="" width="28" height="28">slide-nextup</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#editing">Editing</a>
+      <a href="#quality">Quality</a>
+      <a href="#themes">Themes</a>
+      <a href="#get-started">Get started</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-sm gh" href="https://github.com/white1024/slide-nextup">
+      <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">Narrative-first slide decks for Claude Code and Codex</p>
+        <h1>The story is <em>confirmed</em> before a single slide exists.</h1>
+        <p class="lede">slide-nextup is a deck workflow driven by your coding agent. The agent writes the narrative as a document and stops for your confirmation. Only then does it pick layouts, fill a theme and render one HTML file that you can edit, element by element, in the browser.</p>
+        <div class="codeblock install">
+          <code id="cmd-init">npx slide-nextup init my-decks</code>
+          <button class="btn btn-sm copy" type="button" data-copy="cmd-init">Copy</button>
+        </div>
+        <div class="cta">
+          <a class="btn btn-primary" href="#get-started">Get started</a>
+          <a class="btn" href="https://github.com/white1024/slide-nextup">View the source</a>
+          <span class="fine">Node 24+, pnpm 10+, MIT</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="window story-card">
+          <div class="window-bar"><span class="dot"></span><span class="dot"></span>decks/tidewatch-progress/story.md</div>
+<pre><span class="h">### s1 | The health-check tool is already a deliverable package</span>
+- <span class="k">scene_role</span>: <span class="v">hero</span>
+- <span class="k">intensity</span>: <span class="v">4</span>
+- <span class="k">content_relation</span>: <span class="v">statement</span>
+- <span class="k">message</span>: The health-check tool already has a report
+  contract, a CLI and an unzip-and-run bundle; the GUI is
+  turning it into something non-technical people can use.
+- <span class="k">evidence</span>: Tidewatch website health-check tool (tidewatch),
+  progress reports since 2026-08.
+- <span class="k">notes</span>: Open with the conclusion in one sentence. …</pre>
+          <div class="gate-line"><span>✓</span><span><strong>story:confirm</strong> · recorded, gate open</span></div>
+        </div>
+        <figure class="window deck-shot" style="margin:0">
+          <div class="window-bar"><span class="dot"></span><span class="dot"></span>deck.html · 01 / 08 · rethemed to Blue Professional</div>
+          <img src="assets/slide-01-s1.png" width="960" height="540" alt="The cover of a copy of the bundled example deck, rethemed to Blue Professional for this page: the story's first slide">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="rhythm-section" aria-labelledby="rhythm-title">
+    <div class="wrap">
+      <div class="rhythm-head">
+        <h2 id="rhythm-title">A story has a rhythm before it has slides</h2>
+        <p>Every slide in <code>story.md</code> carries a scene role and an intensity from 1 to 5. <code>pnpm story:check</code> validates the fields and the rhythm rules and prints a page-by-page table, with the intensities as a one-line bar, for you to read before anything is built.</p>
+      </div>
+      <div class="rhythm" role="img" aria-label="Intensity per slide of the bundled example story, on a scale of 1 to 5: s1 hero 4, s2 map 2, s3 relationship 4, s4 evidence 3, s5 evidence 3, s6 relationship 3, s7 evidence 4, s8 close 3">
+        <div class="axis"><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        <div class="beat" style="--i:4;--n:0"><span class="bar"></span><span class="id">s1</span><span class="role">hero</span></div>
+        <div class="beat" style="--i:2;--n:1"><span class="bar"></span><span class="id">s2</span><span class="role">map</span></div>
+        <div class="beat" style="--i:4;--n:2"><span class="bar"></span><span class="id">s3</span><span class="role">relationship</span></div>
+        <div class="beat" style="--i:3;--n:3"><span class="bar"></span><span class="id">s4</span><span class="role">evidence</span></div>
+        <div class="beat" style="--i:3;--n:4"><span class="bar"></span><span class="id">s5</span><span class="role">evidence</span></div>
+        <div class="beat" style="--i:3;--n:5"><span class="bar"></span><span class="id">s6</span><span class="role">relationship</span></div>
+        <div class="beat" style="--i:4;--n:6"><span class="bar"></span><span class="id">s7</span><span class="role">evidence</span></div>
+        <div class="beat" style="--i:3;--n:7"><span class="bar"></span><span class="id">s8</span><span class="role">close</span></div>
+      </div>
+      <p class="rhythm-note">The bundled example, <code>examples/tidewatch-progress</code>: a ten-minute progress meeting in eight slides, opening on the conclusion and settling into evidence.</p>
+    </div>
+  </section>
+
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Why</p>
+        <p>Three things the tools guarantee, so the prompt does not have to.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <h3>Story before slides</h3>
+          <p>A brief becomes a narrative document with a core message, and a scene role and intensity per page. The build refuses to run until you have confirmed it, and refuses again if the story changes afterwards.</p>
+          <p class="how">deck:scaffold checks story.confirmed.json</p>
+        </div>
+        <div class="pillar">
+          <h3>One file, no server</h3>
+          <p>The deck is one HTML file with the model, the styles and the runtime embedded: keyboard navigation, step reveals, entrance animations, page transitions, a presenter window with notes and a timer, and interactive slots such as expandable details, image hotspots and tabs. Render with <code>--inline-assets</code> and the images travel inside it too.</p>
+          <p class="how">deck.html · press P for the presenter window</p>
+        </div>
+        <div class="pillar">
+          <h3>Edit everything in the browser</h3>
+          <p>Drag, resize, rotate, double-click to rewrite text, swap images, change fonts and colours, align and distribute a multi-selection, undo and redo. Edits are saved to the deck model, not lost in the DOM.</p>
+          <p class="how">overrides in deck.json · autosave with pnpm dev</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">How it works</p>
+        <p>A fixed sequence with one human gate in the middle. Each deck lives in its own folder under <code>decks/</code>.</p>
+      </div>
+      <div class="section-body">
+        <div class="flow">
+          <div class="step"><strong>Brief</strong><p>Four questions in one go: purpose and audience, length and page count, how ready the content is, density.</p><span class="out">brief.md</span></div>
+          <div class="step"><strong>Story</strong><p>The narrative: core message, skeleton, then a role, an intensity and a message for every slide. Checked by the tool.</p><span class="out">story.md</span></div>
+          <div class="step gate"><strong>You confirm</strong><p>You read the page-by-page summary and confirm, or send it back. Nothing is generated before this.</p><span class="out">story.confirmed.json</span></div>
+          <div class="step"><strong>Visual direction</strong><p>Three directions rendered as real covers from your own story. You pick one.</p><span class="out">design.json</span></div>
+          <div class="step"><strong>Build, then edit</strong><p>A layout per slide, the theme filled in, one HTML file rendered and measured. Then the browser.</p><span class="out">deck.json · deck.html</span></div>
+        </div>
+        <p class="measure">The agent follows four process skills, plain Markdown files that ship with the workspace. They live once in <code>.agents/skills/</code>; the copy Claude Code reads is generated and checked for drift, and Codex reads the originals through <code>AGENTS.md</code>.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Skill</th><th>What it does</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td><strong>slide-brief</strong></td><td>Asks the four questions at once, skipping whatever your message already answered.</td><td><code>brief.md</code></td></tr>
+              <tr><td><strong>slide-story</strong></td><td>Writes the narrative, runs <code>story:check</code>, shows the summary and <strong>stops for your confirmation</strong>, then records it with <code>story:confirm</code>.</td><td><code>story.md</code>, <code>story.confirmed.json</code></td></tr>
+              <tr><td><strong>slide-design</strong></td><td>Renders one cover per visual direction from the real first slide and lets you choose.</td><td><code>design.json</code></td></tr>
+              <tr><td><strong>slide-build</strong></td><td>Gate, layouts, scaffold, fill the slots, validate, render, QA, hand over. "Redo page 3" rebuilds only that page and keeps your manual edits.</td><td><code>deck.json</code>, <code>deck.html</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="editing">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Editing in the browser</p>
+        <p>Press <kbd>E</kbd> on any rendered deck. With <code>pnpm dev</code> running, edits are written back to <code>deck.json</code> 1.5 seconds after you stop.</p>
+      </div>
+      <div class="section-body">
+        <figure class="figure" style="margin:0">
+          <div class="window">
+            <img src="assets/editor.png" width="1280" height="720" alt="Edit mode on the example deck: the slide rail on the left, the top bar with undo, redo, animations and download, and the floating toolbar over a selected text element with font, size, weight, line height, letter spacing and colour controls">
+          </div>
+          <figcaption>Edit mode: the slide rail, the top bar, and the floating toolbar for the selected element. Every control writes to the model, so a regenerated page never loses what you moved.</figcaption>
+        </figure>
+        <dl class="keys">
+          <div><dt>Select and shape</dt><dd>Click to drag, pull a handle to resize, double-click to edit text. <kbd>Shift</kbd>+click or drag on empty space selects several; the toolbar then aligns and distributes them.</dd></div>
+          <div><dt>Undo, hide, reuse</dt><dd><kbd>Ctrl</kbd>+<kbd>Z</kbd> and <kbd>Ctrl</kbd>+<kbd>Y</kbd> undo and redo, <kbd>Delete</kbd> hides an element, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd> / <kbd>V</kbd> copy and paste a style.</dd></div>
+          <div><dt>Arrange the deck</dt><dd>The slide rail reorders pages by drag or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>↑↓</kbd> and hides them with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd>; hidden pages are skipped in playback and can be written back into the story.</dd></div>
+          <div><dt>Interactive content, in place</dt><dd>Expandable content behind a card, clickable areas drawn on an image, charts from <code>label | value</code> lines, tables, icons by name and tabs from <code>## label</code> headings.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="quality">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Quality checks</p>
+        <p>Headless Chromium measures every page. The report is a file the agent reads and acts on.</p>
+      </div>
+      <div class="section-body">
+        <ul class="checks">
+          <li><strong>Overflow</strong>Text that outgrows its box, with the content and box sizes.</li>
+          <li><strong>Overlap</strong>Text elements that collide.</li>
+          <li><strong>Minimum font sizes</strong>A floor per text role: body text, captions, chips and the rest each have one.</li>
+          <li><strong>Density</strong>How much text a page carries, counted in full-width units: a CJK glyph is one, a Latin letter or digit a half.</li>
+          <li><strong>Theme geometry</strong>Layout owns position and size, theme owns appearance; the check keeps them apart.</li>
+          <li><strong>Whole theme packs</strong><code>theme:qa</code> builds a deck from every layout's own sample and runs the same checks, so a pack is fit before it is shared.</li>
+        </ul>
+<pre class="term"><span class="cmd">$ pnpm qa decks/tidewatch-progress/deck.json</span>
+Tidewatch website health-check tool: progress, deliverables and direction (tidewatch-progress) · 8 slides · 8315 ms
+<span class="err">✖ s1     cover-editorial</span>
+<span class="err">    ✖ [overflow] title: text overflows the element box: content 1560×468, box 1560×400</span>
+<span class="ok">✓ s2     cards-2</span>
+<span class="ok">✓ s3     photo</span>
+<span class="ok">✓ s4     cards</span>
+<span class="ok">✓ s5     cards-2</span>
+<span class="ok">✓ s6     process</span>
+<span class="ok">✓ s7     cards</span>
+<span class="ok">✓ s8     closing</span>
+<span class="err">failed: 1 errors, 0 warnings</span>
+<span class="dim">report: artifacts/qa/tidewatch-progress.json</span></pre>
+        <p class="measure">A real run on a copy of the example deck, rethemed to Blue Professional with its cover switched to <code>cover-editorial</code>: a three-line title in a two-line box. The agent reads the finding, shrinks the title or shortens it, and runs the check again. The cover at the top of this page is that same slide after the fix.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="themes">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Themes and layouts</p>
+        <p>A theme pack is a folder you can zip, share and import. A layout is three files.</p>
+      </div>
+      <div class="section-body">
+        <div class="gallery">
+          <figure><img src="assets/layout-cover-editorial.png" width="768" height="432" alt="cover-editorial layout" loading="lazy"><figcaption>cover-editorial</figcaption></figure>
+          <figure><img src="assets/layout-hero.png" width="768" height="432" alt="hero layout" loading="lazy"><figcaption>hero</figcaption></figure>
+          <figure><img src="assets/layout-statement.png" width="768" height="432" alt="statement layout" loading="lazy"><figcaption>statement</figcaption></figure>
+          <figure><img src="assets/layout-chart-aside.png" width="768" height="432" alt="chart-aside layout" loading="lazy"><figcaption>chart-aside</figcaption></figure>
+          <figure><img src="assets/layout-dashboard.png" width="768" height="432" alt="dashboard layout" loading="lazy"><figcaption>dashboard</figcaption></figure>
+          <figure><img src="assets/layout-process.png" width="768" height="432" alt="process layout" loading="lazy"><figcaption>process</figcaption></figure>
+          <figure><img src="assets/layout-comparison.png" width="768" height="432" alt="comparison layout" loading="lazy"><figcaption>comparison</figcaption></figure>
+          <figure><img src="assets/layout-tabs.png" width="768" height="432" alt="tabs layout" loading="lazy"><figcaption>tabs</figcaption></figure>
+        </div>
+        <p class="fine">Layouts rendered in the Blue Professional theme with their sample content, as <code>pnpm layout:gallery</code> screenshots them: some from the pack, some from the generic library it falls back to. The pack is ported from the MIT-licensed beautiful-html-templates; the sources are listed in the third-party notices.</p>
+        <div class="two-col">
+          <div>
+            <h3>Portable packs</h3>
+            <p>A pack is <code>theme.json</code>, <code>theme.css</code> and, when it ships its own layouts, a <code>layouts/</code> folder. <code>theme:export</code> zips it with a fitness report; <code>theme:import</code> runs the checks in a temporary directory first and writes nothing if they fail. Packs are found in the deck's folder, the workspace, your user directory, then the package, first match wins.</p>
+          </div>
+          <div>
+            <h3>A layout when none fits</h3>
+            <p>A timeline, a four-quadrant grid: ask for it during the build and the agent writes <code>layout.json</code>, <code>layout.html</code> and <code>layout.css</code> from the reference that ships with the skills. <code>theme:lint</code> rejects colour and font rules in a layout, the gallery measures each text box against its slot hint, and <code>theme:qa</code> runs the full check before the layout is registered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="get-started">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Get started</p>
+        <p>One workspace holds all your decks and pins its own version of the package.</p>
+      </div>
+      <div class="section-body">
+        <div class="req"><span>Node.js 24 or newer</span><span>pnpm 10 or newer</span><span>Claude Code or Codex</span><span>Chromium, installed by Playwright</span></div>
+        <div class="codeblock">
+<pre class="term" id="cmd-setup"><span class="cmd">npx slide-nextup init my-decks --example</span>   <span class="dim"># package.json, AGENTS.md, CLAUDE.md, .gitignore, the skills, decks/, themes/, and the example deck</span>
+<span class="cmd">cd my-decks</span>
+<span class="cmd">pnpm install</span>
+<span class="cmd">pnpm browsers:install</span>                    <span class="dim"># the Chromium used for QA and previews</span>
+<span class="cmd">pnpm preflight</span>                           <span class="dim"># checks node, pnpm, playwright and chromium</span>
+<span class="cmd">pnpm dev decks/tidewatch-progress/deck.json</span>   <span class="dim"># http://127.0.0.1:4321, press E to edit</span></pre>
+          <button class="btn btn-sm copy" type="button" data-copy="cmd-setup">Copy</button>
+        </div>
+        <p class="measure">Then open the folder in Claude Code or Codex and ask for a deck. The agent reads the workspace's <code>AGENTS.md</code> and follows the skills. If you would rather hand the whole setup to the agent, paste this:</p>
+        <div class="codeblock">
+<pre class="prompt-box" id="cmd-prompt">Set up slide-nextup and make me a deck.
+
+1. Node 24 and pnpm are already installed; do not run nvm or change Node versions.
+2. Run `npx slide-nextup init my-decks --example`, then `pnpm install` and `pnpm browsers:install` inside my-decks, and confirm `pnpm preflight` passes.
+3. Read my-decks/AGENTS.md. Start with the slide-brief skill: ask me the four questions in one message and wait for my answers.
+4. Do not generate any slide before I have confirmed the story.</pre>
+          <button class="btn btn-sm copy" type="button" data-copy="cmd-prompt">Copy</button>
+        </div>
+        <p class="measure">Every deck command is a script that <code>init</code> wrote into the workspace's <code>package.json</code>. The full list, from <code>story:check</code> to <code>theme:import</code>, is in the <a href="https://github.com/white1024/slide-nextup#commands">Commands section of the README</a>. To upgrade later: <code>pnpm add -D slide-nextup@latest</code>, then <code>pnpm exec slide-nextup init --update</code>, which refreshes the skills and scripts and never touches your decks or your <code>AGENTS.md</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="label">
+        <p class="eyebrow">Questions</p>
+        <p>The honest edges of the first release.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Does presenting need a server?</summary>
+          <p>No. <code>deck.html</code> carries the model, the styles and the player; rendered with <code>--inline-assets</code>, or saved with the editor's Download deck.html, it carries the images too. Open it in a browser and use the arrow keys. <kbd>P</kbd> opens the presenter window with the next slide, notes and a timer. The dev server is only for editing with autosave.</p>
+        </details>
+        <details>
+          <summary>Can I export PDF or PowerPoint?</summary>
+          <p>Not yet. The first release outputs HTML only. PDF export from the same HTML through Playwright is the planned next step; PowerPoint is outside the first phase.</p>
+        </details>
+        <details>
+          <summary>Which agents work?</summary>
+          <p>Claude Code and Codex are the two the workspace is set up for: Claude Code reads <code>CLAUDE.md</code>, which imports <code>AGENTS.md</code>; Codex reads <code>AGENTS.md</code> directly. The skills are plain Markdown, so any agent that can read a file and run <code>pnpm</code> scripts can follow them.</p>
+        </details>
+        <details>
+          <summary>What happens if I change the story after confirming it?</summary>
+          <p><code>story:confirm</code> records a hash of the story. If the file changes, <code>deck:scaffold</code> refuses to run until you confirm again. Regenerating a page keeps the manual edits you made to it in the browser.</p>
+        </details>
+        <details>
+          <summary>Can I bring my own theme?</summary>
+          <p>Yes. A theme pack is a folder; drop it into the workspace's <code>themes/</code> or import a zip with <code>theme:import</code>, which runs the lint and QA first. A pack ported from someone else's template records its source in <code>theme.json</code> and gets an entry in the third-party notices.</p>
+        </details>
+        <details>
+          <summary>Does it work in Chinese, Japanese or Korean?</summary>
+          <p>Yes. Character limits and the density check count full-width units, so a CJK glyph is one and a Latin letter is a half. The deck's <code>lang</code> follows the story's frontmatter or is guessed from the script of the text, and the original Chinese section headings of <code>story.md</code> are still accepted.</p>
+        </details>
+        <details>
+          <summary>Is it open source?</summary>
+          <p>MIT. The source is on <a href="https://github.com/white1024/slide-nextup">GitHub</a> and the package is <a href="https://www.npmjs.com/package/slide-nextup">slide-nextup on npm</a>. Ported themes and icons keep their original licences, listed in the repository.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>slide-nextup · MIT License · Screenshots show a copy of the bundled example deck, rethemed to Blue Professional for this page.</span>
+    <nav aria-label="Project links">
+      <a href="https://github.com/white1024/slide-nextup">GitHub</a>
+      <a href="https://www.npmjs.com/package/slide-nextup">npm</a>
+      <a href="https://github.com/white1024/slide-nextup/blob/main/README.md">README</a>
+      <a href="https://github.com/white1024/slide-nextup/blob/main/THIRD_PARTY_NOTICES.md">Third-party notices</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  for (const button of document.querySelectorAll('[data-copy]')) {
+    button.addEventListener('click', async () => {
+      const source = document.getElementById(button.dataset.copy)
+      const text = source ? source.innerText.replace(/[ \t]+#[^\n]*/g, '').trim() : ''
+      try {
+        await navigator.clipboard.writeText(text)
+        button.textContent = 'Copied'
+      } catch {
+        button.textContent = 'Select and copy'
+      }
+      setTimeout(() => { button.textContent = 'Copy' }, 1600)
+    })
+  }
+</script>
+</body>
+</html>
