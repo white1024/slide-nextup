@@ -1,80 +1,87 @@
-# story.md 格式參考
+# story.md format reference
 
-正本是 `src/model/story.ts` 與 `specs/story-format`（`pnpm story:check` 依此檢查）。這裡是給寫作用的摘要。
+The source of truth is `src/model/story.ts` (`pnpm story:check` checks against it). This is a summary for writing.
 
-## 檔案結構
+## File structure
 
 ```markdown
 ---
-title: <簡報標題>
-audience: <受眾：誰、幾人、背景>
-occasion: <場合與目的>
-duration_minutes: <整數，分鐘>
+title: <deck title>
+audience: <audience: who, how many, background>
+occasion: <occasion and purpose>
+duration_minutes: <number of minutes, greater than 0>
 density: minimal | light | standard | dense
 narrative_pattern: problem-solution | timeline | contrast | pyramid | journey
-core_message: <一句話的核心主張>
+core_message: <the core message in one sentence>
+lang: <optional: a BCP 47 tag such as en or zh-Hant>
 ---
 
-## 目標與受眾
-<散文：目標、受眾現況、希望受眾結束時做的事>
+## Goal and audience
+<prose: the goal, where the audience stands now, what they should do at the end>
 
-## 核心主張
-<一到三句：主張是什麼、為什麼受眾該在乎>
+## Core message
+<one to three sentences: what the claim is and why the audience should care>
 
-## 敘事骨架
-1. <章節：這章要讓受眾相信什麼>
+## Narrative skeleton
+1. <chapter: what this chapter has to make the audience believe>
 2. ...
 
-## 逐頁
+## Slides
 
-### s1 | <標題>
+### s1 | <title>
 - scene_role: hero | map | evidence | relationship | pause | close
-- intensity: 1–5
+- intensity: 1-5
 - content_relation: statement | comparison | sequence | hierarchy | evidence | list | closing
-- message: <一句話>
-- evidence: <一條，或縮排清單多條>
-- notes: <講稿提示>
-- chapter: <選填：這頁屬於骨架的哪一章，例如「骨架」>
+- message: <one sentence>
+- evidence: <one item, or several as an indented list>
+- notes: <speaker prompts>
+- chapter: <optional: the chapter of the skeleton this slide belongs to, e.g. "Skeleton">
 ```
 
-頁面 id 只能用英數、底線、連字號（慣例 `s1`、`s2`…）；標題與 id 之間用 `|`。
+The frontmatter and the `- key: value` fields are YAML: a value that itself contains `: ` (a colon followed by a space) must be quoted, e.g. `title: "Tidewatch: progress and direction"` or `- "Now: open the app, lay it out"`, or it is read as a nested mapping and rejected. Chinese full-width colons do not have this problem.
 
-## 欄位怎麼填
+The four section headings above are the canonical ones. The original Chinese headings are still accepted as aliases, case-insensitively; new documents use the English ones.
 
-| 欄位 | 意思 | 怎麼決定 |
+`lang` is optional: a BCP 47 tag for the language of the content. The scaffold copies it into deck.json as `lang`; without it the language is guessed from the text when the deck is built.
+
+A slide id starts with a letter and uses only letters, digits, underscores and hyphens (by convention `s1`, `s2`, ...); a `|` separates the id from the title (`：`, `:`, `·`, an en or em dash and `-` are accepted too).
+
+## How to fill the fields
+
+| Field | Meaning | How to decide |
 |---|---|---|
-| `scene_role` | 這頁在整體節奏裡的角色 | hero 開場主張；map 地圖或目錄；evidence 證據；relationship 關係、流程、比較；pause 停頓、提問、留白；close 收尾與行動 |
-| `intensity` | 視覺與情緒強度 | 1 幾乎空白、2 安靜、3 一般內容、4 重點、5 全場高峰 |
-| `content_relation` | 內容的結構 | statement 單一主張；comparison 兩邊對比；sequence 步驟或時間；hierarchy 層級或優先序；evidence 數據與事實；list 平行的幾件事；closing 行動呼籲 |
-| `message` | 這頁唯一要說的話 | 一句、有動詞、可被證據支撐 |
-| `evidence` | 要放上投影片的事實 | 見下方寫法約定 |
-| `notes` | 講者備註 | 轉場、停頓、提問、限制說明 |
-| `chapter` | 選填，這頁屬於敘事骨架的哪一章 | 用骨架裡的章名（「骨架」「交付物」）；生成時會依第一次出現的順序編成「01 — 骨架」填進有章節標籤的版型，同章的頁共用一號。封面與結尾通常不填 |
+| `scene_role` | the slide's role in the overall rhythm | hero: the opening claim; map: a map or agenda; evidence: proof; relationship: relations, processes, comparisons; pause: a pause, a question, white space; close: the wrap-up and the action |
+| `intensity` | visual and emotional intensity | 1 almost blank, 2 quiet, 3 ordinary content, 4 a highlight, 5 the peak of the whole deck |
+| `content_relation` | the structure of the content | statement: a single claim; comparison: two sides; sequence: steps or time; hierarchy: levels or priorities; evidence: data and facts; list: several parallel things; closing: the call to action |
+| `message` | the one thing this slide says | one sentence, with a verb, supportable by evidence |
+| `evidence` | the facts that go on the slide | see the conventions below |
+| `notes` | speaker notes | transitions, pauses, questions, caveats |
+| `chapter` | optional: the chapter of the narrative skeleton this slide belongs to | use the chapter's name from the skeleton ("Skeleton", "Deliverables"); at build time the chapters are numbered in order of first appearance and written as a label (`01`, an em dash, the chapter name) into layouts that carry a chapter label, and slides of the same chapter share the number. The cover and the closing slide usually leave it out |
 
-## 內容關係與版型的對應（生成時的預設）
+## Default mapping from content relation to layout (at build time)
 
-| scene_role / content_relation | 預設版型 |
+| scene_role / content_relation | Default layout |
 |---|---|
 | hero | cover |
-| close 或 closing | closing |
-| comparison | comparison（evidence 前兩條分別是左右欄） |
-| list、hierarchy | cards（evidence 每條一張卡，最多三張） |
-| evidence 且每條都是「數字｜標籤｜變化」 | cards（大數字卡） |
-| 其他 | statement（標題、message、evidence 清單） |
+| close, or closing | closing |
+| comparison | comparison (the first two evidence items become the left and right columns) |
+| list, hierarchy | cards (one card per evidence item, at most three) |
+| evidence, with at least two items and every one written as `number \| label \| change` | cards (big-number cards) |
+| anything else | statement (title, message, the evidence as a list) |
 
-需要圖片的頁可在生成時指定 `photo` 版型。
+A slide that needs a picture can be given the `photo` layout at build time.
 
-## evidence 的寫法約定
+## Conventions for evidence
 
-- 大數字：`72%｜主要指標名稱｜較去年 +11pp`（第三段可省略）
-- 對比：兩條，各以「名稱：」開頭，項目用「、」或「→」分隔，例如 `現況：開軟體 → 排版 → 講一遍`
-- 流程：一條，用「→」串接
-- 一般事實：完整短句，附年份、母體或來源
+- A big number: `72% | name of the main metric | +11pp on last year` (the third part is optional; the pipe may be `|` or its full-width form, U+FF5C)
+- A comparison: two items, each starting with `<name>:`, the entries separated by commas, semicolons (ASCII or full-width) or the right-arrow character (U+2192), e.g. `Now: open the software, lay it out, talk it through` (a plain `->` is not recognised as a separator)
+- A process: one item, the steps joined with the right-arrow character (U+2192). The scaffold does not fill process layouts from it: pin the layout with `deck:scaffold --layouts sN=process` and write the steps into the slots by hand
+- An ordinary fact: a complete short sentence, with a year, a base or a source
 
-## 節奏規則（error 級，會擋）
+## Rhythm rules (errors, they block)
 
-- 至少一頁 `intensity` ≤ 2；至少一頁 ≥ 4
-- 同一 `scene_role` 不連續超過 3 頁
-- 每頁只有一個 `message`，不能多行
+- At least one slide with `intensity` <= 2; at least one with >= 4
+- The same `scene_role` never runs for more than 3 slides in a row
+- Exactly one `message` per slide, on a single line
 
-警告級：第一頁不是 hero、最後一頁不是 close、evidence 頁沒有 evidence、message 看起來不只一句、頁數與時長不符（每頁 1 到 2 分鐘）。
+Warnings: the first slide is not a hero, the last slide is not a close, an evidence slide has no evidence, a message looks like more than one sentence, the slide count does not match the duration (1 to 2 minutes per slide).

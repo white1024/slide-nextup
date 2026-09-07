@@ -1,19 +1,19 @@
 {
   "id": "before-after",
-  "name": "之前與之後",
-  "description": "左右兩張卡中間一支箭頭，左邊是現況、右邊是改變後。改成普通兩欄會失去「有方向、有因果」的閱讀順序。",
+  "name": "Before and after",
+  "description": "Two cards with an arrow between them: the left is today, the right is after the change. A plain two-column split would lose the directed, cause-and-effect reading order.",
   "content_relations": ["comparison", "sequence"],
   "scene_roles": ["relationship", "evidence"],
   "density": { "max_chars": 400, "max_elements": 9 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "一行主張" },
-    "before-label": { "type": "text", "required": false, "hint": "左欄名，例如「現況」" },
-    "after-label": { "type": "text", "required": false, "hint": "右欄名，例如「新流程」" },
-    "before": { "type": ["list", "text"], "required": true, "hint": "現況：三到四條" },
-    "after": { "type": ["list", "text"], "required": true, "hint": "改變後：三到四條，與左邊逐條對應" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "a one-line claim" },
+    "before-label": { "type": "text", "required": false, "hint": "left column name, e.g. \"Today\"" },
+    "after-label": { "type": "text", "required": false, "hint": "right column name, e.g. \"New flow\"" },
+    "before": { "type": ["list", "text"], "required": true, "hint": "today: 3 to 4 items" },
+    "after": { "type": ["list", "text"], "required": true, "hint": "after: 3 to 4 items, in the same order as the left" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -27,13 +27,13 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "把「確認敘事」搬到生成版面之前" },
-    "before-label": { "type": "text", "value": "現況" },
-    "after-label": { "type": "text", "value": "新流程" },
-    "before": { "type": "list", "items": ["開軟體，先挑模板", "內容塞進版面", "講一遍，發現順序不對", "重排，再講一遍"] },
-    "after": { "type": "list", "items": ["寫敘事文件", "*你確認*順序與訊息", "生成版面", "只微調文字"] },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "Move story sign-off ahead of layout" },
+    "before-label": { "type": "text", "value": "Today" },
+    "after-label": { "type": "text", "value": "New flow" },
+    "before": { "type": "list", "items": ["Open the app, pick a template", "Pour content into the layout", "Rehearse, find the order is wrong", "Reorder, rehearse again"] },
+    "after": { "type": "list", "items": ["Write the story file", "*You confirm* the order and messages", "Generate the layouts", "Only tweak wording"] },
     "page": { "type": "text", "value": "04 / 08" }
   }
 }

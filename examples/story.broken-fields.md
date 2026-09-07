@@ -1,68 +1,68 @@
 ---
-title: 故意違規的敘事範例
-audience: 測試用
-occasion: 測試用
+title: A story that deliberately breaks the rules
+audience: For testing
+occasion: For testing
 duration_minutes: 10
 density: medium
 narrative_pattern: problem-solution
-core_message: 這份檔案用來確認 story:check 會抓到每一種違規。
+core_message: This file confirms that story:check catches every kind of violation.
 ---
 
-## 目標與受眾
+## Goal and audience
 
-用來測試。
+For testing.
 
-## 核心主張
+## Core message
 
-用來測試。
+For testing.
 
-## 敘事骨架
+## Narrative skeleton
 
-1. 用來測試。
+1. For testing.
 
-## 逐頁
+## Slides
 
-### s1 | 開場
+### s1 | Opening
 - scene_role: hero
 - intensity: 4
 - content_relation: statement
-- message: 開場主張。
+- message: The opening claim.
 
-### s2 | 缺少內容關係
+### s2 | Missing content relation
 - scene_role: map
 - intensity: 3
-- message: 這頁少了 content_relation。
+- message: This slide has no content_relation.
 
-### s3 | 證據一
+### s3 | Evidence one
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據一。
-- evidence: 數據一
+- message: Evidence one.
+- evidence: Figure one
 
-### s4 | 證據二
+### s4 | Evidence two
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據二。
-- evidence: 數據二
+- message: Evidence two.
+- evidence: Figure two
 
-### s5 | 證據三
+### s5 | Evidence three
 - scene_role: evidence
 - intensity: 4
 - content_relation: evidence
-- message: 證據三。
-- evidence: 數據三
+- message: Evidence three.
+- evidence: Figure three
 
-### s6 | 證據四
+### s6 | Evidence four
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據四。
-- evidence: 數據四
+- message: Evidence four.
+- evidence: Figure four
 
-### s7 | 收尾
+### s7 | Close
 - scene_role: close
 - intensity: 4
 - content_relation: closing
-- message: 收尾。
+- message: The close.

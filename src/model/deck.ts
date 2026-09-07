@@ -142,6 +142,8 @@ export interface Deck {
   transition?: Transition
   /** "off": every step element shows at once and nothing enters; absent means on */
   motion?: Motion
+  /** BCP 47 tag of the content (en, zh-Hant…); absent means detected from the text when rendering */
+  lang?: string
   story?: StoryRef
   slides: Slide[]
   overrides: Record<string, Override>
@@ -494,7 +496,7 @@ export function normaliseDeck(deck: Deck): Deck {
     overrides[key] = normaliseOverride(deck.overrides[key] as Override)
   }
   const pages = normalisePages(deck.pages)
-  // fixed key order: schemaVersion, id, title, theme, canvas, transition?, motion?, story?, slides, overrides, pages?
+  // fixed key order: schemaVersion, id, title, theme, canvas, transition?, motion?, lang?, story?, slides, overrides, pages?
   const out: Deck = {
     schemaVersion: 1,
     id: deck.id,
@@ -503,6 +505,7 @@ export function normaliseDeck(deck: Deck): Deck {
     canvas: { width: 1920, height: 1080 },
     ...(deck.transition !== undefined ? { transition: deck.transition } : {}),
     ...(deck.motion !== undefined ? { motion: deck.motion } : {}),
+    ...(deck.lang !== undefined ? { lang: deck.lang } : {}),
     ...(deck.story ? { story: { path: deck.story.path, sha256: deck.story.sha256 } } : {}),
     slides,
     overrides,

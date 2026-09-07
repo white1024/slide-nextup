@@ -1,7 +1,7 @@
 {
   "id": "process",
-  "name": "流程：暖色 Keynote",
-  "description": "一條橫向流程：六個膠囊節點與五個箭頭，上面導語、下面提醒。改成條列會失去「一眼看完整條線」的效果。",
+  "name": "Process: Warm Keynote",
+  "description": "One horizontal flow: six pill nodes and five arrows, a lede above and a reminder below. A bulleted list would lose the effect of taking in the whole line at a glance.",
   "content_relations": [
     "sequence"
   ],
@@ -17,22 +17,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+      "hint": "the claim of the slide in one sentence, up to 2 lines and 24 characters; *keyword* marks an emphasis"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "step-1": {
       "type": [
@@ -40,7 +40,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "步驟名，每行七字以內、兩行以內"
+      "hint": "step name, up to 7 characters per line, up to 2 lines"
     },
     "step-2": {
       "type": [
@@ -48,7 +48,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "step-3": {
       "type": [
@@ -56,7 +56,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "step-4": {
       "type": [
@@ -64,7 +64,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "step-5": {
       "type": [
@@ -72,7 +72,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "step-6": {
       "type": [
@@ -80,17 +80,17 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "流程的提醒：最容易漏的一兩件事"
+      "hint": "a reminder for the process: what is most easily missed"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -170,11 +170,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "page": {
       "type": "text",
@@ -182,11 +182,11 @@
     },
     "title": {
       "type": "text",
-      "value": "固定六步的量測流程"
+      "value": "A fixed six-step check run"
     },
     "subtitle": {
       "type": "text",
-      "value": "一次完整量測是固定的六步，可中斷、可續跑。"
+      "value": "A full check is the same six steps every time; it can be paused and resumed."
     },
     "step-1": {
       "type": "text",
@@ -214,7 +214,7 @@
     },
     "caption": {
       "type": "text",
-      "value": "run 不會自動產出結果檔，漏掉 export 等於跑完卻交不出東西。"
+      "value": "run does not write the result file by itself; skip export and the run ends with nothing to hand over."
     }
   }
 }

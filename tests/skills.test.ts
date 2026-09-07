@@ -5,7 +5,16 @@ import { describe, expect, it } from 'vitest'
 import { checkSkills, isClean, listFiles, syncSkills } from '../src/skills/sync.ts'
 
 const SLIDE_SKILLS = ['slide-brief', 'slide-story', 'slide-design', 'slide-build']
-const EDITOR_WORDS = ['contenteditable', 'pointerdown', '把手', 'undo', 'redo', 'ed-panel']
+// editor internals that must never leak into a skill: markup, event and class names, not the words a user sees in the toolbar
+const EDITOR_WORDS = [
+  'contenteditable',
+  'pointerdown',
+  'ed-panel',
+  'ed-float',
+  'ed-btn',
+  'localstorage',
+]
+const CJK = /[一-鿿]/
 
 describe('skills mirror', () => {
   it('syncs a source tree into a mirror and detects every kind of drift', () => {
@@ -56,6 +65,13 @@ describe('slide skills', () => {
     expect(text).toMatch(/^description: .+/m)
     for (const word of EDITOR_WORDS)
       expect(text.toLowerCase(), `${name} mentions ${word}`).not.toContain(word)
+    // the skills are written in English; the Chinese story headings survive only as aliases described in prose
+    const dir = resolve('.agents/skills', name)
+    for (const rel of listFiles(dir))
+      expect(
+        readFileSync(join(dir, rel), 'utf8'),
+        `${name}/${rel} still contains Chinese text`,
+      ).not.toMatch(CJK)
   })
 
   it('every relative link inside a skill resolves', () => {
@@ -73,7 +89,8 @@ describe('slide skills', () => {
   it('the story skill stops for confirmation and the build skill enforces the gate', () => {
     const storySkill = readFileSync(resolve('.agents/skills/slide-story/SKILL.md'), 'utf8')
     expect(storySkill).toContain('pnpm story:confirm')
-    expect(storySkill).toMatch(/確認/)
+    expect(storySkill).toMatch(/confirm/i)
+    expect(storySkill).toMatch(/before you confirm/)
     const buildSkill = readFileSync(resolve('.agents/skills/slide-build/SKILL.md'), 'utf8')
     expect(buildSkill).toContain('pnpm deck:scaffold')
     expect(buildSkill).toContain('--require-confirmed')

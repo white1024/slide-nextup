@@ -1,17 +1,17 @@
 {
   "id": "data-table",
-  "name": "表格",
-  "description": "標題、一張最多六列五欄的表格、一行出處。改成卡片會失去「同一欄可以上下對照」的可比性。",
+  "name": "Table",
+  "description": "A title, a table of up to 6 rows and 5 columns, and a source note. Cards would lose the column-by-column comparability.",
   "content_relations": ["comparison", "evidence", "list"],
   "scene_roles": ["evidence"],
   "density": { "max_chars": 640, "max_elements": 6 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "表格的結論，一行" },
-    "table": { "type": "table", "required": true, "hint": "header 一列、rows 最多六列，每格一到十個字" },
-    "caption": { "type": "text", "required": false, "hint": "資料來源，一行" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "the table's conclusion, one line" },
+    "table": { "type": "table", "required": true, "hint": "one header row, up to 6 rows, 1 to 10 characters per cell" },
+    "caption": { "type": "text", "required": false, "hint": "data source, one line" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -22,22 +22,22 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "六份簡報裡，只有一份不是順序問題" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "One deck in six was not about order" },
     "table": {
       "type": "table",
-      "header": ["簡報", "改版輪數", "起因是順序", "起因是版面", "備註"],
+      "header": ["Deck", "Rounds", "From order", "From layout", "Note"],
       "rows": [
-        ["Q1 業績回顧", "5", "4", "1", "目錄改了三次"],
-        ["新產品提案", "4", "3", "1", ""],
-        ["季度 OKR", "3", "2", "1", ""],
-        ["客戶案例", "4", "1", "3", "*唯一*版面為主"],
-        ["年度預算", "5", "4", "1", "章節順序對調"],
-        ["內訓教材", "3", "2", "1", ""]
+        ["Q1 sales review", "5", "4", "1", "Agenda moved 3 times"],
+        ["New product pitch", "4", "3", "1", ""],
+        ["Quarterly OKRs", "3", "2", "1", ""],
+        ["Customer case", "4", "1", "3", "*only* layout-led"],
+        ["Annual budget", "5", "4", "1", "Chapters swapped"],
+        ["Training material", "3", "2", "1", ""]
       ]
     },
-    "caption": { "type": "text", "value": "上季六份簡報、二十四輪修改的逐輪紀錄。" },
+    "caption": { "type": "text", "value": "Last quarter: six decks, 24 revision rounds, logged one by one." },
     "page": { "type": "text", "value": "03 / 08" }
   }
 }

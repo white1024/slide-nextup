@@ -1,132 +1,135 @@
-# 視覺方向與主題檔參考
+# Visual directions and the theme file
 
-## 主題能決定什麼
+## What a theme decides
 
-主題只管外觀：色彩、字型、字重、字距、邊框、背景、透明度。位置、尺寸、字級、行高、對齊屬於版型，主題寫了會被 `pnpm theme:lint` 擋下。
+A theme owns appearance only: colour, typeface, weight, letter spacing, borders, backgrounds, opacity. Position, size, font size, line height and alignment belong to the layout; a theme that sets them is stopped by `pnpm theme:lint`.
 
-## 播放時的 hover 狀態
+## Hover states during playback
 
-播放時元件要對滑鼠有回應，這也是主題的事：
+Elements respond to the mouse during playback, and that is the theme's job too:
 
-- 每條 hover 規則寫成 `[data-interactive] [data-role="card"]:hover { … }`：以 `[data-interactive]` 開頭、用 data-role 選元件（後面可以再接 data-tone 或後代元素，例如 `[data-interactive] [data-role="table"] tbody tr:hover td`）。播放器在靜態模式（`?static=1`、QA）與編輯模式會拿掉 `html[data-interactive]`，所以量測與拖曳永遠碰不到 hover。
-- hover 規則裡可以用 `transform`（抬起、微放大），其他地方仍然不行；過場由播放器統一給（0.18 秒），主題不寫 `transition`。
-- 主題定了 card、pill、cta、photo、table 哪一個的外觀，就必須給它 hover 狀態，`pnpm theme:lint` 會擋。慣例：card 抬起並加深陰影、pill／cta 高亮或微放大、table 列換底色、photo 微縮放。
-- 圖表 hover 的數值提示（`.chart-tip`）與圖片點擊放大由播放器負責；提示用 `--color-ink` 底、`--color-paper` 字，主題要換就寫 `[data-role="chart"] .chart-tip rect`。
-- 互動元件的外觀也走同一條路：展開的卡片（`.deck-details`）沿用來源元件的 data-role，所以 card 的玻璃底、陰影會自動套上；分頁籤的框是 `[data-role="tabs"]`，頁籤列與作用中頁籤的底線由基礎 CSS 給，主題只換顏色與字型（`[data-role="tabs"] .tab`、`.tab.is-active`，hover 一樣掛在 `[data-interactive]` 底下）；圖例色塊 `.chart-swatch` 與圖表填色同源，關掉的項目由播放器降透明度；熱區的虛線框與標籤用 `--color-accent`、`--color-ink`／`--color-paper`。
+- Every hover rule is written as `[data-interactive] [data-role="card"]:hover { ... }`: it starts with `[data-interactive]` and picks the element by data-role (a data-tone or a descendant may follow, e.g. `[data-interactive] [data-role="table"] tbody tr:hover td`). The player removes `html[data-interactive]` in static mode (`?static=1`, QA) and in edit mode, so measurement and dragging never meet a hover.
+- A hover rule may use `transform` (a lift, a slight scale); nowhere else may. The player supplies the transition itself (0.18 s); a theme writes no `transition`.
+- Whichever of card, pill, cta, photo and table the theme styles must also get a hover state, or `pnpm theme:lint` fails. Convention: a card lifts and deepens its shadow, a pill or cta highlights or scales slightly, a table row changes its background, a photo scales slightly.
+- The value tooltip on chart hover (`.chart-tip`) and click-to-enlarge on images are the player's; the tooltip uses `--color-ink` as its ground and `--color-paper` for text, and a theme that wants otherwise writes `[data-role="chart"] .chart-tip rect`.
+- Interactive components take their look the same way: an expanded card (`.deck-details`) keeps the data-role of its source element, so a card's glass ground and shadow apply automatically; a tab set's frame is `[data-role="tabs"]`, the tab strip and the active tab's underline come from the base CSS and the theme changes only colour and typeface (`[data-role="tabs"] .tab`, `.tab.is-active`, hover again under `[data-interactive]`); the legend swatches `.chart-swatch` share the chart's fill colours and the player dims a switched-off item; a hotspot's dashed frame and label use `--color-accent` and `--color-ink` / `--color-paper`.
 
-`themes/<id>/theme.json`：
+`themes/<id>/theme.json`:
 
 ```json
 {
+  "schemaVersion": 1,
   "id": "<kebab-case>",
-  "name": "<顯示名>",
-  "description": "<一句話的視覺語言>",
+  "name": "<display name>",
+  "description": "<the visual language in one sentence>",
   "colors": {
-    "paper":   { "value": "#rrggbb", "use": "頁面底色" },
-    "ink":     { "value": "#rrggbb", "use": "主要文字；反相頁的底色" },
-    "muted":   { "value": "#rrggbb", "use": "副標、說明" },
-    "accent":  { "value": "#rrggbb", "use": "唯一強調色" },
-    "surface": { "value": "#rrggbb", "use": "卡片、面板底" },
-    "line":    { "value": "#rrggbb", "use": "細線、邊框" }
+    "paper":   { "value": "#rrggbb", "use": "page background" },
+    "ink":     { "value": "#rrggbb", "use": "primary text; background of inverted pages" },
+    "muted":   { "value": "#rrggbb", "use": "subtitles, captions" },
+    "accent":  { "value": "#rrggbb", "use": "the only accent colour" },
+    "surface": { "value": "#rrggbb", "use": "card and panel background" },
+    "line":    { "value": "#rrggbb", "use": "thin rules, borders" }
   },
   "typography": {
-    "display": { "family": "<字型堆疊>", "weight": 700 },
-    "body":    { "family": "<字型堆疊>", "weight": 400 }
+    "display": { "family": "<font stack>", "weight": 700 },
+    "body":    { "family": "<font stack>", "weight": 400 }
   },
   "spacing": { "radius": 4 },
   "decoration": { "vocabulary": ["..."], "avoid": ["..."] }
 }
 ```
 
-六個色彩角色都是必要的；可以多加自訂色（例如 `accent2`），渲染器會一併轉成 `--color-<name>` 變數。
+`schemaVersion` is required (this engine understands 1; `pnpm theme:check` verifies it); `engine` (a semver range checked against package.json), `source` (where a ported pack came from) and `motion` (the pack's default page transition) are optional. All six colour roles are required; custom colours may be added (e.g. `accent2`) and the renderer turns every one into a `--color-<name>` variable.
 
-`themes/<id>/theme.css` 只透過變數取值：`var(--color-paper)`、`var(--color-ink)`、`var(--color-muted)`、`var(--color-accent)`、`var(--color-surface)`、`var(--color-line)`、`var(--font-display)`、`var(--font-display-weight)`、`var(--font-body)`、`var(--font-body-weight)`、`var(--radius)`。
+`themes/<id>/theme.css` takes its values only through variables: `var(--color-paper)`, `var(--color-ink)`, `var(--color-muted)`, `var(--color-accent)`, `var(--color-surface)`, `var(--color-line)`, `var(--font-display)`, `var(--font-display-weight)`, `var(--font-body)`, `var(--font-body-weight)`, `var(--radius)`.
 
-## 主題要上色的 role
+## Roles a theme colours
 
-版型用 `data-role` 標記元件的語意，主題只認 role，不認版型或元件 id：
+Layouts mark the meaning of a component with `data-role`; a theme knows only roles, never layout or element ids:
 
-| role | 出現在 | 通常怎麼畫 |
+| role | Appears in | Usually drawn as |
 |---|---|---|
-| `title` | 每個版型 | display 字型、ink 色 |
-| `kicker` | cover | accent 色、加字距 |
-| `subtitle`、`caption` | cover、comparison 欄名、photo | muted 色 |
-| `body` | statement、closing | ink 色 |
-| `list` | statement、comparison | `.list li` 的記號用 `border-left` 畫，不用 `content` |
-| `card` | cards | surface 底、line 邊框、radius |
-| `backdrop` | cover、closing 的色條 | accent 色塊 |
-| `divider` | comparison | line 色 |
-| `cta` | closing | accent 或粗體 |
-| `photo` | photo | surface 底、line 邊框 |
+| `title` | every layout | display typeface, ink colour |
+| `kicker` | cover | accent colour, extra letter spacing |
+| `subtitle`, `caption` | cover, comparison column names, photo | muted colour |
+| `body` | statement, closing | ink colour |
+| `list` | statement, comparison | the marker of `.list li` drawn with `border-left`, not with `content` |
+| `card` | cards | surface ground, line border, radius |
+| `backdrop` | the colour bar of cover and closing | an accent block |
+| `divider` | comparison | line colour |
+| `cta` | closing | accent or bold |
+| `photo` | photo | surface ground, line border |
 
-`data-tone="inverse"` 標在整頁（closing）：主題要為反相頁定義底色與文字色。
+`data-tone="inverse"` marks a whole page (closing): the theme has to define the ground and text colours of inverted pages.
 
-metric 卡的內部結構是 `.metric-value`、`.metric-label`、`.metric-delta`，主題可以對這些 class 上色。
+The inside of a metric card is `.metric-value`, `.metric-label`, `.metric-delta`; a theme may colour those classes.
 
-## 三個方向怎麼拉開差距
+## How the three directions pull apart
 
-| 方向 | 手法 |
+| Direction | Means |
 |---|---|
-| 穩妥 | 既有主題，或只換 accent 與字型的變體 |
-| 大膽 | 反相（ink 當底、paper 當字）、大面積 accent、極粗 display 字重、雙色 |
-| 自由發揮 | 從題目長出來的隱喻：例如「實驗室」用冷灰與等寬字、「手作」用暖紙與襯線、「城市夜景」用深藍與霓虹單色 |
+| Safe | an existing theme, or a variant that changes only the accent and the typeface |
+| Bold | inverted (ink as ground, paper as text), large areas of accent, an extra-heavy display weight, two colours |
+| Free | a metaphor grown from the subject: "laboratory" with cool greys and a monospace face, "handmade" with warm paper and a serif, "city at night" with deep blue and a single neon colour |
 
-一個方向一句話能講清楚才算成立：「氛圍 + 色 + 字 + 一個裝飾語彙」。
+A direction stands only if one sentence describes it: "mood + colour + typeface + one decorative vocabulary".
 
-## 允許而且鼓勵的多層手法
+## Layering that is allowed and encouraged
 
-好看的簡報不是純色底加文字。主題可以疊這些（都是外觀屬性，lint 不擋）：
+A good-looking deck is not a flat colour with text on it. A theme may stack these (all appearance properties, the lint allows them):
 
-- **光暈**：`[data-role="glow"]` 用 `radial-gradient` 加 `filter: blur()`，一到兩個、低透明度，放在版型給的位置。
-- **紋理**：`.slide` 的 `background-image` 疊 80px 網格、點陣或紙張噪點（SVG data URI，透明度 2% 到 6%）。
-- **內框與角標**：`[data-role="frame"]` 一條 1px 細線內框；`[data-role="corner"]` 用 `border-top` 加 `border-left` 畫 L 形。
-- **關鍵詞混排**：`em` 換成襯線斜體加強調色（文字槽位用 `*關鍵詞*` 標記）。
-- **家具小字**：`[data-role="meta"]` 大寫字距 0.18em 到 0.3em、等寬或無襯線、muted 色。
-- **大字負字距**：display 字級 ≥ 96px 時 `letter-spacing: -0.02em` 到 `-0.045em`；小字反過來拉開。
+- **Glow**: `[data-role="glow"]` with a `radial-gradient` and `filter: blur()`, one or two, low opacity, at the position the layout gives.
+- **Texture**: the `background-image` of `.slide` overlaid with an 80px grid, a dot pattern or paper noise (an SVG data URI, 2% to 6% opacity).
+- **Inner frame and corner marks**: `[data-role="frame"]` as a 1px inner rule; `[data-role="corner"]` drawn as an L with `border-top` plus `border-left`.
+- **Keyword in a second face**: `em` swapped for an italic serif in the accent colour (text slots mark it as `*keyword*`).
+- **Small furniture text**: `[data-role="meta"]` in capitals with 0.18em to 0.3em letter spacing, monospace or sans-serif, muted colour.
+- **Tight display tracking**: `letter-spacing: -0.02em` to `-0.045em` at display sizes >= 96px; small text goes the other way and opens up.
 
-## 避免的預設味
+## The default look to avoid
 
-- Inter、Roboto、Arial 當 display 字型
-- 白底紫藍漸層、整頁彩虹漸層
-- 為裝飾而裝飾：刪掉它頁面資訊不會少的東西就刪掉；陰影只用在光暈與發光線，不做卡片投影牆
-- 右側制式插圖、無意義的幾何色塊
-- 三個方向只差顏色：方向的差異要先來自版型構圖，再來自主題
+- Inter, Roboto or Arial as the display face
+- white-with-purple-blue gradients, whole-page rainbow gradients
+- decoration for its own sake: if removing it loses no information, remove it; shadows only on glows and glowing lines, never a wall of drop-shadowed cards
+- the stock illustration on the right, meaningless geometric colour blocks
+- three directions that differ only in colour: the difference comes first from the layouts' composition, then from the theme
 
-## 中文字型堆疊
+## Font stacks for Chinese text
 
-- 襯線：`'Noto Serif TC', 'Songti TC', 'PMingLiU', 'Source Han Serif TC', Georgia, serif`
-- 無襯線：`'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif`
-- 等寬：`'JetBrains Mono', 'Cascadia Code', 'Consolas', 'Noto Sans Mono CJK TC', monospace`
+- Serif: `'Noto Serif TC', 'Songti TC', 'PMingLiU', 'Source Han Serif TC', Georgia, serif`
+- Sans-serif: `'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', 'Segoe UI', sans-serif`
+- Monospace: `'JetBrains Mono', 'Cascadia Code', 'Consolas', 'Noto Sans Mono CJK TC', monospace`
 
-中文一律落系統字型，堆疊要能在 Windows 與 macOS 各自落到可用的系統字型。拉丁字型可以載入：主題包的 theme.css 直接放 Google Fonts 的 `@font-face`（只取 `/* latin */` 子集，src 指向 gstatic 的 woff2；lint 對主題的 font-face 放行）。不要用 `@import`——渲染器把 CSS 串接後它不會生效。
+Chinese always falls to a system face, and the stack has to land on a usable system face on Windows and on macOS. Latin faces may be loaded: a theme pack's theme.css carries Google Fonts `@font-face` rules directly (only the `/* latin */` subset, src pointing at the gstatic woff2; the lint lets a theme's font-face through). Do not use `@import`; the renderer concatenates the CSS and it would not take effect.
 
-## 移植主題包（從 beautiful-html-templates）
+## Porting a theme pack (from beautiful-html-templates)
 
-一套模板移植成一個主題包，跨模板不混用版型（原專案的規則：每套是封閉的視覺系統）：
+One template becomes one theme pack, and layouts are never mixed across templates (the source project's rule: every set is a closed visual system):
 
-1. 讀 `templates/<slug>/template.html` 的 `:root` 與 `design.md` 開頭的 YAML tokens；`template.json` 的 palette／typography 是摘要。色彩全部落成 `#rrggbb`（rgba 的淡色先與紙色混色成實色），六個必要角色照語意對應，其餘自訂色照原名加（`green`、`pink2`、`tint`…）。
-2. `theme.json` 填 `source`（name、url、author、license、template）；根目錄 `THIRD_PARTY_NOTICES.md` 列上這套；theme.css 與 layout.css 第一行註明出處。
-3. 字型：抓 Google Fonts CSS（用 Chrome UA 才會給 woff2），只取 latin 子集貼進 theme.css；只有單一字重的字型（如 Archivo Black）把 `font-weight` 改成 `100 900`，中文 fallback 才能真的粗體。CJK 堆疊照上面。`design.md` 的「CJK & International Content」段有每套的中文配對建議。
-4. 版型：模板的每一頁 = 主題包裡一個版型 `themes/<slug>/layouts/<id>/`。固定 1920×1080 的模板（deck-stage）數字直接用；vw／vh／clamp 的模板在 1920×1080 下換算（1vw = 19.2px、1vh = 10.8px、1rem = 16px），clamp 取中間值夾住的結果。原版字級在 1920 畫布常只有 13–20px，投影要放大：標題與內文按比例放大到 ≥ 32px，家具（`data-role="meta"`）≥ 20px，保持原本的層級比。
-5. 裝飾一律做成 shape 元件：斜切面用 `clip-path`（幾何，版型可寫）、位移陰影用 `box-shadow`（外觀，主題寫）、圖案用 `background-image`、掃描線用內嵌 `<svg>` 加 pattern，顏色由主題以 `[data-role="<role>"] line { stroke }` 上。主題包可以用自己的 role（`tint`、`dots`、`pixel`、`poster`…），版型與主題成對即可。
-6. 模板的家具對應我們的槽位：頁碼 → `page`，簡報名／系列名 → `brand`，場合／日期 → `meta` 或 `kicker`，來源行 → `cta`（scaffold 自動填第一條 evidence）。
-7. `pnpm theme:check --theme <slug>` 零錯誤（含 theme:lint、schemaVersion、核心版型齊全；role 沒規則只是警告，但要看過），`pnpm design:preview <story> --theme <slug> --layout cover` 看真實內容，和原模板截圖並排比對；`pnpm layouts --theme <slug>` 會列出主題包的版型。
+1. Read the `:root` of `templates/<slug>/template.html` and the YAML tokens at the top of `design.md`; the palette / typography in `template.json` is a summary. Every colour becomes `#rrggbb` (a translucent rgba tint is first blended with the paper colour into a solid), the six required roles are mapped by meaning, and the remaining custom colours keep their original names (`green`, `pink2`, `tint`, ...).
+2. Fill `source` in `theme.json` (name, url, author, license, template); list the set in the root `THIRD_PARTY_NOTICES.md`; note the origin on the first line of theme.css and of each layout.css.
+3. Fonts: fetch the Google Fonts CSS (a Chrome user agent is needed to get woff2), paste only the latin subset into theme.css; for single-weight faces (such as Archivo Black) change `font-weight` to `100 900` so the Chinese fallback can really be bold. CJK stacks as above. The "CJK & International Content" section of `design.md` suggests a Chinese pairing for each set.
+4. Layouts: every page of the template = one layout `themes/<slug>/layouts/<id>/` in the pack. Templates fixed at 1920x1080 (deck-stage) keep their numbers; templates in vw / vh / clamp are converted at 1920x1080 (1vw = 19.2px, 1vh = 10.8px, 1rem = 16px), a clamp taking the clamped middle value. The original font sizes on a 1920 canvas are often only 13-20px and have to grow for projection: scale headings and body proportionally to >= 32px and furniture (`data-role="meta"`) to >= 20px, keeping the original hierarchy ratios.
+5. Decoration is always a shape element: bevels with `clip-path` (geometry, the layout writes it), offset shadows with `box-shadow` (appearance, the theme writes it), patterns with `background-image`, scanlines with an inline `<svg>` plus a pattern, coloured by the theme through `[data-role="<role>"] line { stroke }`. A pack may use roles of its own (`tint`, `dots`, `pixel`, `poster`, ...) as long as layout and theme agree.
+6. The template's furniture maps to our slots: page number -> `page`, deck or series name -> `brand`, occasion or date -> `meta` or `kicker`, source line -> `cta` (the scaffold fills the first evidence item).
+7. `pnpm theme:check --theme <slug>` at zero errors (it runs theme:lint, checks schemaVersion and the complete set of core layouts; a role without a rule is only a warning, but read it), `pnpm design:preview <story> --theme <slug> --layout cover` to see real content, compared side by side with the original template screenshot; `pnpm layouts --theme <slug>` lists the pack's layouts.
 
-### 共用版型詞彙（讓 deck 可以換主題包）
+Themes are looked up in three places, first hit wins: the deck's own folder (`<deck>/themes/<id>`), the user directory (`$SLIDE_NEXTUP_HOME/themes`, else `~/.slide-nextup/themes`), then the repo's `themes/`. `pnpm theme:export` and `pnpm theme:import` move a pack between them as a folder or a zip.
 
-每個主題包都要提供這組核心版型 id，槽位名稱與型別跟通用版型一樣（可以多，不可以少或改名），`pnpm deck:retheme <deck.json> --theme <slug>` 才能把做好的 deck 直接換過去：
+### The shared layout vocabulary (so a deck can change theme pack)
 
-| id | 核心槽位 |
+Every theme pack provides this set of core layout ids, with the same slot names and types as the generic layouts (more is fine, fewer or renamed is not), so that `pnpm deck:retheme <deck.json> --theme <slug>` can move a finished deck across:
+
+| id | Core slots |
 |---|---|
-| cover | title、subtitle |
-| section | number、title、body |
-| statement | title、body、evidence（list） |
-| cards | title、card-1、card-2、card-3（text｜metric） |
-| comparison | title、left-title、left-items、right-title、right-items |
-| process | title、step-1 到 step-4 |
-| photo | title、photo、caption |
-| data-table | title、table、caption |
-| quote | title、caption |
-| closing | title、body、cta |
+| cover | title, subtitle |
+| section | number, title, body |
+| statement | title, body, evidence (list) |
+| cards | title, card-1, card-2, card-3 (text or metric) |
+| comparison | title, left-title, left-items, right-title, right-items |
+| process | title, step-1 to step-4 |
+| photo | title, photo, caption |
+| data-table | title, table, caption |
+| quote | title, caption |
+| closing | title, body, cta |
 
-家具槽位 `brand`、`meta`、`kicker`、`page` 選填。主題包可以再加自己的版型（例如 warm-keynote 的 `cards-2`、`cards-4`、`fact`、`before-after`、`chart-aside`；blue-professional 的 `agenda`、`dashboard`、`detail`、`tabs`）。目前完整的主題包有兩套：warm-keynote（16 個版型）與 blue-professional（17 個版型，由 `themes/blue-professional/generate-layouts.cjs` 從規格產生，改版型就改規格再跑一次）。缺的核心版型會退回通用版型，外觀仍由主題決定，但看起來會弱一截，所以還是補齊。字級下限依 role 分級：一般內容 32px，`chapter`／`pill`／`caption` 24px，`meta`／`chip`／`eyebrow` 20px，`table` 22px。
+The furniture slots `brand`, `meta`, `kicker`, `page` are optional. A pack may add layouts of its own (for example warm-keynote's `cards-2`, `cards-4`, `fact`, `before-after`, `chart-aside`; blue-professional's `agenda`, `dashboard`, `detail`, `tabs`). Two packs are complete at the moment, warm-keynote and blue-professional (`ls themes/<id>/layouts` for the current set). Both are generated from a compact spec by their own `themes/<id>/generate-layouts.cjs` (warm-keynote's `cover` is the one hand-kept file): to change a layout, change the spec and run the generator again, because a hand edit to a generated layout.json is overwritten on the next run. A missing core layout falls back to the generic one, still styled by the theme, but it looks a notch weaker, so fill the set. Font-size floors are graded by role: ordinary content 32px; `chapter` / `pill` / `caption` / `cta` / `kicker` / `flow` 24px; `meta` / `chip` / `eyebrow` 20px; `table` 22px.

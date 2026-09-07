@@ -1,7 +1,7 @@
 {
   "id": "comparison",
-  "name": "對照：藍色專業",
-  "description": "左右兩張淡藍底卡片，各有一個粗體欄名與帶藍線的條列；右邊那張加藍色邊框，是結論要落的那一邊。改成上下兩段會失去並排對照的張力。",
+  "name": "Comparison: blue professional",
+  "description": "Two tinted cards side by side, each with a bold column name and a blue-ruled list; the right one has a blue border and is the side the conclusion lands on. Two stacked paragraphs would lose the tension of the side-by-side contrast.",
   "content_relations": [
     "comparison"
   ],
@@ -17,42 +17,42 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "left-title": {
       "type": "text",
       "required": true,
-      "hint": "左欄名稱，二到八個字"
+      "hint": "left column name, 2 to 8 characters"
     },
     "left-items": {
       "type": "list",
       "required": true,
-      "hint": "三到五條，每條兩行以內"
+      "hint": "3 to 5 items, up to 2 lines each"
     },
     "right-title": {
       "type": "text",
       "required": true,
-      "hint": "右欄名稱，二到八個字"
+      "hint": "right column name, 2 to 8 characters"
     },
     "right-items": {
       "type": "list",
       "required": true,
-      "hint": "三到五條，每條兩行以內"
+      "hint": "3 to 5 items, up to 2 lines each"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -104,11 +104,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -116,32 +116,32 @@
     },
     "title": {
       "type": "text",
-      "value": "先守住交付，再談新功能"
+      "value": "Protect delivery first, then new features"
     },
     "left-title": {
       "type": "text",
-      "value": "守成：先修的"
+      "value": "Hold: fix first"
     },
     "left-items": {
       "type": "list",
       "items": [
-        "首頁與列表頁的載入時間",
-        "表單送出後的回饋",
-        "監控補上使用者端的等待時間",
-        "修復流程指定負責人"
+        "Home and list page load times",
+        "Feedback after a form is submitted",
+        "Monitor the wait as users see it",
+        "Name an owner for each fix"
       ]
     },
     "right-title": {
       "type": "text",
-      "value": "進攻：下一季再排"
+      "value": "Push: later"
     },
     "right-items": {
       "type": "list",
       "items": [
-        "搜尋結果的相關性",
-        "行動版的排版重整",
-        "通知的頻率與分類",
-        "報表匯出"
+        "Relevance of search results",
+        "Reworking the mobile layout",
+        "Notification frequency and grouping",
+        "Report export"
       ]
     }
   }

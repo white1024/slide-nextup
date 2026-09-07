@@ -1,7 +1,7 @@
 {
   "id": "photo",
-  "name": "圖：藍色專業",
-  "description": "標題下面一張全寬的淡藍框放圖（系統圖、截圖），底下一行說明。改成小圖加文字會失去圖本身當主角的份量。",
+  "name": "Photo: blue professional",
+  "description": "Under the title, one full-width tinted frame for an image (a system diagram, a screenshot) with a caption beneath. A small image beside text would lose the weight of the image as the main act.",
   "content_relations": [
     "evidence",
     "statement"
@@ -19,32 +19,32 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "photo": {
       "type": "image",
       "required": true,
-      "hint": "圖片，建議 1766×620 或同比例，會以 cover 方式裁切；可加 hotspots（播放時點擊跳頁的區域，百分比定位）"
+      "hint": "image, ideally 1766 by 620 or the same ratio, cropped to cover; may carry hotspots (click-to-jump areas during playback, positioned in percent)"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行圖說"
+      "hint": "a one-line caption"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -80,11 +80,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -92,12 +92,12 @@
     },
     "title": {
       "type": "text",
-      "value": "量測從使用者這一端開始"
+      "value": "Measurement starts at the user's end"
     },
     "photo": {
       "type": "image",
       "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23ebe9e9%27/%3E%3C/svg%3E",
-      "alt": "系統圖",
+      "alt": "System diagram",
       "hotspots": [
         {
           "target": "cards",
@@ -105,13 +105,13 @@
           "y": 30,
           "w": 16,
           "h": 40,
-          "label": "看三個數字"
+          "label": "See the three numbers"
         }
       ]
     },
     "caption": {
       "type": "text",
-      "value": "瀏覽器端的等待時間先進監控，再對回主機的日誌。"
+      "value": "Browser-side wait times go into monitoring first, then get matched to the server logs."
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "id": "agenda",
-  "name": "議程：藍色專業",
-  "description": "目錄頁：標題下一條短藍線，六個編號項目排成兩欄三列，每項是藍色序號、小標與一句說明，底下細線分隔。改成一條清單會失去「六件事各自成格」的掃視節奏。",
+  "name": "Agenda: blue professional",
+  "description": "A contents page: a short blue rule under the title, then six numbered entries in two columns of three, each a blue number, a heading and a one-sentence note, separated by hairlines. A single list would lose the scanning rhythm of six things each in its own cell.",
   "content_relations": [
     "list",
     "hierarchy",
@@ -18,17 +18,17 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "item-1": {
       "type": [
@@ -36,7 +36,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "議程項目：metric 的 value 是序號（01）、label 是小標、delta 是一句說明；或一段短文"
+      "hint": "agenda entry: the metric's value is the number (01), label the heading, delta a one-sentence note; or a short paragraph"
     },
     "item-2": {
       "type": [
@@ -44,7 +44,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "item-3": {
       "type": [
@@ -52,7 +52,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "item-4": {
       "type": [
@@ -60,7 +60,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "item-5": {
       "type": [
@@ -68,7 +68,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "item-6": {
       "type": [
@@ -76,12 +76,12 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -137,11 +137,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "目錄"
+      "value": "Contents"
     },
     "meta": {
       "type": "text",
-      "value": "總覽"
+      "value": "Overview"
     },
     "page": {
       "type": "text",
@@ -149,43 +149,43 @@
     },
     "title": {
       "type": "text",
-      "value": "這場回顧要談的六件事"
+      "value": "The six things this review covers"
     },
     "item-1": {
       "type": "metric",
       "value": "01",
-      "label": "現況盤點",
-      "delta": "三個月的健檢數據怎麼看"
+      "label": "Where we stand",
+      "delta": "How to read three months of health-check data"
     },
     "item-2": {
       "type": "metric",
       "value": "02",
-      "label": "風險排序",
-      "delta": "哪些問題先修、哪些可以等"
+      "label": "Ranking the risks",
+      "delta": "Which problems to fix first, which can wait"
     },
     "item-3": {
       "type": "metric",
       "value": "03",
-      "label": "投入配置",
-      "delta": "人力與預算往哪裡移"
+      "label": "Where the effort goes",
+      "delta": "Where people and budget move to"
     },
     "item-4": {
       "type": "metric",
       "value": "04",
-      "label": "季度目標",
-      "delta": "下一季要交出的三件事"
+      "label": "Quarterly goals",
+      "delta": "The three things next quarter must deliver"
     },
     "item-5": {
       "type": "metric",
       "value": "05",
-      "label": "風險與機會",
-      "delta": "守成與進攻的取捨"
+      "label": "Risks and opportunities",
+      "delta": "The trade-off between holding and pushing"
     },
     "item-6": {
       "type": "metric",
       "value": "06",
-      "label": "結論與下一步",
-      "delta": "會後誰要做什麼"
+      "label": "Conclusions and next steps",
+      "delta": "Who does what after the meeting"
     }
   }
 }

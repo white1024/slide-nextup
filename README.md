@@ -59,6 +59,8 @@ The workflow is a fixed sequence: **brief → story (you confirm) → visual dir
 
 `deck:scaffold` refuses to run on an unconfirmed story or one that changed after confirmation. Redoing a single page ("regenerate page 3", "change this layout") rebuilds only that page and keeps your manual overrides.
 
+A story is a Markdown file with a YAML frontmatter (`title`, `audience`, `occasion`, `duration_minutes`, `density`, `narrative_pattern`, `core_message`, optionally `lang`) and four sections: `## Goal and audience`, `## Core message`, `## Narrative skeleton` and `## Slides`, where each slide is a `### <id> | <title>` block with `scene_role`, `intensity`, `content_relation`, `message` and optional `evidence`, `notes` and `chapter`. The original Chinese headings are still accepted as aliases. See `examples/story.sample.md` and the format reference in `.agents/skills/slide-story/references/story-format.md`.
+
 ## Commands
 
 | Command | What it does |
@@ -70,8 +72,8 @@ The workflow is a fixed sequence: **brief → story (you confirm) → visual dir
 | `pnpm story:confirm <story.md>` | Records the sha256 of the story you confirmed (the build gate). |
 | `pnpm story:apply-deck <deck.json> [--dry-run]` | Writes the page arrangement made in the editor (playback order, hidden pages) back into `story.md`. Confirm again afterwards; regenerating those pages then clears the stale `pages` entry. |
 | `pnpm deck:scaffold <story.md> [--theme id] [--layouts …] [--slide sN] [--from slide.json] [--reset-overrides] [-o deck.json]` | Generates or regenerates `deck.json` from the story, keeping manual overrides; `--slide` redoes one page, `--from` replaces it with a page the agent wrote, `--reset-overrides` clears the overrides of the regenerated pages only. |
-| `pnpm layouts [--json]` | Lists the layouts and their slots so the agent can choose. |
-| `pnpm design:preview <story.md> --theme <id>` | Renders a theme's cover with the first page of your story. |
+| `pnpm layouts [--theme id] [--deck <deck.json>] [--json]` | Lists the layouts and their slots so the agent can choose; with a theme, that pack's own layouts replace the generic ones of the same id. |
+| `pnpm design:preview <story.md> --theme <id> [--layout cover] [-o dir]` | Renders a theme's cover (or another layout) with the first page of your story into `artifacts/design/<deck>/`. |
 | `pnpm deck:validate <deck.json> [--write]` | Validates the deck model and its cross-references against `schemas/deck.schema.json`; `--write` normalises the file. |
 | `pnpm deck:retheme <deck.json> --theme <id> [--reset-positions] [--dry-run]` | Moves a finished deck to another theme pack: each layout id is resolved again under the new theme (its own copy first), overrides are kept, and the report lists dropped slots, filled required slots and orphaned overrides. |
 | `pnpm theme:lint [--as theme\|layout <css>]` | Checks the theme and layout contract: schema, html/json element consistency, CSS ownership. |
@@ -94,7 +96,7 @@ Open a rendered deck and press `E` (or add `?edit=1` to the URL) to enter edit m
 
 Position, size, style, text, details and hotspots are stored as `overrides` in the embedded model; reveal steps and entrances go to the slide's elements, page order and hidden pages to `pages`, and the motion and transition switches to the deck itself. Generated content is never rewritten from the DOM. `window.__deck.exportModel()` returns the model, and **Download deck.json** saves it as a file at any time; with the dev server running, edits are also written to disk automatically.
 
-During playback, `P` opens the presenter window (next slide, notes, position, timer), `M` switches element motion off or on for this browser, and `?static=1` shows every element with no transitions, which is also what QA measures. Themes may define hover states for cards, pills, calls to action, table rows and images; the player adds chart tooltips, image lightboxes and `[text](url)` links.
+During playback, `P` opens the presenter window (next slide, notes, position, timer), `M` switches element motion off or on for this browser, and `?static=1` shows every element with no transitions, which is also what QA measures. The page's `lang` attribute follows the deck: `lang` in deck.json, which the scaffold copies from the story's frontmatter or guesses from the script of the text (`zh-Hant`, `ja`, `ko` or `en`). Themes may define hover states for cards, pills, calls to action, table rows and images; the player adds chart tooltips, image lightboxes and `[text](url)` links.
 
 ## Themes and layouts
 
@@ -102,7 +104,7 @@ Themes are looked up in three places, first match wins: the deck's own folder (`
 
 ### Adding a layout
 
-When no layout fits (a timeline, a four-quadrant grid), a layout is three files under `layouts/<id>/` or `themes/<theme>/layouts/<id>/`: `layout.json`, `layout.html` and `layout.css`. The spec and the list of roles are in `.agents/skills/slide-build/references/new-layout.md`; let the agent write the files from it, there is no separate skill. The rules are enforced by tools: `pnpm theme:lint` rejects colour and font CSS that does not belong in a layout, `pnpm layout:gallery --theme <theme> <id>` screenshots the sample and compares each text box's capacity with the slot hint, and `pnpm theme:qa --theme <theme> <id>` runs the full QA. Show the screenshot first, iterate until it looks right, then register the layout with `deck:scaffold --layouts s3=<id>`. Layouts inside a theme pack are visible only to decks using that theme and travel with `theme:export`. Theme packs that ship a full layout set also ship a `generate-layouts.cjs`, a template for generating the three files from a compact spec; copy and adapt it, since running it as is rewrites that pack's layouts.
+When no layout fits (a timeline, a four-quadrant grid), a layout is three files under `layouts/<id>/` or `themes/<theme>/layouts/<id>/`: `layout.json`, `layout.html` and `layout.css`. The spec and the list of roles are in `.agents/skills/slide-build/references/new-layout.md`; let the agent write the files from it, there is no separate skill. The rules are enforced by tools: `pnpm theme:lint` rejects colour and font CSS that does not belong in a layout, `pnpm layout:gallery --theme <theme> <id>` screenshots the sample and compares each text box's capacity with the slot hint, and `pnpm theme:qa --theme <theme> <id>` runs the full QA. Slot hints state their limits in a small grammar the capacity check reads ("up to 24 characters", "4 to 12 characters", "8 characters per line", "one line", "up to 2 lines", "3 to 5 items, one line each"); character counts are full-width units, so a CJK glyph counts as one and a Latin letter or digit as a half, and the QA density limit is counted the same way. Show the screenshot first, iterate until it looks right, then register the layout with `deck:scaffold --layouts s3=<id>`. Layouts inside a theme pack are visible only to decks using that theme and travel with `theme:export`. Theme packs that ship a full layout set also ship a `generate-layouts.cjs`, a template for generating the three files from a compact spec; copy and adapt it, since running it as is rewrites that pack's layouts.
 
 ### Sharing a theme pack
 

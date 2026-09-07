@@ -1,16 +1,16 @@
 {
   "id": "comparison",
-  "name": "兩欄對比",
-  "description": "左右各一個標題與清單，中間一條分隔線。改成一張表格會失去「兩邊各自成段落」的閱讀節奏。",
+  "name": "Two-column comparison",
+  "description": "A title and a list on each side with a divider between them. A single table would lose the rhythm of two sides that each read as a paragraph.",
   "content_relations": ["comparison"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 320, "max_elements": 6 },
   "slots": {
-    "title": { "type": "text", "required": true, "hint": "對比的結論，一行" },
-    "left-title": { "type": "text", "required": true, "hint": "左欄名稱，二到六個字" },
-    "left-items": { "type": "list", "required": true, "hint": "三到五條" },
-    "right-title": { "type": "text", "required": true, "hint": "右欄名稱，二到六個字" },
-    "right-items": { "type": "list", "required": true, "hint": "三到五條" }
+    "title": { "type": "text", "required": true, "hint": "the conclusion of the comparison, one line" },
+    "left-title": { "type": "text", "required": true, "hint": "left column name, 2 to 6 characters" },
+    "left-items": { "type": "list", "required": true, "hint": "3 to 5 items" },
+    "right-title": { "type": "text", "required": true, "hint": "right column name, 2 to 6 characters" },
+    "right-items": { "type": "list", "required": true, "hint": "3 to 5 items" }
   },
   "elements": [
     { "id": "title", "kind": "text" },
@@ -21,13 +21,13 @@
     { "id": "right-items", "kind": "text" }
   ],
   "sample": {
-    "title": { "type": "text", "value": "工具沒有錯，順序錯了" },
-    "left-title": { "type": "text", "value": "現況" },
+    "title": { "type": "text", "value": "The tool is fine; the order is wrong" },
+    "left-title": { "type": "text", "value": "Today" },
     "left-items": {
       "type": "list",
-      "items": ["開簡報軟體", "排版", "講一遍", "發現順序不對", "重排"]
+      "items": ["Open the slide app", "Lay out the slides", "Rehearse", "Find the order is wrong", "Reorder"]
     },
-    "right-title": { "type": "text", "value": "目標" },
-    "right-items": { "type": "list", "items": ["寫敘事", "確認", "生成版面", "只微調"] }
+    "right-title": { "type": "text", "value": "Target" },
+    "right-items": { "type": "list", "items": ["Write the story", "Confirm", "Generate layouts", "Only tweak"] }
   }
 }

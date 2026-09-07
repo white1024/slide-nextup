@@ -1,7 +1,7 @@
 {
   "id": "chart-aside",
-  "name": "圖表與旁註：暖色 Keynote",
-  "description": "章節頭下面左邊一張圖表（長條、進度、折線、環形），右邊一張玻璃卡片放旁註或關鍵數字，底下一行註記。改成純表格會失去比例感。",
+  "name": "Chart and aside: Warm Keynote",
+  "description": "Under the chapter head, a chart on the left (bar, progress, line or donut) and a glass card on the right holding an aside or a key number, with a note below. A plain table would lose the sense of proportion.",
   "content_relations": [
     "evidence",
     "comparison",
@@ -19,22 +19,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+      "hint": "the claim of the slide in one sentence, up to 2 lines and 24 characters; *keyword* marks an emphasis"
     },
     "chart": {
       "type": "chart",
       "required": true,
-      "hint": "圖表；progress 最像原版的長條列"
+      "hint": "chart; kind progress looks most like the bar list in the source deck"
     },
     "aside": {
       "type": [
@@ -43,17 +43,17 @@
         "chart"
       ],
       "required": false,
-      "hint": "旁註：一個關鍵數字或一段話"
+      "hint": "aside: one key number or a short paragraph"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行註記"
+      "hint": "a one-line note"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -93,11 +93,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "page": {
       "type": "text",
@@ -105,26 +105,26 @@
     },
     "title": {
       "type": "text",
-      "value": "先做用量最大的三張單"
+      "value": "Start with the three most-used checks"
     },
     "chart": {
       "type": "chart",
       "kind": "bar",
       "series": [
         {
-          "label": "請假單",
+          "label": "Uptime",
           "value": 37
         },
         {
-          "label": "加班單",
+          "label": "Latency",
           "value": 28
         },
         {
-          "label": "忘刷單",
+          "label": "Certificates",
           "value": 20
         },
         {
-          "label": "公出差旅單",
+          "label": "Broken links",
           "value": 9
         }
       ],
@@ -134,12 +134,12 @@
     "aside": {
       "type": "metric",
       "value": "85%",
-      "label": "前三張加總",
-      "delta": "是員工最常用的表單"
+      "label": "the top three combined",
+      "delta": "are the checks owners run most"
     },
     "caption": {
       "type": "text",
-      "value": "各產業前三名一致；播放時點圖例可以拿掉一項再比。"
+      "value": "The top three match in every industry; click a legend entry during playback to drop one and compare again."
     }
   }
 }

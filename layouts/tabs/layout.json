@@ -1,17 +1,17 @@
 {
   "id": "tabs",
-  "name": "分頁籤",
-  "description": "標題下面一個框，裡面幾個頁籤各放一個面板（條列、表格或一段話），播放時點頁籤切換，靜態只看第一個。改成三頁會失去「同一個框裡切換比較」的對照感。",
+  "name": "Tabs",
+  "description": "A frame under the title with a few tabs, each holding one panel (a list, a table or a paragraph); tabs switch during playback, static output shows only the first. Three slides would lose the comparison of switching inside one frame.",
   "content_relations": ["list", "comparison", "evidence"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 320, "max_elements": 6 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
-    "panels": { "type": "tabs", "required": true, "hint": "二到五個頁籤，標籤六字以內；每個面板三到五條或一張小表格，第一個面板是靜態與 QA 看到的" },
-    "caption": { "type": "text", "required": false, "hint": "一行出處或提醒" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "a one-line claim, up to 24 characters" },
+    "panels": { "type": "tabs", "required": true, "hint": "2 to 5 tabs, labels up to 6 characters; a panel holds 3 to 5 items or a small table; the first panel is what static output and QA see" },
+    "caption": { "type": "text", "required": false, "hint": "one line of source or reminder" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -22,37 +22,37 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "同一份流程，三種人各看自己的那一段" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "One flow, three roles, three views" },
     "panels": {
       "type": "tabs",
       "panels": [
         {
-          "label": "作者",
+          "label": "Author",
           "content": {
             "type": "list",
-            "items": ["先寫敘事文件，逐頁一句訊息", "確認之後才生成版面", "改文字在瀏覽器裡改，不回頭動版面"]
+            "items": ["Write the story file first, one message per slide", "Layouts are generated only after sign-off", "Edit wording in the browser, never go back to the layout"]
           }
         },
         {
-          "label": "審稿人",
+          "label": "Reviewer",
           "content": {
             "type": "list",
-            "items": ["看逐頁摘要與節奏條，不看版面", "回覆「確認」或指出要改的頁", "改動再小也重新確認"]
+            "items": ["Read the per-slide summary and rhythm bar, not the layout", "Reply \"confirmed\" or name the slides to change", "Confirm again after any change, however small"]
           }
         },
         {
-          "label": "數字",
+          "label": "Numbers",
           "content": {
             "type": "table",
-            "header": ["階段", "輪數", "起因"],
-            "rows": [["敘事", "2", "順序"], ["版面", "0", "－"]]
+            "header": ["Stage", "Rounds", "Cause"],
+            "rows": [["Story", "2", "Order"], ["Layout", "0", "-"]]
           }
         }
       ]
     },
-    "caption": { "type": "text", "value": "播放時點頁籤切換；靜態模式只顯示第一個面板。" },
+    "caption": { "type": "text", "value": "Tabs switch during playback; static mode shows only the first panel." },
     "page": { "type": "text", "value": "04 / 08" }
   }
 }

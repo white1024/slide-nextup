@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "components-demo",
-  "title": "元件範例：圖表、表格、程式碼、圖示、箭頭",
+  "title": "Component examples: charts, tables, code, icons, arrows",
   "theme": "ink-paper",
   "canvas": { "width": 1920, "height": 1080 },
   "slides": [
@@ -9,14 +9,14 @@
       "id": "s1",
       "layout": "hero",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "kicker": { "type": "text", "value": "第三批版型" },
-        "title": { "type": "text", "value": "資料也能*直接上台*" },
-        "subtitle": { "type": "text", "value": "圖表、表格、程式碼與圖示都是可編輯的元件：整塊可移動縮放，內容用多行文字改。" },
-        "stat-1": { "type": "metric", "value": "4", "label": "新的槽位型別" },
-        "stat-2": { "type": "metric", "value": "9", "label": "使用它們的版型" },
-        "stat-3": { "type": "metric", "value": "77", "label": "內建圖示" },
+        "kicker": { "type": "text", "value": "Layouts, batch three" },
+        "title": { "type": "text", "value": "Data can go *straight on stage*" },
+        "subtitle": { "type": "text", "value": "Charts, tables, code and icons are editable components: move and scale the whole block, change the content as multi-line text." },
+        "stat-1": { "type": "metric", "value": "4", "label": "new slot types" },
+        "stat-2": { "type": "metric", "value": "9", "label": "layouts that use them" },
+        "stat-3": { "type": "metric", "value": "77", "label": "built-in icons" },
         "page": { "type": "text", "value": "01 / 07" }
       },
       "elements": [
@@ -39,21 +39,21 @@
       "id": "s2",
       "layout": "chart-aside",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "十六輪版面修改，十一輪起因是內容順序" },
+        "title": { "type": "text", "value": "Sixteen rounds of layout revision, eleven caused by content order" },
         "chart": {
           "type": "chart",
           "kind": "bar",
-          "unit": " 輪",
+          "unit": " rounds",
           "series": [
-            { "label": "內容順序調整", "value": 11 },
-            { "label": "字太小、圖放錯", "value": 3 },
-            { "label": "配色與字型", "value": 2 }
+            { "label": "Order changed", "value": 11 },
+            { "label": "Type and pictures", "value": 3 },
+            { "label": "Colours and fonts", "value": 2 }
           ]
         },
-        "aside": { "type": "metric", "value": "69%", "label": "版面修改其實是順序問題", "delta": "11 / 16 輪" },
-        "caption": { "type": "text", "value": "上季六份簡報、二十四輪修改的逐輪紀錄。" },
+        "aside": { "type": "metric", "value": "69%", "label": "of layout revisions were really order problems", "delta": "11 / 16 rounds" },
+        "caption": { "type": "text", "value": "A round-by-round log of six decks and twenty-four rounds of revision last quarter." },
         "page": { "type": "text", "value": "02 / 07" }
       },
       "elements": [
@@ -70,9 +70,9 @@
       "id": "s3",
       "layout": "chart-aside",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "改版輪數逐季下降" },
+        "title": { "type": "text", "value": "Revision rounds fall quarter by quarter" },
         "chart": {
           "type": "chart",
           "kind": "line",
@@ -80,11 +80,11 @@
             { "label": "Q1", "value": 5 },
             { "label": "Q2", "value": 4 },
             { "label": "Q3", "value": 4 },
-            { "label": "試做", "value": 0 }
+            { "label": "Trial", "value": 0 }
           ]
         },
-        "aside": { "type": "chart", "kind": "donut", "unit": "%", "series": [{ "label": "版面修改歸零", "value": 100 }] },
-        "caption": { "type": "text", "value": "折線是每季平均改版輪數；環形是試做兩份的達成率。" },
+        "aside": { "type": "chart", "kind": "donut", "unit": "%", "series": [{ "label": "Layout revisions at zero", "value": 100 }] },
+        "caption": { "type": "text", "value": "The line is the average rounds of revision per quarter; the ring is how many of the two trial decks got there." },
         "page": { "type": "text", "value": "03 / 07" }
       },
       "elements": [
@@ -101,21 +101,21 @@
       "id": "s4",
       "layout": "data-table",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "六份簡報裡，只有一份不是順序問題" },
+        "title": { "type": "text", "value": "Of six decks, only one was not an order problem" },
         "table": {
           "type": "table",
-          "header": ["簡報", "改版輪數", "起因是順序", "起因是版面", "備註"],
+          "header": ["Deck", "Rounds", "Order-related", "Layout-related", "Note"],
           "rows": [
-            ["Q1 業績回顧", "5", "4", "1", "目錄改了三次"],
-            ["新產品提案", "4", "3", "1", ""],
-            ["季度 OKR", "3", "2", "1", ""],
-            ["客戶案例", "4", "1", "3", "*唯一*版面為主"],
-            ["年度預算", "5", "4", "1", "章節順序對調"]
+            ["Q1 results review", "5", "4", "1", "Agenda changed 3 times"],
+            ["New product proposal", "4", "3", "1", ""],
+            ["Quarterly OKRs", "3", "2", "1", ""],
+            ["Customer case study", "4", "1", "3", "The *only* layout-led one"],
+            ["Annual budget", "5", "4", "1", "Chapter order swapped"]
           ]
         },
-        "caption": { "type": "text", "value": "上季六份簡報、二十四輪修改的逐輪紀錄。" },
+        "caption": { "type": "text", "value": "A round-by-round log of six decks and twenty-four rounds of revision last quarter." },
         "page": { "type": "text", "value": "04 / 07" }
       },
       "elements": [
@@ -131,12 +131,12 @@
       "id": "s5",
       "layout": "icon-cards",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "新流程守住的三件事" },
-        "card-1": { "type": "text", "value": "敘事沒被確認之前，不生成任何一頁。" },
-        "card-2": { "type": "text", "value": "三個視覺方向都用真的封面挑，不用形容詞。" },
-        "card-3": { "type": "text", "value": "重新生成某一頁時，手動修改一律保留。" },
+        "title": { "type": "text", "value": "Three things the new workflow protects" },
+        "card-1": { "type": "text", "value": "No slide is generated before the story is confirmed." },
+        "card-2": { "type": "text", "value": "Three visual directions are chosen from real covers, not from adjectives." },
+        "card-3": { "type": "text", "value": "Regenerating a slide always keeps the manual edits." },
         "icon-1": { "type": "icon", "name": "shield-check" },
         "icon-2": { "type": "icon", "name": "eye" },
         "icon-3": { "type": "icon", "name": "refresh-cw" },
@@ -159,15 +159,15 @@
       "id": "s6",
       "layout": "code-block",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "關卡是工具強制的，不是靠人記" },
+        "title": { "type": "text", "value": "The gate is enforced by the tool, not by memory" },
         "code": {
           "type": "code",
           "lang": "bash",
-          "value": "$ pnpm story:check decks/q3/story.md\n通過：0 個錯誤，0 個警告\n\n$ pnpm deck:scaffold decks/q3/story.md --theme ink-paper\n拒絕：敘事尚未確認（story.confirmed.json 不存在）\n\n$ pnpm story:confirm decks/q3/story.md\n已記錄確認：8 頁，sha256 edce99f4"
+          "value": "$ pnpm story:check decks/q3/story.md\npassed: 0 errors, 0 warnings\n\n$ pnpm deck:scaffold decks/q3/story.md --theme ink-paper\nnot confirmed: show the user the per-slide summary first, then run pnpm story:confirm once they agree\n\n$ pnpm story:confirm decks/q3/story.md\nconfirmation recorded: decks/q3/story.confirmed.json (8 slides, sha256 edce99f4)"
         },
-        "caption": { "type": "text", "value": "未確認或敘事改過，生成指令會直接拒絕。" },
+        "caption": { "type": "text", "value": "When the story is unconfirmed or has changed, the generate command refuses outright." },
         "page": { "type": "text", "value": "06 / 07" }
       },
       "elements": [
@@ -183,13 +183,13 @@
       "id": "s7",
       "layout": "before-after",
       "slots": {
-        "brand": { "type": "text", "value": "元件範例" },
+        "brand": { "type": "text", "value": "Component examples" },
         "meta": { "type": "text", "value": "2026-09" },
-        "title": { "type": "text", "value": "把「確認敘事」搬到生成版面之前" },
-        "before-label": { "type": "text", "value": "現況" },
-        "after-label": { "type": "text", "value": "新流程" },
-        "before": { "type": "list", "items": ["開軟體，先挑模板", "內容塞進版面", "講一遍，發現順序不對", "重排，再講一遍"] },
-        "after": { "type": "list", "items": ["寫敘事文件", "*你確認*順序與訊息", "生成版面", "只微調文字"] },
+        "title": { "type": "text", "value": "Move the story confirmation ahead of the layout" },
+        "before-label": { "type": "text", "value": "Today" },
+        "after-label": { "type": "text", "value": "New workflow" },
+        "before": { "type": "list", "items": ["Open the app, pick a template first", "Pour the content into the layout", "Present once, notice the order is wrong", "Lay out again, present again"] },
+        "after": { "type": "list", "items": ["Write the story document", "*You confirm* the order and the messages", "Generate the layout", "Fine-tune the text only"] },
         "page": { "type": "text", "value": "07 / 07" }
       },
       "elements": [
@@ -206,6 +206,6 @@
     }
   ],
   "overrides": {
-    "s2/chart": { "text": "內容順序調整｜11\n字太小、圖放錯｜3\n配色與字型｜2\n其他｜0" }
+    "s2/chart": { "text": "Order changed|11\nType and pictures|3\nColours and fonts|2\nOther|0" }
   }
 }

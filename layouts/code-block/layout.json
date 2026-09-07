@@ -1,17 +1,17 @@
 {
   "id": "code-block",
-  "name": "程式碼區塊",
-  "description": "標題、一塊等寬字的程式碼或指令（最多十行、每行四十字）、一到兩行說明。改成一般文字會失去「每個字元都對齊」的可讀性。",
+  "name": "Code block",
+  "description": "A title, a block of monospaced code or commands (up to 10 lines of 40 characters) and a short note. Plain text would lose the character-by-character alignment.",
   "content_relations": ["evidence", "sequence", "statement"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 800, "max_elements": 6 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "這段程式碼證明什麼，一行" },
-    "code": { "type": "code", "required": true, "hint": "最多十行、每行四十字；lang 只是標籤" },
-    "caption": { "type": "text", "required": false, "hint": "一行說明" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "what this code proves, one line" },
+    "code": { "type": "code", "required": true, "hint": "up to 10 lines, up to 40 characters per line; lang is only a label" },
+    "caption": { "type": "text", "required": false, "hint": "one line of explanation" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -22,15 +22,15 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "關卡是工具強制的，不是靠人記" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "The tool holds the gate, not memory" },
     "code": {
       "type": "code",
       "lang": "bash",
-      "value": "$ pnpm story:check decks/q3/story.md\n通過：0 個錯誤，0 個警告\n\n$ pnpm deck:scaffold decks/q3/story.md --theme ink-paper\n拒絕：敘事尚未確認（story.confirmed.json 不存在）\n\n$ pnpm story:confirm decks/q3/story.md\n已記錄確認：8 頁，sha256 edce99f4"
+      "value": "$ pnpm story:check decks/q3/story.md\npassed: 0 errors, 0 warnings\n\n$ pnpm deck:scaffold decks/q3/story.md --theme ink-paper\nrefused: the story is not confirmed (no story.confirmed.json)\n\n$ pnpm story:confirm decks/q3/story.md\nconfirmed: 8 slides, sha256 edce99f4"
     },
-    "caption": { "type": "text", "value": "未確認或敘事改過，生成指令會直接拒絕；沒有 --force 以外的繞法。" },
+    "caption": { "type": "text", "value": "Unconfirmed, or edited since: the scaffold refuses outright; there is no way round it but --force." },
     "page": { "type": "text", "value": "05 / 08" }
   }
 }

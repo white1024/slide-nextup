@@ -1,18 +1,18 @@
 {
   "id": "two-cols-header",
-  "name": "上總述、下雙欄",
-  "description": "標題下一段橫跨全寬的總述，再分左右兩張卡。改成純雙欄會失去「先講共同前提、再分兩邊」的結構。",
+  "name": "Summary over two columns",
+  "description": "A full-width summary under the title, then two cards left and right. Plain two columns would lose the structure of stating the shared premise before splitting in two.",
   "content_relations": ["comparison", "list", "evidence"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 420, "max_elements": 7 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "一行主張" },
-    "body": { "type": "text", "required": false, "hint": "一到兩行總述" },
-    "left": { "type": ["list", "text", "metric"], "required": true, "hint": "左欄：清單、短句或數字" },
-    "right": { "type": ["list", "text", "metric"], "required": true, "hint": "右欄：同上" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "a one-line claim" },
+    "body": { "type": "text", "required": false, "hint": "summary, 1 to 2 lines" },
+    "left": { "type": ["list", "text", "metric"], "required": true, "hint": "left column: a list, a short phrase or a number" },
+    "right": { "type": ["list", "text", "metric"], "required": true, "hint": "right column: same as above" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -24,12 +24,12 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "同一份提案，兩種做法的差別" },
-    "body": { "type": "text", "value": "兩邊的工具一樣、講的人一樣，差在敘事什麼時候被確認。" },
-    "left": { "type": "list", "items": ["先排版面，再想順序", "講一遍才發現要調", "平均改四輪"] },
-    "right": { "type": "list", "items": ["先確認敘事，再生成版面", "改的是文字，不是排版", "版面零輪"] },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "Same proposal, two ways of working" },
+    "body": { "type": "text", "value": "Same tools, same presenter; the difference is when the story gets confirmed." },
+    "left": { "type": "list", "items": ["Lay out first, think about order later", "Only rehearsal shows what to change", "Four rounds on average"] },
+    "right": { "type": "list", "items": ["Confirm the story, then generate layouts", "Edits change wording, not layout", "Zero layout rounds"] },
     "page": { "type": "text", "value": "04 / 08" }
   }
 }

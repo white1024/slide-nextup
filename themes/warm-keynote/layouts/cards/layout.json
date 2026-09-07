@@ -1,7 +1,7 @@
 {
   "id": "cards",
-  "name": "三張卡：暖色 Keynote",
-  "description": "章節頭加導語，下面三張玻璃卡片，各放編號、標題與一句說明。改成條列會失去卡片各自成立的並列感。",
+  "name": "Three cards: Warm Keynote",
+  "description": "Chapter head and lede, then three glass cards each holding a number, a title and one explanatory sentence. A bulleted list would lose the sense of three things standing side by side on their own.",
   "content_relations": [
     "list",
     "evidence",
@@ -19,22 +19,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+      "hint": "the claim of the slide in one sentence, up to 2 lines and 24 characters; *keyword* marks an emphasis"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "card-1": {
       "type": [
@@ -42,7 +42,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "卡片：metric 的 value 是編號或字母、label 是標題、delta 是說明；或一段短文；可加 details（播放時點卡片展開的完整內容）"
+      "hint": "card: a metric whose value is a number or letter, label the title and delta the explanation; or a short paragraph; may carry details (the full content that expands when the card is clicked during playback)"
     },
     "card-2": {
       "type": [
@@ -50,7 +50,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上"
+      "hint": "same as above"
     },
     "card-3": {
       "type": [
@@ -58,12 +58,12 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上"
+      "hint": "same as above"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -107,11 +107,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "page": {
       "type": "text",
@@ -119,37 +119,37 @@
     },
     "title": {
       "type": "text",
-      "value": "每件事都不難，難的是散在不同入口"
+      "value": "No single step is hard; the hard part is they sit in different places"
     },
     "subtitle": {
       "type": "text",
-      "value": "四道小小的認知負擔加起來，就成了拖延。"
+      "value": "Four small mental loads add up to putting it off."
     },
     "card-1": {
       "type": "metric",
       "value": "A",
-      "label": "我有異常嗎？",
-      "delta": "忘刷了自己不會知道",
+      "label": "Is my site down?",
+      "delta": "A silent outage goes unnoticed",
       "details": {
         "type": "list",
         "items": [
-          "忘刷卡：系統不主動通知",
-          "遲到早退：月底才在報表看到",
-          "加班未申請：時數直接消失"
+          "Downtime: the checker alerts nobody",
+          "Slow pages: only seen in the monthly report",
+          "Expired certificate: the site simply goes dark"
         ]
       }
     },
     "card-2": {
       "type": "metric",
       "value": "B",
-      "label": "要去哪處理？",
-      "delta": "入口不在手邊，得先找"
+      "label": "Where do I fix it?",
+      "delta": "The dashboard is never at hand"
     },
     "card-3": {
       "type": "metric",
       "value": "C",
-      "label": "規定怎麼算？",
-      "delta": "翻手冊，或是去問 HR"
+      "label": "What does the rule say?",
+      "delta": "Dig through the runbook, or ask ops"
     }
   }
 }

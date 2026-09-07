@@ -1,14 +1,14 @@
 {
   "id": "statement",
-  "name": "單一主張",
-  "description": "大標題承載主張，下方一段說明與可選的證據清單。改成條列頁會失去「先讀到結論」的順序。",
+  "name": "Single claim",
+  "description": "A big title carries the claim, with a paragraph of explanation below and an optional list of evidence. A bullet slide would lose the order of reading the conclusion first.",
   "content_relations": ["statement", "evidence", "sequence"],
   "scene_roles": ["evidence", "relationship", "pause"],
   "density": { "max_chars": 260, "max_elements": 3 },
   "slots": {
-    "title": { "type": "text", "required": true, "hint": "主張或問句，一到兩行" },
-    "body": { "type": "text", "required": false, "hint": "一到三行說明；流程可用箭頭串接" },
-    "evidence": { "type": "list", "required": false, "hint": "二到四條支撐事實" }
+    "title": { "type": "text", "required": true, "hint": "claim or question, 1 to 2 lines" },
+    "body": { "type": "text", "required": false, "hint": "1 to 3 lines of explanation; a process may be chained with arrows" },
+    "evidence": { "type": "list", "required": false, "hint": "2 to 4 supporting facts" }
   },
   "elements": [
     { "id": "title", "kind": "text" },
@@ -16,11 +16,11 @@
     { "id": "evidence", "kind": "text" }
   ],
   "sample": {
-    "title": { "type": "text", "value": "改版輪數的真相" },
-    "body": { "type": "text", "value": "三輪版面修改裡，有兩輪是因為內容順序在中途改變。" },
+    "title": { "type": "text", "value": "The truth about revision rounds" },
+    "body": { "type": "text", "value": "Two of every three layout rounds came from a mid-course change of order." },
     "evidence": {
       "type": "list",
-      "items": ["六份簡報、二十四輪修改的逐輪紀錄", "十六輪與版面有關，其中十一輪起因是內容順序調整"]
+      "items": ["Six decks, 24 revision rounds, logged one by one", "16 rounds touched layout; 11 of them began as a reorder"]
     }
   }
 }

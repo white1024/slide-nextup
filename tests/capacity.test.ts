@@ -44,6 +44,46 @@ describe('slot hint numbers', () => {
       perItem: false,
     })
   })
+
+  it('reads the English hint grammar the same way', () => {
+    expect(hintLimits('one line, up to 24 characters')).toEqual({
+      chars: 24,
+      perLine: false,
+      lines: 1,
+      perItem: false,
+    })
+    expect(hintLimits('occasion or series name, 4 to 12 characters')).toMatchObject({
+      chars: 12,
+      lines: undefined,
+    })
+    expect(hintLimits('step name, up to 7 characters per line, up to 2 lines')).toEqual({
+      chars: 7,
+      perLine: true,
+      lines: 2,
+      perItem: false,
+    })
+    expect(hintLimits('3 to 5 supporting points, one line each')).toMatchObject({
+      chars: undefined,
+      lines: 1,
+      perItem: true,
+    })
+    expect(hintLimits('a single-line claim, up to 16 characters')).toMatchObject({
+      chars: 16,
+      lines: 1,
+    })
+    expect(hintLimits('header row, up to 6 rows, 1 to 10 characters per cell')).toMatchObject({
+      chars: 10,
+      perLine: true,
+      lines: undefined,
+      perItem: true,
+    })
+    expect(hintLimits('top bar right, filled automatically')).toEqual({
+      chars: undefined,
+      perLine: false,
+      lines: undefined,
+      perItem: false,
+    })
+  })
 })
 
 describe('measured capacity', () => {

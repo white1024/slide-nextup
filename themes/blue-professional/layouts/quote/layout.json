@@ -1,7 +1,7 @@
 {
   "id": "quote",
-  "name": "引言：藍色專業",
-  "description": "置中的一段引言：上方一個淡藍的引號、粗體大字，底下一行出處；左上一個細圓環、右下一個淡藍圓點。改成一般文字頁會失去停頓感。",
+  "name": "Quote: blue professional",
+  "description": "A centred quote: a pale blue quotation mark above, bold large type, the source beneath; a thin ring top left and a pale blue dot bottom right. A plain text page would lose the pause.",
   "content_relations": [
     "statement"
   ],
@@ -18,27 +18,27 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "引言本文，三行以內、六十字以內；可用 *關鍵詞* 換藍色"
+      "hint": "the quote itself, up to 3 lines and 60 characters; *keyword* turns blue"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "出處：誰說的、在哪個場合，一行"
+      "hint": "source: who said it and where, one line"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -82,19 +82,19 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "03 — 判斷"
+      "value": "03 — Judgement"
     },
     "meta": {
       "type": "text",
-      "value": "原則"
+      "value": "Principle"
     },
     "title": {
       "type": "text",
-      "value": "先把*等待*修掉，功能才有人用；使用者不會為了新功能忍受慢。"
+      "value": "Fix the *waiting* first, or the features go unused; no one tolerates slow for something new."
     },
     "caption": {
       "type": "text",
-      "value": "產品負責人，季度回顧會議"
+      "value": "Product owner, at the quarterly review"
     },
     "page": {
       "type": "text",

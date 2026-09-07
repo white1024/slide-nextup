@@ -1,7 +1,7 @@
 {
   "id": "photo",
-  "name": "圖：暖色 Keynote",
-  "description": "章節頭下面一張全寬的玻璃框，裡面放圖（系統圖、截圖），底下一行說明。改成小圖加文字會失去圖本身當主角的份量。",
+  "name": "Photo: Warm Keynote",
+  "description": "A full-width glass frame under the chapter head holding an image (a system diagram, a screenshot), with a caption below. A small image beside text would lose the weight of the image as the lead.",
   "content_relations": [
     "evidence",
     "statement"
@@ -19,32 +19,32 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+      "hint": "the claim of the slide in one sentence, up to 2 lines and 24 characters; *keyword* marks an emphasis"
     },
     "photo": {
       "type": "image",
       "required": true,
-      "hint": "圖片，建議 1678×560 或同比例；可加 hotspots（播放時點擊跳頁的區域，百分比定位）"
+      "hint": "image, 1678 by 560 px or the same ratio recommended; may carry hotspots (click-to-jump areas during playback, positioned in percent)"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行圖說"
+      "hint": "a one-line caption"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -84,11 +84,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "page": {
       "type": "text",
@@ -96,12 +96,12 @@
     },
     "title": {
       "type": "text",
-      "value": "量測工具的骨架"
+      "value": "The skeleton of Tidewatch"
     },
     "photo": {
       "type": "image",
       "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23e6dcc4%27/%3E%3C/svg%3E",
-      "alt": "系統圖",
+      "alt": "system diagram",
       "hotspots": [
         {
           "target": "cards",
@@ -109,13 +109,13 @@
           "y": 30,
           "w": 16,
           "h": 40,
-          "label": "run 目錄：看設計原則"
+          "label": "run folder: see the design principles"
         }
       ]
     },
     "caption": {
       "type": "text",
-      "value": "設定與模型進來，走兩條路徑，落到同一個 run 目錄。"
+      "value": "Config and targets come in, take two paths, and land in the same run folder."
     }
   }
 }

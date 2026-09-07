@@ -68,6 +68,9 @@ interface InnerFont {
 async function measureInner(page: Page): Promise<InnerFont[]> {
   return page.evaluate(() => {
     const out: InnerFont[] = []
+    // density counts full-width units, the same rule as the scaffold's textUnits and the slot
+    // hints: a CJK glyph (Hangul, kana, the unified block, fullwidth forms, dashes) is 1, anything else ½
+    const WIDE = /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦–—]/
     for (const section of document.querySelectorAll<HTMLElement>('section.slide')) {
       for (const node of section.querySelectorAll<HTMLElement>('[data-el]')) {
         let minInner = Number.POSITIVE_INFINITY
@@ -79,7 +82,7 @@ async function measureInner(page: Page): Promise<InnerFont[]> {
           const parent = t.parentElement
           // only what is on screen counts: a hidden tab panel is not part of the default state
           if (!parent || parent.getClientRects().length === 0) continue
-          chars += text.length
+          for (const ch of text) chars += WIDE.test(ch) ? 1 : 0.5
           const size = Number.parseFloat(getComputedStyle(parent).fontSize)
           if (size < minInner) minInner = size
         }
@@ -216,13 +219,15 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
       }
     }
 
-    const chars = inner.filter((x) => x.slide === slide.id).reduce((n, x) => n + x.chars, 0)
+    const chars = Math.round(
+      inner.filter((x) => x.slide === slide.id).reduce((n, x) => n + x.chars, 0),
+    )
     if (chars > layout.json.density.max_chars) {
       findings.push({
         rule: 'density',
         severity: 'error',
         slide: slide.id,
-        message: `${chars} characters of text, over the limit of ${layout.json.density.max_chars} for layout ${slide.layout}`,
+        message: `${chars} characters of text (full-width units), over the limit of ${layout.json.density.max_chars} for layout ${slide.layout}`,
       })
     }
 

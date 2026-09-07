@@ -1,7 +1,7 @@
 {
   "id": "section",
-  "name": "章節：藍色專業",
-  "description": "章節開場：系列名與右上標籤，左邊一個巨大的藍色編號、短藍線、章節標題與一段導語。改成一般標題頁會失去編號帶來的「翻到下一章」節奏。",
+  "name": "Section: blue professional",
+  "description": "A chapter opener: the series name and the tag top right, then a huge blue number on the left, a short blue rule, the chapter title and a lede. A plain title page would lose the turn-the-page rhythm the number gives.",
   "content_relations": [
     "statement",
     "list"
@@ -19,32 +19,32 @@
     "brand": {
       "type": "text",
       "required": false,
-      "hint": "系列名或簡報名，自動填；不需要就留空"
+      "hint": "series or deck name, filled automatically; leave empty when not needed"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "number": {
       "type": "text",
       "required": true,
-      "hint": "章節編號，兩位數"
+      "hint": "chapter number, two digits"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "章節標題，一到兩行、十四字以內"
+      "hint": "chapter title, 1 to 2 lines, up to 14 characters"
     },
     "body": {
       "type": "text",
       "required": false,
-      "hint": "一到兩行導語，六十字以內"
+      "hint": "a lede of 1 to 2 lines, up to 60 characters"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -84,11 +84,11 @@
   "sample": {
     "brand": {
       "type": "text",
-      "value": "季度營運回顧"
+      "value": "Quarterly operations review"
     },
     "meta": {
       "type": "text",
-      "value": "第二章"
+      "value": "Chapter 2"
     },
     "number": {
       "type": "text",
@@ -96,11 +96,11 @@
     },
     "title": {
       "type": "text",
-      "value": "營運現況：數字先於判斷"
+      "value": "Where we stand: numbers first"
     },
     "body": {
       "type": "text",
-      "value": "先看三個月的量測結果，再談哪些該修、哪些可以等。"
+      "value": "First the three months of measurements, then which to fix and which can wait."
     },
     "page": {
       "type": "text",

@@ -248,16 +248,19 @@ describe('editor mode', () => {
       elId: 'title',
     })
     await page.keyboard.press('End')
-    await page.keyboard.type('！')
+    await page.keyboard.type('!')
     await page.keyboard.press('Escape')
     expect(await page.evaluate(() => window.__deck.editor.editingText)).toBeNull()
-    expect((await overrideOf('s3/title'))?.text).toBe('改版輪數的真相！')
+    expect((await overrideOf('s3/title'))?.text).toBe('The truth about revision rounds!')
     const model = await page.evaluate(() => window.__deck.exportModel())
-    expect(model.slides[2]?.slots.title).toEqual({ type: 'text', value: '改版輪數的真相' })
+    expect(model.slides[2]?.slots.title).toEqual({
+      type: 'text',
+      value: 'The truth about revision rounds',
+    })
     const dom = await page.evaluate(
       () => document.querySelector('[data-slide="s3"] [data-el="title"]')?.textContent,
     )
-    expect(dom).toBe('改版輪數的真相！')
+    expect(dom).toBe('The truth about revision rounds!')
     expect(await page.locator('[contenteditable="true"]').count()).toBe(0)
   })
 

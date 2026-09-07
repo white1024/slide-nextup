@@ -1,16 +1,16 @@
 {
   "id": "quote",
-  "name": "引言頁",
-  "description": "一句話佔滿畫面，左側一條色柱，下方一行出處；用來停頓或提問。改成一般標題頁會失去「整頁只有這一句」的重量。",
+  "name": "Quote",
+  "description": "One sentence fills the slide, with a colour bar on the left and the source below; for a pause or a question. A regular title slide would lose the weight of a slide that holds only this one sentence.",
   "content_relations": ["statement"],
   "scene_roles": ["pause", "hero", "close"],
   "density": { "max_chars": 140, "max_elements": 9 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "引言或提問，一到三行，四十字以內；可用 *關鍵詞* 強調" },
-    "caption": { "type": "text", "required": false, "hint": "出處或補一句，一行" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "quote or question, 1 to 3 lines, up to 40 characters; *keyword* marks an emphasis" },
+    "caption": { "type": "text", "required": false, "hint": "source or one added remark, one line" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "corner-tl", "kind": "shape" },
@@ -23,10 +23,10 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "你上一次改簡報，改的是*內容*，還是版面？" },
-    "caption": { "type": "text", "value": "停三到五秒再翻頁。" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "Last time you fixed a deck, was it the *content* or the layout?" },
+    "caption": { "type": "text", "value": "Pause three to five seconds before moving on." },
     "page": { "type": "text", "value": "07 / 08" }
   }
 }

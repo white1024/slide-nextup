@@ -1,7 +1,7 @@
 {
   "id": "tabs",
-  "name": "分頁籤：暖色 Keynote",
-  "description": "章節頭、導語，下面一張玻璃卡片裝幾個頁籤，各放一個面板（條列、表格或一段話），播放時點頁籤切換，靜態只看第一個。改成三頁會失去「同一個框裡切換比較」的對照感。",
+  "name": "Tabs: Warm Keynote",
+  "description": "Chapter head and lede, then a glass card holding a few tabs, each with its own panel (a list, a table or a paragraph); clicking a tab during playback switches, static rendering shows only the first. Three separate slides would lose the comparison of switching inside the same frame.",
   "content_relations": [
     "list",
     "comparison",
@@ -19,37 +19,37 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十四字以內；可用 *關鍵詞* 強調"
+      "hint": "the claim of the slide in one sentence, up to 2 lines and 24 characters; *keyword* marks an emphasis"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "panels": {
       "type": "tabs",
       "required": true,
-      "hint": "二到五個頁籤，標籤六字以內；每個面板三到五條或一張小表格，第一個面板是靜態與 QA 看到的"
+      "hint": "2 to 5 tabs, labels up to 6 characters; a panel holds 3 to 5 items or a small table; the first panel is what static rendering and QA see"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行註記"
+      "hint": "a one-line note"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -89,11 +89,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "page": {
       "type": "text",
@@ -101,11 +101,11 @@
     },
     "title": {
       "type": "text",
-      "value": "同一份交付包，三種人各看自己的文件"
+      "value": "One bundle, three roles, each with its own document"
     },
     "subtitle": {
       "type": "text",
-      "value": "operator 跑量測、viewer 看結果、new-platform 接新平台，各有一份角色文件。"
+      "value": "operator runs the checks, viewer reads the results, new-platform adds a platform."
     },
     "panels": {
       "type": "tabs",
@@ -115,9 +115,9 @@
           "content": {
             "type": "list",
             "items": [
-              "整備機器：跑 preflight，缺件就停",
-              "量測：固定六步，可中斷續跑",
-              "交付：export 才有 result.json"
+              "Prepare: run preflight, stop on anything missing",
+              "Measure: six fixed steps, can pause and resume",
+              "Deliver: only export writes result.json"
             ]
           }
         },
@@ -126,9 +126,9 @@
           "content": {
             "type": "list",
             "items": [
-              "只看 result.json，不碰 run 目錄",
-              "摘要四格、色階圖、折線圖",
-              "完整表格在展開層"
+              "Reads only result.json, never the run folder",
+              "Four summary tiles, a heatmap, a line chart",
+              "The full table sits in the expanded layer"
             ]
           }
         },
@@ -137,17 +137,17 @@
           "content": {
             "type": "table",
             "header": [
-              "要做的事",
-              "依據"
+              "What to do",
+              "Basis"
             ],
             "rows": [
               [
-                "產出 result.json",
+                "Produce result.json",
                 "Result Schema v1"
               ],
               [
-                "通過 smoke",
-                "交付包的 preflight"
+                "Pass smoke",
+                "The bundle preflight"
               ]
             ]
           }
@@ -156,7 +156,7 @@
     },
     "caption": {
       "type": "text",
-      "value": "播放時點頁籤切換；靜態模式只顯示第一個面板。"
+      "value": "Click a tab during playback; static mode shows only the first panel."
     }
   }
 }

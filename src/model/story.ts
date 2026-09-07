@@ -32,6 +32,8 @@ export interface StoryMeta {
   density: Density
   narrative_pattern: NarrativePattern
   core_message: string
+  /** optional BCP 47 tag; the scaffold copies it into deck.json, else it guesses from the text */
+  lang?: string
 }
 
 export interface StorySlide {
@@ -78,12 +80,30 @@ export interface ParseResult {
   diagnostics: Diagnostic[]
 }
 
+/** The canonical `##` headings of story.md. */
 export const SECTION_HEADINGS = {
-  goal: '目標與受眾',
-  thesis: '核心主張',
-  skeleton: '敘事骨架',
-  slides: '逐頁',
+  goal: 'Goal and audience',
+  thesis: 'Core message',
+  skeleton: 'Narrative skeleton',
+  slides: 'Slides',
 } as const
+
+/** Headings still accepted for each section (the original Chinese format); matching is case-insensitive. */
+export const SECTION_ALIASES: Record<keyof typeof SECTION_HEADINGS, readonly string[]> = {
+  goal: ['目標與受眾'],
+  thesis: ['核心主張'],
+  skeleton: ['敘事骨架'],
+  slides: ['逐頁'],
+}
+
+/** Whether a `## heading` names the given section, canonical or alias. */
+export function isSectionHeading(key: keyof typeof SECTION_HEADINGS, name: string): boolean {
+  const n = name.trim().toLowerCase()
+  return (
+    n === SECTION_HEADINGS[key].toLowerCase() ||
+    SECTION_ALIASES[key].some((a) => a.toLowerCase() === n)
+  )
+}
 
 const META_STRING_KEYS = ['title', 'audience', 'occasion', 'core_message'] as const
 const SLIDE_KNOWN_KEYS = new Set([
@@ -205,29 +225,33 @@ export function parseStory(text: string): ParseResult {
     const m = /^##\s+(.+?)\s*$/.exec(lines[i] ?? '')
     if (m?.[1]) sectionStarts.push({ name: m[1], line: i })
   }
-  const sectionBody = (name: string): { text: string; from: number; to: number } | null => {
-    const idx = sectionStarts.findIndex((s) => s.name === name)
+  const sectionBody = (
+    key: keyof typeof SECTION_HEADINGS,
+  ): { text: string; from: number; to: number } | null => {
+    const idx = sectionStarts.findIndex((s) => isSectionHeading(key, s.name))
     if (idx === -1) return null
     const from = (sectionStarts[idx]?.line ?? 0) + 1
     const to = sectionStarts[idx + 1]?.line ?? lines.length
     return { text: lines.slice(from, to).join('\n').trim(), from, to }
   }
+  const headingName = (key: keyof typeof SECTION_HEADINGS) =>
+    `\`## ${SECTION_HEADINGS[key]}\` (or \`## ${SECTION_ALIASES[key][0]}\`)`
 
   const sections: Partial<StorySections> = {}
   for (const key of ['goal', 'thesis', 'skeleton'] as const) {
-    const body = sectionBody(SECTION_HEADINGS[key])
+    const body = sectionBody(key)
     if (!body) {
-      error('section/missing', fmEnd + 1, `missing section \`## ${SECTION_HEADINGS[key]}\``)
+      error('section/missing', fmEnd + 1, `missing section ${headingName(key)}`)
     } else if (body.text === '') {
-      warning('section/empty', body.from, `section \`## ${SECTION_HEADINGS[key]}\` is empty`)
+      warning('section/empty', body.from, `section ${headingName(key)} is empty`)
       sections[key] = ''
     } else {
       sections[key] = body.text
     }
   }
-  const slidesBody = sectionBody(SECTION_HEADINGS.slides)
+  const slidesBody = sectionBody('slides')
   if (!slidesBody) {
-    error('section/missing', fmEnd + 1, `missing section \`## ${SECTION_HEADINGS.slides}\``)
+    error('section/missing', fmEnd + 1, `missing section ${headingName('slides')}`)
   }
 
   // ---- slides ------------------------------------------------------------
@@ -251,7 +275,11 @@ export function parseStory(text: string): ParseResult {
       headings.push({ line: i, id: m[1], title })
     }
     if (headings.length === 0) {
-      error('slide/none', slidesBody.from + 1, 'no `### <id> | <title>` slides under `## 逐頁`')
+      error(
+        'slide/none',
+        slidesBody.from + 1,
+        `no \`### <id> | <title>\` slides under \`## ${SECTION_HEADINGS.slides}\``,
+      )
     }
 
     const seen = new Map<string, number>()
@@ -406,6 +434,9 @@ export function parseStory(text: string): ParseResult {
       density: rawMeta.density as Density,
       narrative_pattern: rawMeta.narrative_pattern as NarrativePattern,
       core_message: rawMeta.core_message as string,
+      ...(typeof rawMeta.lang === 'string' && rawMeta.lang.trim() !== ''
+        ? { lang: rawMeta.lang.trim() }
+        : {}),
     },
     sections: {
       goal: sections.goal ?? '',

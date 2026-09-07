@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "story-first",
-  "title": "先確認敘事，再做簡報",
+  "title": "Confirm the story before the slides",
   "theme": "ink-paper",
   "canvas": {
     "width": 1920,
@@ -9,7 +9,7 @@
   },
   "story": {
     "path": "story.sample.md",
-    "sha256": "176d8452ec710ef182cabdb23c91bd879d1e1fce429ad5668a21cf810eb4d54b"
+    "sha256": "448edc1b66b2dabf9ef51721ffd4475eb1f17707f86c594cc0dd0ce493306b3e"
   },
   "slides": [
     {
@@ -18,15 +18,15 @@
       "slots": {
         "kicker": {
           "type": "text",
-          "value": "週會提案"
+          "value": "Weekly proposal"
         },
         "title": {
           "type": "text",
-          "value": "我們改簡報的時間，花在哪裡"
+          "value": "Where our slide revisions go"
         },
         "subtitle": {
           "type": "text",
-          "value": "上季六份簡報平均改四輪，其中三輪只動版面。"
+          "value": "Last quarter six decks averaged four rounds of revision, three of which touched only the layout."
         }
       },
       "elements": [
@@ -47,7 +47,7 @@
           "kind": "text"
         }
       ],
-      "notes": "開場先問：上一次改簡報，你改的是內容還是版面？停三秒再翻頁。"
+      "notes": "Open with a question: the last time you revised a deck, was it the content or the layout? Hold three seconds before moving on."
     },
     {
       "id": "s2",
@@ -55,19 +55,19 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "今天談三件事"
+          "value": "Three things today"
         },
         "card-1": {
           "type": "text",
-          "value": "為什麼一直改版面"
+          "value": "Why the layout keeps changing"
         },
         "card-2": {
           "type": "text",
-          "value": "新流程長什麼樣"
+          "value": "What the new workflow looks like"
         },
         "card-3": {
           "type": "text",
-          "value": "下週的試用計畫"
+          "value": "Next week's trial plan"
         }
       },
       "elements": [
@@ -88,7 +88,7 @@
           "kind": "text"
         }
       ],
-      "notes": "這頁只停十秒，讓大家知道結構就好。"
+      "notes": "Stay on this slide for ten seconds only, just long enough to show the structure."
     },
     {
       "id": "s3",
@@ -96,17 +96,17 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "改版輪數的真相"
+          "value": "The truth about revision rounds"
         },
         "body": {
           "type": "text",
-          "value": "三輪版面修改裡，有兩輪是因為內容順序在中途改變。"
+          "value": "Of three layout rounds, two came from a content order change midway."
         },
         "evidence": {
           "type": "list",
           "items": [
-            "六份簡報、二十四輪修改的逐輪紀錄",
-            "十六輪與版面有關，其中十一輪起因是內容順序調整"
+            "A round-by-round log of six decks and twenty-four rounds of revision",
+            "Sixteen rounds concerned the layout; eleven began with a change in content order"
           ]
         }
       },
@@ -124,7 +124,7 @@
           "kind": "text"
         }
       ],
-      "notes": "強調「版面被改」是結果，不是原因。"
+      "notes": "Stress that \"the layout got changed\" is the result, not the cause."
     },
     {
       "id": "s4",
@@ -132,33 +132,33 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "工具沒有錯，順序錯了"
+          "value": "The tool is fine, the order is wrong"
         },
         "left-title": {
           "type": "text",
-          "value": "現況"
+          "value": "Today"
         },
         "left-items": {
           "type": "list",
           "items": [
-            "開簡報軟體",
-            "排版",
-            "講一遍",
-            "發現順序不對",
-            "重排"
+            "open the slide app",
+            "lay out",
+            "present once",
+            "notice the order is wrong",
+            "lay out again"
           ]
         },
         "right-title": {
           "type": "text",
-          "value": "目標"
+          "value": "Goal"
         },
         "right-items": {
           "type": "list",
           "items": [
-            "寫敘事",
-            "確認",
-            "生成版面",
-            "只微調"
+            "write the story",
+            "confirm",
+            "generate the layout",
+            "fine-tune only"
           ]
         }
       },
@@ -188,7 +188,7 @@
           "kind": "text"
         }
       ],
-      "notes": "用左右對比，不要讀完，讓對比自己說話。"
+      "notes": "Let the two columns speak for themselves; do not read them out."
     },
     {
       "id": "s5",
@@ -196,11 +196,11 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "新流程的五步"
+          "value": "The five steps of the new workflow"
         },
         "body": {
           "type": "text",
-          "value": "brief → 敘事文件（你確認）→ 視覺方向 → 生成 → 瀏覽器內編輯"
+          "value": "brief -> story document (you confirm it) -> visual direction -> generate -> edit in the browser"
         }
       },
       "elements": [
@@ -217,7 +217,7 @@
           "kind": "text"
         }
       ],
-      "notes": "指出「你確認」這一步是唯一需要人停下來的地方。"
+      "notes": "Point out that \"you confirm it\" is the only step where a person has to stop."
     },
     {
       "id": "s6",
@@ -225,19 +225,19 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "試做兩份，改版輪數歸零"
+          "value": "Two trial decks, zero rounds of layout revision"
         },
         "card-1": {
           "type": "metric",
           "value": "0",
-          "label": "試做 A 的版面修改輪數",
-          "delta": "敘事改兩輪"
+          "label": "Layout revisions, trial A",
+          "delta": "two rounds on the story"
         },
         "card-2": {
           "type": "metric",
           "value": "0",
-          "label": "試做 B 的版面修改輪數",
-          "delta": "敘事改一輪"
+          "label": "Layout revisions, trial B",
+          "delta": "one round on the story"
         }
       },
       "elements": [
@@ -258,7 +258,7 @@
           "kind": "text"
         }
       ],
-      "notes": "這是高峰頁，數字放大，停久一點。"
+      "notes": "This is the peak slide: make the numbers big and stay on it longer."
     },
     {
       "id": "s7",
@@ -266,7 +266,7 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "你上一次改簡報，改的是內容，還是版面？"
+          "value": "The last time you revised a deck, was it the content or the layout?"
         }
       },
       "elements": [
@@ -283,7 +283,7 @@
           "kind": "text"
         }
       ],
-      "notes": "不講話，等三到五秒。"
+      "notes": "Say nothing; wait three to five seconds."
     },
     {
       "id": "s8",
@@ -291,15 +291,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "下週做一份真的"
+          "value": "Make a real one next week"
         },
         "body": {
           "type": "text",
-          "value": "用這套流程做一份真實提案，我們一起看結果。"
+          "value": "Make one real proposal this way and review it together."
         },
         "cta": {
           "type": "text",
-          "value": "需要一位志願者提供題目"
+          "value": "One volunteer to provide the topic"
         }
       },
       "elements": [
@@ -320,7 +320,7 @@
           "kind": "text"
         }
       ],
-      "notes": "直接問誰願意提供題目，當場定下來。"
+      "notes": "Ask directly who will provide the topic and settle it on the spot."
     }
   ],
   "overrides": {

@@ -31,6 +31,11 @@
       "enum": ["on", "off"],
       "description": "Master switch for element motion: off means no reveal steps and no entrances during playback, every press turns the page (page transitions still apply). Pressing M during playback overrides it for this browser without changing this value"
     },
+    "lang": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+      "description": "BCP 47 tag of the content (en, zh-Hant, ja…), written to <html lang>. The scaffold copies the story’s frontmatter lang or guesses from the text’s script; absent means the renderer guesses the same way"
+    },
     "story": {
       "type": "object",
       "description": "The story.md this deck was built from; the sha256 detects whether the story has changed since",

@@ -8,6 +8,7 @@ import {
   type Slot,
   transitionFamily,
 } from '../model/deck.ts'
+import { langOf } from '../model/lang.ts'
 import {
   enterFor,
   type Layout,
@@ -232,7 +233,7 @@ export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderD
 
   const { transition, themeTransition } = resolveTransition(deck, theme.json)
   const html = `<!doctype html>
-<html lang="zh-Hant"${opts.staticMode ? ' data-static="true"' : ''}${deck.motion === 'off' ? ' data-motion="off"' : ''}>
+<html lang="${escapeHtml(langOf(deck.lang, JSON.stringify([deck.title, deck.slides, deck.overrides])))}"${opts.staticMode ? ' data-static="true"' : ''}${deck.motion === 'off' ? ' data-motion="off"' : ''}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "broken",
-  "title": "故意壞掉的 deck",
+  "title": "A deliberately broken deck",
   "theme": "ink-paper",
   "canvas": {
     "width": 1920,
@@ -14,11 +14,11 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "標題"
+          "value": "Title"
         },
         "ghost": {
           "type": "text",
-          "value": "這個 slot 沒有對應的元件"
+          "value": "This slot has no matching element"
         }
       },
       "elements": [
@@ -34,7 +34,7 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "重複的頁面 id"
+          "value": "Duplicate slide id"
         }
       },
       "elements": [

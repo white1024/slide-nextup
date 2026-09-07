@@ -1,9 +1,9 @@
 import { effectiveOrder, type Pages } from './pages.js'
-import { SECTION_HEADINGS, type Story } from './story.ts'
+import { isSectionHeading, SECTION_HEADINGS, type Story } from './story.ts'
 
 /**
  * Writing the deck's page-level overrides (playback order, hidden slides) back into story.md:
- * the `### id | title` blocks under `## 逐頁` are re-sequenced to the effective order and the
+ * the `### id | title` blocks under `## Slides` are re-sequenced to the effective order and the
  * hidden ones are removed. Everything else in the file (frontmatter, the prose sections, the
  * skeleton) is copied byte for byte — the skeleton may now disagree with the pages, and that is
  * the author's call, so the CLI only says so.
@@ -21,7 +21,11 @@ export interface AppliedPages {
   changed: boolean
 }
 
-const SLIDES_HEADING = new RegExp(`^##\\s+${SECTION_HEADINGS.slides}\\s*$`)
+/** `## Slides` or one of its aliases (the original `## 逐頁`) */
+const isSlidesHeading = (line: string): boolean => {
+  const m = /^##\s+(.+?)\s*$/.exec(line)
+  return m?.[1] !== undefined && isSectionHeading('slides', m[1])
+}
 
 function trimTrailingBlank(lines: string[]): string[] {
   const out = lines.slice()
@@ -48,7 +52,7 @@ export function applyPagesToStory(
   if (!changed) return { text: storyText, order: ids, removed: [], unknown, changed: false }
 
   const lines = storyText.replace(/\r\n?/g, '\n').split('\n')
-  const sectionStart = lines.findIndex((l) => SLIDES_HEADING.test(l))
+  const sectionStart = lines.findIndex(isSlidesHeading)
   if (sectionStart === -1)
     throw new Error(`story.md has no \`## ${SECTION_HEADINGS.slides}\` section`)
   let sectionEnd = lines.length

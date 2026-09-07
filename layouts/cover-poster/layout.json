@@ -1,14 +1,14 @@
 {
   "id": "cover-poster",
-  "name": "封面：海報色塊",
-  "description": "海報式封面：左三分之一是整塊實色面板，kicker 直排在面板內，右側是 168px 的極粗大標與底部一句副標。改成置中標題頁會失去「一整塊顏色先打到眼睛」的衝擊。",
+  "name": "Cover: poster panel",
+  "description": "A poster-style cover: the left third is a solid colour panel with the kicker set vertically inside it; on the right a 168px extra-bold title and one subtitle along the bottom. A centred title slide would lose the impact of a block of colour hitting the eye first.",
   "content_relations": ["statement"],
   "scene_roles": ["hero"],
   "density": { "max_chars": 120, "max_elements": 5 },
   "slots": {
-    "kicker": { "type": "text", "required": false, "hint": "場合或系列名，直排，四到十二個字" },
-    "title": { "type": "text", "required": true, "hint": "主張式標題，最多三行、每行六字以內" },
-    "subtitle": { "type": "text", "required": false, "hint": "一句支撐主張的事實，六十字以內" }
+    "kicker": { "type": "text", "required": false, "hint": "occasion or series name, set vertically, 4 to 12 characters" },
+    "title": { "type": "text", "required": true, "hint": "claim headline, up to 3 lines, up to 6 characters per line" },
+    "subtitle": { "type": "text", "required": false, "hint": "one fact that supports the claim, up to 60 characters" }
   },
   "elements": [
     { "id": "panel", "kind": "shape" },
@@ -18,8 +18,8 @@
     { "id": "subtitle", "kind": "text" }
   ],
   "sample": {
-    "kicker": { "type": "text", "value": "週會提案" },
-    "title": { "type": "text", "value": "改簡報的時間，花在哪裡" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" }
+    "kicker": { "type": "text", "value": "Weekly meeting pitch" },
+    "title": { "type": "text", "value": "Where deck time goes" },
+    "subtitle": { "type": "text", "value": "Last quarter six decks averaged four rounds; three of them touched only layout." }
   }
 }

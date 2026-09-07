@@ -1,48 +1,48 @@
 ---
 name: slide-build
-description: 敘事已確認、視覺方向已選之後，逐頁選版型、生成 decks/<id>/deck.json、渲染成可編輯的 HTML、跑品質檢查、交付並說明如何編輯。使用者要「重做第 3 頁」「這頁換版型」「重新生成」時也用這個（只重做該頁，手動覆寫會保留）。
+description: After the story is confirmed and the visual direction chosen, picks a layout for every slide, generates decks/<id>/deck.json, renders it into editable HTML, runs the quality checks, delivers and explains how to edit. Also use it when the user says "redo page 3", "a different layout for this slide" or "regenerate" (only that slide is redone; manual overrides are kept).
 ---
 
-# slide-build — 從敘事到可編輯的 HTML
+# slide-build - from the story to editable HTML
 
-## 關卡（先跑，不通過就停）
+## Gate (run it first; stop if it fails)
 
 ```bash
 pnpm story:check decks/<id>/story.md --require-confirmed
 ```
 
-未確認或敘事在確認後改過，指令會失敗：回 slide-story 重新呈現並取得確認。**不要用 `--force`。**
+The command fails when the story is not confirmed (`not confirmed: show the user the per-slide summary first, then run pnpm story:confirm once they agree`) or was changed after confirmation (`the story file was modified after it was confirmed (...), confirm it again`): go back to slide-story, present again and get the confirmation. **Do not use `--force`.**
 
-## 步驟
+## Steps
 
-### 1. 看有哪些版型
-
-```bash
-pnpm layouts --theme <design.json 的 theme>
-# 做好的 deck 要換另一套主題包：pnpm deck:retheme decks/<id>/deck.json --theme <slug> [--reset-positions] 再 pnpm render
-```
-
-每個版型列出適合的 scene_roles、content_relations、slots（型別、必要與否、提示）與密度上限。
-
-### 2. 逐頁決定版型
-
-`deck:scaffold` 會依每頁的 scene_role 與 content_relation 自動選（對應表在 slide-story 的 references）。你要做的是逐頁問一句：**「這頁改成普通 grid 會失去什麼？」** 答得出來就用那個版型；答不出來代表內容關係選錯了，回頭改 story 或換版型。不合的頁用 `--layouts s3=photo,s5=cards` 指定。
-
-需要的版型不存在（例如時間軸、四象限）：依 [references/new-layout.md](references/new-layout.md) 新增一個，不要把內容硬塞進不合的版型。新增後先 `pnpm layout:gallery --theme <theme> <id>` 截圖給使用者看，改到點頭再用 `--layouts` 登記；使用者在流程外直接要新版型時也走這裡。
-
-### 3. 生成 deck.json
+### 1. See which layouts exist
 
 ```bash
-pnpm deck:scaffold decks/<id>/story.md --theme <design.json 的 theme> [--layouts s1=cover,s4=comparison]
+pnpm layouts --theme <the theme in design.json>
+# a finished deck moving to another theme pack: pnpm deck:retheme decks/<id>/deck.json --theme <slug> [--reset-positions] [--dry-run], then pnpm render again
 ```
 
-讀輸出：每頁選了什麼版型、哪些必要 slot 沒填、哪些是佔位圖、家具（meta／brand）是否因為太長而留空。重做單頁用 `--slide s3`；既有的手動覆寫一律保留，指向已消失元件的覆寫會列為孤兒但不會刪。
+Every layout lists the scene_roles and content_relations it suits, its slots (type, required or not, hint) and its density limits. The header states the unit rule the hints use (character counts are full-width units: a CJK glyph counts 1, a Latin letter or digit half). A theme is looked up in the deck's own folder first, then the user directory, then the repo's `themes/`; `--deck <deck.json>` makes the list search the deck folder too.
 
-### 4. 修內容
+### 2. Decide the layout slide by slide
 
-打開 `decks/<id>/deck.json`，逐頁把 `slots` 修成真的上得了投影片的句子；規則見 [references/slot-mapping.md](references/slot-mapping.md)。**只改 `slots` 與 `notes`，不動 `elements`，不動 `overrides`。** 圖片放 `decks/<id>/assets/`，用相對路徑；佔位圖必須換掉或改用不需要圖的版型。
+`deck:scaffold` chooses from each slide's scene_role and content_relation (the mapping table is in slide-story's references). Your job is one question per slide: **"what would this slide lose as a plain grid?"** If you can answer it, use that layout; if you cannot, the content relation is wrong: go back to the story or change the layout. Pin the slides that do not fit with `--layouts s3=photo,s5=cards`.
 
-### 5. 驗證、渲染、檢查
+When the layout you need does not exist (a timeline, a four-quadrant grid): add one following [references/new-layout.md](references/new-layout.md) instead of forcing the content into a layout that does not fit. After adding it, run `pnpm layout:gallery --theme <theme> <id>` and show the user the screenshot; iterate until they nod, then register it with `--layouts`. A user who asks for a new layout outside the workflow goes through the same reference.
+
+### 3. Generate deck.json
+
+```bash
+pnpm deck:scaffold decks/<id>/story.md --theme <the theme in design.json> [--layouts s1=cover,s4=comparison]
+```
+
+Read the output: the layout chosen for every slide, which required slots are unfilled, which images are placeholders, whether the furniture (`meta` / `brand`) was left empty because the text was too long, and which slides exceed the layout's density (the scaffold suggests `details` before a split). To redo one slide use `--slide s3`; existing manual overrides are always kept, and an override that points at an element that no longer exists is listed as orphaned but not deleted.
+
+### 4. Fix the content
+
+Open `decks/<id>/deck.json` and turn every slide's `slots` into sentences that can really go on a slide; the rules are in [references/slot-mapping.md](references/slot-mapping.md). **Change only `slots` and `notes`; leave `elements` and `overrides` alone.** Images go in `decks/<id>/assets/` and are referenced by relative path; every placeholder image has to be replaced, or the slide moved to a layout that needs no image.
+
+### 5. Validate, render, check
 
 ```bash
 pnpm deck:validate decks/<id>/deck.json
@@ -50,22 +50,22 @@ pnpm render decks/<id>/deck.json -o decks/<id>/deck.html
 pnpm qa decks/<id>/deck.html
 ```
 
-QA 失敗只回報，不自動修：溢出或密度超標就縮短文字或拆頁（回 slide-story 改敘事再重做該頁），重疊多半是覆寫造成，請使用者在編輯模式裡處理；不要改 HTML，也不要用覆寫去救。報告在 `artifacts/qa/<id>.json`。
+A failed QA is reported, not repaired automatically: an overflow or a density breach means shorter text or a split slide (back to slide-story to change the story, then redo that slide); an overlap usually comes from an override, so ask the user to sort it out in edit mode. Do not edit the HTML and do not rescue a slide with overrides. The summary reads `passed: N errors, M warnings` or `failed: N errors, M warnings`; the report is in `artifacts/qa/<id>.json`.
 
-### 6. 交付
+### 6. Deliver
 
-告訴使用者：
+Tell the user:
 
-- HTML 路徑、頁數、QA 結果與剩下的警告。
-- 開啟 HTML 後按 `E` 進入編輯模式：上方是工具列（復原／重做、貼齊、顯示隱藏元件、下載 deck.json、投影；「?」有快捷鍵說明），左側是頁面縮圖欄，點選元件後樣式控制（字體、字級、粗斜底線、主題色票）出現在元件旁的浮動工具列，位置、大小、步驟、進場、對齊等距、層次在它的「⋯」裡；Shift 點選或框選可以多選，Ctrl+Alt+C／V 複製貼上樣式。所有修改只寫進 deck 的覆寫區，之後重新生成頁面不會蓋掉；沒開 dev server 時編輯會留在瀏覽器的草稿，下次開啟可還原。
-- 播放：→ 先推進本頁的步驟再翻頁，← 反向；按 `P` 開講者視窗（講稿、下一頁、計時，同一台機器）；`?static=1` 看最終狀態。預設就有動畫：scaffold 替卡片、流程、對比、證據排好逐步顯示（元件的 `step`），到達步驟時依主題的 motion 規則進場（元件的 `enter` 可在浮動工具列的「⋯」或 deck.json 指定，同一步驟內依序錯開），切頁轉場預設 `fade`。要關掉：頂層 `transition` 改 `none`、把 `step` 清掉；觀眾開了 prefers-reduced-motion 時自動無動畫。
-- 播放時的微互動：卡片、膠囊、行動呼籲、表格列、圖片對 hover 有回饋（主題定義），圖表 hover 顯示數值，圖片點擊放大（Esc 關），文字裡的 `[文字](https://…)` 是可點的連結（目標寫 `#s3` 就跳到那一頁）；`?static=1` 與編輯模式一律關閉，QA 量的是靜態狀態。
-- 互動元件（寫在 slots 裡，見 slot-mapping.md 的「互動槽位」）：有底框的卡片（role 是 card、stat、tint、alert、sunk）的 `details` 播放時點一下展開完整內容、圖片的 `hotspots` 點擊跳頁、圖表的 `toggle` 讓圖例可點、`tabs` 槽位是同一個框裡的分頁籤；都能用鍵盤（Tab、Enter、←→）。編輯器的浮動工具列可改展開內容；熱區按「熱區」後在圖上直接拉框、拖曳、選目標頁。scaffold 在敘事超過版型密度時會建議先用 details 而不是拆頁。
-- 臨時不播某頁或調播放順序：編輯模式左側的頁面側欄可隱藏／顯示、拖曳或 ↑↓ 排序（Ctrl+Shift+↑↓、Ctrl+Shift+H），寫進 deck.json 的 `pages`，重做頁面時保留；頁碼膠囊會跟著重編。story.md 仍是敘事正本：要讓這份編排變成正本，跑 `pnpm story:apply-deck decks/<id>/deck.json`（`--dry-run` 先看），它會把逐頁段落重排、隱藏頁移除，然後回 slide-story 重新呈現並確認，再 `deck:scaffold` 重做頁面時 `pages` 就會被清空、播放順序不變。
-- 要改敘事：回 slide-story，重新確認後 `pnpm deck:scaffold ... --slide <id>` 只重做那幾頁。
+- The path of the HTML, the slide count, the QA result and the warnings that remain.
+- Open the HTML and press `E` for edit mode: the top bar holds Undo / Redo, Snap, Show hidden, Element motion, Dock toolbar, the Transition select, Download deck.json (and Download deck.html when the dev server is running) and Present (its `?` lists the shortcuts); the left column is the page thumbnails. Click an element and its style controls (font, size, weight, line height, spacing, the theme's colour swatches) appear in a floating toolbar next to it; position, size, reveal step, entrance, align and distribute, layer and details sit behind the toolbar's "more" button. Shift-click or a drag on empty space selects several elements; Ctrl+Alt+C / Ctrl+Alt+V copy and paste a style. Every change is written only to the deck's overrides, so regenerating a slide later never wipes it; without a dev server (`pnpm dev decks/<id>/deck.json`) the edits stay as a draft in the browser and can be restored on the next visit.
+- Playback: the right arrow advances the current slide's reveal steps before turning the page, the left arrow goes back; `P` opens the presenter window (notes, next slide, timer, on the same machine); `?static=1` shows the final state. Motion is on by default: the scaffold sequences cards, process steps, comparisons and evidence (the element's `step`), and each element enters by the theme's motion rules when its step is reached (an element's `enter` is set behind the toolbar's "more" button or in deck.json; elements sharing a step are staggered). The page transition is the theme's default, else `fade`. To switch motion off: set the deck's `motion` to `off` (the Element motion toggle) and `transition` to `none`; `M` during playback overrides it for that browser, and an audience with prefers-reduced-motion gets no motion at all.
+- Micro-interactions during playback: cards, pills, calls to action, table rows and images respond to hover (defined by the theme), a chart shows its values on hover, an image enlarges on click (Esc closes), and `[text](https://...)` in any text is a clickable link (a target of `#s3` jumps to that slide). `?static=1` and edit mode switch all of it off; QA measures the static state.
+- Interactive components (written in the slots; see "Interactive slots" in slot-mapping.md): the `details` of a boxed card (role card, stat, tint, alert or sunk) expand the full content on a click, an image's `hotspots` jump to a slide, a chart's `toggle` makes the legend clickable, and a `tabs` slot is a set of tabs in one box; all of it works from the keyboard (Tab, Enter, the arrow keys). The editor's floating toolbar edits the expanded content (Details); Hotspots lets the user draw a box straight on the image, drag it and pick the target page. When the story exceeds a layout's density, the scaffold suggests details before a split.
+- Skipping a slide for one occasion, or changing the running order: the page column in edit mode hides / shows, drags or moves a page (Ctrl+Shift+Up / Down, Ctrl+Shift+H), written to `pages` in deck.json and kept when a slide is redone; the page-number chips renumber themselves. story.md stays the source of the narrative: to make that arrangement the source, run `pnpm story:apply-deck decks/<id>/deck.json` (`--dry-run` shows the change first); it reorders the per-slide sections and removes the hidden slides, then go back to slide-story to present and confirm again; the next `deck:scaffold` clears `pages`, and the playback order stays the same.
+- To change the story: back to slide-story; after the new confirmation, `pnpm deck:scaffold ... --slide <id>` redoes only those slides.
 
-## 不做的事
+## What this skill does not do
 
-- 不手改 deck.html，不寫 overrides，不在未確認時 `--force`。
-- 不為了塞進版型而砍掉敘事裡的證據；放不下就是敘事該拆頁。
-- 不在頁面上留下流程性文字（「示意」「待補」「Option A」）；沒有內容的選填 slot 就留空。
+- It does not edit deck.html by hand, does not write overrides and does not use `--force` on an unconfirmed story.
+- It does not cut evidence out of the story to fit a layout; what does not fit is a slide the story should split.
+- It leaves no process text on a slide ("placeholder", "to be added", "Option A"); an optional slot with nothing to say is left empty.

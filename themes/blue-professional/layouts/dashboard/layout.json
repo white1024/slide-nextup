@@ -1,7 +1,7 @@
 {
   "id": "dashboard",
-  "name": "儀表板：藍色專業",
-  "description": "六格數據：標題下三欄兩列的淡藍底格子，各放一個藍色數字、指標名稱與一行細線隔開的脈絡。改成表格會失去每個數字各自被框住的份量。",
+  "name": "Dashboard: blue professional",
+  "description": "Six stat cells: under the title, a three-by-two grid of tinted cells, each with a blue number, the name of the metric and a hairline-separated context note. A table would lose the weight each number gets from its own frame.",
   "content_relations": [
     "evidence",
     "list",
@@ -19,17 +19,17 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "stat-1": {
       "type": [
@@ -37,7 +37,7 @@
         "text"
       ],
       "required": true,
-      "hint": "數據格：metric 的 value 是數字、label 是指標名稱（十五字以內）、delta 是一行脈絡；可加 details"
+      "hint": "stat cell: the metric's value is the number, label the name of the metric (up to 15 characters), delta a one-line context note; may carry details"
     },
     "stat-2": {
       "type": [
@@ -45,7 +45,7 @@
         "text"
       ],
       "required": true,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "stat-3": {
       "type": [
@@ -53,7 +53,7 @@
         "text"
       ],
       "required": true,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "stat-4": {
       "type": [
@@ -61,7 +61,7 @@
         "text"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "stat-5": {
       "type": [
@@ -69,7 +69,7 @@
         "text"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "stat-6": {
       "type": [
@@ -77,12 +77,12 @@
         "text"
       ],
       "required": false,
-      "hint": "同上；不需要就留空"
+      "hint": "same as above; leave empty when not needed"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -134,11 +134,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -146,43 +146,43 @@
     },
     "title": {
       "type": "text",
-      "value": "六個指標看這一季的體質"
+      "value": "Six metrics on the quarter's health"
     },
     "stat-1": {
       "type": "metric",
       "value": "98.7%",
-      "label": "可用率",
-      "delta": "較上季持平，兩次短暫中斷都在維護時段"
+      "label": "Availability",
+      "delta": "Flat on last quarter; both outages were in maintenance"
     },
     "stat-2": {
       "type": "metric",
-      "value": "2.6 秒",
-      "label": "首頁載入中位數",
-      "delta": "較上季快 1.5 秒，行動版改善最多"
+      "value": "2.6 s",
+      "label": "Median home page load",
+      "delta": "1.5 s faster than last quarter, mostly on mobile"
     },
     "stat-3": {
       "type": "metric",
       "value": "412",
-      "label": "本季回報問題數",
-      "delta": "其中六成在兩週內關閉"
+      "label": "Issues reported",
+      "delta": "Six in ten were closed within two weeks"
     },
     "stat-4": {
       "type": "metric",
       "value": "61%",
-      "label": "兩週內關閉率",
-      "delta": "上季 44%，流程加了負責人後改善"
+      "label": "Closed within two weeks",
+      "delta": "44% last quarter; better since each fix got an owner"
     },
     "stat-5": {
       "type": "metric",
       "value": "17",
-      "label": "待辦超過一個月",
-      "delta": "多為需要改架構的項目"
+      "label": "Open for over a month",
+      "delta": "Mostly items that need architectural changes"
     },
     "stat-6": {
       "type": "metric",
       "value": "4.6",
-      "label": "滿意度（5 分）",
-      "delta": "抽樣兩百位使用者的問卷"
+      "label": "Satisfaction (out of 5)",
+      "delta": "Survey of a sample of two hundred users"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "id": "data-table",
-  "name": "表格：藍色專業",
-  "description": "標題、導語，下面一張淡藍框裝表格，表頭是藍色大寫小字加藍色底線，底下一行註記。改成條列會失去欄與欄的對齊。",
+  "name": "Data table: blue professional",
+  "description": "Title and lede, then a tinted frame holding the table, whose header is small blue capitals over a blue underline, with a note beneath. A bulleted list would lose the alignment between columns.",
   "content_relations": [
     "comparison",
     "evidence",
@@ -18,37 +18,37 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "table": {
       "type": "table",
       "required": true,
-      "hint": "表格：表頭一列、三到六列資料；每格一到十個字"
+      "hint": "table: one header row, 3 to 6 data rows, 1 to 10 characters per cell"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行註記或資料來源"
+      "hint": "a one-line note or source"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -88,11 +88,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -100,41 +100,41 @@
     },
     "title": {
       "type": "text",
-      "value": "四個指標，上季與本季並排看"
+      "value": "Four metrics, last quarter beside this one"
     },
     "subtitle": {
       "type": "text",
-      "value": "變化欄是本季減上季；負值代表變快或變少。"
+      "value": "The change column is this quarter minus last; negative means faster or fewer."
     },
     "table": {
       "type": "table",
       "header": [
-        "指標",
-        "上季",
-        "本季",
-        "變化"
+        "Metric",
+        "Last quarter",
+        "This quarter",
+        "Change"
       ],
       "rows": [
         [
-          "首頁載入中位數",
-          "4.1 秒",
-          "2.6 秒",
-          "−1.5 秒"
+          "Median home load",
+          "4.1 s",
+          "2.6 s",
+          "−1.5 s"
         ],
         [
-          "兩週內關閉率",
+          "Closed in two weeks",
           "44%",
           "61%",
           "+17 pts"
         ],
         [
-          "待辦超過一個月",
+          "Open over a month",
           "23",
           "17",
           "−6"
         ],
         [
-          "滿意度（5 分）",
+          "Satisfaction (of 5)",
           "4.2",
           "4.6",
           "+0.4"
@@ -143,7 +143,7 @@
     },
     "caption": {
       "type": "text",
-      "value": "資料來源：本季量測與問卷；問卷抽樣兩百位。"
+      "value": "Source: this quarter's measurements and survey; the survey sampled two hundred users."
     }
   }
 }

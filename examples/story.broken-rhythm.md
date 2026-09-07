@@ -1,69 +1,69 @@
 ---
-title: 節奏違規的敘事範例
-audience: 測試用
-occasion: 測試用
+title: A story that breaks the rhythm rules
+audience: For testing
+occasion: For testing
 duration_minutes: 10
 density: standard
 narrative_pattern: problem-solution
-core_message: 這份檔案的欄位都合法，但節奏規則全部踩線。
+core_message: Every field in this file is valid, but every rhythm rule is broken.
 ---
 
-## 目標與受眾
+## Goal and audience
 
-用來測試。
+For testing.
 
-## 核心主張
+## Core message
 
-用來測試。
+For testing.
 
-## 敘事骨架
+## Narrative skeleton
 
-1. 用來測試。
+1. For testing.
 
-## 逐頁
+## Slides
 
-### s1 | 開場
+### s1 | Opening
 - scene_role: hero
 - intensity: 4
 - content_relation: statement
-- message: 開場主張。
+- message: The opening claim.
 
-### s2 | 地圖
+### s2 | Map
 - scene_role: map
 - intensity: 3
 - content_relation: list
-- message: 今天講四個證據。
+- message: Four pieces of evidence today.
 
-### s3 | 證據一
+### s3 | Evidence one
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據一。
-- evidence: 數據一
+- message: Evidence one.
+- evidence: Figure one
 
-### s4 | 證據二
+### s4 | Evidence two
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據二。
-- evidence: 數據二
+- message: Evidence two.
+- evidence: Figure two
 
-### s5 | 證據三
+### s5 | Evidence three
 - scene_role: evidence
 - intensity: 4
 - content_relation: evidence
-- message: 證據三。
-- evidence: 數據三
+- message: Evidence three.
+- evidence: Figure three
 
-### s6 | 證據四
+### s6 | Evidence four
 - scene_role: evidence
 - intensity: 3
 - content_relation: evidence
-- message: 證據四。
-- evidence: 數據四
+- message: Evidence four.
+- evidence: Figure four
 
-### s7 | 收尾
+### s7 | Close
 - scene_role: close
 - intensity: 4
 - content_relation: closing
-- message: 收尾。
+- message: The close.

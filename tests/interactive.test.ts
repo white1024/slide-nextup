@@ -574,7 +574,7 @@ describe('interactive slots while playing, and their default state elsewhere', (
     await page.evaluate(() => window.__deck.editor.select('card-1'))
     const detailsBox = page.locator('.ed-float [data-details]')
     await detailsBox.waitFor({ state: 'visible' })
-    expect(await detailsBox.inputValue()).toMatch(/^operator：.*\nviewer：.*\nnew-platform：/s)
+    expect(await detailsBox.inputValue()).toMatch(/^operator: .*\nviewer: .*\nnew-platform: /s)
     await detailsBox.fill('operator\nviewer')
     await detailsBox.dispatchEvent('change')
     const model = () => page.evaluate(() => window.__deck.exportModel())

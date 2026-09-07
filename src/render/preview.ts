@@ -1,4 +1,5 @@
 import type { Override, Slot } from '../model/deck.ts'
+import { detectLang } from '../model/lang.ts'
 import { type Layout, type Theme, themeCssVariables } from './assets.ts'
 import { iconSprite } from './icons.ts'
 import { FIT_JS } from './runtime.ts'
@@ -27,7 +28,7 @@ export function renderPreviewDocument(input: PreviewInput): string {
   ].join('\n')
   const body = renderSlideHtml({ layout, slideId, slots: input.slots, overrides: input.overrides })
   return `<!doctype html>
-<html lang="zh-Hant">
+<html lang="${escapeHtml(detectLang(JSON.stringify(input.slots)))}">
 <head>
 <meta charset="utf-8">
 <title>${escapeHtml(`${layout.json.name} · ${theme.json.name}`)}</title>

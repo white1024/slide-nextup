@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1678 560" width="1678" height="560" font-family="Inter, 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif">
-  <title>tidewatch 簡化系統圖</title>
+  <title>Simplified tidewatch system map</title>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0 0 L10 5 L0 10 Z" fill="#14b8a6"/>
@@ -18,39 +18,39 @@
     .zone-label { fill: #b8a994; font-size: 17px; font-weight: 600; letter-spacing: 0.08em; }
   </style>
 
-  <!-- 1. 站台清單 -->
+  <!-- 1. Site list -->
   <rect class="box" x="40" y="200" width="280" height="160" rx="28"/>
-  <text class="label" x="180" y="272">站台清單</text>
-  <text class="sub" x="180" y="316">sites/*.yaml · sitemap</text>
+  <text class="label" x="180" y="272">Site list</text>
+  <text class="sub" x="180" y="316">sites/*.yaml, sitemap</text>
 
-  <!-- 2. 兩條檢查路徑 -->
+  <!-- 2. Two check paths -->
   <rect class="zone" x="420" y="60" width="420" height="440" rx="32"/>
-  <text class="zone-label" x="444" y="48">兩條檢查路徑，數字不併表</text>
+  <text class="zone-label" x="444" y="48">Two check paths, numbers never merged</text>
 
   <rect class="box" x="440" y="90" width="380" height="160" rx="28"/>
-  <text class="label" x="630" y="172">瀏覽器路徑</text>
-  <text class="sub" x="630" y="212">真實瀏覽器載入與轉譯的端到端檢查</text>
+  <text class="label" x="630" y="172">Browser path</text>
+  <text class="sub" x="630" y="212">End to end in a real browser</text>
   <rect class="chip-bg" x="676" y="100" width="136" height="32" rx="16"/>
-  <text class="chip" x="744" y="123">對外主數據源</text>
+  <text class="chip" x="744" y="123">Main source</text>
 
   <rect class="box" x="440" y="310" width="380" height="160" rx="28"/>
-  <text class="label" x="630" y="392">爬蟲路徑</text>
-  <text class="sub" x="630" y="432">只抓 HTML，看回應速度</text>
+  <text class="label" x="630" y="392">Crawler path</text>
+  <text class="sub" x="630" y="432">HTML only, checks response time</text>
   <rect class="chip-bg" x="712" y="320" width="100" height="32" rx="16"/>
-  <text class="chip" x="762" y="343">交叉核對</text>
+  <text class="chip" x="762" y="343">Cross-check</text>
 
-  <!-- 3. 報告目錄 -->
+  <!-- 3. Report directory -->
   <rect class="box-key" x="940" y="170" width="260" height="220" rx="28"/>
-  <text class="label" x="1070" y="262">報告目錄</text>
-  <text class="sub" x="1070" y="306">state.json · pages/</text>
-  <text class="sub" x="1070" y="336">逐頁原子寫入，可續跑</text>
+  <text class="label" x="1070" y="262">Reports</text>
+  <text class="sub" x="1070" y="306">state.json, pages/</text>
+  <text class="sub" x="1070" y="336">Atomic writes, resumable</text>
   <rect class="chip-bg" x="1030" y="182" width="100" height="32" rx="16" fill="#ffffff"/>
-  <text class="chip" x="1080" y="205">共用契約</text>
+  <text class="chip" x="1080" y="205">Contract</text>
 
   <!-- 4. aggregate / export -->
   <rect class="box" x="1320" y="200" width="340" height="160" rx="28"/>
-  <text class="label-sm" x="1490" y="270">aggregate ／ export</text>
-  <text class="sub" x="1490" y="316">獨立的第二遍評分，產出 result.json</text>
+  <text class="label-sm" x="1490" y="270">aggregate / export</text>
+  <text class="sub" x="1490" y="316">Second-pass scoring, result.json</text>
 
   <!-- arrows -->
   <path class="flow" d="M320 280 H380 V170 H428"/>

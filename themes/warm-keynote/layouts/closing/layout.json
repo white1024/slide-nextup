@@ -1,7 +1,7 @@
 {
   "id": "closing",
-  "name": "結尾：暖色 Keynote",
-  "description": "青綠短線、一句收尾大標、一行導語與一行提醒，最後一排膠囊：主要的行動呼籲加幾個要點。改成「謝謝」頁會失去把下一步交到對方手上的動作。",
+  "name": "Closing: Warm Keynote",
+  "description": "A short teal rule, one closing headline, a lede and a reminder, then a row of pills: the main call to action plus a few key points. A \"thank you\" slide would lose the gesture of handing the next step to the audience.",
   "content_relations": [
     "closing",
     "statement"
@@ -17,22 +17,22 @@
     "title": {
       "type": "text",
       "required": true,
-      "hint": "收尾主張，兩行以內"
+      "hint": "closing claim, up to 2 lines"
     },
     "body": {
       "type": "text",
       "required": false,
-      "hint": "一行導語"
+      "hint": "a one-line lede"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行提醒，膠囊前的引言"
+      "hint": "a one-line reminder that introduces the pills"
     },
     "cta": {
       "type": "text",
       "required": true,
-      "hint": "主要的行動呼籲，一個短句、十二字以內"
+      "hint": "the main call to action, one short phrase, up to 12 characters"
     },
     "evidence": {
       "type": [
@@ -40,12 +40,12 @@
         "text"
       ],
       "required": false,
-      "hint": "幾個要點，每條一個膠囊"
+      "hint": "a few key points, a pill for every point"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -85,27 +85,27 @@
   "sample": {
     "title": {
       "type": "text",
-      "value": "只要想到「這件事能不能交給 AI」，就可以來聊聊。"
+      "value": "Whenever you wonder \"could this be checked automatically?\", come and talk."
     },
     "body": {
       "type": "text",
-      "value": "不管是想讓 AI 陪你一起想，還是直接把任務交給它代工，都歡迎。"
+      "value": "Whether you want a second pair of eyes or want the checks run for you, you are welcome."
     },
     "caption": {
       "type": "text",
-      "value": "真的要動手時，這五題我們會陪你一起釐清："
+      "value": "When you are ready to start, we will work through these five questions with you:"
     },
     "cta": {
       "type": "text",
-      "value": "找 AI 小組聊聊"
+      "value": "Talk to the Tidewatch team"
     },
     "evidence": {
       "type": "list",
       "items": [
-        "需要哪些工具",
-        "抽哪些欄位",
-        "什麼時候追問",
-        "要不要人工確認"
+        "Which checks to run",
+        "Which fields to pull",
+        "When to ask again",
+        "Whether a person confirms"
       ]
     },
     "page": {

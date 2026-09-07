@@ -1,7 +1,7 @@
 {
   "id": "process",
-  "name": "流程：藍色專業",
-  "description": "一條橫向流程：六個編號的藍色圓形節點，越後面越淡，節點之間一截細線，下面是步驟名與一句說明，最後一行提醒。改成條列會失去「一眼看完整條線」的效果。",
+  "name": "Process: blue professional",
+  "description": "One horizontal flow: six numbered blue circular nodes that fade towards the end, a short hairline between nodes, the step name and a one-sentence note under each, and a reminder at the bottom. A bulleted list would lose seeing the whole line at a glance.",
   "content_relations": [
     "sequence"
   ],
@@ -17,22 +17,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "step-1": {
       "type": [
@@ -40,7 +40,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "步驟：text 是步驟名（每行八字以內）；metric 的 value 是步驟名、label 是一句說明"
+      "hint": "step: text is the step name (up to 8 characters per line); as a metric, value is the step name and label a one-sentence note"
     },
     "step-2": {
       "type": [
@@ -48,7 +48,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上；不需要就留空（節點與連線一起消失）"
+      "hint": "same as above; leave empty when not needed (the node and its connector disappear together)"
     },
     "step-3": {
       "type": [
@@ -56,7 +56,7 @@
         "metric"
       ],
       "required": true,
-      "hint": "同上；不需要就留空（節點與連線一起消失）"
+      "hint": "same as above; leave empty when not needed (the node and its connector disappear together)"
     },
     "step-4": {
       "type": [
@@ -64,7 +64,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空（節點與連線一起消失）"
+      "hint": "same as above; leave empty when not needed (the node and its connector disappear together)"
     },
     "step-5": {
       "type": [
@@ -72,7 +72,7 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空（節點與連線一起消失）"
+      "hint": "same as above; leave empty when not needed (the node and its connector disappear together)"
     },
     "step-6": {
       "type": [
@@ -80,17 +80,17 @@
         "metric"
       ],
       "required": false,
-      "hint": "同上；不需要就留空（節點與連線一起消失）"
+      "hint": "same as above; leave empty when not needed (the node and its connector disappear together)"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "流程的提醒：最容易漏的一兩件事"
+      "hint": "a reminder for the process: the one or two things most easily missed"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -150,11 +150,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -162,45 +162,45 @@
     },
     "title": {
       "type": "text",
-      "value": "每季固定六步，可中斷、可續跑"
+      "value": "Six fixed steps a quarter, stop and resume at will"
     },
     "subtitle": {
       "type": "text",
-      "value": "每一步都有產出物，跳過任何一步下一步就做不下去。"
+      "value": "Every step has an output; skip one and the next cannot start."
     },
     "step-1": {
       "type": "metric",
-      "value": "盤點",
-      "label": "列出本季所有回報"
+      "value": "Inventory",
+      "label": "List every report this quarter"
     },
     "step-2": {
       "type": "metric",
-      "value": "排序",
-      "label": "依影響與成本分級"
+      "value": "Rank",
+      "label": "Grade by impact and cost"
     },
     "step-3": {
       "type": "metric",
-      "value": "指派",
-      "label": "每項一個負責人"
+      "value": "Assign",
+      "label": "One owner per item"
     },
     "step-4": {
       "type": "metric",
-      "value": "修復",
-      "label": "兩週一個循環"
+      "value": "Fix",
+      "label": "Two-week cycles"
     },
     "step-5": {
       "type": "metric",
-      "value": "驗證",
-      "label": "用同一套量測重跑"
+      "value": "Verify",
+      "label": "Rerun the same measurements"
     },
     "step-6": {
       "type": "metric",
-      "value": "回顧",
-      "label": "把結果寫進下一季"
+      "value": "Review",
+      "label": "Write the results into next quarter"
     },
     "caption": {
       "type": "text",
-      "value": "最常漏的是驗證：修完不重跑量測，等於沒有修。"
+      "value": "Verification is missed most often: a fix that is not re-measured is no fix."
     }
   }
 }

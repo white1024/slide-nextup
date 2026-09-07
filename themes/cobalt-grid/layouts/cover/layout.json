@@ -1,17 +1,17 @@
 {
   "id": "cover",
-  "name": "封面：鈷藍方格",
-  "description": "趨勢報告的封面：上下兩條髮線框住整頁，左上巨大的襯線標題、系列名與一句襯線導語，右側一根像素階梯的掃描柱，最右邊一行直排的場合小字，左下一行來源說明，右下頁碼。改成一般標題頁會失去掃描柱與直排小字帶來的「印刷刊物」感。",
+  "name": "Cover: Cobalt Grid",
+  "description": "A trend-report cover: two hairlines frame the page top and bottom, a huge serif title top left with the series name and one serif lede, a pixel-stair scan column on the right, a vertical line of small occasion text at the far right, a source note bottom left and the page number bottom right. A plain title slide would lose the printed-journal feel that the scan column and the vertical small text give.",
   "content_relations": ["statement"],
   "scene_roles": ["hero"],
   "density": { "max_chars": 220, "max_elements": 9 },
   "slots": {
-    "title": { "type": "text", "required": true, "hint": "主張式標題，兩行、十六字以內；襯線大字，可用 *關鍵詞* 換斜體" },
-    "brand": { "type": "text", "required": false, "hint": "系列名或簡報名，大寫小字，自動填敘事標題的系列名（冒號前）" },
-    "subtitle": { "type": "text", "required": false, "hint": "一句襯線導語，五十字以內" },
-    "meta": { "type": "text", "required": false, "hint": "直排的場合或日期小字，自動填 occasion 的第一句（十字以內）" },
-    "cta": { "type": "text", "required": false, "hint": "左下一行來源或作者說明，自動填第一條 evidence" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填「01 / 08」" }
+    "title": { "type": "text", "required": true, "hint": "claim headline, 2 lines, up to 16 characters; large serif type, *keyword* turns italic" },
+    "brand": { "type": "text", "required": false, "hint": "series or deck name in small capitals, filled automatically from the series name of the story title (before the colon)" },
+    "subtitle": { "type": "text", "required": false, "hint": "one serif lede, up to 50 characters" },
+    "meta": { "type": "text", "required": false, "hint": "vertical small text for the occasion or date, filled automatically from the first clause of occasion (up to 10 characters)" },
+    "cta": { "type": "text", "required": false, "hint": "source or author note bottom left, filled automatically from the first evidence entry" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically (\"01 / 08\")" }
   },
   "elements": [
     { "id": "rule-top", "kind": "shape" },
@@ -25,11 +25,11 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "title": { "type": "text", "value": "我們改簡報的時間，花在版面" },
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報 · 第一期" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "cta": { "type": "text", "value": "整理自上季六份簡報的修改紀錄與會議記錄" },
+    "title": { "type": "text", "value": "Our revision time goes on layout" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides - Issue 1" },
+    "subtitle": { "type": "text", "value": "Last quarter six decks averaged four revision rounds; three touched only the layout." },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "cta": { "type": "text", "value": "Compiled from the revision logs and meeting notes of six decks last quarter" },
     "page": { "type": "text", "value": "01 / 08" }
   }
 }

@@ -1,16 +1,16 @@
 {
   "id": "cover",
-  "name": "封面：創意模式",
-  "description": "海報式封面：左側一條墨線接大寫等寬 tagline、全大寫粗黑大標與一段說明，右側一整塊綠底海報框，裡面一個帶硬邊陰影的桃紅開關方塊；底部等寬頁尾左放系列名、右放頁碼。改成置中標題頁會失去色塊海報的份量與左右對峙的張力。",
+  "name": "Cover: Creative Mode",
+  "description": "A poster cover: on the left an ink rule leading into a monospace capitals tagline, a heavy all-caps headline and a paragraph; on the right one solid green poster frame holding a hot-pink switch block with a hard-edged shadow; a monospace footer with the series name left and the page number right. A centred title slide would lose the weight of the colour-block poster and the tension between the two sides.",
   "content_relations": ["statement"],
   "scene_roles": ["hero"],
   "density": { "max_chars": 180, "max_elements": 10 },
   "slots": {
-    "kicker": { "type": "text", "required": false, "hint": "墨線後的大寫等寬 tagline，自動填 occasion 的第一句（十字以內）" },
-    "title": { "type": "text", "required": true, "hint": "主張式標題，兩行、十四字以內；可用 *關鍵詞* 換成橘色" },
-    "subtitle": { "type": "text", "required": false, "hint": "左下一段說明，三行以內、六十字以內" },
-    "brand": { "type": "text", "required": false, "hint": "頁尾左：系列名或簡報名，自動填敘事標題的系列名（冒號前）" },
-    "page": { "type": "text", "required": false, "hint": "頁尾右：頁碼，自動填「01 / 08」" }
+    "kicker": { "type": "text", "required": false, "hint": "monospace capitals tagline after the ink rule, filled automatically from the first clause of occasion (up to 10 characters)" },
+    "title": { "type": "text", "required": true, "hint": "claim headline, 2 lines, up to 14 characters; *keyword* turns orange" },
+    "subtitle": { "type": "text", "required": false, "hint": "a paragraph bottom left, up to 3 lines and 60 characters" },
+    "brand": { "type": "text", "required": false, "hint": "footer left: series or deck name, filled automatically from the series name of the story title (before the colon)" },
+    "page": { "type": "text", "required": false, "hint": "footer right: page number, filled automatically (\"01 / 08\")" }
   },
   "elements": [
     { "id": "poster", "kind": "shape" },
@@ -25,10 +25,10 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "kicker": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "改簡報的時間花在*版面*" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面；敘事先被確認，版面修改就會消失。" },
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
+    "kicker": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "Revisions are *layout*" },
+    "subtitle": { "type": "text", "value": "Six decks last quarter averaged four revision rounds, three of them layout only; confirm the story first and those rounds disappear." },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
     "page": { "type": "text", "value": "01 / 08" }
   }
 }

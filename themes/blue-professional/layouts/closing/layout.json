@@ -1,7 +1,7 @@
 {
   "id": "closing",
-  "name": "結尾：藍色專業",
-  "description": "置中收尾：背後兩個同心的細圓環，短藍線、一句收尾大標、一段說明、一顆實心藍色膠囊按鈕當行動呼籲，最後一行聯絡方式。改成「謝謝」頁會失去把下一步交到對方手上的動作。",
+  "name": "Closing: blue professional",
+  "description": "A centred close: two concentric thin rings behind, a short blue rule, one closing headline, a short explanation, a solid blue pill button as the call to action, and contact details on the last line. A thank-you page would lose the act of handing the next step to the audience.",
   "content_relations": [
     "closing",
     "statement"
@@ -17,27 +17,27 @@
     "title": {
       "type": "text",
       "required": true,
-      "hint": "收尾主張，一行、十六字以內"
+      "hint": "closing claim, one line, up to 16 characters"
     },
     "body": {
       "type": "text",
       "required": false,
-      "hint": "一到兩行說明，五十字以內"
+      "hint": "an explanation of 1 to 2 lines, up to 50 characters"
     },
     "cta": {
       "type": "text",
       "required": true,
-      "hint": "主要的行動呼籲，一個短句、十二字以內"
+      "hint": "the main call to action, a short phrase, up to 12 characters"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "聯絡方式或下一次見面的時間，一行"
+      "hint": "contact details or the next meeting time, one line"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -81,19 +81,19 @@
   "sample": {
     "title": {
       "type": "text",
-      "value": "先修等待，再談功能"
+      "value": "Fix waiting, then features"
     },
     "body": {
       "type": "text",
-      "value": "這一季把三個影響交付的問題修掉，下一季才有餘裕做新的東西。"
+      "value": "Fix the three delivery problems this quarter, and next quarter has room for new things."
     },
     "cta": {
       "type": "text",
-      "value": "下週三前回覆優先順序"
+      "value": "Reply by next Wednesday"
     },
     "caption": {
       "type": "text",
-      "value": "回顧資料與附錄放在共用資料夾，會後一小時內更新"
+      "value": "Data and appendix in the shared folder, updated an hour after the meeting"
     },
     "page": {
       "type": "text",

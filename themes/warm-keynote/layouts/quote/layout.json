@@ -1,7 +1,7 @@
 {
   "id": "quote",
-  "name": "引言：暖色 Keynote",
-  "description": "章節標籤下面一整塊青綠淡底的引言框，粗體大字，底下一行出處。改成一般文字頁會失去停頓感。",
+  "name": "Quote: Warm Keynote",
+  "description": "Under the chapter label, one block of pale teal holding the quote in large bold type, with the source below. A plain text slide would lose the pause.",
   "content_relations": [
     "statement"
   ],
@@ -18,27 +18,27 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "引言本文，三行以內、六十字以內；可用 *關鍵詞* 換青綠"
+      "hint": "the quote itself, up to 3 lines and 60 characters; *keyword* turns teal"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "出處或說明"
+      "hint": "source or explanation"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -74,19 +74,19 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "03 — 怎麼設計"
+      "value": "03 — How"
     },
     "meta": {
       "type": "text",
-      "value": "原則"
+      "value": "Principle"
     },
     "title": {
       "type": "text",
-      "value": "說錯了會不會造成*法遵風險*？會，就寫死；只是語氣問題，才交給 LLM。"
+      "value": "Could a wrong answer cause an *outage*? Hard-code it; only wording goes to the LLM."
     },
     "caption": {
       "type": "text",
-      "value": "數字和法規一律寫死，語氣才交給 LLM"
+      "value": "Thresholds and rules are hard-coded; only wording goes to the LLM"
     },
     "page": {
       "type": "text",

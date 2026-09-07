@@ -1,68 +1,68 @@
 ---
 name: slide-story
-description: 依 brief 撰寫敘事文件 decks/<id>/story.md（核心主張、敘事骨架、逐頁角色與強度），用 pnpm story:check 驗證，把逐頁摘要拿給使用者確認；使用者確認前絕不生成頁面。使用者要「先把故事線想好」「改敘事」「調整順序」「重寫第幾頁的訊息」時也用這個。
+description: Writes the story document decks/<id>/story.md from the brief (core message, narrative skeleton, the role and intensity of every slide), checks it with pnpm story:check, and shows the user a per-slide summary for confirmation; no slide is generated before the user confirms. Also use it when the user wants to "work out the storyline first", "change the narrative", "reorder the slides" or "rewrite the message of slide N".
 ---
 
-# slide-story — 敘事先於版面，確認先於製作
+# slide-story - story before layout, confirmation before build
 
-這一步是整個流程唯一需要人停下來的關卡。版面改來改去多半是因為敘事在中途變了，所以敘事要在生成任何頁面之前被使用者明確確認。**確認是工具強制的**：`pnpm story:confirm` 會記錄 story.md 的雜湊，之後的生成指令在未確認或敘事已改時會直接拒絕。
+This is the only step of the workflow where a person has to stop. Layouts get reworked over and over mostly because the story changed halfway through, so the story is confirmed explicitly by the user before any slide is generated. **The confirmation is enforced by the tools**: `pnpm story:confirm` records a hash of story.md, and `pnpm deck:scaffold` refuses to run while the story is unconfirmed or has changed since (`pnpm story:check --require-confirmed` fails the same way; `render` only warns when the deck no longer matches the story).
 
-## 步驟
+## Steps
 
-### 1. 讀 brief
+### 1. Read the brief
 
-讀 `decks/<id>/brief.md`。若沒有 brief，先跑 slide-brief。若使用者提供了材料，先讀完材料再動筆。
+Read `decks/<id>/brief.md`. If there is no brief, run slide-brief first. If the user supplied material, read all of it before writing.
 
-### 2. 選敘事模式
+### 2. Choose a narrative pattern
 
-| narrative_pattern | 適合 | 骨架 |
+| narrative_pattern | Suits | Skeleton |
 |---|---|---|
-| `problem-solution` | 提案、爭取同意 | 痛點 → 診斷 → 解法 → 證據 → 行動 |
-| `timeline` | 進度回報、回顧 | 起點 → 里程碑 → 現況 → 下一步 |
-| `contrast` | 決策、比較方案 | 現況 vs 目標 → 差異 → 選擇 |
-| `pyramid` | 高層報告、結論先行 | 結論 → 三個支撐 → 細節 → 行動 |
-| `journey` | 教學、分享、故事 | 情境 → 轉折 → 學到什麼 → 帶走什麼 |
+| `problem-solution` | proposals, winning approval | pain -> diagnosis -> solution -> evidence -> action |
+| `timeline` | progress reports, retrospectives | starting point -> milestones -> where we are -> next steps |
+| `contrast` | decisions, comparing options | now vs target -> the gap -> the choice |
+| `pyramid` | executive reports, conclusion first | conclusion -> three supports -> detail -> action |
+| `journey` | teaching, sharing, stories | situation -> turning point -> what was learnt -> what to take away |
 
-### 3. 寫 `decks/<id>/story.md`
+### 3. Write `decks/<id>/story.md`
 
-格式與欄位見 [references/story-format.md](references/story-format.md)。寫的時候守住這幾條：
+The format and the fields are in [references/story-format.md](references/story-format.md). Use the canonical headings `## Goal and audience`, `## Core message`, `## Narrative skeleton`, `## Slides` (the original Chinese headings are still accepted as aliases). While writing, hold these lines:
 
-- **一頁一個 message**，一句話、可以被講者說出口。標題是主張，不是主題。
-- **強度有節奏**：至少一頁強度 ≤2 的停頓、至少一頁 ≥4 的高峰，同一個 scene_role 不連續超過三頁。高峰放在最重要的證據或結論。
-- **evidence 是事實**：數字、對比、案例、來源，不是形容詞。用約定的寫法讓之後能自動填進版型：數字寫成「72%｜指標名稱｜較去年 +11pp」，對比寫成「現況：a、b、c」與「目標：x、y、z」兩條。
-- **第一頁 hero、最後一頁 close**；頁數落在 brief 的區間，用「每頁 1 到 2 分鐘」校對時長。
-- notes 是講稿提示（轉場、停頓、要問的問題），不是把畫面再唸一次。
+- **One message per slide**: one sentence the speaker could say out loud. The title is a claim, not a topic.
+- **Intensity has a rhythm**: at least one slide pauses at intensity <= 2, at least one peaks at >= 4, and the same scene_role never runs for more than three slides in a row. Put the peak on the most important evidence or on the conclusion.
+- **Evidence is fact**: numbers, comparisons, cases, sources, not adjectives. Use the agreed forms so the build can fill the layouts automatically: a number as `72% | name of the metric | +11pp on last year`, a comparison as two items, `Now: a, b, c` and `Target: x, y, z`.
+- **First slide hero, last slide close**; the slide count lands in the brief's range, checked against the duration at 1 to 2 minutes per slide.
+- notes are speaker prompts (transitions, pauses, questions to ask), not the slide read out again.
 
-### 4. 檢查
+### 4. Check
 
 ```bash
 pnpm story:check decks/<id>/story.md
 ```
 
-修到零錯誤。警告要判斷：`pacing/pages` 超出時長是真問題；`message/single` 多半代表那頁塞了兩件事，該拆頁。
+Fix until it reports zero errors. Judge the warnings: `pacing/pages` outside the duration is a real problem; `message/single` usually means the slide carries two things and should be split.
 
-### 5. 呈現並停下
+### 5. Present and stop
 
-給使用者看：`story:check` 印出的摘要表與節奏條、核心主張一句、敘事骨架三到五行、你對節奏安排的一句說明。然後用這句話結尾，**不要接著做任何事**：
+Show the user: the summary table and the rhythm bar that `story:check` prints, the core message in one sentence, the narrative skeleton in three to five lines, and one sentence on how you arranged the rhythm. Then end with this line and **do nothing further**:
 
-> 請回覆「確認」或告訴我要改哪裡；確認之前我不會開始做頁面。
+> Reply "confirm" or tell me what to change; I will not start on the slides before you confirm.
 
-只有使用者明確表示確認（確認、OK、可以、就這樣）才算；沉默、追問、或「先做看看」都不算。
+Only an explicit confirmation counts ("confirm", "OK", "looks good", "go ahead"); silence, a follow-up question or "just try it" do not.
 
-### 6. 修改或確認
+### 6. Revise or confirm
 
-- 使用者要改：改 story.md，回到步驟 4，重新呈現。改動再小也要重新呈現受影響的頁。
-- 使用者在編輯器裡調過播放順序或隱藏了頁（deck.json 有 `pages`）而要讓它成為正本：`pnpm story:apply-deck decks/<id>/deck.json` 會替你重排逐頁段落、移除隱藏頁（骨架不會自動改，自己核對），然後同樣回到步驟 4 呈現並確認。
-- 使用者確認：
+- The user wants changes: edit story.md, go back to step 4 and present again. However small the change, re-present the affected slides.
+- The user has reordered playback or hidden slides in the editor (deck.json has `pages`) and wants that to become the source of truth: `pnpm story:apply-deck decks/<id>/deck.json` reorders the per-slide sections and removes the hidden slides for you (the skeleton is not updated automatically; check it yourself), then go back to step 4 to present and confirm again.
+- The user confirms:
 
 ```bash
 pnpm story:confirm decks/<id>/story.md
 ```
 
-然後進入 slide-design（若 `decks/<id>/design.json` 已存在且使用者沒要換風格，直接進 slide-build）。
+Then move to slide-design (if `decks/<id>/design.json` already exists and the user has not asked for a new style, go straight to slide-build).
 
-## 不做的事
+## What this skill does not do
 
-- 不在確認前呼叫 `pnpm deck:scaffold`、`pnpm render`，也不手寫 deck.json。
-- 不用 `--force` 繞過關卡；那是使用者明確要求時才有的權限。
-- 確認之後如果使用者又改了敘事，必須重新確認（工具會擋，不要繞）。
+- It does not call `pnpm deck:scaffold` or `pnpm render` before confirmation, and it does not hand-write deck.json.
+- It does not use `--force` to get past the gate; that is only for when the user explicitly asks for it.
+- If the user changes the story after confirming, it has to be confirmed again (the tools block it; do not work around them).

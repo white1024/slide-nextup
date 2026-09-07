@@ -1,17 +1,17 @@
 {
   "id": "split-asym",
-  "name": "非對稱兩欄",
-  "description": "三分之二的主欄放清單或段落，三分之一的側欄放一個數字或一句話，中間一條細線。改成 50/50 會失去「主資訊佔多、留白給次資訊」的重心。",
+  "name": "Asymmetric two columns",
+  "description": "A two-thirds main column for a list or a paragraph, a one-third aside for one number or one sentence, and a thin rule between them. A 50/50 split would lose the balance of the main information taking more room and the blank space going to the secondary.",
   "content_relations": ["list", "evidence", "statement", "sequence"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 360, "max_elements": 7 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
-    "main": { "type": ["list", "text"], "required": true, "hint": "主欄：三到五條，或一段" },
-    "aside": { "type": ["text", "metric"], "required": false, "hint": "側欄：一個大數字或一句話" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "a one-line claim, up to 24 characters" },
+    "main": { "type": ["list", "text"], "required": true, "hint": "main column: 3 to 5 items, or one paragraph" },
+    "aside": { "type": ["text", "metric"], "required": false, "hint": "aside: one big number or one sentence" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -23,19 +23,19 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "現有工具都先讓你排版面，再回頭想敘事" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "All tools: layout first, story later" },
     "main": {
       "type": "list",
       "items": [
-        "開簡報軟體，先挑一個模板",
-        "把想到的內容塞進版面",
-        "講一遍，發現順序不對",
-        "重排版面，再講一遍"
+        "Open the slide app and pick a template",
+        "Pour whatever comes to mind into the layout",
+        "Rehearse, find the order is wrong",
+        "Relayout, rehearse again"
       ]
     },
-    "aside": { "type": "metric", "value": "4", "label": "平均改版輪數", "delta": "上季六份簡報" },
+    "aside": { "type": "metric", "value": "4", "label": "average revision rounds", "delta": "six decks last quarter" },
     "page": { "type": "text", "value": "04 / 08" }
   }
 }

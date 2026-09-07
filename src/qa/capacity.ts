@@ -23,14 +23,20 @@ export interface TextCapacity {
   lines: number
 }
 
+/**
+ * A hint is read in either grammar. English: "up to 24 characters", "4 to 12 characters",
+ * "8 characters per line", "one line", "up to 2 lines", "3 to 5 items, one line each".
+ * Chinese: 「二十四字以內」「四到十二個字」「每行八字」「單行」「兩行以內」「三到五條，每條一行」.
+ * Character counts are full-width units: a CJK glyph counts 1, a Latin letter or digit ½.
+ */
 export interface HintLimits {
-  /** the largest character count the hint names (「二十四字以內」「四到十二個字」) */
+  /** the largest character count the hint names */
   chars?: number
-  /** the count is per line, item or cell (「每行七字」「每格一到十個字」) rather than a total */
+  /** the count is per line, item or cell rather than a total */
   perLine: boolean
-  /** the largest line count the hint names (「兩行以內」「一到三行」「單行」) */
+  /** the largest line count the hint names */
   lines?: number
-  /** the line count is about items (「每條一行」「三到五條」), not about the box */
+  /** the line count is about items ("one line each", 「每條一行」), not about the box */
   perItem: boolean
 }
 
@@ -47,10 +53,27 @@ const DIGITS: Record<string, number> = {
   九: 9,
 }
 const NUMERAL = '[0-9一二兩三四五六七八九十]+'
+const WORDS: Record<string, number> = {
+  one: 1,
+  single: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
+  twelve: 12,
+}
+const EN_NUMERAL = `(?:\\d+|${Object.keys(WORDS).join('|')})`
 
-/** Chinese numerals up to 99 (「十」「十二」「二十四」) or Arabic digits; null when it is neither. */
+/** Chinese numerals up to 99 (「十」「十二」「二十四」), English number words or Arabic digits; null when it is none of these. */
 export function parseNumeral(s: string): number | null {
   if (/^\d+$/.test(s)) return Number(s)
+  const word = WORDS[s.toLowerCase()]
+  if (word !== undefined) return word
   const m = /^([一二兩三四五六七八九])?(十)?([一二兩三四五六七八九])?$/.exec(s)
   if (!m || (!m[1] && !m[2] && !m[3]) || (!m[2] && m[3])) return null
   const tens = m[2] ? (m[1] ? (DIGITS[m[1]] as number) : 1) : 0
@@ -67,16 +90,33 @@ function largest(hint: string, unit: string): number | undefined {
   return max
 }
 
+/** English counts: "up to 24 characters", "4 to 12 characters", "one line", "2 to 3 lines"; a range keeps its larger end. */
+function largestEn(hint: string, unit: string): number | undefined {
+  let max: number | undefined
+  const re = new RegExp(
+    `\\b(${EN_NUMERAL})(?:\\s*(?:to|-|–)\\s*(${EN_NUMERAL}))?[\\s-]*${unit}\\b`,
+    'gi',
+  )
+  for (const m of hint.matchAll(re)) {
+    for (const g of [m[1], m[2]]) {
+      if (!g) continue
+      const n = parseNumeral(g)
+      if (n !== null && (max === undefined || n > max)) max = n
+    }
+  }
+  return max
+}
+
 /** The numbers a slot hint promises. */
 export function hintLimits(hint: string): HintLimits {
-  const chars = largest(hint, '字')
-  let lines = largest(hint, '行')
+  const chars = largest(hint, '字') ?? largestEn(hint, 'characters?')
+  let lines = largest(hint, '行') ?? largestEn(hint, 'lines?')
   if (lines === undefined && /單行/.test(hint)) lines = 1
   return {
     chars,
-    perLine: /每行|每格|每條|每項|每列/.test(hint),
+    perLine: /每行|每格|每條|每項|每列|\bper (?:line|cell|item|row)\b/i.test(hint),
     lines,
-    perItem: /條|每項|每列/.test(hint),
+    perItem: /條|每項|每列|\bitems?\b|\brows?\b|\beach\b/i.test(hint),
   }
 }
 

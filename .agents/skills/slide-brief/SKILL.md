@@ -1,53 +1,53 @@
 ---
 name: slide-brief
-description: 開始做一份新簡報的第一步：用一次提問弄清楚用途與受眾、時長與頁數、內容就緒度、密度，寫成 decks/<id>/brief.md。使用者說「幫我做一份簡報」「做個 deck」「準備一場提案／演講／報告」而還沒有 brief 時使用；已有 brief 就直接進 slide-story。
+description: The first step of a new deck. One round of questions settles the purpose and audience, duration and slide count, how ready the content is, and the density, written to decks/<id>/brief.md. Use it when the user says "make me a deck", "build a presentation", "prepare a pitch / talk / report" and there is no brief yet; with a brief in place go straight to slide-story.
 ---
 
-# slide-brief — 一次問清楚，寫成 brief
+# slide-brief - one round of questions, written up as a brief
 
-這套流程的順序固定：**brief → 敘事（使用者確認）→ 視覺方向 → 生成 → 瀏覽器內編輯**。brief 是第一步，目的只有一個：讓下一步的敘事能寫得對，不是收集所有細節。
+The workflow has a fixed order: **brief -> story (confirmed by the user) -> visual direction -> build -> edit in the browser**. The brief is the first step and has one purpose: to let the next step write the story correctly. It does not collect every detail.
 
-## 步驟
+## Steps
 
-### 1. 先整理使用者已經說的
+### 1. Sort out what the user has already said
 
-把使用者訊息裡已經有的資訊列出來（主題、對象、場合、時間、既有材料）。**已經回答的不要再問**；你打算跳過的題目要復述你的假設，讓使用者能糾正。
+List the information already in the user's message (topic, audience, occasion, time, existing material). **Do not ask again what has already been answered**; for the questions you intend to skip, restate your assumption so the user can correct it.
 
-決定 deck id：kebab-case 英數字（例如 `q3-roadmap`、`team-offsite-2026`），檢查 `decks/` 沒有重名。
+Decide the deck id: kebab-case letters, digits and hyphens (e.g. `q3-roadmap`, `team-offsite-2026`), and check that `decks/` has no folder of that name yet.
 
-### 2. 一次問四題
+### 2. Ask four questions in one go
 
-用 `AskUserQuestion` 的多題模式一次問完；沒有這個工具就在一則訊息裡列出四題。每題給選項並標出你建議的那個。
+Use the multi-question mode of `AskUserQuestion` to ask all four at once; without that tool, list the four questions in one message. Give options for each and mark the one you recommend.
 
-1. **用途與受眾**：這場簡報要讓誰、做出什麼決定或行動？（提案取得同意／進度回報／教學或分享／募資或銷售／其他）
-2. **時長與頁數**：幾分鐘？頁數區間 3–5（短講）／6–10（標準）／11–20（深入）。每頁約 1 到 2 分鐘。
-3. **內容就緒度**：已有材料（請使用者貼上或指出檔案）／需要我研究補足／目前只有想法。
-4. **密度**：`minimal`（一頁一句或一個數字）／`light`（標題加兩三點）／`standard`（標題加四五點或一小段）／`dense`（多欄、細節多）。多數演講型簡報是 `light` 或 `standard`。
+1. **Purpose and audience**: who has to make what decision or take what action after this deck? (win approval for a proposal / progress report / teaching or sharing / fundraising or sales / other)
+2. **Duration and slide count**: how many minutes? Slide range 3-5 (short talk) / 6-10 (standard) / 11-20 (deep dive). About 1 to 2 minutes per slide.
+3. **Content readiness**: material exists (ask the user to paste it or point at the files) / needs research from me / only an idea so far.
+4. **Density**: `minimal` (one sentence or one number per slide) / `light` (a headline plus two or three points) / `standard` (a headline plus four or five points, or a short paragraph) / `dense` (several columns, lots of detail). Most talks are `light` or `standard`.
 
-不要在這一步問視覺風格、動畫、主題色：風格在 slide-design 用真的封面挑，第一階段沒有動畫。
+Do not ask about visual style, animation or theme colours at this step: the style is chosen from real covers in slide-design, and the first pass has no animation.
 
-### 3. 寫 `decks/<id>/brief.md`
+### 3. Write `decks/<id>/brief.md`
 
 ```markdown
-# Brief：<簡報標題（暫定）>
+# Brief: <working title of the deck>
 
 - deck_id: <id>
-- 用途：<一句話>
-- 受眾：<誰、幾人、背景、他們在意什麼>
-- 場合與時長：<場合>，<N> 分鐘，目標 <a–b> 頁
-- 希望受眾在結束時做的事：<一句話>
-- 內容就緒度：<已有材料／需研究／只有想法>，材料位置：<路徑或「無」>
-- 密度：<minimal|light|standard|dense>
-- 已知限制：<品牌、禁忌、必須提到的事；沒有就寫「無」>
+- Purpose: <one sentence>
+- Audience: <who, how many, background, what they care about>
+- Occasion and duration: <occasion>, <N> minutes, aiming for <a-b> slides
+- What the audience should do at the end: <one sentence>
+- Content readiness: <material exists / needs research / only an idea>, material at: <path or "none">
+- Density: <minimal|light|standard|dense>
+- Known constraints: <brand, taboos, things that must be mentioned; "none" if there are none>
 ```
 
-`用途`、`受眾`、`希望受眾做的事` 三行是敘事的原料，寫具體，不要寫「讓大家了解專案」這種空話。
+`Purpose`, `Audience` and `What the audience should do at the end` are the raw material of the story: make them concrete, not empty phrases like "help everyone understand the project".
 
-### 4. 交接
+### 4. Hand over
 
-告訴使用者 brief 寫在哪裡，然後**在同一輪直接進入 slide-story**，不需要再問一次「要不要繼續」。
+Tell the user where the brief is, then **go straight into slide-story in the same turn**; do not ask "shall I continue?" again.
 
-## 不做的事
+## What this skill does not do
 
-- 不生成任何頁面、不挑主題、不寫講稿。
-- 不把四題拆成四輪問答；也不要問使用者可以自己查到的事（例如既有檔案的內容）。
+- It generates no slides, picks no theme and writes no script.
+- It does not split the four questions into four rounds, and it does not ask about things the user can look up themselves (e.g. the contents of an existing file).

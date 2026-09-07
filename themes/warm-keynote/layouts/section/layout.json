@@ -1,7 +1,7 @@
 {
   "id": "section",
-  "name": "章節：暖色 Keynote",
-  "description": "章節開場：右上膠囊標籤、左邊一個淡青綠的巨大編號、青綠短線、大標與一段導語。改成一般標題頁會失去編號帶來的「翻到下一章」節奏。",
+  "name": "Section: Warm Keynote",
+  "description": "Chapter opener: a pill tag top right, a huge pale teal number on the left, a short teal rule, the heading and a lede. A plain title slide would lose the turn-to-the-next-chapter rhythm the number gives.",
   "content_relations": [
     "statement",
     "list"
@@ -19,27 +19,27 @@
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤"
+      "hint": "pill tag top right"
     },
     "number": {
       "type": "text",
       "required": true,
-      "hint": "章節編號，兩位數"
+      "hint": "chapter number, two digits"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "章節標題，一到兩行、十四字以內"
+      "hint": "chapter title, 1 to 2 lines, up to 14 characters"
     },
     "body": {
       "type": "text",
       "required": false,
-      "hint": "一段導語，五十字以內"
+      "hint": "a short lede, up to 50 characters"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -75,7 +75,7 @@
   "sample": {
     "meta": {
       "type": "text",
-      "value": "第一章"
+      "value": "Chapter 1"
     },
     "number": {
       "type": "text",
@@ -83,11 +83,11 @@
     },
     "title": {
       "type": "text",
-      "value": "為什麼一直改版面"
+      "value": "Why the layout keeps changing"
     },
     "body": {
       "type": "text",
-      "value": "先看使用者怎麼描述問題，再看數字。"
+      "value": "Hear how users describe the problem first, then look at the numbers."
     },
     "page": {
       "type": "text",

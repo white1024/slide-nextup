@@ -1,19 +1,19 @@
 {
   "id": "grid-2x2",
-  "name": "Bento：2×2 網格",
-  "description": "四張等大卡片，適合四件並列或四個數字。改成條列會失去「四件事各自獨立、一眼掃完」的整齊感。",
+  "name": "Bento: 2x2 grid",
+  "description": "Four equal cards for four parallel items or four numbers. A bullet list would lose the tidiness of four separate things taken in at a glance.",
   "content_relations": ["list", "evidence", "hierarchy"],
   "scene_roles": ["evidence", "map"],
   "density": { "max_chars": 400, "max_elements": 8 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "一行主張，二十四字以內" },
-    "card-1": { "type": ["text", "metric"], "required": true, "hint": "短句或大數字" },
-    "card-2": { "type": ["text", "metric"], "required": true, "hint": "同上" },
-    "card-3": { "type": ["text", "metric"], "required": true, "hint": "同上" },
-    "card-4": { "type": ["text", "metric"], "required": false, "hint": "同上；沒有第四個就留空" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "a one-line claim, up to 24 characters" },
+    "card-1": { "type": ["text", "metric"], "required": true, "hint": "a short phrase or a big number" },
+    "card-2": { "type": ["text", "metric"], "required": true, "hint": "same as above" },
+    "card-3": { "type": ["text", "metric"], "required": true, "hint": "same as above" },
+    "card-4": { "type": ["text", "metric"], "required": false, "hint": "same as above; leave empty when there is no fourth" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -26,13 +26,13 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "新流程的四個承諾" },
-    "card-1": { "type": "text", "value": "敘事沒被確認之前，不生成任何一頁。" },
-    "card-2": { "type": "text", "value": "三個視覺方向都用真的封面挑，不用形容詞。" },
-    "card-3": { "type": "metric", "value": "100%", "label": "元件可在瀏覽器裡編輯", "delta": "文字、位置、樣式、圖片" },
-    "card-4": { "type": "text", "value": "重新生成某一頁時，手動修改一律保留。" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "Four promises of the new flow" },
+    "card-1": { "type": "text", "value": "Not one slide is generated before the story is confirmed." },
+    "card-2": { "type": "text", "value": "Three visual directions are chosen from real covers, not adjectives." },
+    "card-3": { "type": "metric", "value": "100%", "label": "of elements editable in the browser", "delta": "text, position, style, image" },
+    "card-4": { "type": "text", "value": "Regenerating a slide always keeps manual edits." },
     "page": { "type": "text", "value": "06 / 08" }
   }
 }

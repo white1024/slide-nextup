@@ -61,7 +61,7 @@ describe('story → deck scaffolding', () => {
     const third = story.slides[2] as Story['slides'][number]
     const slots = slotsFor(third, furnished, story)
     expect(slots.brand).toEqual({ type: 'text', value: story.meta.title })
-    expect(slots.meta).toEqual({ type: 'text', value: '週會提案' })
+    expect(slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
     expect(slots.page).toEqual({ type: 'text', value: '03 / 08' })
     const plain = slotsFor(third, layouts.get('statement') as LayoutJson, story)
     expect(Object.keys(plain)).not.toContain('brand')
@@ -69,11 +69,19 @@ describe('story → deck scaffolding', () => {
   })
 
   it('fills furniture with short labels: the occasion’s first clause and the title’s series name', () => {
-    expect(firstClause('專案進度會，介紹健檢工具的現況、已交付的東西與工作方向')).toBe('專案進度會')
-    expect(firstClause('週會提案')).toBe('週會提案')
+    expect(
+      firstClause(
+        'Progress meeting, presenting where the health-check tool stands, what has been delivered and where the work is heading',
+      ),
+    ).toBe('Progress meeting')
+    expect(firstClause('Weekly proposal')).toBe('Weekly proposal')
     expect(firstClause('Q3 review: numbers and next steps')).toBe('Q3 review')
-    expect(seriesName('Tidewatch 網站健檢工具：進度、交付與方向')).toBe('Tidewatch 網站健檢工具')
-    expect(seriesName('先確認敘事，再做簡報')).toBe('先確認敘事，再做簡報')
+    expect(
+      seriesName('Tidewatch website health-check tool: progress, deliverables and direction'),
+    ).toBe('Tidewatch website health-check tool')
+    expect(seriesName('Confirm the story before the slides')).toBe(
+      'Confirm the story before the slides',
+    )
     expect(seriesName('Quarterly Review — Q3')).toBe('Quarterly Review')
     expect(textUnits('專案進度會')).toBe(5)
     expect(textUnits('Tidewatch 網站健檢工具')).toBe(11)
@@ -82,8 +90,8 @@ describe('story → deck scaffolding', () => {
     expect(fitLabel('十一個字十一個字十一個', FURNITURE_MAX_UNITS)).toBe('')
     expect(fitLabel('', BRAND_MAX_UNITS)).toBe('')
     expect(furnitureDefaults(story)).toEqual({
-      occasion: '週會提案',
-      brand: '先確認敘事，再做簡報',
+      occasion: 'Weekly proposal',
+      brand: 'Confirm the story before the slides',
     })
   })
 
@@ -108,10 +116,10 @@ describe('story → deck scaffolding', () => {
     // the sample story's labels are short, so no furniture is reported empty
     const short = scaffold({ choices: { s3: 'process', s5: 'fact' } })
     expect(short.warnings.filter((w) => w.includes('left empty'))).toEqual([])
-    expect(short.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: '週會提案' })
+    expect(short.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
     expect(short.deck.slides[2]?.slots.brand).toEqual({
       type: 'text',
-      value: '先確認敘事，再做簡報',
+      value: 'Confirm the story before the slides',
     })
   })
 
@@ -139,8 +147,8 @@ describe('story → deck scaffolding', () => {
     // without a chapter only a hero page gets the occasion in its kicker; others stay empty
     const plain = scaffold({ choices: { s3: 'fact' } })
     expect(plain.deck.slides[2]?.slots.kicker).toBeUndefined()
-    expect(plain.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: '週會提案' })
-    expect(plain.deck.slides[0]?.slots.kicker).toEqual({ type: 'text', value: '週會提案' })
+    expect(plain.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
+    expect(plain.deck.slides[0]?.slots.kicker).toEqual({ type: 'text', value: 'Weekly proposal' })
   })
 
   it('picks layouts from scene role and content relation', () => {
@@ -177,15 +185,24 @@ describe('story → deck scaffolding', () => {
     expect(r.deck.story?.sha256).toHaveLength(64)
     expect(r.deck.slides).toHaveLength(8)
     expect(r.deck.slides[0]?.slots).toMatchObject({
-      kicker: { type: 'text', value: '週會提案' },
-      title: { type: 'text', value: '我們改簡報的時間，花在哪裡' },
-      subtitle: { type: 'text', value: '我們改簡報的時間，多半花在版面而不是內容。' },
+      kicker: { type: 'text', value: 'Weekly proposal' },
+      title: { type: 'text', value: 'Where our slide revisions go' },
+      subtitle: {
+        type: 'text',
+        value: 'Most of our slide revisions go into the layout, not the content.',
+      },
     })
     expect(r.deck.slides[3]?.slots).toMatchObject({
-      'left-title': { type: 'text', value: '現況' },
-      'right-items': { type: 'list', items: ['寫敘事', '確認', '生成版面', '只微調'] },
+      'left-title': { type: 'text', value: 'Today' },
+      'right-items': {
+        type: 'list',
+        items: ['write the story', 'confirm', 'generate the layout', 'fine-tune only'],
+      },
     })
-    expect(r.deck.slides[1]?.slots['card-3']).toEqual({ type: 'text', value: '下週的試用計畫' })
+    expect(r.deck.slides[1]?.slots['card-3']).toEqual({
+      type: 'text',
+      value: "Next week's trial plan",
+    })
     expect(r.warnings).toEqual([])
     expect(() =>
       renderDeckDocument(r.deck, { deckDir: resolve('examples'), outDir: resolve('dist') }),
@@ -405,8 +422,11 @@ describe('the demo deck with the scaffold’s furniture defaults', () => {
       }
     }
     // what the scaffold now puts there instead of the whole occasion sentence
-    expect(deck.slides[0]?.slots.brand).toEqual({ type: 'text', value: 'Tidewatch 網站健檢工具' })
-    expect(deck.slides[3]?.slots.meta).toEqual({ type: 'text', value: '專案進度會' })
+    expect(deck.slides[0]?.slots.brand).toEqual({
+      type: 'text',
+      value: 'Tidewatch website health-check tool',
+    })
+    expect(deck.slides[3]?.slots.meta).toEqual({ type: 'text', value: 'Progress meeting' })
     expect(deck.slides[3]?.slots.kicker).toBeUndefined()
     expect(deck.slides[5]?.slots.page).toEqual({ type: 'text', value: '06 / 08' })
     const report = await runDeckQa(deck, { deckDir: dir })

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tidewatch-progress",
-  "title": "Tidewatch 網站健檢工具：進度、交付與方向",
+  "title": "Tidewatch website health-check tool: progress, deliverables and direction",
   "theme": "warm-keynote",
   "canvas": {
     "width": 1920,
@@ -10,7 +10,7 @@
   "motion": "off",
   "story": {
     "path": "story.md",
-    "sha256": "14934dd60eb9668768db4977953c08c6e7824aa1bc4e7c41d32248c9e91487d4"
+    "sha256": "5fd9454aac3bbd902791f6caac92663c37241295d73c41733ded71f35ae7ae7d"
   },
   "slides": [
     {
@@ -19,11 +19,11 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "健檢工具已經是*一包可交付的東西*"
+          "value": "The health-check tool is already *a deliverable package*"
         },
         "brand": {
           "type": "text",
-          "value": "tidewatch · Tidewatch 網站健檢工具"
+          "value": "Tidewatch website health-check tool (tidewatch)"
         },
         "page": {
           "type": "text",
@@ -31,7 +31,7 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "報告契約、CLI 與解壓即用的交付包都在，GUI 正在讓非技術人員也能用"
+          "value": "Report contract, CLI and unzip-and-run bundle are in place; the GUI is opening it to non-technical people"
         }
       },
       "elements": [
@@ -60,7 +60,7 @@
           "kind": "text"
         }
       ],
-      "notes": "開場一句話講結論。負責人最想知道的是「工具交得出去嗎」，先給答案再展開。"
+      "notes": "Open with the conclusion in one sentence. What the owner most wants to know is \"can the tool be handed over\": give the answer first, then expand."
     },
     {
       "id": "s2",
@@ -68,15 +68,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "今天講兩件事"
+          "value": "Two things today"
         },
         "kicker": {
           "type": "text",
-          "value": "議程"
+          "value": "Agenda"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -84,19 +84,19 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "先講已經交出來的工具與契約，再講進行中的 GUI。"
+          "value": "First the tool and contract already delivered, then the GUI in progress."
         },
         "card-1": {
           "type": "metric",
           "value": "01",
-          "label": "已交付",
-          "delta": "健檢工具骨架、Result Schema 契約、解壓即用的交付包、固定六步的健檢流程"
+          "label": "Delivered",
+          "delta": "Tool skeleton, Result Schema contract, unzip-and-run bundle, fixed six-step check"
         },
         "card-2": {
           "type": "metric",
           "value": "02",
-          "label": "進行中",
-          "delta": "給非技術人員的 GUI：不開終端機也能設定、健檢、看結果"
+          "label": "In progress",
+          "delta": "A GUI for non-technical people: configure, check and read results without a terminal"
         }
       },
       "elements": [
@@ -135,7 +135,7 @@
           "kind": "text"
         }
       ],
-      "notes": "十秒帶過，讓負責人知道結構就好。"
+      "notes": "Ten seconds, just so the owner knows the structure."
     },
     {
       "id": "s3",
@@ -143,15 +143,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "兩條檢查路徑，落到*同一個報告目錄*"
+          "value": "Two check paths land in *one report directory*"
         },
         "kicker": {
           "type": "text",
-          "value": "01 — 骨架"
+          "value": "01 - Skeleton"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -159,12 +159,12 @@
         },
         "caption": {
           "type": "text",
-          "value": "站台清單進來，走瀏覽器路徑或爬蟲路徑，落到同一個報告目錄；評分是獨立的第二遍。"
+          "value": "The site list takes the browser path or the crawler path and lands in one report directory; scoring is a separate second pass."
         },
         "photo": {
           "type": "image",
           "src": "assets/system-map.svg",
-          "alt": "tidewatch 簡化系統圖：站台清單進來，走瀏覽器路徑或爬蟲路徑，落到同一個報告目錄，再由 aggregate 與 export 評分",
+          "alt": "Simplified tidewatch system map: a site list comes in, takes the browser path or the crawler path, lands in one report directory, and aggregate and export score it",
           "hotspots": [
             {
               "target": "s4",
@@ -172,7 +172,7 @@
               "y": 10.7,
               "w": 25,
               "h": 78.6,
-              "label": "兩條路徑不併表：看設計原則"
+              "label": "The two paths are never merged: see the design principles"
             },
             {
               "target": "s4",
@@ -180,7 +180,7 @@
               "y": 30.4,
               "w": 15.5,
               "h": 39.3,
-              "label": "報告目錄是共用契約：看設計原則"
+              "label": "The report directory is a shared contract: see the design principles"
             },
             {
               "target": "s6",
@@ -188,7 +188,7 @@
               "y": 35.7,
               "w": 20.3,
               "h": 28.6,
-              "label": "aggregate／export：看六步流程"
+              "label": "aggregate / export: see the six-step flow"
             }
           ]
         }
@@ -229,7 +229,7 @@
           "kind": "text"
         }
       ],
-      "notes": "這頁用 photo 版型放簡化版系統圖（四個大字塊），完整系統圖留作備用。講的時候用手指順著箭頭走一遍就好，原則留到下一頁。"
+      "notes": "This slide uses the photo layout with the simplified system map (four big blocks); the full map is kept in reserve. Trace the arrows with a finger while talking; the principles wait for the next slide."
     },
     {
       "id": "s4",
@@ -237,15 +237,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "這三個設計原則都是*刻意的*"
+          "value": "All three design principles are *deliberate*"
         },
         "kicker": {
           "type": "text",
-          "value": "01 — 骨架"
+          "value": "01 - Skeleton"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -253,25 +253,25 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "不併表、共用契約、評分分開：三件事各對應系統圖的一個區塊。"
+          "value": "Never merged, shared contract, scoring apart: each maps to one block of the system map."
         },
         "card-1": {
           "type": "metric",
           "value": "01",
-          "label": "兩條路徑不併表",
-          "delta": "瀏覽器路徑含載入與轉譯，是對外主數據源；爬蟲路徑只做交叉核對"
+          "label": "Two paths, never merged",
+          "delta": "The browser path loads and renders and is the primary source; the crawler path only cross-checks"
         },
         "card-2": {
           "type": "metric",
           "value": "02",
-          "label": "報告目錄是共用契約",
-          "delta": "逐頁狀態原子寫入；任何一刻中斷，都能從斷點續跑"
+          "label": "One shared report directory",
+          "delta": "Per-page state is written atomically; a run interrupted at any moment resumes where it stopped"
         },
         "card-3": {
           "type": "metric",
           "value": "03",
-          "label": "評分是獨立的第二遍",
-          "delta": "重新評分免費、重新檢查要一整夜；判定政策可以改，數字不必重跑"
+          "label": "Scoring is a second pass",
+          "delta": "Rescoring is free, rechecking takes a whole night; the verdict policy can change without rerunning the numbers"
         }
       },
       "elements": [
@@ -315,7 +315,7 @@
           "kind": "text"
         }
       ],
-      "notes": "三張卡各對應系統圖的一個區塊。「不併表」是因為檢查邊界不同，不提任何實測比值。"
+      "notes": "Each of the three cards maps to one block of the system map. \"Never merged\" is because the check boundaries differ; do not quote any measured ratio."
     },
     {
       "id": "s5",
@@ -323,15 +323,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "已經交出去的：*一份契約*、一個交付包"
+          "value": "Delivered so far: *one contract*, one bundle"
         },
         "kicker": {
           "type": "text",
-          "value": "02 — 交付物"
+          "value": "02 - Deliverables"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -339,27 +339,27 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "Result Schema v1 是所有平台共用的結果契約；交付包空機解壓後無人值守安裝。"
+          "value": "Every platform shares the Result Schema v1 contract; the bundle installs unattended on a clean machine."
         },
         "card-1": {
           "type": "metric",
           "value": "v1.0.0",
           "label": "Result Schema",
-          "delta": "所有平台共用的 result.json 契約，附 operator、viewer、new-platform 三份角色文件",
+          "delta": "The result.json contract every platform shares, with three role documents: operator, viewer, new-platform",
           "details": {
             "type": "list",
             "items": [
-              "operator：跑健檢的人。準備站台清單、走完六步、記得 export",
-              "viewer：看結果的人。只讀 result.json，不碰報告目錄",
-              "new-platform：接新平台的人。照 Result Schema v1 產出 result.json，通過 smoke 就算接上"
+              "operator: the person who runs the check. Prepares the site list, goes through the six steps, remembers to export",
+              "viewer: the person who reads the results. Reads only result.json, never touches the report directory",
+              "new-platform: the person connecting a new platform. Produces result.json to Result Schema v1; passing the smoke test means it is connected"
             ]
           }
         },
         "card-2": {
           "type": "metric",
           "value": "0.1.0",
-          "label": "交付包",
-          "delta": "執行檔、設定檔、文件、瀏覽器核心；空機解壓後無人值守安裝"
+          "label": "Bundle",
+          "delta": "Executable, configuration, docs and browser engine; unzip on a clean machine and it installs unattended"
         }
       },
       "elements": [
@@ -398,7 +398,7 @@
           "kind": "text"
         }
       ],
-      "notes": "交付包對應分工計畫裡「可重複執行的標準化健檢 Package」。三份角色文件是 operator、viewer、new-platform。第三張卡留空。"
+      "notes": "The bundle is the \"repeatable, standardised health-check package\" in the work split. The three role documents are operator, viewer and new-platform. The third card stays empty."
     },
     {
       "id": "s6",
@@ -406,15 +406,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "一次完整健檢是*固定的六步*，可中斷、可續跑"
+          "value": "A full check is *six fixed steps*, interruptible and resumable"
         },
         "kicker": {
           "type": "text",
-          "value": "02 — 交付物"
+          "value": "02 - Deliverables"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -422,35 +422,35 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "每一步的狀態都落盤；最後一步 export 才產出交出去的 result.json。"
+          "value": "Each step lands its state on disk; only export, the last step, produces the result.json handed over."
         },
         "caption": {
           "type": "text",
-          "value": "最容易漏的兩件事：run 不會自動產出 result.json，漏掉 export 等於交不出東西；aggregate 要在還留著快照的機器上跑。"
+          "value": "Easily missed: run does not write result.json, so skipping export leaves nothing to hand over; aggregate runs where the snapshots still are."
         },
         "step-1": {
           "type": "text",
-          "value": "preflight\n機器準備好了嗎"
+          "value": "preflight\nMachine ready?"
         },
         "step-2": {
           "type": "text",
-          "value": "download\n取得站台清單"
+          "value": "download\nGet site list"
         },
         "step-3": {
           "type": "text",
-          "value": "plan\n空跑看要查幾頁"
+          "value": "plan\nCount pages"
         },
         "step-4": {
           "type": "text",
-          "value": "run\n逐頁檢查並落盤"
+          "value": "run\nCheck pages"
         },
         "step-5": {
           "type": "text",
-          "value": "aggregate\n彙整成表"
+          "value": "aggregate\nRoll up tables"
         },
         "step-6": {
           "type": "text",
-          "value": "export\n產出結果檔"
+          "value": "export\nProduce result"
         }
       },
       "elements": [
@@ -538,7 +538,7 @@
           "kind": "text"
         }
       ],
-      "notes": "全寬一條流程。提醒兩個最容易漏的地方：run 不會自動產出 result.json，漏掉 export 等於跑完卻交不出東西；aggregate 要在還留著快照的機器上跑。"
+      "notes": "One full-width flow. Point out the two easiest things to miss: run does not produce result.json by itself, so skipping export means finishing the run with nothing to hand over; aggregate must run on the machine that still holds the snapshots."
     },
     {
       "id": "s7",
@@ -546,15 +546,15 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "正在做的 GUI，讓非技術人員*不開終端機*也能用"
+          "value": "The GUI in progress: usable *without a terminal*"
         },
         "kicker": {
           "type": "text",
-          "value": "03 — 進行中"
+          "value": "03 - In progress"
         },
         "meta": {
           "type": "text",
-          "value": "進度會 · 2026-09"
+          "value": "Progress meeting"
         },
         "page": {
           "type": "text",
@@ -562,25 +562,25 @@
         },
         "subtitle": {
           "type": "text",
-          "value": "解壓即用的本機 GUI，行銷與客服可以自己加站台、跑健檢、看結果。"
+          "value": "An unzip-and-run local GUI: marketing and support add sites, run checks and read results themselves."
         },
         "card-1": {
           "type": "metric",
           "value": "01",
-          "label": "站台設定",
-          "delta": "匯入站台清單逐階段顯示進度；缺件就擋下，檢查條件只告知"
+          "label": "Site setup",
+          "delta": "Import a site list, progress per stage; missing items block, check conditions only inform"
         },
         "card-2": {
           "type": "metric",
           "value": "02",
-          "label": "執行健檢",
-          "delta": "固定預設集按鈕，參數不可改；可比性由設定檔版本控管"
+          "label": "Run a check",
+          "delta": "Fixed preset buttons, parameters locked; comparability governed by the configuration version"
         },
         "card-3": {
           "type": "metric",
           "value": "03",
-          "label": "看結果",
-          "delta": "摘要四格、色階圖、折線圖、時序圖；完整表格降到展開層"
+          "label": "Read the results",
+          "delta": "Four summary tiles, heatmap, line chart, timeline; the full table drops to an expandable layer"
         }
       },
       "elements": [
@@ -624,7 +624,7 @@
           "kind": "text"
         }
       ],
-      "notes": "負責人上個月提的方向。兩個裁定：不做全參數編輯器、不拆成兩個 APP。目前三頁走通、三套外觀，驗收條件是「重灌後的空機解壓雙擊跑完 smoke，全程不開終端機」。"
+      "notes": "The direction the owner set last month. Two rulings: no full parameter editor, and no split into two apps. Three screens work end to end, with three looks; acceptance is \"unzip and double-click on a freshly reinstalled machine, run the smoke test through, never open a terminal\"."
     },
     {
       "id": "s8",
@@ -632,7 +632,7 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "交給客服的是*同一包*"
+          "value": "Support gets *the same package*"
         },
         "page": {
           "type": "text",
@@ -640,22 +640,22 @@
         },
         "body": {
           "type": "text",
-          "value": "CLI 與 GUI 共用同一份設定與結果，交出去的永遠是同一個解壓即用的包。"
+          "value": "CLI and GUI share one config and one result set; one package for all."
         },
         "caption": {
           "type": "text",
-          "value": "薄殼原則"
+          "value": "Thin-shell principle"
         },
         "cta": {
           "type": "text",
-          "value": "今天定案：交付包＋GUI"
+          "value": "Decide today: bundle + GUI"
         },
         "evidence": {
           "type": "list",
           "items": [
-            "GUI 不重做判斷邏輯",
-            "只經退出碼與 result.json 溝通",
-            "不裝 GUI 的包照常可用"
+            "GUI never redoes the verdicts",
+            "Exit codes and result.json only",
+            "Works without the GUI too"
           ]
         }
       },
@@ -695,7 +695,7 @@
           "kind": "text"
         }
       ],
-      "notes": "收尾只講交付形態，不講數據、不列時程。若負責人問下一步，答「交付包在重灌後的空機做端到端驗收」。"
+      "notes": "The close is about the delivery form only: no data, no timeline. If the owner asks about the next step, answer \"end-to-end acceptance of the bundle on a freshly reinstalled machine\"."
     }
   ],
   "overrides": {
@@ -732,7 +732,7 @@
       "y": 308
     },
     "s8/caption": {
-      "text": "薄殼原則：GUI 只是一層殼"
+      "text": "Thin-shell principle: the GUI is only a shell"
     }
   }
 }

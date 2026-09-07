@@ -1,7 +1,7 @@
 {
   "id": "fact",
-  "name": "大數字：暖色 Keynote",
-  "description": "章節標籤下面一個巨大的青綠數字與標籤，底下一段說明。改成表格會失去「一個數字講完」的力道。",
+  "name": "Big number: Warm Keynote",
+  "description": "Under the chapter label, one huge teal number with its label and an explanation below. A table would lose the punch of one number saying it all.",
   "content_relations": [
     "evidence",
     "statement"
@@ -19,12 +19,12 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空（留空就連豎條一起消失）"
+      "hint": "chapter label, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty (an empty label takes the vertical bar with it)"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的膠囊標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "pill tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "fact": {
       "type": [
@@ -32,17 +32,17 @@
         "text"
       ],
       "required": true,
-      "hint": "metric：value 是數字、label 是單位或說明"
+      "hint": "metric: value is the number, label the unit or explanation"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一到兩行說明"
+      "hint": "an explanation, 1 to 2 lines"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼膠囊，自動填「01 / 08」"
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -74,20 +74,20 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "01 — 為什麼做"
+      "value": "01 — Why"
     },
     "meta": {
       "type": "text",
-      "value": "員工端"
+      "value": "Site owners"
     },
     "fact": {
       "type": "metric",
       "value": "104,411",
-      "label": "名員工受影響"
+      "label": "site owners affected"
     },
     "caption": {
       "type": "text",
-      "value": "每一次要處理假勤，員工都得自己重新想過幾件事。"
+      "value": "Every time a check fails, the owner has to work out the same few things from scratch."
     },
     "page": {
       "type": "text",

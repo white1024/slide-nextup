@@ -1,14 +1,14 @@
 {
   "id": "cover",
-  "name": "封面",
-  "description": "一個主張、一條朱紅色條，其他全部留白。改成普通標題頁會失去「一開場就只有一句話」的重量。",
+  "name": "Cover",
+  "description": "One claim, one vermilion bar, everything else left blank. A regular title slide would lose the weight of opening with a single sentence.",
   "content_relations": ["statement"],
   "scene_roles": ["hero"],
   "density": { "max_chars": 120, "max_elements": 4 },
   "slots": {
-    "kicker": { "type": "text", "required": false, "hint": "場合或系列名，四到十個字" },
-    "title": { "type": "text", "required": true, "hint": "主張式標題，一到兩行" },
-    "subtitle": { "type": "text", "required": false, "hint": "一句支撐主張的事實" }
+    "kicker": { "type": "text", "required": false, "hint": "occasion or series name, 4 to 10 characters" },
+    "title": { "type": "text", "required": true, "hint": "claim headline, 1 to 2 lines" },
+    "subtitle": { "type": "text", "required": false, "hint": "one fact that supports the claim" }
   },
   "elements": [
     { "id": "backdrop", "kind": "shape" },
@@ -17,8 +17,8 @@
     { "id": "subtitle", "kind": "text" }
   ],
   "sample": {
-    "kicker": { "type": "text", "value": "週會提案" },
-    "title": { "type": "text", "value": "我們改簡報的時間，花在哪裡" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面。" }
+    "kicker": { "type": "text", "value": "Weekly meeting pitch" },
+    "title": { "type": "text", "value": "Where revision time goes" },
+    "subtitle": { "type": "text", "value": "Last quarter six decks averaged four rounds; three of them touched only layout." }
   }
 }

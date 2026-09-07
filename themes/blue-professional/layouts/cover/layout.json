@@ -1,7 +1,7 @@
 {
   "id": "cover",
-  "name": "封面：藍色專業",
-  "description": "顧問報告的封面：右側一片斜切的淡色面、右下 3×3 小點陣，左側系列名、短藍線、標題、導語與一行 meta，左下頁碼、底部進度條。改成置中標題頁會失去「文件感」的左對齊節奏與斜切面的份量。",
+  "name": "Cover: blue professional",
+  "description": "A consulting-report cover: a slanted tinted panel on the right with a 3 by 3 dot grid in its corner; on the left the series name, a short blue rule, the title, a lede and one line of meta, with the page number bottom left and the progress bar along the bottom edge. A centred title page would lose the document-like left-aligned rhythm and the weight of the slanted panel.",
   "content_relations": [
     "statement"
   ],
@@ -16,27 +16,27 @@
     "brand": {
       "type": "text",
       "required": false,
-      "hint": "系列名或簡報名，自動填敘事標題冒號前的部分；不需要就留空"
+      "hint": "series or deck name, filled automatically from the part of the story title before the colon; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "主張式標題，一到兩行，十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "claim headline, 1 to 2 lines, up to 16 characters; *keyword* marks an emphasis (blue)"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一到兩行導語，四十五字以內"
+      "hint": "a lede of 1 to 2 lines, up to 45 characters"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "場合、日期或機密等級，自動填 occasion 的第一句（十字以內）"
+      "hint": "occasion, date or confidentiality level, filled automatically from the first clause of occasion (up to 10 characters)"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -80,19 +80,19 @@
   "sample": {
     "brand": {
       "type": "text",
-      "value": "季度營運回顧"
+      "value": "Quarterly operations review"
     },
     "title": {
       "type": "text",
-      "value": "先修*等待*，再談功能"
+      "value": "Fix *waiting* first, then features"
     },
     "subtitle": {
       "type": "text",
-      "value": "三個月的量測說明：使用者流失在載入與表單，不在功能清單。"
+      "value": "Three months of data: users drop off at loading and forms, not the feature list."
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧 · 2026-09 · 內部"
+      "value": "Quarterly review · 2026-09 · Internal"
     },
     "page": {
       "type": "text",

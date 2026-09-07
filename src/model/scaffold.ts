@@ -10,6 +10,7 @@ import {
   type Slot,
   sha256,
 } from './deck.ts'
+import { langOf } from './lang.ts'
 import type { Story, StorySlide } from './story.ts'
 
 export const IMAGE_PLACEHOLDER =
@@ -225,14 +226,14 @@ export interface ScaffoldResult extends MergeReport {
   detailsSuggested: string[]
 }
 
-/** Characters the story puts on the slide, the way QA will count them (markup stripped). */
+/** Text the story puts on the slide, in the full-width units QA's density check counts (markup stripped). */
 export function slotChars(slots: Record<string, Slot>): number {
   let n = 0
   for (const slot of Object.values(slots)) {
     if (slot.type === 'image' || slot.type === 'icon') continue
-    n += slotText(slot).replace(/[*\n]/g, '').length
+    n += textUnits(slotText(slot).replace(/[*\n]/g, ''))
   }
-  return n
+  return Math.round(n)
 }
 
 /**
@@ -389,6 +390,8 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
   const merged = mergeSlides(base, slides)
   merged.deck.title = input.story.meta.title
   merged.deck.theme = input.theme
+  // the language tag: the frontmatter's, else a guess from the story's script; an existing deck keeps its own
+  merged.deck.lang ??= langOf(input.story.meta.lang, input.storyText)
   merged.deck.story = { path: input.storyRelativePath, sha256: sha256(input.storyText) }
   return { ...merged, warnings, chosen, stepsKept, stepsDropped, stepsAuto, detailsSuggested }
 }

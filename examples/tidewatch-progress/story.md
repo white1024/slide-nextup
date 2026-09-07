@@ -1,101 +1,101 @@
 ---
-title: Tidewatch 網站健檢工具：進度、交付與方向
-audience: 產品負責人一人，可能有同組的兩位同事；負責人已清楚三人分工，在意工具交得出去嗎、交出去的是什麼形態、非技術人員用不用得了
-occasion: 專案進度會，介紹健檢工具的現況、已交付的東西與工作方向
+title: "Tidewatch website health-check tool: progress, deliverables and direction"
+audience: The product owner, possibly with two colleagues from the same group; the owner already knows how the three-person split works and cares about whether the tool can be handed over, in what form, and whether non-technical people can use it
+occasion: Progress meeting, presenting where the health-check tool stands, what has been delivered and where the work is heading
 duration_minutes: 10
 density: standard
 narrative_pattern: pyramid
-core_message: 健檢工具已經是一包可交付的東西：報告契約、CLI 與解壓即用的交付包都在，GUI 正在把它變成非技術人員也能用的版本。
+core_message: The health-check tool is already a deliverable package; the report contract, the CLI and the unzip-and-run bundle are all there, and the GUI is turning it into something non-technical people can use.
 ---
 
-## 目標與受眾
+## Goal and audience
 
-這場進度會要讓產品負責人在 10 分鐘內知道兩件事：工具已經交出了什麼形態、現在正在做什麼。負責人是三人分工計畫的發起人，已經清楚各自負責什麼，所以不重述分工，直接講工具。本專案目前的責任是交付工具，不是產出健檢數據，所以全程不拿過去檢查的數字出來。結束時希望他清楚工具的現況，並對「交付包加 GUI」這個交付形態點頭。
+This progress meeting should tell the product owner two things within 10 minutes: what form the tool has already been delivered in, and what is being worked on now. The owner initiated the three-person split and knows who does what, so the split is not restated; the meeting goes straight to the tool. The project's current responsibility is to deliver the tool, not to produce health-check data, so no figures from past checks are shown at any point. By the end he should know where the tool stands and nod at "bundle plus GUI" as the delivery form.
 
-## 核心主張
+## Core message
 
-工具已經是一包可交付的東西。對外有 Result Schema v1 這份跨平台契約，有 CLI 與固定六步的健檢流程，有解壓即用、空機無人值守安裝的交付包。正在做的 GUI 是負責人指定的方向，目的是讓行銷與客服不開終端機也能設定、健檢、看結果。
+The tool is already a deliverable package. Outwardly there is Result Schema v1, a cross-platform contract; a CLI with a fixed six-step check; and an unzip-and-run bundle that installs unattended on a clean machine. The GUI in progress is the direction the owner set, so that marketing and support can configure, check and read results without opening a terminal.
 
-## 敘事骨架
+## Narrative skeleton
 
-1. 結論：健檢工具已經是一包可交付的東西，GUI 正在讓它更好用。
-2. 骨架：一張圖看工具怎麼組成，再講三個刻意的設計原則。
-3. 交付物：Result Schema 契約、解壓即用的交付包、固定六步的健檢流程。
-4. 進行中：給非技術人員的 GUI。
-5. 收尾：交給客服的是同一包，CLI 與 GUI 共用同一份設定與結果。
+1. Conclusion: the health-check tool is already a deliverable package, and the GUI is making it easier to use.
+2. Skeleton: one picture of how the tool is put together, then three deliberate design principles.
+3. Deliverables: the Result Schema contract, the unzip-and-run bundle, the fixed six-step check.
+4. In progress: a GUI for non-technical people.
+5. Close: support gets the same package; the CLI and the GUI share one configuration and one set of results.
 
-## 逐頁
+## Slides
 
-### s1 | 健檢工具已經是一包可交付的東西
+### s1 | The health-check tool is already a deliverable package
 - scene_role: hero
 - intensity: 4
 - content_relation: statement
-- message: 健檢工具已經有報告契約、CLI 與解壓即用的交付包，GUI 正在把它變成非技術人員也能用的版本。
-- evidence: Tidewatch 網站健檢工具 tidewatch，2026-08 起的進度回報。
-- notes: 開場一句話講結論。負責人最想知道的是「工具交得出去嗎」，先給答案再展開。
+- message: The health-check tool already has a report contract, a CLI and an unzip-and-run bundle; the GUI is turning it into something non-technical people can use.
+- evidence: Tidewatch website health-check tool (tidewatch), progress reports since 2026-08.
+- notes: Open with the conclusion in one sentence. What the owner most wants to know is "can the tool be handed over", so give the answer first, then expand.
 
-### s2 | 今天講兩件事
+### s2 | Two things today
 - scene_role: map
 - intensity: 2
 - content_relation: list
-- message: 今天講已經交出來的工具與契約，以及進行中的 GUI。
+- message: Today covers the tool and contract already delivered, then the GUI in progress.
 - evidence:
-  - 已交付：健檢工具骨架、Result Schema 契約、交付包、六步流程
-  - 進行中：給非技術人員的 GUI
-- notes: 十秒帶過，讓負責人知道結構就好。
+  - "Delivered: the health-check tool's skeleton, the Result Schema contract, the bundle, the six-step flow"
+  - "In progress: a GUI for non-technical people"
+- notes: Ten seconds, just so the owner knows the structure.
 
-### s3 | 健檢工具 tidewatch 的骨架
+### s3 | The skeleton of the tidewatch health-check tool
 - scene_role: relationship
 - intensity: 4
 - content_relation: statement
-- message: 站台清單進來，走兩條檢查路徑，落到同一個報告目錄，評分是獨立的第二遍。
-- evidence: 系統圖：站台清單 → 瀏覽器路徑／爬蟲路徑 → 報告目錄 → aggregate／export
-- notes: 這頁用 photo 版型放簡化版系統圖（四個大字塊），完整系統圖留作備用。講的時候用手指順著箭頭走一遍就好，原則留到下一頁。
+- message: A site list comes in, runs through two check paths and lands in one report directory; scoring is a separate second pass.
+- evidence: "System map: site list -> browser path / crawler path -> report directory -> aggregate / export"
+- notes: This slide uses the photo layout with the simplified system map (four big blocks); the full map is kept in reserve. Trace the arrows with a finger while talking; the principles wait for the next slide.
 
-### s4 | 三個刻意的設計原則
+### s4 | Three deliberate design principles
 - scene_role: evidence
 - intensity: 3
 - content_relation: list
-- message: 兩條路徑不併表、報告目錄是共用契約、評分與檢查分開，三件事都是刻意的。
+- message: The two paths are never merged into one table, the report directory is a shared contract, and scoring is separate from checking; all three are deliberate.
 - evidence:
-  - 兩條路徑不併表：瀏覽器路徑含載入與轉譯，是對外主數據源；爬蟲路徑只做交叉核對
-  - 報告目錄是共用契約：逐頁狀態原子寫入，任何一刻中斷都能續跑
-  - 評分是獨立的第二遍：重新評分免費，重新檢查要一整夜，判定政策可改而數字不必重跑
-- notes: 三張卡各對應系統圖的一個區塊。「不併表」是因為檢查邊界不同，不提任何實測比值。
+  - "The two paths are never merged: the browser path includes loading and rendering and is the primary external data source; the crawler path only cross-checks"
+  - "The report directory is a shared contract: per-page state is written atomically, so a run interrupted at any moment can resume"
+  - "Scoring is a separate second pass: rescoring is free, rechecking takes a whole night; the verdict policy can change without rerunning the numbers"
+- notes: Each of the three cards maps to one block of the system map. "Never merged" is because the check boundaries differ; do not quote any measured ratio.
 
-### s5 | 交出去的東西：契約與交付包
+### s5 | What has been delivered: a contract and a bundle
 - scene_role: evidence
 - intensity: 3
 - content_relation: list
-- message: 對外已經有 Result Schema v1 契約，以及解壓即用、空機無人值守安裝的交付包。
+- message: Outwardly there is already the Result Schema v1 contract and an unzip-and-run bundle that installs unattended on a clean machine.
 - evidence:
-  - Result Schema v1.0.0：所有平台共用的 result.json 契約，附三份角色文件
-  - 交付包 0.1.0：執行檔、設定檔、文件、瀏覽器核心，空機解壓後無人值守安裝
-- notes: 交付包對應分工計畫裡「可重複執行的標準化健檢 Package」。三份角色文件是 operator、viewer、new-platform。第三張卡留空。
+  - "Result Schema v1.0.0: the result.json contract shared by every platform, with three role documents"
+  - "Bundle 0.1.0: executable, configuration, docs and browser engine; unzip on a clean machine and it installs unattended"
+- notes: The bundle is the "repeatable, standardised health-check package" in the work split. The three role documents are operator, viewer and new-platform. The third card stays empty.
 
-### s6 | 固定六步的健檢流程
+### s6 | A fixed six-step health check
 - scene_role: relationship
 - intensity: 3
 - content_relation: sequence
-- message: 一次完整健檢是固定的六步，可中斷、可續跑，最後一步 export 才產出交出去的結果檔。
-- evidence: preflight（機器準備好了嗎）→ download（取得站台清單）→ plan（空跑看要查幾頁）→ run（逐頁檢查、狀態落盤）→ aggregate（彙整成表）→ export（產出 result.json）
-- notes: 全寬一條流程。提醒兩個最容易漏的地方：run 不會自動產出 result.json，漏掉 export 等於跑完卻交不出東西；aggregate 要在還留著快照的機器上跑。
+- message: A full health check is a fixed six steps, interruptible and resumable; only the last step, export, produces the result file that gets handed over.
+- evidence: preflight (is the machine ready) -> download (fetch the site list) -> plan (dry run to count the pages) -> run (check page by page, state on disk) -> aggregate (roll up into tables) -> export (produce result.json)
+- notes: One full-width flow. Point out the two things easiest to miss, namely that run does not produce result.json by itself (skipping export means finishing the run with nothing to hand over) and that aggregate must run on the machine that still holds the snapshots.
 
-### s7 | 進行中：給非技術人員的 GUI
+### s7 | In progress: a GUI for non-technical people
 - scene_role: evidence
 - intensity: 4
 - content_relation: list
-- message: 正在做的是一個解壓即用的本機 GUI，讓行銷與客服不開終端機也能設定、健檢、看結果。
+- message: What is being built is an unzip-and-run local GUI, so that marketing and support can configure, check and read results without opening a terminal.
 - evidence:
-  - 站台設定：匯入站台清單，逐階段進度，缺件擋、檢查條件只告知
-  - 執行健檢：固定預設集按鈕，參數不可改，可比性由設定檔版本控管
-  - 結果：摘要四格、色階圖、折線圖、時序圖，完整表格降到展開層
-- notes: 負責人上個月提的方向。兩個裁定：不做全參數編輯器、不拆成兩個 APP。目前三頁走通、三套外觀，驗收條件是「重灌後的空機解壓雙擊跑完 smoke，全程不開終端機」。
+  - "Site setup: import a site list, progress per stage, missing items block, check conditions only inform"
+  - "Run a check: fixed preset buttons, parameters locked, comparability governed by the configuration version"
+  - "Results: four summary tiles, a heatmap, a line chart, a timeline; the full table drops to an expandable layer"
+- notes: The direction the owner set last month. Two rulings, no full parameter editor and no split into two apps. Three screens work end to end, with three looks; acceptance is "unzip and double-click on a freshly reinstalled machine, run the smoke test through, never open a terminal".
 
-### s8 | 交給客服的是同一包
+### s8 | Support gets the same package
 - scene_role: close
 - intensity: 3
 - content_relation: closing
-- message: CLI 與 GUI 共用同一份設定與結果，交出去的永遠是同一個解壓即用的包。
-- evidence: 薄殼原則：GUI 不重做判斷邏輯，只經退出碼與 result.json 溝通；不裝 GUI 的包照常可用。
-- notes: 收尾只講交付形態，不講數據、不列時程。若負責人問下一步，答「交付包在重灌後的空機做端到端驗收」。
+- message: The CLI and the GUI share one configuration and one set of results; what gets handed over is always the same unzip-and-run package.
+- evidence: "Thin-shell principle: the GUI does not redo the verdict logic and talks only through exit codes and result.json; a package without the GUI works as before."
+- notes: The close is about the delivery form only, no data and no timeline. If the owner asks about the next step, answer "end-to-end acceptance of the bundle on a freshly reinstalled machine".

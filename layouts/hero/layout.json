@@ -1,20 +1,20 @@
 {
   "id": "hero",
-  "name": "封面：Hero",
-  "description": "網站首屏式的封面：頂欄家具、帶錨點的 kicker、大標、一段導語、三個 KPI 數字，右側一團光暈。改成只有標題的封面會失去「一頁就把主張、證據與規模講完」的份量。",
+  "name": "Cover: hero",
+  "description": "A website-hero cover: top-bar furniture, an anchored kicker, a big title, a lede, three KPI numbers and a glow on the right. A title-only cover would lose the weight of stating claim, evidence and scale on one slide.",
   "content_relations": ["statement", "evidence"],
   "scene_roles": ["hero"],
   "density": { "max_chars": 260, "max_elements": 14 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左：簡報或系列名，自動填敘事標題的系列名（冒號前）" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右：場合或日期，自動填 occasion 的第一句（十字以內）" },
-    "kicker": { "type": "text", "required": false, "hint": "錨點後的小標，四到十二個字" },
-    "title": { "type": "text", "required": true, "hint": "主張式標題，一到兩行，十六字以內；可用 *關鍵詞* 強調" },
-    "subtitle": { "type": "text", "required": false, "hint": "一到兩行導語，五十字以內" },
-    "stat-1": { "type": ["text", "metric"], "required": false, "hint": "KPI：大數字加標籤，或一句短語" },
-    "stat-2": { "type": ["text", "metric"], "required": false, "hint": "同上" },
-    "stat-3": { "type": ["text", "metric"], "required": false, "hint": "同上；沒有第三個就留空" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填「01 / 08」" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left: deck or series name, filled automatically from the series part of the story title (before the colon)" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right: occasion or date, filled automatically from the first clause of occasion (up to 10 characters)" },
+    "kicker": { "type": "text", "required": false, "hint": "small heading after the anchor, 4 to 12 characters" },
+    "title": { "type": "text", "required": true, "hint": "claim headline, 1 to 2 lines, up to 16 characters; *keyword* marks an emphasis" },
+    "subtitle": { "type": "text", "required": false, "hint": "lede, 1 to 2 lines, up to 50 characters" },
+    "stat-1": { "type": ["text", "metric"], "required": false, "hint": "KPI: a big number with a label, or a short phrase" },
+    "stat-2": { "type": ["text", "metric"], "required": false, "hint": "same as above" },
+    "stat-3": { "type": ["text", "metric"], "required": false, "hint": "same as above; leave empty when there is no third" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically (\"01 / 08\")" }
   },
   "elements": [
     { "id": "glow", "kind": "shape" },
@@ -32,14 +32,14 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "kicker": { "type": "text", "value": "為什麼一直改版面" },
-    "title": { "type": "text", "value": "我們改簡報的時間，花在*版面*" },
-    "subtitle": { "type": "text", "value": "上季六份簡報平均改四輪，其中三輪只動版面；敘事先被確認，版面修改就會消失。" },
-    "stat-1": { "type": "metric", "value": "4", "label": "平均改版輪數" },
-    "stat-2": { "type": "metric", "value": "3", "label": "其中只動版面" },
-    "stat-3": { "type": "metric", "value": "0", "label": "新流程的版面修改" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "kicker": { "type": "text", "value": "Why the layout keeps changing" },
+    "title": { "type": "text", "value": "Our deck time goes to *layout*" },
+    "subtitle": { "type": "text", "value": "Six decks averaged four rounds, three on layout alone; confirm the story first and they vanish." },
+    "stat-1": { "type": "metric", "value": "4", "label": "rounds per deck" },
+    "stat-2": { "type": "metric", "value": "3", "label": "layout only" },
+    "stat-3": { "type": "metric", "value": "0", "label": "layout, new flow" },
     "page": { "type": "text", "value": "01 / 08" }
   }
 }

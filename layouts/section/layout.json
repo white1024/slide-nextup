@@ -1,17 +1,17 @@
 {
   "id": "section",
-  "name": "章節頁",
-  "description": "大號章節數字、一小段色條、標題與一句導語，其餘留白。改成一般標題頁會失去「翻到這裡就知道換章了」的呼吸感。",
+  "name": "Section",
+  "description": "A large chapter number, a short colour bar, a title and one lede, the rest left blank. A regular title slide would lose the breathing space that says a new chapter starts here.",
   "content_relations": ["statement", "list"],
   "scene_roles": ["map", "pause", "relationship"],
   "density": { "max_chars": 160, "max_elements": 10 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填敘事標題的系列名（冒號前）" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填 occasion 的第一句（十字以內）" },
-    "number": { "type": "text", "required": true, "hint": "章節序號，兩位數字，例如 02" },
-    "title": { "type": "text", "required": true, "hint": "章節標題，一到兩行" },
-    "body": { "type": "text", "required": false, "hint": "一到兩行導語" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically from the series part of the story title (before the colon)" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically from the first clause of occasion (up to 10 characters)" },
+    "number": { "type": "text", "required": true, "hint": "chapter number, two digits, e.g. 02" },
+    "title": { "type": "text", "required": true, "hint": "chapter title, 1 to 2 lines" },
+    "body": { "type": "text", "required": false, "hint": "lede, 1 to 2 lines" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "corner-tl", "kind": "shape" },
@@ -25,11 +25,11 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
     "number": { "type": "text", "value": "02" },
-    "title": { "type": "text", "value": "工具沒有錯，順序錯了" },
-    "body": { "type": "text", "value": "現有工具都先讓你排版面，再回頭想敘事，所以每次改敘事都要重排。" },
+    "title": { "type": "text", "value": "The tool is fine; the order is wrong" },
+    "body": { "type": "text", "value": "Today's tools make you lay out first and think about the story later, so every story change means a relayout." },
     "page": { "type": "text", "value": "03 / 08" }
   }
 }

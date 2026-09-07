@@ -77,10 +77,10 @@ describe('parseStory on the shipped sample', () => {
     expect(result.hasErrors).toBe(false)
     expect(result.diagnostics).toEqual([])
     const story = result.story as Story
-    expect(story.meta.title).toBe('先確認敘事，再做簡報')
+    expect(story.meta.title).toBe('Confirm the story before the slides')
     expect(story.meta.duration_minutes).toBe(12)
     expect(story.meta.density).toBe('standard')
-    expect(story.sections.goal).toContain('下週用新流程')
+    expect(story.sections.goal).toContain('with the new workflow next week')
     expect(story.slides).toHaveLength(8)
     expect(story.slides.map((s) => s.id)).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'])
   })
@@ -88,12 +88,18 @@ describe('parseStory on the shipped sample', () => {
   it('keeps titles, list evidence, notes and heading line numbers', () => {
     const story = parseStory(sample).story as Story
     const s2 = story.slides[1] as Story['slides'][number]
-    expect(s2.title).toBe('今天談三件事')
-    expect(s2.evidence).toEqual(['為什麼一直改版面', '新流程長什麼樣', '下週的試用計畫'])
-    expect(s2.notes).toContain('十秒')
-    expect(sample.split('\n')[s2.line - 1]).toBe('### s2 | 今天談三件事')
+    expect(s2.title).toBe('Three things today')
+    expect(s2.evidence).toEqual([
+      'Why the layout keeps changing',
+      'What the new workflow looks like',
+      "Next week's trial plan",
+    ])
+    expect(s2.notes).toContain('ten seconds')
+    expect(sample.split('\n')[s2.line - 1]).toBe('### s2 | Three things today')
     const s1 = story.slides[0] as Story['slides'][number]
-    expect(s1.evidence).toEqual(['上季六份簡報平均改四輪，其中三輪只動版面。'])
+    expect(s1.evidence).toEqual([
+      'Last quarter six decks averaged four rounds of revision, three of which touched only the layout.',
+    ])
   })
 })
 
@@ -122,6 +128,29 @@ describe('parseStory structural errors', () => {
   it('reports a missing section', () => {
     const text = makeStory([ok('hero', 4)]).replace('## 敘事骨架\n骨架。\n', '')
     expect(errorsOf(text)).toContain('section/missing')
+  })
+
+  it('accepts the English section headings and the Chinese ones as aliases', () => {
+    const zh = makeStory([ok('hero', 4), ok('close', 2, 'closing')])
+    const en = zh
+      .replace('## 目標與受眾', '## Goal and audience')
+      .replace('## 核心主張', '## Core message')
+      .replace('## 敘事骨架', '## Narrative skeleton')
+      .replace('## 逐頁', '## Slides')
+    expect(en).not.toBe(zh)
+    const a = parseStory(zh)
+    const b = parseStory(en)
+    expect(b.diagnostics.filter((d) => d.severity === 'error')).toEqual([])
+    expect(b.story?.sections).toEqual(a.story?.sections)
+    expect(b.story?.slides.map((s) => s.id)).toEqual(a.story?.slides.map((s) => s.id))
+    // mixed and case-insensitive headings still parse
+    const mixed = en.replace('## Core message', '## core MESSAGE').replace('## Slides', '## 逐頁')
+    expect(parseStory(mixed).diagnostics.filter((d) => d.severity === 'error')).toEqual([])
+    // a missing English section is reported with the canonical name and the alias
+    const missing = en.replace('## Narrative skeleton\n骨架。\n', '')
+    const d = parseStory(missing).diagnostics.find((x) => x.rule === 'section/missing')
+    expect(d?.message).toContain('`## Narrative skeleton`')
+    expect(d?.message).toContain('`## 敘事骨架`')
   })
 
   it('reports missing slide fields, bad enums and out-of-range intensity', () => {
@@ -276,9 +305,9 @@ describe('the shipped broken examples', () => {
     const lines = brokenRhythm.split('\n')
     const pause = r.diagnostics.find((d) => d.rule === 'rhythm/pause')
     expect(pause?.severity).toBe('error')
-    expect(lines[(pause?.line ?? 0) - 1]).toBe('### s2 | 地圖')
+    expect(lines[(pause?.line ?? 0) - 1]).toBe('### s2 | Map')
     const run = r.diagnostics.find((d) => d.rule === 'rhythm/run')
     expect(run?.severity).toBe('error')
-    expect(lines[(run?.line ?? 0) - 1]).toBe('### s6 | 證據四')
+    expect(lines[(run?.line ?? 0) - 1]).toBe('### s6 | Evidence four')
   })
 })

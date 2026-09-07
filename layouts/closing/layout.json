@@ -1,14 +1,14 @@
 {
   "id": "closing",
-  "name": "收尾",
-  "description": "反相底色、一句收尾主張、一行說明與一個行動呼籲。改成一般內容頁會失去「已經結束、該做決定」的訊號。",
+  "name": "Closing",
+  "description": "Inverted background, one closing claim, a short explanation and one call to action. A regular content slide would lose the signal that the talk is over and a decision is due.",
   "content_relations": ["closing", "statement"],
   "scene_roles": ["close"],
   "density": { "max_chars": 160, "max_elements": 4 },
   "slots": {
-    "title": { "type": "text", "required": true, "hint": "收尾主張，一行" },
-    "body": { "type": "text", "required": false, "hint": "一到兩行說明" },
-    "cta": { "type": "text", "required": true, "hint": "要受眾做的一件事" }
+    "title": { "type": "text", "required": true, "hint": "closing claim, one line" },
+    "body": { "type": "text", "required": false, "hint": "1 to 2 lines of explanation" },
+    "cta": { "type": "text", "required": true, "hint": "the one thing the audience should do" }
   },
   "elements": [
     { "id": "backdrop", "kind": "shape" },
@@ -17,8 +17,8 @@
     { "id": "cta", "kind": "text" }
   ],
   "sample": {
-    "title": { "type": "text", "value": "下週做一份真的" },
-    "body": { "type": "text", "value": "用這套流程做一份真實提案，我們一起看結果。" },
-    "cta": { "type": "text", "value": "需要一位志願者提供題目" }
+    "title": { "type": "text", "value": "Next week, a real one" },
+    "body": { "type": "text", "value": "Run a real proposal through this flow and we review the result together." },
+    "cta": { "type": "text", "value": "We need one volunteer with a topic" }
   }
 }

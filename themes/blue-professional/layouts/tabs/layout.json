@@ -1,7 +1,7 @@
 {
   "id": "tabs",
-  "name": "分頁籤：藍色專業",
-  "description": "標題、導語，下面一張淡藍框裝幾個頁籤，各放一個面板（條列、表格或一段話），播放時點頁籤切換，靜態只看第一個。改成三頁會失去「同一個框裡切換比較」的對照感。",
+  "name": "Tabs: blue professional",
+  "description": "Title and lede, then a tinted frame holding a few tabs, each with its own panel (a list, a table or a paragraph); tabs switch on click during playback and only the first shows when static. Three separate slides would lose the contrast of switching within one frame.",
   "content_relations": [
     "list",
     "comparison",
@@ -19,37 +19,37 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "subtitle": {
       "type": "text",
       "required": false,
-      "hint": "一行導語，五十字以內"
+      "hint": "a one-line lede, up to 50 characters"
     },
     "panels": {
       "type": "tabs",
       "required": true,
-      "hint": "二到五個頁籤，標籤六字以內；每個面板三到五條或一張小表格，第一個面板是靜態與 QA 看到的"
+      "hint": "2 to 5 tabs, tab labels up to 6 characters; each panel holds 3 to 5 items or a small table; the first panel is what static output and QA see"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行註記或提醒"
+      "hint": "a one-line note or reminder"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -89,11 +89,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -101,53 +101,53 @@
     },
     "title": {
       "type": "text",
-      "value": "三種人各看自己要的那一頁"
+      "value": "Three audiences, each on their own tab"
     },
     "subtitle": {
       "type": "text",
-      "value": "主管看指標、工程看待辦、客服看回報流程，資料同一份。"
+      "value": "Managers see metrics, engineers the backlog, support the reporting flow; the data is the same."
     },
     "panels": {
       "type": "tabs",
       "panels": [
         {
-          "label": "主管",
+          "label": "Managers",
           "content": {
             "type": "list",
             "items": [
-              "六個指標每月更新",
-              "紅色代表落後目標",
-              "點指標看趨勢"
+              "Six metrics, updated monthly",
+              "Red means behind target",
+              "Click a metric for its trend"
             ]
           }
         },
         {
-          "label": "工程",
+          "label": "Engineers",
           "content": {
             "type": "list",
             "items": [
-              "待辦依影響排序",
-              "每項有負責人與停損點",
-              "兩週一個循環"
+              "Backlog ranked by impact",
+              "Each item has an owner and a stop-loss point",
+              "Two-week cycles"
             ]
           }
         },
         {
-          "label": "客服",
+          "label": "Support",
           "content": {
             "type": "table",
             "header": [
-              "情境",
-              "怎麼做"
+              "Situation",
+              "What to do"
             ],
             "rows": [
               [
-                "使用者回報慢",
-                "貼連結到回報表單"
+                "A user reports slowness",
+                "Send the link to the report form"
               ],
               [
-                "表單送不出去",
-                "先查狀態頁再回覆"
+                "A form will not submit",
+                "Check the status page before replying"
               ]
             ]
           }
@@ -156,7 +156,7 @@
     },
     "caption": {
       "type": "text",
-      "value": "播放時點頁籤切換；靜態模式只顯示第一個面板。"
+      "value": "Click a tab to switch during playback; static mode shows only the first panel."
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "id": "detail",
-  "name": "細節：藍色專業",
-  "description": "兩欄兩列四個淡藍底區塊，各有一個粗體小標與帶藍線的兩到三條要點。改成一條長清單會失去「四件事各自成組」的分類感。",
+  "name": "Detail: blue professional",
+  "description": "Four tinted blocks in two columns and two rows, each with a bold heading and two or three blue-ruled points. One long list would lose the grouping of four things each in its own set.",
   "content_relations": [
     "list",
     "hierarchy",
@@ -19,22 +19,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "head-1": {
       "type": "text",
       "required": true,
-      "hint": "區塊小標，十二字以內"
+      "hint": "block heading, up to 12 characters"
     },
     "list-1": {
       "type": [
@@ -42,12 +42,12 @@
         "text"
       ],
       "required": true,
-      "hint": "二到三條，每條一行"
+      "hint": "2 to 3 items, one line each"
     },
     "head-2": {
       "type": "text",
       "required": true,
-      "hint": "同上；不需要就整組留空"
+      "hint": "same as above; leave the whole block empty when not needed"
     },
     "list-2": {
       "type": [
@@ -55,12 +55,12 @@
         "text"
       ],
       "required": true,
-      "hint": "同上"
+      "hint": "same as above"
     },
     "head-3": {
       "type": "text",
       "required": false,
-      "hint": "同上；不需要就整組留空"
+      "hint": "same as above; leave the whole block empty when not needed"
     },
     "list-3": {
       "type": [
@@ -68,12 +68,12 @@
         "text"
       ],
       "required": false,
-      "hint": "同上"
+      "hint": "same as above"
     },
     "head-4": {
       "type": "text",
       "required": false,
-      "hint": "同上；不需要就整組留空"
+      "hint": "same as above; leave the whole block empty when not needed"
     },
     "list-4": {
       "type": [
@@ -81,12 +81,12 @@
         "text"
       ],
       "required": false,
-      "hint": "同上"
+      "hint": "same as above"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -162,11 +162,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -174,54 +174,54 @@
     },
     "title": {
       "type": "text",
-      "value": "四個做法上的改變"
+      "value": "Four changes in how we work"
     },
     "head-1": {
       "type": "text",
-      "value": "假設更高的修復成本"
+      "value": "Assume fixes cost more"
     },
     "list-1": {
       "type": "list",
       "items": [
-        "每項修復都估兩週以上的循環",
-        "小修不再插隊，改排進固定循環",
-        "先量再修，避免修錯地方"
+        "Each fix is budgeted at two weeks or more",
+        "Small fixes no longer jump the queue",
+        "Measure first, so we fix the right thing"
       ]
     },
     "head-2": {
       "type": "text",
-      "value": "更保守的排程"
+      "value": "A more cautious schedule"
     },
     "list-2": {
       "type": "list",
       "items": [
-        "同時進行的項目不超過三個",
-        "每個項目都有停損點",
-        "超過一個月的自動升級討論"
+        "At most three items in progress at once",
+        "Every item has a stop-loss point",
+        "Anything open over a month is escalated"
       ]
     },
     "head-3": {
       "type": "text",
-      "value": "以交付為先"
+      "value": "Delivery first"
     },
     "list-3": {
       "type": "list",
       "items": [
-        "先修影響交付的問題",
-        "新功能排在體質指標達標之後",
-        "每季只承諾三件事"
+        "Fix what hurts delivery first",
+        "Features come after the health targets",
+        "Commit to only three things a quarter"
       ]
     },
     "head-4": {
       "type": "text",
-      "value": "由下而上的回報"
+      "value": "Bottom-up reporting"
     },
     "list-4": {
       "type": "list",
       "items": [
-        "問題由第一線直接回報",
-        "兩週一次的公開排序",
-        "數據放在大家看得到的地方"
+        "The front line reports issues directly",
+        "A public ranking every two weeks",
+        "Data where everyone can see it"
       ]
     }
   }

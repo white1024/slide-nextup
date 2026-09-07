@@ -251,7 +251,7 @@ describe('steps, transitions and the presenter view', () => {
       }),
     ).toBe(0)
     const staticHtml = renderDeckDocument(sample(), { deckDir, outDir, staticMode: true }).html
-    expect(staticHtml).toContain('<html lang="zh-Hant" data-static="true">')
+    expect(staticHtml).toContain('<html lang="en" data-static="true">')
   })
 
   it('opens a presenter window with P that follows the main window and shows the notes', async () => {
@@ -591,7 +591,7 @@ describe('element motion switch', () => {
     mkdirSync(outDir, { recursive: true })
     htmlFile = join(outDir, 'deck-motion-off.html')
     const { html } = renderDeckDocument(deck, { deckDir, outDir })
-    expect(html).toContain('<html lang="zh-Hant" data-motion="off">')
+    expect(html).toContain('<html lang="en" data-motion="off">')
     writeFileSync(htmlFile, html, 'utf8')
     browser = await chromium.launch({ headless: true })
     page = await browser.newPage({ viewport: { width: 1280, height: 720 } })

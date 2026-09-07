@@ -56,9 +56,9 @@ describe('writing the deck’s page-level overrides back into story.md', () => {
 
   it('removes hidden slides and reports them by title', () => {
     const r = applyPagesToStory(storyText, story, { hidden: ['s7'] })
-    expect(r.removed).toEqual([{ id: 's7', title: '停一下' }])
+    expect(r.removed).toEqual([{ id: 's7', title: 'Pause for a moment' }])
     expect(headings(r.text)).toEqual(ids.filter((id) => id !== 's7'))
-    expect(r.text).not.toContain('停一下')
+    expect(r.text).not.toContain('Pause for a moment')
     // what is left still parses as a story with the remaining seven pages, in order
     const again = loadStory(r.text)
     expect(again.story?.slides.map((s) => s.id)).toEqual(ids.filter((id) => id !== 's7'))

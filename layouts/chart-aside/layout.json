@@ -1,18 +1,18 @@
 {
   "id": "chart-aside",
-  "name": "圖表加側欄",
-  "description": "左邊三分之二一張圖表（長條、折線、環形或進度），右邊一張卡放結論數字或一句判讀，下方一行出處。改成表格會失去「一眼看出高低」的直覺。",
+  "name": "Chart with aside",
+  "description": "A chart (bar, line, donut or progress) fills the left two thirds; a card on the right holds the headline number or a one-sentence reading, with the source below. A table would lose the at-a-glance sense of high and low.",
   "content_relations": ["evidence", "comparison", "sequence"],
   "scene_roles": ["evidence", "relationship"],
   "density": { "max_chars": 520, "max_elements": 7 },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "頂欄左，自動填" },
-    "meta": { "type": "text", "required": false, "hint": "頂欄右，自動填" },
-    "title": { "type": "text", "required": true, "hint": "圖表的結論，一行" },
-    "chart": { "type": "chart", "required": true, "hint": "kind：bar｜line｜donut｜progress；series 三到八筆；toggle 為 true 時播放時圖例可點" },
-    "aside": { "type": ["metric", "text", "chart"], "required": false, "hint": "一個結論數字、一句判讀，或一個 donut／progress 小圖" },
-    "caption": { "type": "text", "required": false, "hint": "資料來源與量測條件，一行" },
-    "page": { "type": "text", "required": false, "hint": "頁碼，自動填" }
+    "brand": { "type": "text", "required": false, "hint": "top bar left, filled automatically" },
+    "meta": { "type": "text", "required": false, "hint": "top bar right, filled automatically" },
+    "title": { "type": "text", "required": true, "hint": "the chart's conclusion, one line" },
+    "chart": { "type": "chart", "required": true, "hint": "kind: bar | line | donut | progress; 3 to 8 series points; with toggle true the legend is clickable during playback" },
+    "aside": { "type": ["metric", "text", "chart"], "required": false, "hint": "one headline number, a one-sentence reading, or a small donut / progress chart" },
+    "caption": { "type": "text", "required": false, "hint": "data source and measurement conditions, one line" },
+    "page": { "type": "text", "required": false, "hint": "page number, filled automatically" }
   },
   "elements": [
     { "id": "brand", "kind": "text" },
@@ -24,22 +24,22 @@
     { "id": "page", "kind": "text" }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "先確認敘事，再做簡報" },
-    "meta": { "type": "text", "value": "週會提案 · 2026-09" },
-    "title": { "type": "text", "value": "十六輪版面修改，十一輪起因是內容順序" },
+    "brand": { "type": "text", "value": "Confirm the story before the slides" },
+    "meta": { "type": "text", "value": "Weekly meeting pitch - 2026-09" },
+    "title": { "type": "text", "value": "11 of 16 layout rounds were reorders" },
     "chart": {
       "type": "chart",
       "kind": "bar",
-      "unit": " 輪",
+      "unit": " rounds",
       "toggle": true,
       "series": [
-        { "label": "內容順序調整", "value": 11 },
-        { "label": "字太小、圖放錯", "value": 3 },
-        { "label": "配色與字型", "value": 2 }
+        { "label": "Content reorder", "value": 11 },
+        { "label": "Type size, figures", "value": 3 },
+        { "label": "Colour and fonts", "value": 2 }
       ]
     },
-    "aside": { "type": "metric", "value": "69%", "label": "版面修改其實是順序問題", "delta": "11 / 16 輪" },
-    "caption": { "type": "text", "value": "上季六份簡報、二十四輪修改的逐輪紀錄。" },
+    "aside": { "type": "metric", "value": "69%", "label": "of layout fixes were order problems", "delta": "11 / 16 rounds" },
+    "caption": { "type": "text", "value": "Last quarter: six decks, 24 revision rounds, logged one by one." },
     "page": { "type": "text", "value": "03 / 08" }
   }
 }

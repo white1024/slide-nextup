@@ -38,6 +38,9 @@ else
   console.log(
     'add --theme <id> to see the layouts a theme brings; --deck <deck.json> also searches the deck folder for themes',
   )
+console.log(
+  'character counts in hints are full-width units: a CJK glyph counts 1, a Latin letter or digit ½',
+)
 console.log('')
 for (const l of layouts) {
   console.log(`${l.id} — ${l.name}`)

@@ -1,7 +1,7 @@
 {
   "id": "chart-aside",
-  "name": "圖表與旁註：藍色專業",
-  "description": "標題下面左邊一張圖表（橫條排名、進度、折線、環形），右邊一張淡藍底卡片放旁註或關鍵數字，底下一行註記。改成純表格會失去比例感。",
+  "name": "Chart with aside: blue professional",
+  "description": "Under the title, a chart on the left (ranked bars, progress, line or donut) and a tinted card on the right for an aside or a key number, with a note underneath. A plain table would lose the sense of proportion.",
   "content_relations": [
     "evidence",
     "comparison",
@@ -19,22 +19,22 @@
     "kicker": {
       "type": "text",
       "required": false,
-      "hint": "左上角的章節標籤，例如「01 — 為什麼做」；敘事逐頁有 chapter 時 scaffold 自動編號，否則留空"
+      "hint": "chapter label top left, e.g. \"01 — Why\"; numbered automatically by the scaffold when the slides in the story carry a chapter, otherwise left empty"
     },
     "meta": {
       "type": "text",
       "required": false,
-      "hint": "右上角的圓角標籤：對象、階段或場合，十字以內，自動填 occasion 的第一句；不需要就留空"
+      "hint": "rounded tag top right: audience, phase or occasion, up to 10 characters, filled automatically from the first clause of occasion; leave empty when not needed"
     },
     "title": {
       "type": "text",
       "required": true,
-      "hint": "一句話的頁面主張，兩行以內、二十六字以內；可用 *關鍵詞* 強調（藍色）"
+      "hint": "the slide's claim in one sentence, up to 2 lines and 26 characters; *keyword* marks an emphasis (blue)"
     },
     "chart": {
       "type": "chart",
       "required": true,
-      "hint": "圖表：bar 或 progress 最像原版的橫條排名，也可 line、donut"
+      "hint": "chart: bar or progress is closest to the original's ranked bars; line and donut also work"
     },
     "aside": {
       "type": [
@@ -43,17 +43,17 @@
         "chart"
       ],
       "required": false,
-      "hint": "旁註：一個關鍵數字或一段話"
+      "hint": "aside: one key number or a short paragraph"
     },
     "caption": {
       "type": "text",
       "required": false,
-      "hint": "一行註記或提醒"
+      "hint": "a one-line note or reminder"
     },
     "page": {
       "type": "text",
       "required": false,
-      "hint": "頁碼，自動填「01 / 08」"
+      "hint": "page number, filled automatically (\"01 / 08\")"
     }
   },
   "elements": [
@@ -93,11 +93,11 @@
   "sample": {
     "kicker": {
       "type": "text",
-      "value": "02 — 營運現況"
+      "value": "02 — Where we stand"
     },
     "meta": {
       "type": "text",
-      "value": "季度回顧"
+      "value": "Quarterly review"
     },
     "page": {
       "type": "text",
@@ -105,30 +105,30 @@
     },
     "title": {
       "type": "text",
-      "value": "使用者最在意的是等待，不是功能"
+      "value": "What users mind most is waiting, not features"
     },
     "chart": {
       "type": "chart",
       "kind": "bar",
       "series": [
         {
-          "label": "頁面載入慢",
+          "label": "Slow page loads",
           "value": 79
         },
         {
-          "label": "表單沒有回饋",
+          "label": "Silent forms",
           "value": 69
         },
         {
-          "label": "搜尋找不到",
+          "label": "Search misses",
           "value": 39
         },
         {
-          "label": "行動版排版跑掉",
+          "label": "Mobile layout bugs",
           "value": 37
         },
         {
-          "label": "通知太多",
+          "label": "Too many alerts",
           "value": 25
         }
       ],
@@ -138,12 +138,12 @@
     "aside": {
       "type": "metric",
       "value": "79%",
-      "label": "把「等待」排在第一",
-      "delta": "每五位受訪者就有四位提到載入時間"
+      "label": "Put waiting first",
+      "delta": "Four in five respondents mention load time"
     },
     "caption": {
       "type": "text",
-      "value": "抽樣兩百位使用者，複選；播放時點圖例可以拿掉一項再比。"
+      "value": "Two hundred users sampled, multiple answers; in playback, click the legend to drop an item and compare again."
     }
   }
 }

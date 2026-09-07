@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "qa-broken",
-  "title": "故意違反品質規則的 deck",
+  "title": "A deck that deliberately breaks the quality rules",
   "theme": "ink-paper",
   "canvas": {
     "width": 1920,
@@ -14,7 +14,7 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "這個標題被移到畫布外面"
+          "value": "This title is moved off the canvas"
         }
       },
       "elements": [
@@ -42,11 +42,11 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "內文被拉到標題上面"
+          "value": "The body is pulled over the title"
         },
         "body": {
           "type": "text",
-          "value": "這段內文的位置覆寫和標題重疊。"
+          "value": "The position override on this body overlaps the title."
         }
       },
       "elements": [
@@ -70,11 +70,11 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "字太小"
+          "value": "Type too small"
         },
         "body": {
           "type": "text",
-          "value": "這段內文被改成 28px。"
+          "value": "This body was set to 28px."
         }
       },
       "elements": [
@@ -98,21 +98,21 @@
       "slots": {
         "title": {
           "type": "text",
-          "value": "塞太多字的頁面"
+          "value": "A slide with far too much text"
         },
         "body": {
           "type": "text",
-          "value": "這一頁的說明文字刻意寫得很長很長，長到超過版型宣告的密度上限，用來確認密度檢查會把它抓出來。這一頁的說明文字刻意寫得很長很長，長到超過版型宣告的密度上限。"
+          "value": "The explanatory text on this slide is deliberately written far too long, long enough to exceed the density limit the layout declares, so that the density check is certain to catch it. The explanatory text on this slide is deliberately written far too long, long enough to exceed the density limit the layout declares."
         },
         "evidence": {
           "type": "list",
           "items": [
-            "第一條證據也寫得很長，為了讓總字數超過兩百六十字的上限而不斷延伸句子，直到看起來像一段而不是一條",
-            "第二條證據同樣冗長，重複描述同一件事情好幾次以便累積字數到超過上限，再多加幾個沒有意義的修飾語",
-            "第三條證據再補一些字，確保這一頁的總字數確實超過版型允許的密度，順便把行數撐到元件框裝不下",
-            "第四條證據繼續堆疊，讓文字溢出元件框並同時觸發密度規則，這是刻意為之的壞範例",
-            "第五條證據只是為了行數，內容並不重要，重要的是它讓清單高度超過兩百八十像素",
-            "第六條證據是最後一擊，總字數與高度在這裡都確定超標"
+            "The first piece of evidence is also written at great length, stretching the sentence on and on so that the total character count climbs past the limit of two hundred and sixty units, until it reads like a paragraph rather than a bullet",
+            "The second piece of evidence is just as long-winded, describing the same thing several times over to pile up characters beyond the limit, and then adding a few more meaningless qualifiers for good measure",
+            "The third piece of evidence adds a few more words to make sure the slide's total character count really does exceed the density the layout allows, and pushes the line count past what the element box can hold",
+            "The fourth piece of evidence keeps stacking up, so that the text overflows the element box and trips the density rule at the same time; this is a deliberately bad example",
+            "The fifth piece of evidence exists only for the line count; the content does not matter, what matters is that it pushes the list higher than two hundred and eighty pixels",
+            "The sixth piece of evidence is the final blow: both the character count and the height are certainly over the limit here"
           ]
         }
       },
