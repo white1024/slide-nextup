@@ -1,0 +1,152 @@
+{
+  "id": "diagram-notes",
+  "name": "Guided view: Technical Brief",
+  "description": "The same system diagram on the left with one path lit, and a note column on the right: a teal bar down the lede, then what this view is for in teal dash points. Three separate slides of prose would lose that all three views are the same diagram read three ways.",
+  "content_relations": [
+    "evidence",
+    "list",
+    "statement"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 420,
+    "max_elements": 12
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "photo": {
+      "type": "image",
+      "required": true,
+      "hint": "the diagram with this view lit and the rest dimmed, 1000 by 600 px or the same ratio recommended"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "what this view is for, up to 3 lines and 20 characters per line"
+    },
+    "evidence": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "2 to 3 points about this view, up to 2 lines each"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "a one-line note: what this view deliberately does not answer"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "photo",
+      "kind": "image"
+    },
+    {
+      "id": "ledebar",
+      "kind": "shape"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "evidence",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "View one: the browser path, the primary source"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "It measures the route a real visitor takes, and it is the one quoted outside."
+    },
+    "photo": {
+      "type": "image",
+      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%275%27 height=%273%27%3E%3Crect width=%275%27 height=%273%27 fill=%27%231b2726%27/%3E%3C/svg%3E",
+      "alt": "System map with the browser path lit"
+    },
+    "evidence": {
+      "type": "list",
+      "items": [
+        "A real browser: parsing, layout and scripts all count",
+        "The browser restarts for every page, so no cache leaks into the next cell",
+        "engine.py is the seam for other browsers; a swap touches only this layer"
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "Telemetry is sampled in the background, not measured, so it is dimmed here."
+    }
+  }
+}

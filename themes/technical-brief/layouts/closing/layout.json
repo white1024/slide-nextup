@@ -1,0 +1,119 @@
+{
+  "id": "closing",
+  "name": "Closing: Technical Brief",
+  "description": "A short teal bar, the closing claim, one line of scope, then where to go next as a dash list and the single next step as a teal button. A thank-you slide would waste the last thing the audience looks at.",
+  "content_relations": [
+    "closing",
+    "statement"
+  ],
+  "scene_roles": [
+    "close"
+  ],
+  "density": {
+    "max_chars": 420,
+    "max_elements": 9
+  },
+  "slots": {
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the closing claim, up to 2 lines and 20 characters per line"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "one line of scope: what this deck did and did not cover"
+    },
+    "evidence": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": false,
+      "hint": "where to go next, 2 to 3 items, up to 2 lines each"
+    },
+    "cta": {
+      "type": "text",
+      "required": true,
+      "hint": "the single next step, up to 14 characters"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "bar",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "evidence",
+      "kind": "text"
+    },
+    {
+      "id": "cta",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "title": {
+      "type": "text",
+      "value": "Three places to go deeper"
+    },
+    "body": {
+      "type": "text",
+      "value": "This deck covered the tool and its architecture; figures, progress, milestones and dates were out of scope."
+    },
+    "evidence": {
+      "type": "list",
+      "items": [
+        "The full map and the check boundaries: the interactive system map, with its three guided views",
+        "Commands and file formats: the README and AGENTS.md of the tool",
+        "Method and boundaries: specs/ holds the matrix and the scoring rules; memory/ keeps one fact per file"
+      ]
+    },
+    "cta": {
+      "type": "text",
+      "value": "For numbers, ask for a run"
+    },
+    "meta": {
+      "type": "text",
+      "value": "Architecture only"
+    },
+    "page": {
+      "type": "text",
+      "value": "16 / 16"
+    }
+  }
+}

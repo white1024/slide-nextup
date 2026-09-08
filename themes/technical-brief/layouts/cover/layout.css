@@ -1,0 +1,200 @@
+/* technical-brief/cover — geometry only, read off a 1280x720 source deck rendered at 1920x1080. */
+
+[data-layout="cover"] [data-el="dot"] {
+  left: 144px;
+  top: 286px;
+  width: 14px;
+  height: 14px;
+}
+
+[data-layout="cover"] [data-el="kicker"] {
+  left: 172px;
+  top: 278px;
+  width: 900px;
+  height: 32px;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+[data-layout="cover"] [data-el="title"] {
+  left: 144px;
+  top: 336px;
+  width: 1632px;
+  height: 116px;
+  font-size: 84px;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+[data-layout="cover"] [data-el="subtitle"] {
+  left: 144px;
+  top: 462px;
+  width: 1500px;
+  height: 60px;
+  font-size: 34px;
+  line-height: 1.5;
+}
+
+[data-layout="cover"] [data-el="rule"] {
+  left: 144px;
+  top: 566px;
+  width: 1632px;
+  height: 2px;
+}
+
+[data-layout="cover"] [data-el="grid-label-1"] {
+  left: 144px;
+  top: 596px;
+  width: 300px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+[data-layout="cover"] [data-el="grid-value-1"] {
+  left: 144px;
+  top: 628px;
+  width: 300px;
+  height: 34px;
+  font-size: 22px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="sep-1"] {
+  left: 477px;
+  top: 592px;
+  width: 2px;
+  height: 70px;
+}
+
+[data-layout="cover"] [data-el="grid-label-2"] {
+  left: 503px;
+  top: 596px;
+  width: 300px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+[data-layout="cover"] [data-el="grid-value-2"] {
+  left: 503px;
+  top: 628px;
+  width: 300px;
+  height: 34px;
+  font-size: 22px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="sep-2"] {
+  left: 810px;
+  top: 592px;
+  width: 2px;
+  height: 70px;
+}
+
+[data-layout="cover"] [data-el="grid-label-3"] {
+  left: 836px;
+  top: 596px;
+  width: 300px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+[data-layout="cover"] [data-el="grid-value-3"] {
+  left: 836px;
+  top: 628px;
+  width: 300px;
+  height: 34px;
+  font-size: 22px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="sep-3"] {
+  left: 1143px;
+  top: 592px;
+  width: 2px;
+  height: 70px;
+}
+
+[data-layout="cover"] [data-el="grid-label-4"] {
+  left: 1169px;
+  top: 596px;
+  width: 300px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+[data-layout="cover"] [data-el="grid-value-4"] {
+  left: 1169px;
+  top: 628px;
+  width: 300px;
+  height: 34px;
+  font-size: 22px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="sep-4"] {
+  left: 1476px;
+  top: 592px;
+  width: 2px;
+  height: 70px;
+}
+
+[data-layout="cover"] [data-el="grid-label-5"] {
+  left: 1502px;
+  top: 596px;
+  width: 300px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+[data-layout="cover"] [data-el="grid-value-5"] {
+  left: 1502px;
+  top: 628px;
+  width: 300px;
+  height: 34px;
+  font-size: 22px;
+  line-height: 34px;
+}
+
+[data-layout="cover"] [data-el="caveat"] {
+  left: 144px;
+  top: 700px;
+  width: 1632px;
+  height: 168px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 24px 30px;
+}
+
+[data-layout="cover"] [data-el="meta"] {
+  left: 144px;
+  top: 1020px;
+  width: 1200px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="cover"] [data-el="progress"] {
+  left: 0px;
+  top: 0px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="cover"] [data-el="page"] {
+  left: 1512px;
+  top: 1020px;
+  width: 300px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="cover"] [data-el="footrule"] { display: none; }
+

@@ -1,0 +1,129 @@
+/* technical-brief/flow-3 — geometry only, read off a 1280x720 source deck rendered at 1920x1080. */
+
+[data-layout="flow-3"] [data-el="kicker"] {
+  left: 108px;
+  top: 84px;
+  width: 168px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+[data-layout="flow-3"] [data-el="headrule"] {
+  left: 292px;
+  top: 98px;
+  width: 1520px;
+  height: 2px;
+}
+
+[data-layout="flow-3"] [data-el="title"] {
+  left: 108px;
+  top: 128px;
+  width: 1704px;
+  height: 68px;
+  font-size: 50px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="flow-3"] [data-el="subtitle"] {
+  left: 108px;
+  top: 212px;
+  width: 1400px;
+  height: 104px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="flow-3"] [data-el="node-1"] {
+  left: 108px;
+  top: 348px;
+  width: 530px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 28px 30px;
+}
+
+[data-layout="flow-3"] [data-el="arrow-1"] {
+  left: 646px;
+  top: 516px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="flow-3"] [data-el="node-2"] {
+  left: 694px;
+  top: 348px;
+  width: 530px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 28px 30px;
+}
+
+[data-layout="flow-3"] [data-el="arrow-2"] {
+  left: 1232px;
+  top: 516px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="flow-3"] [data-el="node-3"] {
+  left: 1280px;
+  top: 348px;
+  width: 530px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 28px 30px;
+}
+
+[data-layout="flow-3"] [data-el="caveat"] {
+  left: 108px;
+  top: 732px;
+  width: 1704px;
+  height: 166px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 22px 28px;
+}
+
+[data-layout="flow-3"] [data-el="footrule"] {
+  left: 108px;
+  top: 1006px;
+  width: 1704px;
+  height: 2px;
+}
+
+[data-layout="flow-3"] [data-el="meta"] {
+  left: 108px;
+  top: 1020px;
+  width: 1200px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="flow-3"] [data-el="progress"] {
+  left: 0px;
+  top: 0px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="flow-3"] [data-el="page"] {
+  left: 1512px;
+  top: 1020px;
+  width: 300px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="flow-3"] [data-role="node"] .metric { justify-content: flex-start; }
+[data-layout="flow-3"] [data-role="node"] .metric-value { font-size: 28px; line-height: 1.1; }
+[data-layout="flow-3"] [data-role="node"] .metric-label { font-size: 32px; line-height: 1.35; margin-top: 12px; }
+[data-layout="flow-3"] [data-role="node"] .metric-delta { font-size: 28px; line-height: 1.6; margin-top: 14px; }
+

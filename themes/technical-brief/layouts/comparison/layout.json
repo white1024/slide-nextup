@@ -1,0 +1,186 @@
+{
+  "id": "comparison",
+  "name": "Two columns: Technical Brief",
+  "description": "Two panels of equal weight, each a title over a dash list, with room for a caveat below. Deliberately symmetrical: built for two boundaries of equal standing, where making one side heavier would be a claim about which one is right.",
+  "content_relations": [
+    "comparison"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 420,
+    "max_elements": 15
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "a lede that says why this slide matters, up to 2 lines and 40 characters per line"
+    },
+    "left-title": {
+      "type": "text",
+      "required": true,
+      "hint": "left column title, up to 14 characters"
+    },
+    "left-items": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "left column, 2 to 3 items, up to 2 lines each"
+    },
+    "right-title": {
+      "type": "text",
+      "required": true,
+      "hint": "right column title, up to 14 characters"
+    },
+    "right-items": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "right column, 2 to 3 items, up to 2 lines each"
+    },
+    "caveat": {
+      "type": "text",
+      "required": false,
+      "hint": "a caveat or a limit, up to 2 lines; amber is reserved for this"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "left",
+      "kind": "shape"
+    },
+    {
+      "id": "left-title",
+      "kind": "text"
+    },
+    {
+      "id": "left-items",
+      "kind": "text"
+    },
+    {
+      "id": "right",
+      "kind": "shape"
+    },
+    {
+      "id": "right-title",
+      "kind": "text"
+    },
+    {
+      "id": "right-items",
+      "kind": "text"
+    },
+    {
+      "id": "caveat",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "Why the browser path reports two phases"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "Averaging two usage patterns into one number gets both of them wrong."
+    },
+    "left-title": {
+      "type": "text",
+      "value": "First visit"
+    },
+    "left-items": {
+      "type": "list",
+      "items": [
+        "The whole page is fetched for the first time",
+        "A new session, a cold cache, every asset over the wire",
+        "A one-off cost"
+      ]
+    },
+    "right-title": {
+      "type": "text",
+      "value": "Return visit"
+    },
+    "right-items": {
+      "type": "list",
+      "items": [
+        "The same page with the cache already warm",
+        "Where a visitor spends most of a session",
+        "The report lists it as its own table"
+      ]
+    },
+    "caveat": {
+      "type": "text",
+      "value": "⚠️ Depth 0 has no earlier page to load, so it only has the return phase; the crawler path has one phase by construction."
+    }
+  }
+}

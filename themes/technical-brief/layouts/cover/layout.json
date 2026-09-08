@@ -1,0 +1,257 @@
+{
+  "id": "cover",
+  "name": "Cover: Technical Brief",
+  "description": "A filled teal dot and a monospace eyebrow, the title big and tight with its subtitle under it, then a hairline over a five-column meta grid divided by vertical rules, and an amber callout for what the deck does not cover. A plain title card would lose the meta grid, which is where a technical deck states the machine it is talking about.",
+  "content_relations": [
+    "statement"
+  ],
+  "scene_roles": [
+    "hero"
+  ],
+  "density": {
+    "max_chars": 420,
+    "max_elements": 23
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the project in monospace capitals, up to 14 characters; filled automatically from the occasion"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "deck title, one line of up to 16 characters, two at most"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": true,
+      "hint": "what the deck is, one line of up to 26 characters"
+    },
+    "grid-label-1": {
+      "type": "text",
+      "required": true,
+      "hint": "meta column heading, up to 5 characters (the platform, the engine, the contract)"
+    },
+    "grid-value-1": {
+      "type": "text",
+      "required": true,
+      "hint": "the value in monospace, up to 11 characters"
+    },
+    "grid-label-2": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "grid-value-2": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "grid-label-3": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "grid-value-3": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "grid-label-4": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "grid-value-4": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "grid-label-5": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "grid-value-5": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "caveat": {
+      "type": "text",
+      "required": false,
+      "hint": "the framing caveat: what this deck does not cover, up to 2 lines; amber is reserved for this"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "dot",
+      "kind": "shape"
+    },
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "rule",
+      "kind": "shape"
+    },
+    {
+      "id": "grid-label-1",
+      "kind": "text"
+    },
+    {
+      "id": "grid-value-1",
+      "kind": "text"
+    },
+    {
+      "id": "sep-1",
+      "kind": "shape"
+    },
+    {
+      "id": "grid-label-2",
+      "kind": "text"
+    },
+    {
+      "id": "grid-value-2",
+      "kind": "text"
+    },
+    {
+      "id": "sep-2",
+      "kind": "shape"
+    },
+    {
+      "id": "grid-label-3",
+      "kind": "text"
+    },
+    {
+      "id": "grid-value-3",
+      "kind": "text"
+    },
+    {
+      "id": "sep-3",
+      "kind": "shape"
+    },
+    {
+      "id": "grid-label-4",
+      "kind": "text"
+    },
+    {
+      "id": "grid-value-4",
+      "kind": "text"
+    },
+    {
+      "id": "sep-4",
+      "kind": "shape"
+    },
+    {
+      "id": "grid-label-5",
+      "kind": "text"
+    },
+    {
+      "id": "grid-value-5",
+      "kind": "text"
+    },
+    {
+      "id": "caveat",
+      "kind": "text"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "TIDEWATCH · HEALTH CHECK"
+    },
+    "meta": {
+      "type": "text",
+      "value": "Architecture only"
+    },
+    "page": {
+      "type": "text",
+      "value": "2026-09"
+    },
+    "title": {
+      "type": "text",
+      "value": "Tidewatch health-check tool"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "How the tool is put together"
+    },
+    "grid-label-1": {
+      "type": "text",
+      "value": "Platform"
+    },
+    "grid-value-1": {
+      "type": "text",
+      "value": "Windows, macOS, Linux"
+    },
+    "grid-label-2": {
+      "type": "text",
+      "value": "Engine"
+    },
+    "grid-value-2": {
+      "type": "text",
+      "value": "Chromium 128 headless"
+    },
+    "grid-label-3": {
+      "type": "text",
+      "value": "Contract"
+    },
+    "grid-value-3": {
+      "type": "text",
+      "value": "Result Schema v1.0.0"
+    },
+    "grid-label-4": {
+      "type": "text",
+      "value": "Bundle"
+    },
+    "grid-value-4": {
+      "type": "text",
+      "value": "tidewatch-0.1.0.zip"
+    },
+    "grid-label-5": {
+      "type": "text",
+      "value": "Check"
+    },
+    "grid-value-5": {
+      "type": "text",
+      "value": "six fixed steps"
+    },
+    "caveat": {
+      "type": "text",
+      "value": "This deck covers the tool and its architecture only: no figures from past checks, no progress, milestones or dates. The engine and the browser build are still moving, so every run records the machine state itself."
+    }
+  }
+}

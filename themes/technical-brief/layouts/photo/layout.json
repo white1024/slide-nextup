@@ -1,0 +1,125 @@
+{
+  "id": "photo",
+  "name": "Diagram: Technical Brief",
+  "description": "A full-width hairline frame holding a system diagram, with a legend line below. A diagram shrunk beside text would lose the detail that makes it worth showing at all.",
+  "content_relations": [
+    "evidence",
+    "statement"
+  ],
+  "scene_roles": [
+    "map",
+    "evidence",
+    "hero"
+  ],
+  "density": {
+    "max_chars": 200,
+    "max_elements": 9
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "photo": {
+      "type": "image",
+      "required": true,
+      "hint": "the diagram, 1420 by 690 px or the same 2.06:1 ratio; may carry hotspots (click-to-jump areas during playback, positioned in percent)"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "what the diagram says in one line, or how to read it"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "photo",
+      "kind": "image"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "The system at a glance"
+    },
+    "photo": {
+      "type": "image",
+      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%275%27%3E%3Crect width=%2716%27 height=%275%27 fill=%27%231b2726%27/%3E%3C/svg%3E",
+      "alt": "System map",
+      "hotspots": [
+        {
+          "target": "cards-list",
+          "x": 56,
+          "y": 30,
+          "w": 16,
+          "h": 40,
+          "label": "Report directory: see the three principles"
+        }
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "teal interface · emerald core · violet storage · slate external tools · amber dashes mark a check boundary"
+    }
+  }
+}

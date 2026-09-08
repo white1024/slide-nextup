@@ -1,0 +1,147 @@
+{
+  "id": "data-table",
+  "name": "Table: Technical Brief",
+  "description": "A table with a small uppercase header over hairline rows and tabular numbers, with a note below. A list of cards would lose the alignment that lets a reader compare down a column.",
+  "content_relations": [
+    "comparison",
+    "evidence",
+    "list"
+  ],
+  "scene_roles": [
+    "evidence"
+  ],
+  "density": {
+    "max_chars": 520,
+    "max_elements": 10
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "a lede that says why this slide matters, up to 2 lines and 40 characters per line"
+    },
+    "table": {
+      "type": "table",
+      "required": true,
+      "hint": "table: one header row, 3 to 6 rows of data, one line per cell"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "a one-line note"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "table",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "Two output phases, two usage patterns"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "Two tables cost nothing; one averaged number is what costs."
+    },
+    "table": {
+      "type": "table",
+      "header": [
+        "Phase",
+        "What it measures",
+        "The visitor it stands for"
+      ],
+      "rows": [
+        [
+          "First visit",
+          "The whole page fetched cold",
+          "A new session, a new document"
+        ],
+        [
+          "Return visit",
+          "The same page with a warm cache",
+          "Repeat visits within a session"
+        ],
+        [
+          "Crawler",
+          "One phase by construction",
+          "Not quoted outside; cross-check only"
+        ]
+      ]
+    },
+    "caption": {
+      "type": "text",
+      "value": "Depth 0 has no earlier page to load, so it only has the return phase."
+    }
+  }
+}

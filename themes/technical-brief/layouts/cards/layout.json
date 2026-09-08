@@ -1,0 +1,164 @@
+{
+  "id": "cards",
+  "name": "Three cards: Technical Brief",
+  "description": "Three panels, each a monospace teal label over a title and one explanation. Use `cards-list` when each card carries several points instead.",
+  "content_relations": [
+    "list",
+    "hierarchy",
+    "evidence"
+  ],
+  "scene_roles": [
+    "map",
+    "evidence",
+    "relationship"
+  ],
+  "density": {
+    "max_chars": 420,
+    "max_elements": 11
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "a lede that says why this slide matters, up to 2 lines and 40 characters per line"
+    },
+    "card-1": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "card: a metric whose value is the short monospace label (up to 6 characters), label the card title (up to 12 characters) and delta the explanation; or a short paragraph; may carry details (the full text that expands when the card is clicked during playback)"
+    },
+    "card-2": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": true,
+      "hint": "same as above"
+    },
+    "card-3": {
+      "type": [
+        "text",
+        "metric"
+      ],
+      "required": false,
+      "hint": "same as above"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "card-1",
+      "kind": "text"
+    },
+    {
+      "id": "card-2",
+      "kind": "text"
+    },
+    {
+      "id": "card-3",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "Three deliberate design principles"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "If only three sentences survive the meeting, make it paths, contract and scoring."
+    },
+    "card-1": {
+      "type": "metric",
+      "value": "PATHS",
+      "label": "Never merged",
+      "delta": "The browser path includes loading and rendering and is the primary source; the crawler path only cross-checks.",
+      "details": {
+        "type": "list",
+        "items": [
+          "Browser path: the primary external data source",
+          "Crawler path: an independent cross-check",
+          "Loading time is never compared across the two"
+        ]
+      }
+    },
+    "card-2": {
+      "type": "metric",
+      "value": "CONTRACT",
+      "label": "One report directory",
+      "delta": "Both runners share create_run, RunState and cooldown; per-page state is written atomically, so any run resumes."
+    },
+    "card-3": {
+      "type": "metric",
+      "value": "SCORING",
+      "label": "A second pass",
+      "delta": "Rescoring is free and rechecking takes a night; an incomplete page stays an empty cell with its reason."
+    }
+  }
+}

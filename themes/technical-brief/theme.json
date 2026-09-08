@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "engine": ">=0.1.0",
+  "id": "technical-brief",
+  "name": "Technical Brief",
+  "description": "A dark technical brief: a near-black green-grey room, panels one step up from the ground with a single hairline border and no shadow, a monospace uppercase eyebrow in bright teal trailed by a thin rule, dash-marked lists under a coloured pip label, monospace tabular numbers, and a teal hairline progress bar along the top edge. Teal is the working accent; emerald and amber mark the second and third card of a triple, and amber alone means a caveat. Ported from the author's own hand-written 1280x720 architecture deck, geometry x1.5; every face is a system font, because a projector is not guaranteed to have a network and a failed web font falls back silently.",
+  "colors": {
+    "paper": {
+      "value": "#0c1312",
+      "use": "page background: the source deck dark mode ground, a near-black green-grey"
+    },
+    "surface": {
+      "value": "#141d1c",
+      "use": "panel and card background: one step up from the ground, a 1px hairline border and no shadow"
+    },
+    "surface2": {
+      "value": "#1b2726",
+      "use": "sunken panels, chips, inline code"
+    },
+    "line": {
+      "value": "#2c3a38",
+      "use": "the visible hairline: the eyebrow rule, the footer rule, table header rules, meta separators"
+    },
+    "linesoft": {
+      "value": "#243130",
+      "use": "the quieter hairline: card borders, table row rules, chip borders"
+    },
+    "ink": {
+      "value": "#e2ebe9",
+      "use": "headings, card titles and emphasis"
+    },
+    "ink2": {
+      "value": "#b6c4c1",
+      "use": "body text and list items"
+    },
+    "muted": {
+      "value": "#93a19f",
+      "use": "ledes, captions and secondary explanation"
+    },
+    "faint": {
+      "value": "#6c7a78",
+      "use": "footer rail, page numbers, card labels, list dashes and small print"
+    },
+    "accent": {
+      "value": "#3fcdbd",
+      "use": "the working accent: eyebrows, numbers, the progress bar, keywords, the first card pip"
+    },
+    "accentsoft": {
+      "value": "#0f2b29",
+      "use": "the accent tint: highlighted panels, the interface layer of a diagram"
+    },
+    "accent2": {
+      "value": "#4fbf95",
+      "use": "emerald: the core-logic layer of a diagram, accent chips, the second card pip"
+    },
+    "accent2soft": {
+      "value": "#0f2921",
+      "use": "emerald tint: accent chip ground, core-logic nodes"
+    },
+    "violet": {
+      "value": "#a693f0",
+      "use": "violet: the persistence layer of a diagram and the dashed derivation path"
+    },
+    "violetsoft": {
+      "value": "#1d1a33",
+      "use": "violet tint: persistence nodes"
+    },
+    "slate": {
+      "value": "#8b9997",
+      "use": "slate: external tools in a diagram, the layer that is not ours"
+    },
+    "slatesoft": {
+      "value": "#1c2524",
+      "use": "slate tint: external-tool nodes"
+    },
+    "alert": {
+      "value": "#d9a441",
+      "use": "amber, reserved for caveats and limits: the left bar of a callout, the third card pip, measurement-boundary frames"
+    },
+    "alertsoft": {
+      "value": "#2b2214",
+      "use": "amber tint: the ground of a caveat callout"
+    }
+  },
+  "typography": {
+    "display": {
+      "family": "\"Segoe UI Variable Display\", \"Segoe UI\", \"Microsoft JhengHei UI\", \"Microsoft JhengHei\", \"PingFang TC\", \"Noto Sans TC\", system-ui, sans-serif",
+      "weight": 680
+    },
+    "body": {
+      "family": "\"Segoe UI Variable Text\", \"Segoe UI\", \"Microsoft JhengHei UI\", \"Microsoft JhengHei\", \"PingFang TC\", \"Noto Sans TC\", system-ui, sans-serif",
+      "weight": 400
+    }
+  },
+  "spacing": {
+    "radius": 8
+  },
+  "decoration": {
+    "vocabulary": [
+      "a monospace uppercase eyebrow in teal, trailed by a hairline that runs to the right margin",
+      "panels one step up from the ground: a single 1px hairline border, an 8px radius, no shadow and no gradient",
+      "a card label as a small coloured pip followed by faint monospace capitals — teal, emerald then amber across a triple",
+      "list items marked by a short horizontal dash, not a bullet",
+      "monospace tabular numbers in teal, sized by the layout",
+      "monospace chips on a sunken ground with a hairline border and a 4px radius",
+      "caveats as a callout: an amber left bar 3px wide on an amber tint, square on the left and rounded on the right",
+      "a cover meta grid: five columns divided by vertical hairlines, a faint small-caps label over a monospace value",
+      "a footer rail: a hairline above monospace small print, the page source on the left and the page number on the right",
+      "a 3px teal progress bar along the very top edge, filled to the current page",
+      "diagram layers coded by colour: teal for interfaces, emerald for core logic, violet for persistence, slate for external tools, amber dashes for a measurement boundary"
+    ],
+    "avoid": [
+      "shadows, glass and gradients on panels: this pack is flat and hairline-bordered",
+      "rounded pill cards and radii above 8px, except the progress bar and chips",
+      "serif faces and any web font: every face is a system font",
+      "colour used decoratively: teal is the accent, violet and slate label diagram layers, amber only ever means a caveat",
+      "filling a gap with a plausible-looking value: an empty slot stays empty"
+    ]
+  },
+  "motion": {
+    "transition": "fade",
+    "default": "fade-up",
+    "byRole": {
+      "card": "fade-up",
+      "stat": "fade-up",
+      "list": "fade-up",
+      "alert": "fade",
+      "list-alert": "fade",
+      "photo": "fade",
+      "connector": "fade",
+      "table": "wipe",
+      "chart": "wipe",
+      "node": "fade-up",
+      "pill": "fade-up",
+      "flow": "fade-up",
+      "flow-accent": "fade-up"
+    },
+    "stagger": 60,
+    "duration": 300
+  }
+}

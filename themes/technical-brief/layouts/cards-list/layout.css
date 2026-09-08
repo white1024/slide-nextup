@@ -1,0 +1,177 @@
+/* technical-brief/cards-list — geometry only, read off a 1280x720 source deck rendered at 1920x1080. */
+
+[data-layout="cards-list"] [data-el="kicker"] {
+  left: 108px;
+  top: 84px;
+  width: 168px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+[data-layout="cards-list"] [data-el="headrule"] {
+  left: 292px;
+  top: 98px;
+  width: 1520px;
+  height: 2px;
+}
+
+[data-layout="cards-list"] [data-el="title"] {
+  left: 108px;
+  top: 128px;
+  width: 1704px;
+  height: 68px;
+  font-size: 50px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="cards-list"] [data-el="subtitle"] {
+  left: 108px;
+  top: 212px;
+  width: 1400px;
+  height: 104px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cards-list"] [data-el="card-1"] {
+  left: 108px;
+  top: 348px;
+  width: 552px;
+  height: 584px;
+}
+
+[data-layout="cards-list"] [data-el="card-1-label"] {
+  left: 140px;
+  top: 378px;
+  width: 488px;
+  height: 30px;
+  font-size: 22px;
+  line-height: 30px;
+  padding-left: 24px;
+}
+
+[data-layout="cards-list"] [data-el="card-1-title"] {
+  left: 140px;
+  top: 428px;
+  width: 488px;
+  height: 96px;
+  font-size: 34px;
+  line-height: 1.35;
+}
+
+[data-layout="cards-list"] [data-el="card-1-items"] {
+  left: 140px;
+  top: 540px;
+  width: 488px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cards-list"] [data-el="card-2"] {
+  left: 684px;
+  top: 348px;
+  width: 552px;
+  height: 584px;
+}
+
+[data-layout="cards-list"] [data-el="card-2-label"] {
+  left: 716px;
+  top: 378px;
+  width: 488px;
+  height: 30px;
+  font-size: 22px;
+  line-height: 30px;
+  padding-left: 24px;
+}
+
+[data-layout="cards-list"] [data-el="card-2-title"] {
+  left: 716px;
+  top: 428px;
+  width: 488px;
+  height: 96px;
+  font-size: 34px;
+  line-height: 1.35;
+}
+
+[data-layout="cards-list"] [data-el="card-2-items"] {
+  left: 716px;
+  top: 540px;
+  width: 488px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cards-list"] [data-el="card-3"] {
+  left: 1260px;
+  top: 348px;
+  width: 552px;
+  height: 584px;
+}
+
+[data-layout="cards-list"] [data-el="card-3-label"] {
+  left: 1292px;
+  top: 378px;
+  width: 488px;
+  height: 30px;
+  font-size: 22px;
+  line-height: 30px;
+  padding-left: 24px;
+}
+
+[data-layout="cards-list"] [data-el="card-3-title"] {
+  left: 1292px;
+  top: 428px;
+  width: 488px;
+  height: 96px;
+  font-size: 34px;
+  line-height: 1.35;
+}
+
+[data-layout="cards-list"] [data-el="card-3-items"] {
+  left: 1292px;
+  top: 540px;
+  width: 488px;
+  height: 360px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="cards-list"] [data-el="footrule"] {
+  left: 108px;
+  top: 1006px;
+  width: 1704px;
+  height: 2px;
+}
+
+[data-layout="cards-list"] [data-el="meta"] {
+  left: 108px;
+  top: 1020px;
+  width: 1200px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="cards-list"] [data-el="progress"] {
+  left: 0px;
+  top: 0px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="cards-list"] [data-el="page"] {
+  left: 1512px;
+  top: 1020px;
+  width: 300px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: right;
+}
+
+[data-layout="cards-list"] [data-role="list"] li { padding-left: 24px; margin-bottom: 16px; }
+

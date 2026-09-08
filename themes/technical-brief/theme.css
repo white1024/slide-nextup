@@ -1,0 +1,450 @@
+/* technical-brief — colour, type and edges only; every box's position and size belongs to its layout.
+   A dark technical brief ported from the author's own hand-written deck: flat panels with one hairline
+   border and no shadow, a monospace teal eyebrow trailed by a rule, dash-marked lists, amber
+   reserved for caveats. System fonts only — a projector may have no network, and a web font that
+   fails to load falls back silently, changing the layout where nobody can see it. */
+
+.slide {
+  --mono: "Cascadia Code", "Cascadia Mono", Consolas, "SFMono-Regular", "Microsoft JhengHei", monospace;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-tone="inverse"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* ── shapes ──────────────────────────────────────────────────────────────── */
+
+[data-role="backdrop"] {
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+[data-role="divider"] {
+  background: var(--color-line);
+}
+
+[data-role="frame"] {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+[data-role="corner"] {
+  border-top: 2px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
+}
+
+[data-role="corner-end"] {
+  border-right: 2px solid var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+[data-role="glow"] {
+  background: radial-gradient(circle, var(--color-accentsoft) 0%, transparent 70%);
+  opacity: 0.9;
+}
+
+[data-role="scrim"] {
+  background: var(--color-paper);
+  opacity: 0.88;
+}
+
+/* the top-edge progress bar: filled to the current page, geometry-free so the layout owns the box.
+   The renderer writes --page-index / --page-count on every section. */
+[data-role="progress"] {
+  background-image: linear-gradient(
+    to right,
+    var(--color-accent) 0 calc(var(--page-index, 1) / var(--page-count, 8) * 100%),
+    transparent calc(var(--page-index, 1) / var(--page-count, 8) * 100%) 100%
+  );
+}
+
+/* ── page furniture ──────────────────────────────────────────────────────── */
+
+[data-role="meta"] {
+  color: var(--color-faint);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+[data-role="chip"] {
+  background: var(--color-surface2);
+  border: 1px solid var(--color-linesoft);
+  border-radius: 4px;
+  color: var(--color-ink2);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* the signature head: monospace teal capitals with wide tracking, a rule carrying on to the right */
+[data-role="eyebrow"],
+[data-role="chapter"],
+[data-role="kicker"] {
+  color: var(--color-accent);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* a card label: a coloured pip followed by faint monospace capitals (the pack's card label).
+   The pip is a background dot so it stays selectable-free decoration; the layout owns its padding. */
+[data-role="eyebrow-accent"][data-tone="second"] {
+  background-image: radial-gradient(circle, var(--color-accent2) 5px, transparent 5.6px);
+}
+
+[data-role="eyebrow-accent"][data-tone="third"] {
+  background-image: radial-gradient(circle, var(--color-alert) 5px, transparent 5.6px);
+}
+
+[data-role="eyebrow-accent"] {
+  background-image: radial-gradient(circle, var(--color-accent) 5px, transparent 5.6px);
+  background-position: 0 0.46em;
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  color: var(--color-faint);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+
+/* ── type ────────────────────────────────────────────────────────────────── */
+
+[data-role="title"],
+[data-role="heading"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.012em;
+}
+
+[data-role="subtitle"] {
+  color: var(--color-ink2);
+  font-weight: 400;
+}
+
+[data-role="body"] {
+  color: var(--color-muted);
+}
+
+[data-role="caption"] {
+  color: var(--color-faint);
+}
+
+[data-role="label"] {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+[data-role="label-alert"] {
+  color: var(--color-alert);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-role="quote"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.015em;
+}
+
+[data-role="number"] {
+  color: var(--color-accentsoft);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+
+[data-role="list"] em,
+[data-role="body"] em,
+[data-role="caption"] em,
+[data-role="quote"] em {
+  color: var(--color-accent);
+  font-style: normal;
+  font-weight: 600;
+}
+
+[data-tone="inverse"] [data-role="body"],
+[data-tone="inverse"] [data-role="subtitle"],
+[data-tone="inverse"] [data-role="caption"],
+[data-tone="inverse"] [data-role="meta"] {
+  color: var(--color-paper);
+  opacity: 0.82;
+}
+
+/* ── boxes ───────────────────────────────────────────────────────────────── */
+
+[data-role="card"],
+[data-role="node"] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-linesoft);
+  border-radius: var(--radius);
+}
+
+[data-role="sunk"] {
+  background: var(--color-surface2);
+  border: 1px solid var(--color-linesoft);
+  border-radius: var(--radius);
+}
+
+[data-role="tint"] {
+  background: var(--color-accentsoft);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+}
+
+/* caveats: an amber bar on the left, square on that side and rounded on the other */
+[data-role="alert"] {
+  background: var(--color-alertsoft);
+  color: var(--color-ink2);
+  border-left: 3px solid var(--color-alert);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+[data-role="pill"] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-ink);
+  font-family: var(--mono);
+}
+
+[data-role="badge"] {
+  background: var(--color-accent);
+  border-radius: 999px;
+}
+
+[data-role="cta"] {
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  color: var(--color-surface);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-role="photo"] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-linesoft);
+  border-radius: var(--radius);
+}
+
+/* ── lists: a short dash, never a bullet ─────────────────────────────────── */
+
+.list li {
+  background-image: linear-gradient(var(--color-faint), var(--color-faint));
+  background-repeat: no-repeat;
+  background-position: 0 0.72em;
+  background-size: 8px 2px;
+  color: var(--color-ink2);
+}
+
+[data-role="list-alert"] .list li {
+  background-image: linear-gradient(var(--color-alert), var(--color-alert));
+  color: var(--color-ink2);
+}
+
+/* the note column of a guided view: a teal bar down the left of the lede */
+[data-role="lede-accent"] {
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-ink2);
+}
+
+/* pill lists: monospace chips laid out by the layout */
+[data-role="flow"] .list li,
+[data-role="flow-accent"] .list li {
+  background-image: none;
+  border-radius: 4px;
+  font-family: var(--mono);
+}
+
+[data-role="flow"] .list li {
+  background-color: var(--color-surface2);
+  border: 1px solid var(--color-linesoft);
+  color: var(--color-ink2);
+}
+
+[data-role="flow-accent"] .list li {
+  background-color: var(--color-accent2soft);
+  border: 1px solid transparent;
+  color: var(--color-accent2);
+}
+
+/* ── numbers ─────────────────────────────────────────────────────────────── */
+
+.metric-value,
+[data-role="stat"] .metric-value,
+[data-role="card"] .metric-value {
+  color: var(--color-accent);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metric-label,
+[data-role="card"] .metric-label,
+[data-role="stat"] .metric-label {
+  color: var(--color-ink);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.metric-delta,
+[data-role="card"] .metric-delta,
+[data-role="stat"] .metric-delta {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+[data-role="alert"] .metric-value {
+  color: var(--color-alert);
+}
+
+[data-role="alert"] .metric-delta,
+[data-role="alert"] .metric-label {
+  color: var(--color-ink2);
+}
+
+/* ── containers ──────────────────────────────────────────────────────────── */
+
+[data-role="table"] {
+  color: var(--color-ink2);
+}
+
+[data-role="table"] .table th {
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-faint);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+[data-role="table"] .table td {
+  border-bottom: 1px solid var(--color-linesoft);
+  color: var(--color-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+[data-role="table"] .table tr:last-child td {
+  border-bottom: 0;
+}
+
+[data-role="code"] {
+  background: var(--color-surface2);
+  border: 1px solid var(--color-linesoft);
+  border-radius: 4px;
+  color: var(--color-ink2);
+  font-family: var(--mono);
+}
+
+[data-role="icon"] {
+  color: var(--color-accent);
+}
+
+[data-role="chart"] {
+  color: var(--color-ink2);
+}
+
+.chart-track {
+  fill: var(--color-linesoft);
+}
+
+.chart-grid {
+  stroke: var(--color-linesoft);
+}
+
+[data-role="tabs"] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-linesoft);
+  border-radius: var(--radius);
+}
+
+[data-role="tabs"] .tab {
+  color: var(--color-faint);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-role="tabs"] .tab.is-active {
+  border-bottom-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+[data-interactive] [data-role="tabs"] .tab:hover {
+  color: var(--color-ink);
+}
+
+[data-role="tabs"] .table th {
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-faint);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+[data-role="tabs"] .table td {
+  border-bottom: 1px solid var(--color-linesoft);
+  color: var(--color-ink2);
+}
+
+/* ── connectors ──────────────────────────────────────────────────────────── */
+
+[data-role="connector"]:not(svg) {
+  background: var(--color-line);
+}
+
+[data-role="connector"] line {
+  stroke: var(--color-faint);
+  stroke-width: 2;
+}
+
+[data-role="connector"] polygon {
+  fill: var(--color-faint);
+}
+
+/* an empty chapter label must not leave its rule hanging in mid-air */
+[data-slot][data-role="chapter"]:empty,
+[data-slot][data-role="eyebrow"]:empty {
+  border: 0;
+}
+
+/* ── hover, edit and playback affordances ────────────────────────────────── */
+
+[data-interactive] [data-role="card"]:hover {
+  border-color: var(--color-accent);
+}
+
+[data-interactive] [data-role="pill"]:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+[data-interactive] [data-role="cta"]:hover {
+  background: var(--color-accent2);
+  border-color: var(--color-accent2);
+}
+
+[data-interactive] [data-role="photo"]:hover {
+  border-color: var(--color-accent);
+}
+
+[data-interactive] [data-role="table"] tbody tr:hover td {
+  background: var(--color-surface2);
+}

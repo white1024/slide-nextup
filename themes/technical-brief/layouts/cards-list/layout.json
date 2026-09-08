@@ -1,0 +1,252 @@
+{
+  "id": "cards-list",
+  "name": "Three cards with lists: Technical Brief",
+  "description": "The pack's signature card: a coloured pip over a faint monospace label, the card's claim in one bold line, then two or three dash points. Cards holding one paragraph each (`cards`) would lose the parallel reading down the three columns.",
+  "content_relations": [
+    "list",
+    "hierarchy",
+    "comparison"
+  ],
+  "scene_roles": [
+    "evidence",
+    "relationship",
+    "map"
+  ],
+  "density": {
+    "max_chars": 620,
+    "max_elements": 20
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "a lede that says why this slide matters, up to 2 lines and 40 characters per line"
+    },
+    "card-1-label": {
+      "type": "text",
+      "required": false,
+      "hint": "the card's pip label in monospace capitals, up to 4 characters"
+    },
+    "card-1-title": {
+      "type": "text",
+      "required": true,
+      "hint": "the card's claim, up to 2 lines and 14 characters per line"
+    },
+    "card-1-items": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "2 to 3 supporting points, up to 2 lines each"
+    },
+    "card-2-label": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "card-2-title": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "card-2-items": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "same as above"
+    },
+    "card-3-label": {
+      "type": "text",
+      "required": false,
+      "hint": "same as above"
+    },
+    "card-3-title": {
+      "type": "text",
+      "required": true,
+      "hint": "same as above"
+    },
+    "card-3-items": {
+      "type": [
+        "list",
+        "text"
+      ],
+      "required": true,
+      "hint": "same as above"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "card-1",
+      "kind": "shape"
+    },
+    {
+      "id": "card-1-label",
+      "kind": "text"
+    },
+    {
+      "id": "card-1-title",
+      "kind": "text"
+    },
+    {
+      "id": "card-1-items",
+      "kind": "text"
+    },
+    {
+      "id": "card-2",
+      "kind": "shape"
+    },
+    {
+      "id": "card-2-label",
+      "kind": "text"
+    },
+    {
+      "id": "card-2-title",
+      "kind": "text"
+    },
+    {
+      "id": "card-2-items",
+      "kind": "text"
+    },
+    {
+      "id": "card-3",
+      "kind": "shape"
+    },
+    {
+      "id": "card-3-label",
+      "kind": "text"
+    },
+    {
+      "id": "card-3-title",
+      "kind": "text"
+    },
+    {
+      "id": "card-3-items",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "Three deliberate design principles"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "If only three sentences survive the meeting, make it these three."
+    },
+    "card-1-label": {
+      "type": "text",
+      "value": "PATHS"
+    },
+    "card-1-title": {
+      "type": "text",
+      "value": "The two paths are never merged"
+    },
+    "card-1-items": {
+      "type": "list",
+      "items": [
+        "Browser path: loading and rendering included",
+        "Crawler path: no browser, cross-check only",
+        "Response times match, so only those are joined"
+      ]
+    },
+    "card-2-label": {
+      "type": "text",
+      "value": "CONTRACT"
+    },
+    "card-2-title": {
+      "type": "text",
+      "value": "The report directory is a shared contract"
+    },
+    "card-2-items": {
+      "type": "list",
+      "items": [
+        "The runner and the scorer are siblings, not forks",
+        "One create_run, one RunState, one cooldown",
+        "Per-page state is written atomically; any run resumes"
+      ]
+    },
+    "card-3-label": {
+      "type": "text",
+      "value": "SCORING"
+    },
+    "card-3-title": {
+      "type": "text",
+      "value": "Scoring is a separate second pass"
+    },
+    "card-3-items": {
+      "type": "list",
+      "items": [
+        "Aggregate and export read the raw page output",
+        "Rescoring is free; rechecking takes a night",
+        "An incomplete page stays an empty cell, with its reason"
+      ]
+    }
+  }
+}

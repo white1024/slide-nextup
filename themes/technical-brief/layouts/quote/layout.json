@@ -1,0 +1,117 @@
+{
+  "id": "quote",
+  "name": "Principle: Technical Brief",
+  "description": "One principle on a teal tint, large and quiet, with its source below. An ordinary content slide would lose the pause that makes a principle land.",
+  "content_relations": [
+    "statement"
+  ],
+  "scene_roles": [
+    "pause",
+    "close",
+    "hero"
+  ],
+  "density": {
+    "max_chars": 140,
+    "max_elements": 10
+  },
+  "slots": {
+    "kicker": {
+      "type": "text",
+      "required": false,
+      "hint": "the section name alone in monospace capitals, up to 6 characters; filled automatically from the story chapter, empty when there is none"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "the claim of the slide in one sentence, one line of up to 30 characters; *keyword* turns teal"
+    },
+    "quote": {
+      "type": "text",
+      "required": true,
+      "hint": "the principle itself, up to 3 lines and 24 characters per line; *keyword* turns teal"
+    },
+    "caption": {
+      "type": "text",
+      "required": false,
+      "hint": "where the principle comes from"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "kicker",
+      "kind": "text"
+    },
+    {
+      "id": "headrule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "box",
+      "kind": "shape"
+    },
+    {
+      "id": "quote",
+      "kind": "text"
+    },
+    {
+      "id": "caption",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "kicker": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "meta": {
+      "type": "text",
+      "value": "specs/"
+    },
+    "page": {
+      "type": "text",
+      "value": "11 / 16"
+    },
+    "title": {
+      "type": "text",
+      "value": "An empty cell is more honest than a filled one"
+    },
+    "quote": {
+      "type": "text",
+      "value": "A crashed or incomplete page stays an empty cell with its reason, and is *never* filled from a neighbour."
+    },
+    "caption": {
+      "type": "text",
+      "value": "The scoring rule of the health check, written down in specs/"
+    }
+  }
+}

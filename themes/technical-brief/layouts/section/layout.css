@@ -1,0 +1,80 @@
+/* technical-brief/section — geometry only, read off a 1280x720 source deck rendered at 1920x1080. */
+
+[data-layout="section"] [data-el="meta-chip"] {
+  left: 1560px;
+  top: 80px;
+  width: 252px;
+  height: 44px;
+  font-size: 20px;
+  line-height: 42px;
+  text-align: center;
+}
+
+[data-layout="section"] [data-el="number"] {
+  left: 108px;
+  top: 300px;
+  width: 700px;
+  height: 240px;
+  font-size: 200px;
+  line-height: 1;
+}
+
+[data-layout="section"] [data-el="rule"] {
+  left: 108px;
+  top: 572px;
+  width: 120px;
+  height: 6px;
+}
+
+[data-layout="section"] [data-el="title"] {
+  left: 108px;
+  top: 614px;
+  width: 1500px;
+  height: 190px;
+  font-size: 76px;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+[data-layout="section"] [data-el="body"] {
+  left: 108px;
+  top: 820px;
+  width: 1300px;
+  height: 110px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="section"] [data-el="footrule"] {
+  left: 108px;
+  top: 1006px;
+  width: 1704px;
+  height: 2px;
+}
+
+[data-layout="section"] [data-el="meta"] {
+  left: 108px;
+  top: 1020px;
+  width: 1200px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="section"] [data-el="progress"] {
+  left: 0px;
+  top: 0px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="section"] [data-el="page"] {
+  left: 1512px;
+  top: 1020px;
+  width: 300px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: right;
+}
+

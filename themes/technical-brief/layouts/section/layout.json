@@ -1,0 +1,113 @@
+{
+  "id": "section",
+  "name": "Section: Technical Brief",
+  "description": "A chapter break: a huge dim teal numeral, a short teal bar, the chapter title and one line of what it has to establish. A plain title slide would lose the beat that tells the audience a new chapter has started.",
+  "content_relations": [
+    "statement",
+    "list"
+  ],
+  "scene_roles": [
+    "map",
+    "pause"
+  ],
+  "density": {
+    "max_chars": 140,
+    "max_elements": 9
+  },
+  "slots": {
+    "meta-chip": {
+      "type": "text",
+      "required": false,
+      "hint": "tag top right, up to 10 characters"
+    },
+    "number": {
+      "type": "text",
+      "required": true,
+      "hint": "chapter number, two digits"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "chapter title, 1 to 2 lines, up to 14 characters"
+    },
+    "body": {
+      "type": "text",
+      "required": false,
+      "hint": "what this chapter has to make the audience believe, up to 40 characters"
+    },
+    "meta": {
+      "type": "text",
+      "required": false,
+      "hint": "footer small print: where this page's facts come from, up to 10 characters; the scaffold fills it from the occasion, so overwrite it per page"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number, filled automatically (\"01 / 16\")"
+    }
+  },
+  "elements": [
+    {
+      "id": "meta-chip",
+      "kind": "text"
+    },
+    {
+      "id": "number",
+      "kind": "text"
+    },
+    {
+      "id": "rule",
+      "kind": "shape"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "body",
+      "kind": "text"
+    },
+    {
+      "id": "footrule",
+      "kind": "shape"
+    },
+    {
+      "id": "meta",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
+  ],
+  "sample": {
+    "meta-chip": {
+      "type": "text",
+      "value": "DESIGN"
+    },
+    "number": {
+      "type": "text",
+      "value": "03"
+    },
+    "title": {
+      "type": "text",
+      "value": "Architecture"
+    },
+    "body": {
+      "type": "text",
+      "value": "What each check path measures, and why scoring is a separate second pass."
+    },
+    "meta": {
+      "type": "text",
+      "value": "docs/system-map.md"
+    },
+    "page": {
+      "type": "text",
+      "value": "06 / 16"
+    }
+  }
+}

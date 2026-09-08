@@ -90,8 +90,8 @@ describe('theme:check on the shipped themes', () => {
     }
   })
 
-  it('the two complete packs pass clean, core vocabulary included', () => {
-    for (const id of ['warm-keynote', 'blue-professional']) {
+  it('the three complete packs pass clean, core vocabulary included', () => {
+    for (const id of ['warm-keynote', 'blue-professional', 'technical-brief']) {
       const report = runThemeCheck(id, REPO)
       expect(report.coreChecked, id).toBe(true)
       expect(report.packLayouts.length, id).toBeGreaterThanOrEqual(10)

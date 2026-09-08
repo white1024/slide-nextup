@@ -1,0 +1,181 @@
+/* technical-brief/process — geometry only, read off a 1280x720 source deck rendered at 1920x1080. */
+
+[data-layout="process"] [data-el="kicker"] {
+  left: 108px;
+  top: 84px;
+  width: 168px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+[data-layout="process"] [data-el="headrule"] {
+  left: 292px;
+  top: 98px;
+  width: 1520px;
+  height: 2px;
+}
+
+[data-layout="process"] [data-el="title"] {
+  left: 108px;
+  top: 128px;
+  width: 1704px;
+  height: 68px;
+  font-size: 50px;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+[data-layout="process"] [data-el="subtitle"] {
+  left: 108px;
+  top: 212px;
+  width: 1400px;
+  height: 104px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="process"] [data-el="step-1"] {
+  left: 108px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-1"] {
+  left: 364px;
+  top: 500px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-2"] {
+  left: 400px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-2"] {
+  left: 656px;
+  top: 500px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-3"] {
+  left: 692px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-3"] {
+  left: 948px;
+  top: 500px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-4"] {
+  left: 984px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-4"] {
+  left: 1240px;
+  top: 500px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-5"] {
+  left: 1276px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="arrow-5"] {
+  left: 1532px;
+  top: 500px;
+  width: 41px;
+  height: 24px;
+}
+
+[data-layout="process"] [data-el="step-6"] {
+  left: 1568px;
+  top: 460px;
+  width: 244px;
+  height: 104px;
+  font-size: 26px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 14px 18px; display: flex; align-items: center; justify-content: center;
+}
+
+[data-layout="process"] [data-el="caveat"] {
+  left: 108px;
+  top: 640px;
+  width: 1704px;
+  height: 166px;
+  font-size: 32px;
+  line-height: 1.6;
+  padding: 22px 28px;
+}
+
+[data-layout="process"] [data-el="footrule"] {
+  left: 108px;
+  top: 1006px;
+  width: 1704px;
+  height: 2px;
+}
+
+[data-layout="process"] [data-el="meta"] {
+  left: 108px;
+  top: 1020px;
+  width: 1200px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+[data-layout="process"] [data-el="progress"] {
+  left: 0px;
+  top: 0px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="process"] [data-el="page"] {
+  left: 1512px;
+  top: 1020px;
+  width: 300px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: right;
+}
+
