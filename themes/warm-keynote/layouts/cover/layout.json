@@ -2,27 +2,80 @@
   "id": "cover",
   "name": "Cover: Warm Keynote",
   "description": "A Keynote-style cover: on grid paper, a short teal rule leading into the series name, one line of 900-weight headline (the keyword turns teal) and one line of subtitle; bottom left the progress ticks (one per page, the current one lit), bottom right the page number pill. Title and subtitle are single lines and shrink automatically when too long. A centred title slide would lose the left-aligned rhythm and the product feel the page furniture gives.",
-  "content_relations": ["statement"],
-  "scene_roles": ["hero"],
-  "density": { "max_chars": 120, "max_elements": 8 },
+  "content_relations": [
+    "statement"
+  ],
+  "scene_roles": [
+    "hero"
+  ],
+  "density": {
+    "max_chars": 120,
+    "max_elements": 8
+  },
   "slots": {
-    "brand": { "type": "text", "required": false, "hint": "series or product name after the teal rule, filled automatically from the series name of the story title (before the colon)" },
-    "title": { "type": "text", "required": true, "hint": "claim headline, single line, up to 16 characters; *keyword* turns the emphasis teal" },
-    "subtitle": { "type": "text", "required": false, "hint": "a one-line subtitle, up to 45 characters" },
-    "page": { "type": "text", "required": false, "hint": "page number pill, filled automatically (\"01 / 08\")" }
+    "brand": {
+      "type": "text",
+      "required": false,
+      "hint": "series or product name after the teal rule, filled automatically from the series name of the story title (before the colon)"
+    },
+    "title": {
+      "type": "text",
+      "required": true,
+      "hint": "claim headline, single line, up to 16 characters; *keyword* turns the emphasis teal"
+    },
+    "subtitle": {
+      "type": "text",
+      "required": false,
+      "hint": "a one-line subtitle, up to 45 characters"
+    },
+    "page": {
+      "type": "text",
+      "required": false,
+      "hint": "page number pill, filled automatically (\"01 / 08\")"
+    }
   },
   "elements": [
-    { "id": "bar", "kind": "shape" },
-    { "id": "brand", "kind": "text" },
-    { "id": "title", "kind": "text" },
-    { "id": "subtitle", "kind": "text" },
-    { "id": "progress", "kind": "shape" },
-    { "id": "page", "kind": "text" }
+    {
+      "id": "bar",
+      "kind": "shape"
+    },
+    {
+      "id": "brand",
+      "kind": "text"
+    },
+    {
+      "id": "title",
+      "kind": "text"
+    },
+    {
+      "id": "subtitle",
+      "kind": "text"
+    },
+    {
+      "id": "progress",
+      "kind": "shape"
+    },
+    {
+      "id": "page",
+      "kind": "text"
+    }
   ],
   "sample": {
-    "brand": { "type": "text", "value": "Confirm the story before the slides" },
-    "title": { "type": "text", "value": "Spend time on the *story*, not layout" },
-    "subtitle": { "type": "text", "value": "Six decks averaged four rounds last quarter, three layout only; confirm the story first and they vanish." },
-    "page": { "type": "text", "value": "01 / 08" }
+    "brand": {
+      "type": "text",
+      "value": "Status in writing"
+    },
+    "title": {
+      "type": "text",
+      "value": "Give the *hour* back"
+    },
+    "subtitle": {
+      "type": "text",
+      "value": "Updates in writing, decisions in a short call; the weekly hour comes back."
+    },
+    "page": {
+      "type": "text",
+      "value": "01 / 08"
+    }
   }
 }

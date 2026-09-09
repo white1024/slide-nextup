@@ -8,8 +8,6 @@ Some of this project's themes and layouts are ported from open-source projects; 
 - Related: <https://github.com/zarazhangrui/frontend-slides> (same author, MIT; the origin of the template index and workflow)
 - Ported templates (each maps to `themes/<id>/`; the `source` field of theme.json records the original slug):
   - `blue-professional` ← templates/blue-professional
-  - `cobalt-grid` ← templates/cobalt-grid
-  - `creative-mode` ← templates/creative-mode
 
 Full licence text:
 
@@ -43,13 +41,9 @@ The ported themes reference font files served by Google Fonts through `@font-fac
 
 | Font | Author | Used in |
 |---|---|---|
-| Space Grotesk | Florian Karsten | blue-professional (headings), creative-mode (body) |
-| Inter | Rasmus Andersson | blue-professional (body) |
-| Newsreader | Production Type | cobalt-grid (headings) |
-| Hanken Grotesk | Alfredo Marco Pradil, Hanken Design Co. | cobalt-grid (body) |
-| DM Mono | Colophon Foundry | cobalt-grid (furniture) |
-| Archivo Black | Omnibus-Type | creative-mode (headings) |
-| JetBrains Mono | JetBrains | creative-mode (furniture) |
+| Space Grotesk | Florian Karsten | blue-professional (headings) |
+| Inter | Rasmus Andersson | blue-professional (body), warm-keynote (Latin text and numerals) |
+| JetBrains Mono | JetBrains | warm-keynote (furniture) |
 
 ## Icons
 
@@ -57,4 +51,4 @@ The ported themes reference font files served by Google Fonts through `@font-fac
 
 ## warm-keynote (a private deck, used with its author's consent)
 
-The style of `themes/warm-keynote/` comes from a friend's internal presentation (consent given on 2026-09-05; the author asked not to be credited). Only the visual system was taken (colours, font pairing, component vocabulary, layout composition); all CSS was rewritten under this project's contract and none of the deck's content was used. The fonts Inter and JetBrains Mono are covered by the table above (OFL).
+The style of `themes/warm-keynote/` comes from a friend's internal presentation (consent given on 2026-09-05; the author asked not to be credited). Only the visual system was taken (colours, font pairing, component vocabulary, layout composition); all CSS was rewritten under this project's contract and none of the deck's content was used: the sample content of the pack's layouts is a fictional internal proposal written for this project (a team moving its status meeting to a written update). The fonts Inter and JetBrains Mono are covered by the table above (OFL).

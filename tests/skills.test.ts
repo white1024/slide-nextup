@@ -2,9 +2,9 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { SLIDE_SKILLS } from '../src/cli/commands.ts'
 import { checkSkills, isClean, listFiles, syncSkills } from '../src/skills/sync.ts'
 
-const SLIDE_SKILLS = ['slide-brief', 'slide-story', 'slide-design', 'slide-build']
 // editor internals that must never leak into a skill: markup, event and class names, not the words a user sees in the toolbar
 const EDITOR_WORDS = [
   'contenteditable',

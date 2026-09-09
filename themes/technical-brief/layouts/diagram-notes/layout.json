@@ -29,7 +29,8 @@
     "photo": {
       "type": "image",
       "required": true,
-      "hint": "the diagram with this view lit and the rest dimmed, 1000 by 600 px or the same ratio recommended"
+      "hint": "the diagram with this view lit and the rest dimmed, 1000 by 486 px or the same ratio, shown whole (fit: contain)",
+      "fit": "contain"
     },
     "subtitle": {
       "type": "text",

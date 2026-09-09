@@ -29,7 +29,7 @@ const progress = () => ({ el: 'progress', role: 'progress', css: { left: 0, top:
 const rule = (el, left, top) => ({ el, role: 'backdrop', css: { left, top, width: 60, height: 4 } });
 
 const HEAD_SAMPLE = { kicker: t('02 — Where we stand'), meta: t('Quarterly review'), page: t('03 / 10') };
-const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23ebe9e9%27/%3E%3C/svg%3E';
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271766%27 height=%27620%27%3E%3Crect width=%271766%27 height=%27620%27 fill=%27%23ebe9e9%27/%3E%3C/svg%3E';
 
 function cardsLayout(id, n, name, desc) {
   const gap = 36;
@@ -112,7 +112,7 @@ const layouts = [
     content_relations: ['statement', 'evidence', 'sequence'], scene_roles: ['evidence', 'relationship', 'pause'], density: { max_chars: 360 },
     elements: [
       ...head(),
-      { el: 'evidence', tag: 'div', role: 'list', slot: ['list', 'text'], required: false, hint: '3 to 5 supporting points, up to 2 lines each', css: { left: M, top: 300, width: 880, height: 560, fontSize: 32, lineHeight: 1.55 } },
+      { el: 'evidence', tag: 'div', role: 'list', slot: ['list', 'text'], required: false, hint: '3 to 4 supporting points, up to 2 lines each', css: { left: M, top: 300, width: 880, height: 560, fontSize: 32, lineHeight: 1.55 } },
       { el: 'split', role: 'divider', css: { left: 981, top: 300, width: 2, height: 660 } },
       { el: 'body', tag: 'p', role: 'highlight', slot: ['text'], required: false, hint: 'the claim in one sentence, or a quote, up to 3 lines and 50 characters', fit: true, css: { left: 1013, top: 300, width: 830, height: 250, fontSize: 34, lineHeight: 1.45, extra: 'padding: 32px 36px;' } },
       ...[1, 2, 3].map((i) => ({ el: `stat-${i}`, tag: 'div', role: 'stat', slot: ['metric', 'text'], required: false, hint: i === 1 ? "small stat cell: the metric's value is the number, label its caption (up to 8 characters); leave empty when not needed" : 'same as above', css: { left: 1013 + (i - 1) * 283, top: 582, width: 263, height: 180, fontSize: 32, lineHeight: 1.3, extra: 'padding: 20px 22px;' } })),
@@ -187,10 +187,10 @@ const layouts = [
       ...head(),
       { el: 'left', role: 'card', css: { left: M, top: 300, width: 859, height: 660 } },
       { el: 'left-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'left column name, 2 to 8 characters', css: { left: M + 40, top: 340, width: 779, height: 52, fontSize: 36, lineHeight: '52px' } },
-      { el: 'left-items', tag: 'div', role: 'list', slot: ['list'], required: true, hint: '3 to 5 items, up to 2 lines each', css: { left: M + 40, top: 412, width: 779, height: 520, fontSize: 32, lineHeight: 1.55 } },
+      { el: 'left-items', tag: 'div', role: 'list', slot: ['list'], required: true, hint: '3 to 4 items, up to 2 lines each', css: { left: M + 40, top: 412, width: 779, height: 520, fontSize: 32, lineHeight: 1.55 } },
       { el: 'right', role: 'card', tone: 'accent', css: { left: 984, top: 300, width: 859, height: 660 } },
       { el: 'right-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'right column name, 2 to 8 characters', css: { left: 1024, top: 340, width: 779, height: 52, fontSize: 36, lineHeight: '52px' } },
-      { el: 'right-items', tag: 'div', role: 'list', slot: ['list'], required: true, hint: '3 to 5 items, up to 2 lines each', css: { left: 1024, top: 412, width: 779, height: 520, fontSize: 32, lineHeight: 1.55 } },
+      { el: 'right-items', tag: 'div', role: 'list', slot: ['list'], required: true, hint: '3 to 4 items, up to 2 lines each', css: { left: 1024, top: 412, width: 779, height: 520, fontSize: 32, lineHeight: 1.55 } },
       pageNo(),
     ],
     extraCss: `[data-layout="comparison"] [data-el="left-items"] li, [data-layout="comparison"] [data-el="right-items"] li { padding-left: 24px; margin-bottom: 16px; }`,

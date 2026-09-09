@@ -9,7 +9,7 @@ import { scaffoldDeck } from '../src/model/scaffold.ts'
 import { loadStory, type Story } from '../src/model/story.ts'
 import { applyPagesToStory } from '../src/model/story-apply.ts'
 import { confirmationStatus, writeConfirmation } from '../src/model/story-confirm.ts'
-import { type LayoutJson, listLayoutIds, loadLayout } from '../src/render/assets.ts'
+import { type LayoutJson, listLayoutIdsFor, loadLayout } from '../src/render/assets.ts'
 
 const storyText = readFileSync(resolve('examples/story.sample.md'), 'utf8')
 const story = loadStory(storyText).story as Story
@@ -81,14 +81,17 @@ describe('writing the deck’s page-level overrides back into story.md', () => {
     writeFileSync(storyFile, storyText, 'utf8')
     writeConfirmation(storyFile, storyText, ids.length)
     const layouts = new Map<string, LayoutJson>(
-      listLayoutIds().map((id) => [id, loadLayout(id).json]),
+      listLayoutIdsFor('blue-professional').map((id) => [
+        id,
+        loadLayout(id, 'blue-professional').json,
+      ]),
     )
     const first = scaffoldDeck({
       story,
       storyText,
       storyRelativePath: 'story.md',
       deckId: 'apply',
-      theme: 'ink-paper',
+      theme: 'blue-professional',
       layouts,
     })
     // the editor hid s7 and moved s6 before s4
@@ -112,7 +115,7 @@ describe('writing the deck’s page-level overrides back into story.md', () => {
       storyText: applied.text,
       storyRelativePath: 'story.md',
       deckId: 'apply',
-      theme: 'ink-paper',
+      theme: 'blue-professional',
       layouts,
       existing: deck,
     })

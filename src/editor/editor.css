@@ -359,12 +359,13 @@
   left: 0;
   right: 0;
   top: 0;
-  height: 48px;
+  min-height: 48px;
+  flex-wrap: wrap;
   z-index: 2000;
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 0 12px;
+  padding: 0 8px;
   background: var(--ed-bg);
   border-bottom: 1px solid var(--ed-line);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
@@ -433,7 +434,7 @@
 .ed-pages {
   position: fixed;
   left: 0;
-  top: 48px;
+  top: var(--ed-top, 48px);
   bottom: 0;
   width: 220px;
   box-sizing: border-box;
@@ -1042,7 +1043,7 @@
   left: auto !important;
   right: 0;
   /* biome-ignore lint/complexity/noImportantStyles: the floating mode's inline coordinates must lose */
-  top: 48px !important;
+  top: var(--ed-top, 48px) !important;
   bottom: 0;
   width: 320px;
   max-width: none;
@@ -1203,4 +1204,28 @@
   background: #fff;
   color: var(--ed-text);
   font: inherit;
+}
+
+/* ---- the top toolbar on a narrower window ---- */
+
+/* the bar keeps to one row down to a laptop width: the key hints go first, then the labels of the
+   buttons whose icon already says it (undo, redo, fullscreen); every title still names the control */
+@media (max-width: 1790px) {
+  .ed-topbar .ed-btn kbd {
+    display: none;
+  }
+}
+
+@media (max-width: 1630px) {
+  .ed-topbar [data-action="undo"] span,
+  .ed-topbar [data-action="redo"] span,
+  .ed-topbar [data-action="fullscreen"] span {
+    display: none;
+  }
+}
+
+@media (max-width: 1490px) {
+  .ed-topbar .ed-long {
+    display: none;
+  }
 }

@@ -213,17 +213,17 @@ const layouts = [
       ...head(),
       { el: 'left', role: 'card', css: { left: M, top: BODY_TOP, width: 828, height: 420 } },
       { el: 'left-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'left column title, up to 14 characters', css: { left: M + 36, top: BODY_TOP + 32, width: 756, height: 48, fontSize: 34, lineHeight: '48px' } },
-      { el: 'left-items', tag: 'div', role: 'list', slot: ['list', 'text'], required: true, hint: 'left column, 2 to 3 items, up to 2 lines each', css: { left: M + 36, top: BODY_TOP + 96, width: 756, height: 312, fontSize: 32, lineHeight: 1.6 } },
+      { el: 'left-items', tag: 'div', role: 'list', slot: ['list', 'text'], required: true, hint: 'left column, 2 to 3 items, one line each', css: { left: M + 36, top: BODY_TOP + 96, width: 756, height: 312, fontSize: 32, lineHeight: 1.6 } },
       { el: 'right', role: 'card', css: { left: 984, top: BODY_TOP, width: 828, height: 420 } },
       { el: 'right-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'right column title, up to 14 characters', css: { left: 1020, top: BODY_TOP + 32, width: 756, height: 48, fontSize: 34, lineHeight: '48px' } },
-      { el: 'right-items', tag: 'div', role: 'list', slot: ['list', 'text'], required: true, hint: 'right column, 2 to 3 items, up to 2 lines each', css: { left: 1020, top: BODY_TOP + 96, width: 756, height: 312, fontSize: 32, lineHeight: 1.6 } },
+      { el: 'right-items', tag: 'div', role: 'list', slot: ['list', 'text'], required: true, hint: 'right column, 2 to 3 items, one line each', css: { left: 1020, top: BODY_TOP + 96, width: 756, height: 312, fontSize: 32, lineHeight: 1.6 } },
       caveat(BODY_TOP + 444, 166, TWO_LINE_CAVEAT),
       ...rail(),
     ],
     extraCss: `[data-layout="comparison"] [data-el="left-items"] li, [data-layout="comparison"] [data-el="right-items"] li { padding-left: 24px; margin-bottom: 18px; }`,
     sample: {
       ...HEAD_SAMPLE, title: t('Why the browser path reports two phases'), subtitle: t('Averaging two usage patterns into one number gets both of them wrong.'),
-      'left-title': t('First visit'), 'left-items': list(['The whole page is fetched for the first time', 'A new session, a cold cache, every asset over the wire', 'A one-off cost']),
+      'left-title': t('First visit'), 'left-items': list(['The whole page is fetched for the first time', 'A new session with a cold cache', 'A one-off cost']),
       'right-title': t('Return visit'), 'right-items': list(['The same page with the cache already warm', 'Where a visitor spends most of a session', 'The report lists it as its own table']),
       caveat: t('⚠️ Depth 0 has no earlier page to load, so it only has the return phase; the crawler path has one phase by construction.'),
     },
@@ -278,11 +278,10 @@ const layouts = [
     content_relations: ['evidence', 'statement'], scene_roles: ['map', 'evidence', 'hero'], density: { max_chars: 200, max_elements: 9 },
     elements: [
       ...head(false),
-      { el: 'photo', tag: 'div', role: 'photo', slot: ['image'], required: true, hint: 'the diagram, 1420 by 690 px or the same 2.06:1 ratio; may carry hotspots (click-to-jump areas during playback, positioned in percent)', css: { left: 250, top: 250, width: 1420, height: 690 } },
+      { el: 'photo', tag: 'div', role: 'photo', slot: ['image'], required: true, imageFit: 'contain', hint: 'the diagram, 1420 by 690 px or the same 2.06:1 ratio, shown whole (fit: contain); may carry hotspots (click-to-jump areas during playback, positioned in percent)', css: { left: 250, top: 250, width: 1420, height: 690 } },
       { ...caption(950, 44, 'what the diagram says in one line, or how to read it'), css: { left: 250, top: 950, width: 1420, height: 44, fontSize: 26, lineHeight: 1.6 } },
       ...rail(),
     ],
-    extraCss: `[data-layout="photo"] [data-el="photo"] img { object-fit: contain; }`,
     sample: { ...HEAD_SAMPLE, title: t('The system at a glance'), photo: { type: 'image', src: 'data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%275%27%3E%3Crect width=%2716%27 height=%275%27 fill=%27%231b2726%27/%3E%3C/svg%3E', alt: 'System map', hotspots: [{ target: 'cards-list', x: 56, y: 30, w: 16, h: 40, label: 'Report directory: see the three principles' }] }, caption: t('teal interface · emerald core · violet storage · slate external tools · amber dashes mark a check boundary') },
   },
   // ── diagram-notes ────────────────────────────────────────────────────────
@@ -291,7 +290,7 @@ const layouts = [
     content_relations: ['evidence', 'list', 'statement'], scene_roles: ['evidence', 'relationship'], density: { max_chars: 420, max_elements: 11 },
     elements: [
       ...head(false),
-      { el: 'photo', tag: 'div', role: 'photo', slot: ['image'], required: true, hint: 'the diagram with this view lit and the rest dimmed, 1000 by 600 px or the same ratio recommended', css: { left: M, top: 300, width: 1000, height: 486 } },
+      { el: 'photo', tag: 'div', role: 'photo', slot: ['image'], required: true, imageFit: 'contain', hint: 'the diagram with this view lit and the rest dimmed, 1000 by 486 px or the same ratio, shown whole (fit: contain)', css: { left: M, top: 300, width: 1000, height: 486 } },
       { el: 'ledebar', role: 'backdrop', css: { left: 1148, top: 290, width: 4, height: 165 } },
       { el: 'subtitle', tag: 'p', role: 'body', slot: ['text'], required: false, hint: 'what this view is for, up to 3 lines and 20 characters per line', fit: true, css: { left: 1172, top: 290, width: 640, height: 165, fontSize: 32, lineHeight: 1.6 } },
       { el: 'evidence', tag: 'div', role: 'list', slot: ['list', 'text'], required: true, hint: '2 to 3 points about this view, up to 2 lines each', css: { left: 1148, top: 486, width: 664, height: 404, fontSize: 32, lineHeight: 1.6 } },
@@ -299,8 +298,7 @@ const layouts = [
       ...rail(),
     ],
     extraCss: `[data-layout="diagram-notes"] [data-el="evidence"] li { padding-left: 24px; margin-bottom: 20px; }
-[data-layout="diagram-notes"] [data-el="caption"] { width: 1000px; }
-[data-layout="diagram-notes"] [data-el="photo"] img { object-fit: contain; }`,
+[data-layout="diagram-notes"] [data-el="caption"] { width: 1000px; }`,
     sample: {
       ...HEAD_SAMPLE, title: t('View one: the browser path, the primary source'),
       subtitle: t('It measures the route a real visitor takes, and it is the one quoted outside.'),
@@ -322,11 +320,11 @@ const layouts = [
       { el: 'left', role: 'card', css: { left: M, top: BODY_TOP, width: 828, height: 420 } },
       { el: 'left-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'left set title, up to 16 characters', css: { left: M + 36, top: BODY_TOP + 30, width: 756, height: 48, fontSize: 34, lineHeight: '48px' } },
       { el: 'left-note', tag: 'p', role: 'body', slot: ['text'], required: false, hint: 'one line on what decides membership, up to 2 lines', fit: true, css: { left: M + 36, top: BODY_TOP + 88, width: 756, height: 108, fontSize: 32, lineHeight: 1.6 } },
-      { el: 'left-items', tag: 'div', role: 'flow', slot: ['list'], required: true, hint: 'the members as chips, 4 to 9 items, up to 12 characters each', css: { left: M + 36, top: BODY_TOP + 208, width: 756, height: 200, fontSize: 24, lineHeight: 1.5 } },
+      { el: 'left-items', tag: 'div', role: 'flow', slot: ['list'], required: true, hint: 'the members as chips, 4 to 9 items, up to 8 characters each', css: { left: M + 36, top: BODY_TOP + 208, width: 756, height: 200, fontSize: 24, lineHeight: 1.5 } },
       { el: 'right', role: 'card', css: { left: 984, top: BODY_TOP, width: 828, height: 420 } },
       { el: 'right-title', tag: 'p', role: 'label', slot: ['text'], required: true, hint: 'right set title, up to 16 characters', css: { left: 1020, top: BODY_TOP + 30, width: 756, height: 48, fontSize: 34, lineHeight: '48px' } },
       { el: 'right-note', tag: 'p', role: 'body', slot: ['text'], required: false, hint: 'one line on what decides membership, up to 2 lines', fit: true, css: { left: 1020, top: BODY_TOP + 88, width: 756, height: 108, fontSize: 32, lineHeight: 1.6 } },
-      { el: 'right-items', tag: 'div', role: 'flow-accent', slot: ['list'], required: true, hint: 'the members as accent chips, 4 to 9 items, up to 12 characters each', css: { left: 1020, top: BODY_TOP + 208, width: 756, height: 200, fontSize: 24, lineHeight: 1.5 } },
+      { el: 'right-items', tag: 'div', role: 'flow-accent', slot: ['list'], required: true, hint: 'the members as accent chips, 4 to 9 items, up to 8 characters each', css: { left: 1020, top: BODY_TOP + 208, width: 756, height: 200, fontSize: 24, lineHeight: 1.5 } },
       caveat(BODY_TOP + 444, 166, TWO_LINE_CAVEAT),
       ...rail(),
     ],
@@ -435,6 +433,7 @@ for (const L of layouts) {
   for (const e of L.elements) {
     if (e.slot) {
       slots[e.el] = { type: e.slot.length === 1 ? e.slot[0] : e.slot, required: !!e.required, hint: e.hint };
+      if (e.imageFit) slots[e.el].fit = e.imageFit;
       elements.push({ id: e.el, kind: SLOT_KIND[e.slot[0]] });
     } else elements.push({ id: e.el, kind: 'shape' });
   }

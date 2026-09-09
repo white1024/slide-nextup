@@ -39,6 +39,17 @@ function multiline(text) {
   return inlineMarkup(text).replace(/\n/g, '<br>')
 }
 
+/** a short prefix, one number (thousands separators and decimals allowed), a short suffix: what a count entrance can run up to */
+export const COUNTABLE = /^\s*([^\d\s-]{0,3})\s*(-?\d[\d,]*(?:\.\d+)?)\s*([^\d]{0,12})\s*$/
+
+/** The number a one-line value counts up to (62 for "62 min", 104411 for "104,411", 0.8 for "0.8x"), or null when it is not a number. */
+export function countValue(text) {
+  const m = COUNTABLE.exec(String(text).replace(/\*/g, ''))
+  if (!m) return null
+  const n = Number.parseFloat(m[2].replace(/,/g, ''))
+  return Number.isFinite(n) ? n : null
+}
+
 const SEP = /\s*[|｜]\s*/
 /** slot types that may carry `details` (the content behind a click while playing) */
 const DETAILS_TYPES = new Set(['text', 'list', 'metric'])
@@ -124,13 +135,16 @@ function lineChart(slot, off) {
   if (on.length > 1) {
     parts.push(
       `<polygon class="chart-area" points="${num(on[0].x)},${bottom} ${poly} ${num(on[on.length - 1].x)},${bottom}"/>`,
-      `<polyline class="chart-line" points="${poly}"/>`,
+      // pathLength 1: the draw entrance dashes the line in path units, whatever its real length
+      `<polyline class="chart-line" points="${poly}" pathLength="1"/>`,
     )
   }
   for (const q of pts) {
     const isOff = off.has(q.i)
+    // --t: where along the line this point sits (0..1), so the draw entrance can show it as the line arrives
+    const t = on.length > 1 ? on.findIndex((o) => o.i === q.i) / (on.length - 1) : 0
     parts.push(
-      `<g class="${partClass('chart-point', q.i, off)}" data-index="${q.i}" ${hoverData(q.p, slot)}>`,
+      `<g class="${partClass('chart-point', q.i, off)}" data-index="${q.i}" ${hoverData(q.p, slot)} style="--t:${num(Math.max(0, t))}">`,
       isOff ? '' : `<circle class="chart-hit" cx="${num(q.x)}" cy="${num(q.y)}" r="36"/>`,
       isOff ? '' : `<circle class="chart-dot" cx="${num(q.x)}" cy="${num(q.y)}" r="10"/>`,
       isOff
@@ -147,15 +161,16 @@ function donutChart(slot, off) {
   const max = chartMax(slot, off)
   const first = slot.series.find((_, i) => !off.has(i)) || slot.series[0]
   const r = 220
-  const c = 2 * Math.PI * r
   const parts = [`<circle class="chart-ring-track" cx="300" cy="300" r="${r}"/>`]
+  // every ring is pathLength 1: a segment's dash is its share of the whole, its offset the shares
+  // before it, and --share lets the grow entrance run the dash from 0 to the real share
   let offset = 0
   slot.series.forEach((p, i) => {
     const share = off.has(i) ? 0 : Math.max(0, Math.min(1, p.value / max))
     parts.push(
-      `<circle class="${partClass(`chart-ring-fill chart-seg-${i + 1}`, i, off)}" data-index="${i}" ${hoverData(p, slot)} cx="300" cy="300" r="${r}" stroke-dasharray="${num(c * share)} ${num(c)}" stroke-dashoffset="${num(-offset)}" transform="rotate(-90 300 300)"/>`,
+      `<circle class="${partClass(`chart-ring-fill chart-seg-${i + 1}`, i, off)}" data-index="${i}" ${hoverData(p, slot)} cx="300" cy="300" r="${r}" pathLength="1" stroke-dasharray="${num(share)} 1" stroke-dashoffset="${num(-offset)}" transform="rotate(-90 300 300)" style="--share:${num(share)}"/>`,
     )
-    offset += c * share
+    offset += share
   })
   parts.push(
     `<text class="chart-center" x="300" y="290" font-size="96" text-anchor="middle" dominant-baseline="middle">${escapeHtml(num(first.value) + (slot.unit || ''))}</text>`,
@@ -303,7 +318,11 @@ function renderBase(slot) {
     case 'metric': {
       const delta =
         slot.delta === undefined ? '' : `<span class="metric-delta">${multiline(slot.delta)}</span>`
-      return `<div class="metric"><span class="metric-value">${multiline(slot.value)}</span><span class="metric-label">${multiline(slot.label)}</span>${delta}</div>`
+      // data-count: the number inside the value (62 in "62 min", 104411 in "104,411"), the hook the
+      // count entrance runs up to; the text itself stays exactly as written
+      const n = countValue(slot.value)
+      const count = n === null ? '' : ` data-count="${num(n)}"`
+      return `<div class="metric"><span class="metric-value"${count}>${multiline(slot.value)}</span><span class="metric-label">${multiline(slot.label)}</span>${delta}</div>`
     }
     case 'chart':
       return chartSvg(slot)

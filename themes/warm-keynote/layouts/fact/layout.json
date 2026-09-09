@@ -78,16 +78,16 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "fact": {
       "type": "metric",
-      "value": "104,411",
-      "label": "site owners affected"
+      "value": "62 min",
+      "label": "the average status meeting last month"
     },
     "caption": {
       "type": "text",
-      "value": "Every time a check fails, the owner has to work out the same few things from scratch."
+      "value": "Every week the same updates are read aloud to people who could have read them in five minutes."
     },
     "page": {
       "type": "text",

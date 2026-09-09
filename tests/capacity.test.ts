@@ -84,6 +84,20 @@ describe('slot hint numbers', () => {
       perItem: false,
     })
   })
+
+  it('reads the item count in both grammars, with a word or two before the unit', () => {
+    expect(hintLimits('2 to 3 supporting points, up to 2 lines each').items).toBe(3)
+    expect(hintLimits('the members as chips, 4 to 9 items, up to 12 characters each').items).toBe(9)
+    expect(hintLimits('3 supporting points, up to 2 lines each').items).toBe(3)
+    expect(hintLimits('三到五條支撐；每條一行').items).toBe(5)
+    expect(hintLimits('2到3點，每點兩行').items).toBe(3)
+    // no item count: a total of lines, a table of rows, a hint with no numbers at all
+    expect(hintLimits('one line, up to 24 characters').items).toBeUndefined()
+    expect(
+      hintLimits('header row, up to 6 rows, 1 to 10 characters per cell').items,
+    ).toBeUndefined()
+    expect(hintLimits('top bar right, filled automatically').items).toBeUndefined()
+  })
 })
 
 describe('measured capacity', () => {
@@ -153,5 +167,44 @@ describe('measured capacity', () => {
     // lines about items (每條一行) are not lines of the box
     expect(checkHint('三到五條支撐；每條一行', lede)).toBeNull()
     expect(checkHint('頂欄右，自動填', lede)).toBeNull()
+  })
+
+  it('counts a list by items, each costing its lines plus the margin between them', () => {
+    // technical-brief cards-list: the items box of a card, 16px between items
+    const items = { ...box(488, 360, 32, 51.2), items: 3, itemGap: 16 }
+    expect(checkHint('2 to 3 supporting points, up to 2 lines each', items)).toBeNull()
+    expect(checkHint('4 points, up to 2 lines each', items)).toMatch(/only holds 3 such items/)
+    expect(checkHint('2 to 3 supporting points, up to 3 lines each', items)).toMatch(
+      /3 items × 3 lines/,
+    )
+    // 5 items of one line each still fit: 5 × (51.2 + 16) = 336px of 360px
+    expect(checkHint('up to 5 items, one line each', items)).toBeNull()
+    // a hint with no item count says nothing about items
+    expect(checkHint('one paragraph, up to 6 lines', items)).toBeNull()
+    // the same numbers on an element with no list measured are left alone
+    expect(checkHint('4 points, up to 2 lines each', box(488, 360, 32, 51.2))).toBeNull()
+  })
+
+  it('counts chips by how many fit in a row and how many rows the box holds', () => {
+    // technical-brief chips-2: 756×200 at 24px, one chip padded 16/8 with a 12px gap
+    const chips = {
+      ...box(756, 200, 24, 36),
+      items: 9,
+      itemGap: 12,
+      chip: { padX: 32, padY: 16, marginX: 12, marginY: 12, lineHeight: 36 },
+    }
+    // 12 characters make a 332px chip: two to a row, so nine of them need five rows of the three
+    expect(
+      checkHint('the members as chips, 4 to 9 items, up to 12 characters each', chips),
+    ).toMatch(/9 chips of 12 characters, which need 5 rows/)
+    expect(
+      checkHint('the members as chips, 4 to 9 items, up to 12 characters each', chips),
+    ).toMatch(/the box holds 3 rows/)
+    // 8 characters make a 236px chip: three to a row, so nine of them fit in three rows
+    expect(
+      checkHint('the members as chips, 4 to 9 items, up to 8 characters each', chips),
+    ).toBeNull()
+    // chips are not lines: the same hint read as a list would have failed on nine items
+    expect(checkHint('4 to 9 items', chips)).toBeNull()
   })
 })

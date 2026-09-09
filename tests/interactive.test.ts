@@ -160,7 +160,7 @@ describe('interactive slots in the deck model', () => {
     const deck = structuredClone(base)
     const s2 = deck.slides[1] as Slide
     s2.slots['card-1'] = card
-    const photo = loadLayout('photo')
+    const photo = loadLayout('photo', 'blue-professional')
     deck.slides.push({
       id: 's9',
       layout: 'photo',
@@ -196,7 +196,7 @@ describe('interactive slots in the deck model', () => {
 
   it('rejects hotspots that point nowhere and overrides on the wrong element kind', () => {
     const deck = structuredClone(base)
-    const photo = loadLayout('photo')
+    const photo = loadLayout('photo', 'blue-professional')
     deck.slides.push({
       id: 's9',
       layout: 'photo',
@@ -208,7 +208,7 @@ describe('interactive slots in the deck model', () => {
     })
     deck.overrides['s9/photo'] = { hotspots: [{ target: 'gone', x: 1, y: 2, w: 3, h: 4 }] }
     deck.overrides['s9/title'] = { hotspots: [] }
-    deck.overrides['s1/backdrop'] = { details: 'x' }
+    deck.overrides['s1/panel'] = { details: 'x' }
     const errors = errorsOf(deck)
     expect(errors).toEqual(
       expect.arrayContaining([
@@ -222,7 +222,7 @@ describe('interactive slots in the deck model', () => {
           '/overrides/s9/title/hotspots a `hotspots` override can only apply to an element of kind image',
         ),
         expect.stringContaining(
-          '/overrides/s1/backdrop/details a `details` override can only apply to an element of kind text',
+          '/overrides/s1/panel/details a `details` override can only apply to an element of kind text',
         ),
       ]),
     )
@@ -255,7 +255,7 @@ describe('scaffold suggests details before a split', () => {
       storyText,
       storyRelativePath: 'story.sample.md',
       deckId: 'story-first',
-      theme: 'ink-paper',
+      theme: 'blue-professional',
       layouts,
       roles,
     }
@@ -298,8 +298,8 @@ declare const window: DeckWindow & Window
 
 function tabsDeck(): Deck {
   const deck = load('examples/deck.sample.json')
-  const tabsLayout = loadLayout('tabs')
-  const chartLayout = loadLayout('chart-aside')
+  const tabsLayout = loadLayout('tabs', 'blue-professional')
+  const chartLayout = loadLayout('chart-aside', 'blue-professional')
   deck.slides.push(
     {
       id: 's9',
@@ -716,7 +716,9 @@ describe('interactive slots while playing, and their default state elsewhere', (
       panels: [first, { label: '長', content: long }, { label: '更長', content: long }],
     }
     const report = await runDeckQa(deck, { deckDir: resolve('examples'), browser })
-    expect(report.slides.find((s) => s.id === 's9')?.findings).toEqual([])
+    expect(
+      report.slides.find((s) => s.id === 's9')?.findings.filter((f) => f.rule !== 'slack'),
+    ).toEqual([])
     expect(report.errors).toBe(0)
     // the same text on the first panel is what QA sees, and it is too much
     s9.slots.panels = { type: 'tabs', panels: [{ label: '長', content: long }, first] }

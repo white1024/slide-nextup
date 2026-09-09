@@ -55,11 +55,15 @@
     // element steps live in slides[].elements; send them all so cleared steps are removed too
     const steps = {}
     const enters = {}
-    for (const s of model.slides)
+    // a page's own transition lives on the slide; sent for every page so a cleared one is removed too
+    const pageTransitions = {}
+    for (const s of model.slides) {
+      pageTransitions[s.id] = s.transition || ''
       for (const e of s.elements) {
         steps[`${s.id}/${e.id}`] = e.step || 0
         enters[`${s.id}/${e.id}`] = e.enter || ''
       }
+    }
     saving = fetch('/__save', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -67,6 +71,7 @@
         overrides: model.overrides,
         steps,
         enters,
+        pageTransitions,
         pages: model.pages || null,
         motion: model.motion === 'off' ? 'off' : 'on',
         transition: model.transition || '',

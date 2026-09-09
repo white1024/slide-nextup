@@ -40,7 +40,7 @@
         "text"
       ],
       "required": true,
-      "hint": "left column, 2 to 3 items, up to 2 lines each"
+      "hint": "left column, 2 to 3 items, one line each"
     },
     "right-title": {
       "type": "text",
@@ -53,7 +53,7 @@
         "text"
       ],
       "required": true,
-      "hint": "right column, 2 to 3 items, up to 2 lines each"
+      "hint": "right column, 2 to 3 items, one line each"
     },
     "caveat": {
       "type": "text",
@@ -162,7 +162,7 @@
       "type": "list",
       "items": [
         "The whole page is fetched for the first time",
-        "A new session, a cold cache, every asset over the wire",
+        "A new session with a cold cache",
         "A one-off cost"
       ]
     },

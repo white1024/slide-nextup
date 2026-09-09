@@ -29,7 +29,8 @@
     "photo": {
       "type": "image",
       "required": true,
-      "hint": "the diagram, 1420 by 690 px or the same 2.06:1 ratio; may carry hotspots (click-to-jump areas during playback, positioned in percent)"
+      "hint": "the diagram, 1420 by 690 px or the same 2.06:1 ratio, shown whole (fit: contain); may carry hotspots (click-to-jump areas during playback, positioned in percent)",
+      "fit": "contain"
     },
     "caption": {
       "type": "text",

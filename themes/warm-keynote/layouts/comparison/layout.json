@@ -32,7 +32,7 @@
     "left-title": {
       "type": "text",
       "required": true,
-      "hint": "left column title, e.g. \"The ops month-end loop\""
+      "hint": "left column title, e.g. \"The lead's Friday loop\""
     },
     "left-items": {
       "type": "list",
@@ -42,7 +42,7 @@
     "right-title": {
       "type": "text",
       "required": true,
-      "hint": "right column title, e.g. \"The cost of chasing in vain\""
+      "hint": "right column title, e.g. \"The cost of a late update\""
     },
     "right-items": {
       "type": "list",
@@ -120,7 +120,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -128,30 +128,30 @@
     },
     "title": {
       "type": "text",
-      "value": "Owners put it off; ops carries the cost"
+      "value": "Updates slip; the lead carries the cost"
     },
     "left-title": {
       "type": "text",
-      "value": "The ops month-end loop"
+      "value": "The lead's Friday loop"
     },
     "left-items": {
       "type": "list",
       "items": [
-        "Check anomalies: compare every site log by hand",
-        "Chase missing reports: a second and a third time",
-        "Answer repeat questions: the same ones dozens of times a day"
+        "Collect updates: chase every thread by hand",
+        "Rebuild the deck: the same slides with new numbers",
+        "Repeat the context: the same questions in every call"
       ]
     },
     "right-title": {
       "type": "text",
-      "value": "The cost of chasing in vain"
+      "value": "The cost of a late update"
     },
     "right-items": {
       "type": "list",
       "items": [
-        "Wrong billing: ops is blamed first",
-        "Compliance risk: false uptime claims and missed SLAs",
-        "Time sink: chasing and answering eat the working day"
+        "Late decisions: a week lost each time",
+        "Wrong priorities: work goes on for a closed item",
+        "Time sink: chasing and rewriting eat the Friday"
       ]
     }
   }

@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   type Deck,
+  ENTERS,
   mergeSlides,
   normaliseDeck,
   overrideKey,
@@ -57,12 +58,34 @@ describe('reveal steps and transitions', () => {
   })
 
   it('accepts every page transition family, the legacy slide-left included', () => {
-    for (const t of ['none', 'fade', 'push', 'lift', 'slide-left'] as const) {
+    for (const t of [
+      'none',
+      'fade',
+      'rise',
+      'settle',
+      'dissolve',
+      'breath',
+      'push',
+      'lift',
+      'slide-left',
+    ] as const) {
       const deck = sample()
       deck.transition = t
       expect(errorsOf(deck), t).toEqual([])
       expect(normaliseDeck(deck).transition).toBe(t)
     }
+  })
+
+  it("accepts a slide's own transition after its layout in the key order, and rejects other values", () => {
+    const deck = sample()
+    const s2 = deck.slides[1] as { transition?: string }
+    s2.transition = 'breath'
+    expect(errorsOf(deck)).toEqual([])
+    const out = normaliseDeck(deck).slides[1] as { transition?: string }
+    expect(out.transition).toBe('breath')
+    expect(Object.keys(out).slice(0, 3)).toEqual(['id', 'layout', 'transition'])
+    s2.transition = 'zoom'
+    expect(errorsOf(deck).some((e) => e.startsWith('/slides/1/transition'))).toBe(true)
   })
 
   it('accepts the deck-wide motion switch after transition and rejects other values', () => {
@@ -188,7 +211,7 @@ describe('cross-reference validation', () => {
     s.elements.push({ id: 'title', kind: 'text' })
     s.slots.orphan = { type: 'text', value: 'x' }
     const errs = errorsOf(deck)
-    expect(errs.some((e) => e.startsWith('/slides/0/elements/4/id'))).toBe(true)
+    expect(errs.some((e) => e.startsWith('/slides/0/elements/9/id'))).toBe(true)
     expect(errs.some((e) => e.startsWith('/slides/0/slots/orphan'))).toBe(true)
   })
 
@@ -205,10 +228,10 @@ describe('cross-reference validation', () => {
 
   it('rejects text overrides on shapes and src overrides on text', () => {
     const deck = sample()
-    deck.overrides['s1/backdrop'] = { text: 'no' }
+    deck.overrides['s1/panel'] = { text: 'no' }
     deck.overrides['s1/title'] = { src: 'a.png' }
     const errs = errorsOf(deck)
-    expect(errs.some((e) => e.startsWith('/overrides/s1/backdrop/text'))).toBe(true)
+    expect(errs.some((e) => e.startsWith('/overrides/s1/panel/text'))).toBe(true)
     expect(errs.some((e) => e.startsWith('/overrides/s1/title/src'))).toBe(true)
   })
 
@@ -320,5 +343,35 @@ describe('page-level overrides (playback order and hidden slides)', () => {
       pages: { order: ['s1'] },
       dropped: ['order:x', 'hidden:y'],
     })
+  })
+})
+
+describe('entrances', () => {
+  it('accepts every entrance, from pop, blur and cascade to grow, draw and count, and rejects other values', () => {
+    const deck = sample()
+    const card = (deck.slides[1] as Slide).elements.find(
+      (e) => e.id === 'card-1',
+    ) as Slide['elements'][number]
+    card.step = 1
+    for (const enter of ENTERS) {
+      card.enter = enter
+      expect(errorsOf(deck), enter).toEqual([])
+    }
+    expect(ENTERS).toEqual([
+      'fade-up',
+      'fade',
+      'scale-in',
+      'slide-left',
+      'slide-right',
+      'wipe',
+      'pop',
+      'blur',
+      'cascade',
+      'grow',
+      'draw',
+      'count',
+    ])
+    ;(card as { enter: string }).enter = 'bounce'
+    expect(errorsOf(deck).some((e) => e.includes('/slides/1/elements/'))).toBe(true)
   })
 })

@@ -128,9 +128,13 @@
     },
     "motion": {
       "type": "object",
-      "description": "Entrance rhythm during playback: elements without an explicit enter take the default for their data-role; stagger is the delay in milliseconds between elements of one step, duration the length of one entrance. Always off in static mode",
+      "description": "Entrance rhythm during playback: family is the pack’s motion personality and sets the pace, the curve and the band the durations must stay in (crisp 300ms / 60ms stagger, band 150–400ms; soft 450ms / 90ms, band 300–800ms; minimal 220ms / 40ms, band 150–320ms); elements without an explicit enter take the default for their data-role; stagger is the delay in milliseconds between elements of one step, duration the length of one entrance, both overriding the family’s figures and checked by theme:lint against its band. Always off in static mode",
       "additionalProperties": false,
       "properties": {
+        "family": {
+          "enum": ["crisp", "soft", "minimal"],
+          "description": "The pack’s one motion personality: crisp (quick and decisive), soft (Keynote-like, longer and rounder), minimal (short, plain ease). It decides the default entrance duration, stagger and curve; a pack has exactly one"
+        },
         "default": {
           "$ref": "#/definitions/enter"
         },
@@ -147,14 +151,21 @@
         },
         "duration": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 1000
+          "minimum": 150,
+          "maximum": 800,
+          "description": "Length of one entrance in milliseconds; theme:lint also holds it to the family’s band"
         },
         "transition": {
-          "enum": ["none", "fade", "push", "lift"],
-          "description": "This theme’s default page transition (used when deck.json has none); ported packs use the family of their source template. Absent means fade"
+          "enum": ["none", "fade", "rise", "settle", "dissolve", "breath", "push", "lift"],
+          "description": "This theme’s default page transition family (used when deck.json has none): rise, settle, dissolve, breath, fade, push, lift or none; ported packs pick the family closest to their source template’s motion. Absent means fade"
         }
       }
+    },
+    "tones": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+      "description": "the data-tone values theme.css styles: inverse for a whole page, and the variants of one role a layout may ask for (second, third, accent, faint). theme:check warns when a layout uses a tone the theme does not style, and when a listed tone has no rule."
     },
     "source": {
       "type": "object",
@@ -193,7 +204,7 @@
   },
   "definitions": {
     "enter": {
-      "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe"]
+      "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe","pop","blur","cascade","grow","draw","count"]
     },
     "color": {
       "type": "object",

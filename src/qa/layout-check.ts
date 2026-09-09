@@ -1,5 +1,11 @@
 import type { ErrorObject } from 'ajv'
-import { type Layout, type Theme, validateLayoutJson, validateThemeJson } from '../render/assets.ts'
+import {
+  type Layout,
+  motionFor,
+  type Theme,
+  validateLayoutJson,
+  validateThemeJson,
+} from '../render/assets.ts'
 import { type CssLintIssue, lintCss, lintLayoutScope, lintThemeHover } from './css-ownership.ts'
 
 export interface CheckIssue {
@@ -38,6 +44,8 @@ export function scanLayoutHtml(html: string): {
   elements: HtmlElement[]
   placeholders: string[]
   hasTone: boolean
+  /** every data-tone value the layout asks the theme for */
+  tones: string[]
 } {
   const elements: HtmlElement[] = []
   const tagRe = /<([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g
@@ -61,7 +69,8 @@ export function scanLayoutHtml(html: string): {
   const placeholders = [...html.matchAll(/\{\{([A-Za-z][A-Za-z0-9_-]*)\}\}/g)].map(
     (x) => x[1] as string,
   )
-  return { elements, placeholders, hasTone: /data-tone="/.test(html) }
+  const tones = [...new Set([...html.matchAll(/data-tone="([^"]*)"/g)].map((x) => x[1] as string))]
+  return { elements, placeholders, hasTone: tones.length > 0, tones }
 }
 
 const SLOT_KIND: Record<string, 'text' | 'image'> = {
@@ -110,6 +119,17 @@ export function checkLayout(layout: Layout): CheckIssue[] {
       file: jsonFile,
       message: `${json.elements.length} elements, over its own density.max_elements ${json.density.max_elements}`,
     })
+  }
+
+  for (const [slotId, slot] of Object.entries(json.slots)) {
+    const types = Array.isArray(slot.type) ? slot.type : [slot.type]
+    if (slot.fit && !types.includes('image')) {
+      issues.push({
+        severity: 'error',
+        file: jsonFile,
+        message: `slot \`${slotId}\` declares fit but is not an image slot; fit says how a picture fills its box`,
+      })
+    }
   }
 
   for (const [slotId, slot] of Object.entries(json.slots)) {
@@ -289,5 +309,71 @@ export function checkTheme(theme: Theme): CheckIssue[] {
   }
   issues.push(...cssIssues(`${theme.dir}/theme.css`, lintCss(theme.css, 'theme')))
   issues.push(...cssIssues(`${theme.dir}/theme.css`, lintThemeHover(theme.css)))
+  issues.push(...lintThemeMotion(theme))
   return issues
+}
+
+/** the most travel one keyframe run may ask of an element (open-slide's measured entrances stay well under it) */
+export const MOTION_TRAVEL_MAX = 64
+
+/**
+ * The motion rules a pack must keep: an explicit duration inside its family's band (150–800ms
+ * without a family; the schema already holds enter values to the vocabulary and family to one
+ * of three), and no keyframes in theme.css that move an element more than 64px.
+ */
+export function lintThemeMotion(theme: Theme): CheckIssue[] {
+  const issues: CheckIssue[] = []
+  const motion = theme.json.motion
+  if (motion?.duration !== undefined) {
+    const { family, band } = motionFor(theme.json)
+    if (motion.duration < band[0] || motion.duration > band[1]) {
+      issues.push({
+        severity: 'error',
+        file: `${theme.dir}/theme.json`,
+        message: `motion.duration ${motion.duration}ms is outside ${family ? `the ${family} family's band` : 'the entrance band'} ${band[0]}–${band[1]}ms`,
+      })
+    }
+  }
+  // the ownership parser skips keyframes (frames carry no ownership), so the travel check reads them itself
+  for (const block of keyframesBlocks(theme.css)) {
+    for (const m of block.body.matchAll(/transform\s*:\s*([^;}]+)/g)) {
+      const value = (m[1] ?? '').trim()
+      for (const t of value.matchAll(/translate(?:X|Y|3d)?\(([^)]*)\)/g)) {
+        const px = (t[1] ?? '')
+          .split(',')
+          .map((v) => /^\s*(-?[0-9.]+)px\s*$/.exec(v)?.[1])
+          .filter((v): v is string => v !== undefined)
+          .map(Number)
+        const over = px.find((v) => Math.abs(v) > MOTION_TRAVEL_MAX)
+        if (over === undefined) continue
+        issues.push({
+          severity: 'error',
+          file: `${theme.dir}/theme.css`,
+          line: block.line + block.body.slice(0, m.index).split('\n').length - 1,
+          message: `@keyframes ${block.name} { transform: ${value} }  keyframes may move an element at most ${MOTION_TRAVEL_MAX}px (this one moves ${over}px)`,
+        })
+      }
+    }
+  }
+  return issues
+}
+
+/** every @keyframes block in a stylesheet: its name, its body and the line it starts on */
+function keyframesBlocks(css: string): { name: string; body: string; line: number }[] {
+  const out: { name: string; body: string; line: number }[] = []
+  for (const m of css.matchAll(/@keyframes\s+([^\s{]+)\s*\{/g)) {
+    const open = m.index + m[0].length
+    let depth = 1
+    let i = open
+    for (; i < css.length && depth > 0; i++) {
+      if (css[i] === '{') depth++
+      else if (css[i] === '}') depth--
+    }
+    out.push({
+      name: m[1] ?? '',
+      body: css.slice(open, i - 1),
+      line: css.slice(0, m.index).split('\n').length,
+    })
+  }
+  return out
 }

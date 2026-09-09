@@ -38,7 +38,7 @@
         "text"
       ],
       "required": false,
-      "hint": "3 to 5 supporting points, up to 2 lines each"
+      "hint": "3 to 4 supporting points, up to 2 lines each"
     },
     "body": {
       "type": "text",

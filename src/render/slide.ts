@@ -3,6 +3,7 @@ import type { Layout } from './assets.ts'
 import {
   applyTextOverride,
   chartSvg,
+  countValue,
   effectiveSlot,
   escapeHtml,
   inlineMarkup,
@@ -13,6 +14,7 @@ import {
 export {
   applyTextOverride,
   chartSvg,
+  countValue,
   effectiveSlot,
   escapeHtml,
   inlineMarkup,
@@ -133,6 +135,8 @@ export interface RenderSlideInput {
   enters?: Record<string, string>
   /** 1-based position and total in the playback order; the section carries them as --page-index / --page-count for furniture like progress ticks */
   page?: { index: number; count: number }
+  /** this page's own transition family (from slide.transition); rendered as data-transition on the section, which the player reads when the page comes in */
+  transition?: string
 }
 
 /**
@@ -149,9 +153,10 @@ export function renderSlideHtml(input: RenderSlideInput): string {
   const pageVars = input.page
     ? ` style="--page-index:${Math.trunc(input.page.index)};--page-count:${Math.trunc(input.page.count)}"`
     : ''
+  const own = input.transition ? ` data-transition="${escapeHtml(input.transition)}"` : ''
   html = html.replace(
     /<section\b([^>]*)>/,
-    (_m, attrs: string) => `<section${attrs} data-slide="${escapeHtml(slideId)}"${pageVars}>`,
+    (_m, attrs: string) => `<section${attrs} data-slide="${escapeHtml(slideId)}"${own}${pageVars}>`,
   )
 
   // elements whose content carries details get data-details, so the player knows what opens

@@ -88,7 +88,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -96,12 +96,12 @@
     },
     "title": {
       "type": "text",
-      "value": "The skeleton of Tidewatch"
+      "value": "The weekly loop on one page"
     },
     "photo": {
       "type": "image",
-      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23e6dcc4%27/%3E%3C/svg%3E",
-      "alt": "system diagram",
+      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271678%27 height=%27560%27%3E%3Crect width=%271678%27 height=%27560%27 fill=%27%23e6dcc4%27/%3E%3C/svg%3E",
+      "alt": "weekly loop diagram",
       "hotspots": [
         {
           "target": "cards",
@@ -109,13 +109,13 @@
           "y": 30,
           "w": 16,
           "h": 40,
-          "label": "run folder: see the design principles"
+          "label": "comment step: see the four waits"
         }
       ]
     },
     "caption": {
       "type": "text",
-      "value": "Config and targets come in, take two paths, and land in the same run folder."
+      "value": "Updates come in from three teams, take one path, and land on the same page."
     }
   }
 }

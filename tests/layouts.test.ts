@@ -15,6 +15,7 @@ import {
 import { renderPreviewDocument } from '../src/render/preview.ts'
 import {
   applyTextOverride,
+  countValue,
   inlineMarkup,
   overrideToInlineStyle,
   renderSlideHtml,
@@ -23,11 +24,11 @@ import {
 } from '../src/render/slide.ts'
 
 const layoutIds = listLayoutIds()
-const theme = loadTheme('ink-paper')
+const theme = loadTheme('blue-professional')
 
 describe('shipped themes and layouts', () => {
-  it('ships the ink-paper theme and the first-batch layouts (more may be added per deck)', () => {
-    expect(listThemeIds()).toContain('ink-paper')
+  it('ships the blue-professional theme and the first-batch layouts (more may be added per deck)', () => {
+    expect(listThemeIds()).toContain('blue-professional')
     expect(layoutIds).toEqual(
       expect.arrayContaining(['cards', 'closing', 'comparison', 'cover', 'photo', 'statement']),
     )
@@ -36,9 +37,9 @@ describe('shipped themes and layouts', () => {
   it('theme.json validates, theme.css is appearance-only and tokens become CSS variables', () => {
     expect(checkTheme(theme)).toEqual([])
     const vars = themeCssVariables(theme.json)
-    expect(vars).toContain('--color-accent: #c8102e;')
+    expect(vars).toContain('--color-accent: #1e2bfa;')
     expect(vars).toContain('--font-display:')
-    expect(vars).toContain('--radius: 4px;')
+    expect(vars).toContain('--radius: 12px;')
   })
 
   it.each(layoutIds)('layout %s passes the contract check', (id) => {
@@ -122,7 +123,9 @@ describe('slide rendering', () => {
     expect(renderSlot({ type: 'image', src: 'p.png', alt: 'q"' })).toBe(
       '<img src="p.png" alt="q&quot;">',
     )
-    expect(renderSlot({ type: 'metric', value: '0', label: 'L' })).toContain('metric-value">0<')
+    expect(renderSlot({ type: 'metric', value: '0', label: 'L' })).toContain(
+      'metric-value" data-count="0">0<',
+    )
   })
 
   it('renders chart, table, code and icon slots', () => {
@@ -320,4 +323,24 @@ describe('layouts in a real browser', () => {
     }
     await page.close()
   }, 120_000)
+})
+
+describe('the number a count entrance runs up to', () => {
+  it('reads one number with its separators and decimals out of a short value, and nothing out of the rest', () => {
+    expect(countValue('62 min')).toBe(62)
+    expect(countValue('104,411')).toBe(104411)
+    expect(countValue('+12%')).toBe(12)
+    expect(countValue('$1.2M')).toBe(1.2)
+    expect(countValue('0.8x')).toBe(0.8)
+    expect(countValue('01')).toBe(1)
+    expect(countValue('-3.5')).toBe(-3.5)
+    expect(countValue('**77**')).toBe(77)
+    expect(countValue('N/A')).toBeNull()
+    expect(countValue('3 of 5')).toBeNull()
+    expect(countValue('about twelve')).toBeNull()
+    expect(renderSlot({ type: 'metric', value: '104,411', label: 'L' })).toContain(
+      'data-count="104411">104,411<',
+    )
+    expect(renderSlot({ type: 'metric', value: 'N/A', label: 'L' })).toContain('metric-value">N/A<')
+  })
 })

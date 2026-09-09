@@ -36,12 +36,14 @@
     "vocabulary": ["48px warm grid", "white glass cards with soft shadows", "pill process nodes", "section heads with a short teal bar", "Inter 900 big numbers", "orange-red consequence cards", "bottom tabs and page-number pill"],
     "avoid": ["hard borders", "dark backgrounds", "a third accent colour", "serifs", "gradients", "sharp corners"]
   },
+  "tones": ["inverse"],
   "motion": {
-    "transition": "lift",
+    "family": "soft",
+    "transition": "settle",
     "default": "fade-up",
     "byRole": {
       "card": "scale-in",
-      "stat": "scale-in",
+      "stat": "count",
       "badge": "scale-in",
       "badge-arrow": "scale-in",
       "pill": "fade-up",
@@ -53,12 +55,10 @@
       "label-alert": "slide-left",
       "list-alert": "slide-left",
       "sunk": "slide-right",
-      "chart": "wipe",
+      "chart": "grow",
       "table": "wipe",
       "photo": "fade",
       "connector": "fade"
-    },
-    "stagger": 80,
-    "duration": 380
+    }
   }
 }

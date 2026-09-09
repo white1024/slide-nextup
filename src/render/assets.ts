@@ -3,7 +3,7 @@ import { homedir } from 'node:os'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Ajv } from 'ajv'
-import type { Enter, Slot } from '../model/deck.ts'
+import type { Enter, MotionFamily, Slot, TransitionFamily } from '../model/deck.ts'
 
 export const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
@@ -34,21 +34,75 @@ export interface ThemeJson {
   decoration: { vocabulary: string[]; avoid: string[] }
   source?: ThemeSource
   motion?: ThemeMotion
+  /** the data-tone values theme.css styles (inverse, and the variants of one role) */
+  tones?: string[]
 }
 
 /** Playback rhythm: which entrance a step element gets when it does not say, and the timing. */
 export interface ThemeMotion {
+  /** the pack's motion personality: the pace, curve and band its entrances default to */
+  family?: MotionFamily
   default?: Enter
   byRole?: Record<string, Enter>
-  /** ms between elements revealed by the same step */
+  /** ms between elements revealed by the same step (overrides the family's figure) */
   stagger?: number
-  /** ms of one entrance */
+  /** ms of one entrance (overrides the family's figure; must stay in its band) */
   duration?: number
   /** the page transition a deck of this theme plays when deck.json names none (fade otherwise) */
-  transition?: 'none' | 'fade' | 'push' | 'lift'
+  transition?: TransitionFamily
 }
 
-export const MOTION_DEFAULTS = { enter: 'fade-up' as Enter, stagger: 70, duration: 350 }
+export interface MotionFamilySpec {
+  /** ms of one entrance */
+  duration: number
+  /** ms between elements revealed by the same step */
+  stagger: number
+  /** the entrance curve (pop keeps its own overshoot) */
+  ease: string
+  /** the durations a pack of this family may declare, and what QA holds its computed entrances to */
+  band: readonly [number, number]
+}
+
+/**
+ * The three motion personalities a pack can pick. Craft figures, not product ones: a strong
+ * ease-out at 150–400ms for a crisp pack, a longer rounder run for a soft one, a short plain
+ * ease for a minimal one; stagger 30–90ms so a group never feels slow.
+ */
+export const MOTION_FAMILIES: Record<MotionFamily, MotionFamilySpec> = {
+  crisp: { duration: 300, stagger: 60, ease: 'cubic-bezier(0.23, 1, 0.32, 1)', band: [150, 400] },
+  soft: { duration: 450, stagger: 90, ease: 'cubic-bezier(0.22, 1, 0.36, 1)', band: [300, 800] },
+  minimal: { duration: 220, stagger: 40, ease: 'cubic-bezier(0.4, 0, 0.2, 1)', band: [150, 320] },
+}
+
+/** the widest band any entrance may use, family or not (open-slide's measured range) */
+export const ENTRANCE_BAND: readonly [number, number] = [150, 800]
+
+export const MOTION_DEFAULTS = {
+  enter: 'fade-up' as Enter,
+  stagger: 70,
+  duration: 350,
+  ease: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
+}
+
+/** The pace a theme's entrances play at: its family's figures, overridden by its own duration and stagger. */
+export function motionFor(theme: Pick<ThemeJson, 'motion'>): {
+  family: MotionFamily | null
+  duration: number
+  stagger: number
+  ease: string
+  band: readonly [number, number]
+} {
+  const motion = theme.motion ?? {}
+  const family = motion.family ?? null
+  const spec = family ? MOTION_FAMILIES[family] : null
+  return {
+    family,
+    duration: motion.duration ?? spec?.duration ?? MOTION_DEFAULTS.duration,
+    stagger: motion.stagger ?? spec?.stagger ?? MOTION_DEFAULTS.stagger,
+    ease: spec?.ease ?? MOTION_DEFAULTS.ease,
+    band: spec?.band ?? ENTRANCE_BAND,
+  }
+}
 
 /** The entrance a step element uses: its own, else the theme default for its role, else fade-up. */
 export function enterFor(theme: ThemeJson, role: string | undefined): Enter {
@@ -67,7 +121,16 @@ export interface LayoutJson {
   content_relations: string[]
   scene_roles: string[]
   density: { max_chars: number; max_elements: number }
-  slots: Record<string, { type: Slot['type'] | Slot['type'][]; required: boolean; hint?: string }>
+  slots: Record<
+    string,
+    {
+      type: Slot['type'] | Slot['type'][]
+      required: boolean
+      hint?: string
+      /** image slots: cover (the default) crops to fill the box, contain shows the whole picture */
+      fit?: 'cover' | 'contain'
+    }
+  >
   elements: Array<{ id: string; kind: 'text' | 'image' | 'shape' }>
   sample: Record<string, Slot>
 }
@@ -105,6 +168,23 @@ function readJson(file: string): unknown {
 
 const ajv = new Ajv({ allErrors: true, strict: true })
 ajv.addSchema(readJson(join(PROJECT_ROOT, 'schemas', 'deck.schema.json')) as object)
+/**
+ * object-fit rules for the image slots a layout declares `fit` on. The base sheet crops with cover
+ * (a photo fills its frame); a diagram declares contain so nothing is cut off. Every renderer appends
+ * this after the layout's own CSS, so the declaration wins over a stray object-fit there.
+ */
+export function layoutFitCss(layout: Layout): string {
+  const rules: string[] = []
+  for (const [slotId, slot] of Object.entries(layout.json.slots)) {
+    if (slot.fit) {
+      rules.push(
+        `[data-layout="${layout.json.id}"] [data-el="${slotId}"] img { object-fit: ${slot.fit}; }`,
+      )
+    }
+  }
+  return rules.join('\n')
+}
+
 export const validateThemeJson = ajv.compile(
   readJson(join(PROJECT_ROOT, 'schemas', 'theme.schema.json')) as object,
 )
@@ -306,7 +386,9 @@ export function themeCssVariables(theme: ThemeJson): string {
   lines.push(`  --font-body: ${theme.typography.body.family};`)
   lines.push(`  --font-body-weight: ${theme.typography.body.weight};`)
   lines.push(`  --radius: ${theme.spacing.radius}px;`)
-  lines.push(`  --motion-duration: ${theme.motion?.duration ?? MOTION_DEFAULTS.duration}ms;`)
-  lines.push(`  --motion-stagger: ${theme.motion?.stagger ?? MOTION_DEFAULTS.stagger}ms;`)
+  const motion = motionFor(theme)
+  lines.push(`  --motion-duration: ${motion.duration}ms;`)
+  lines.push(`  --motion-stagger: ${motion.stagger}ms;`)
+  lines.push(`  --motion-ease: ${motion.ease};`)
   return `:root {\n${lines.join('\n')}\n}\n`
 }

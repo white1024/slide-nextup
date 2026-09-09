@@ -96,7 +96,7 @@
     },
     "photo": {
       "type": "image",
-      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%279%27%3E%3Crect width=%2716%27 height=%279%27 fill=%27%23ebe9e9%27/%3E%3C/svg%3E",
+      "src": "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271766%27 height=%27620%27%3E%3Crect width=%271766%27 height=%27620%27 fill=%27%23ebe9e9%27/%3E%3C/svg%3E",
       "alt": "System diagram",
       "hotspots": [
         {

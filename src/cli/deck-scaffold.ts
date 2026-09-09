@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { type Deck, parseDeck, type Slide, stringifyDeck, validateDeck } from '../model/deck.ts'
+import { readDesign } from '../model/design.ts'
 import { deckIdFromStoryPath, scaffoldDeck } from '../model/scaffold.ts'
 import { loadStory } from '../model/story.ts'
 import { confirmationStatus, describeStatus } from '../model/story-confirm.ts'
@@ -71,7 +72,25 @@ if (existsSync(outFile)) {
   existing = parsed.deck
 }
 
-const theme = opt('--theme') ?? existing?.theme ?? 'ink-paper'
+// the choice slide-design recorded next to the story (pnpm design:set) is the default theme; a deck
+// that is already built keeps its own, because moving one is deck:retheme's job
+const design = readDesign(dirname(storyFile))
+if (design && !design.ok) {
+  for (const e of design.errors) console.log(`✖ ${relative(process.cwd(), design.path)} ${e}`)
+  console.log(
+    'design.json failed its schema; fix it or record the choice again with pnpm design:set',
+  )
+  process.exit(1)
+}
+const chosen = design?.ok ? design.design.theme : undefined
+const theme = opt('--theme') ?? existing?.theme ?? chosen ?? 'blue-professional'
+if (chosen && chosen !== theme) {
+  console.log(
+    opt('--theme')
+      ? `⚠ --theme ${theme} differs from design.json (${chosen}); record the change with pnpm design:set`
+      : `⚠ design.json chooses ${chosen} but deck.json is on ${theme}; keeping the deck's theme (pnpm deck:retheme moves a built deck, --theme overrides for this run)`,
+  )
+}
 // the deck's own folder may carry the theme (decks/<id>/themes/<theme>/), so look from there
 const lookup = { deckDir: dirname(outFile) }
 try {
@@ -186,8 +205,12 @@ if (existing) {
 if (result.stepsAuto.length > 0) {
   const pages = new Set(result.stepsAuto.map((k) => k.split('/')[0]))
   console.log(
-    `reveal steps: ${result.stepsAuto.length} elements sequenced automatically across ${pages.size} slides (editable in the editor panel; your edits are kept when the slide is redone)`,
+    `reveal steps: ${result.stepsAuto.length} elements sequenced by the story across ${pages.size} slides (evidence and relationship pages build up, map pages only their items, hero, pause, close and intensity 4+ show whole; editable in the editor panel, and your edits are kept when the slide is redone)`,
   )
 }
+if (result.transitionsAuto.length > 0)
+  console.log(
+    `page transitions: ${result.transitionsAuto.join(', ')} (from the story: a pause page breathes, a hero page after the first settles; the toolbar's "This page" menu changes it)`,
+  )
 for (const w of result.warnings) console.log(`⚠ ${w}`)
 process.exit(validation.ok ? 0 : 1)

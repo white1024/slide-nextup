@@ -1,6 +1,6 @@
 import type { Override, Slot } from '../model/deck.ts'
 import { detectLang } from '../model/lang.ts'
-import { type Layout, type Theme, themeCssVariables } from './assets.ts'
+import { type Layout, layoutFitCss, type Theme, themeCssVariables } from './assets.ts'
 import { iconSprite } from './icons.ts'
 import { FIT_JS } from './runtime.ts'
 import { BASE_CSS, escapeHtml, renderSlideHtml } from './slide.ts'
@@ -24,6 +24,7 @@ export function renderPreviewDocument(input: PreviewInput): string {
     themeCssVariables(theme.json),
     input.withoutTheme ? '' : theme.css,
     layout.css,
+    layoutFitCss(layout),
     'html, body { margin: 0; padding: 0; background: #808080; }',
   ].join('\n')
   const body = renderSlideHtml({ layout, slideId, slots: input.slots, overrides: input.overrides })

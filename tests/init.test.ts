@@ -36,7 +36,7 @@ const json = (ws: string, f: string) =>
   }
 
 describe('slide-nextup init', () => {
-  it('creates a workspace: package.json, agent entry points, the four skills with their mirror, decks/ and themes/', () => {
+  it('creates a workspace: package.json, agent entry points, the five skills with their mirror, decks/ and themes/', () => {
     const ws = join(mkdtempSync(join(tmpdir(), 'slide-init-')), 'My Decks')
     const r = init([ws])
     expect(r.code, r.out).toBe(0)
@@ -51,6 +51,7 @@ describe('slide-nextup init', () => {
       '.agents/skills/slide-story/SKILL.md',
       '.agents/skills/slide-design/SKILL.md',
       '.agents/skills/slide-build/SKILL.md',
+      '.agents/skills/slide-talk/SKILL.md',
       '.agents/skills/slide-build/references/new-layout.md',
       '.claude/skills/slide-build/SKILL.md',
       '.claude/skills/.sync-lock.json',
@@ -86,7 +87,7 @@ describe('slide-nextup init', () => {
     // the user customises the workspace
     writeFileSync(
       join(ws, 'AGENTS.md'),
-      `${read(ws, 'AGENTS.md')}\n## House rules\n\nAlways use ink-paper.\n`,
+      `${read(ws, 'AGENTS.md')}\n## House rules\n\nAlways use blue-professional.\n`,
     )
     const p = json(ws, 'package.json')
     p.scripts.lint = 'biome check .'

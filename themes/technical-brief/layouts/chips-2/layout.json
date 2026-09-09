@@ -44,7 +44,7 @@
     "left-items": {
       "type": "list",
       "required": true,
-      "hint": "the members as chips, 4 to 9 items, up to 12 characters each"
+      "hint": "the members as chips, 4 to 9 items, up to 8 characters each"
     },
     "right-title": {
       "type": "text",
@@ -59,7 +59,7 @@
     "right-items": {
       "type": "list",
       "required": true,
-      "hint": "the members as accent chips, 4 to 9 items, up to 12 characters each"
+      "hint": "the members as accent chips, 4 to 9 items, up to 8 characters each"
     },
     "caveat": {
       "type": "text",

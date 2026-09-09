@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "story-first",
   "title": "Confirm the story before the slides",
-  "theme": "ink-paper",
+  "theme": "blue-professional",
   "canvas": {
     "width": 1920,
     "height": 1080
@@ -16,10 +16,6 @@
       "id": "s1",
       "layout": "cover",
       "slots": {
-        "kicker": {
-          "type": "text",
-          "value": "Weekly proposal"
-        },
         "title": {
           "type": "text",
           "value": "Where our slide revisions go"
@@ -27,16 +23,28 @@
         "subtitle": {
           "type": "text",
           "value": "Last quarter six decks averaged four rounds of revision, three of which touched only the layout."
+        },
+        "brand": {
+          "type": "text",
+          "value": "Weekly proposal"
         }
       },
       "elements": [
         {
-          "id": "backdrop",
+          "id": "panel",
           "kind": "shape"
         },
         {
-          "id": "kicker",
+          "id": "dots",
+          "kind": "shape"
+        },
+        {
+          "id": "brand",
           "kind": "text"
+        },
+        {
+          "id": "accent",
+          "kind": "shape"
         },
         {
           "id": "title",
@@ -44,6 +52,18 @@
         },
         {
           "id": "subtitle",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -72,7 +92,19 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "subtitle",
           "kind": "text"
         },
         {
@@ -85,6 +117,14 @@
         },
         {
           "id": "card-3",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -112,15 +152,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -164,11 +240,19 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
         },
         {
-          "id": "divider",
+          "id": "left",
           "kind": "shape"
         },
         {
@@ -180,11 +264,23 @@
           "kind": "text"
         },
         {
+          "id": "right",
+          "kind": "shape"
+        },
+        {
           "id": "right-title",
           "kind": "text"
         },
         {
           "id": "right-items",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -205,15 +301,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -242,7 +374,19 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
+          "kind": "text"
+        },
+        {
+          "id": "subtitle",
           "kind": "text"
         },
         {
@@ -255,6 +399,14 @@
         },
         {
           "id": "card-3",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -271,15 +423,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ],
@@ -304,7 +492,15 @@
       },
       "elements": [
         {
-          "id": "backdrop",
+          "id": "ring-big",
+          "kind": "shape"
+        },
+        {
+          "id": "ring-small",
+          "kind": "shape"
+        },
+        {
+          "id": "accent",
           "kind": "shape"
         },
         {
@@ -318,6 +514,18 @@
         {
           "id": "cta",
           "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
+          "kind": "text"
         }
       ],
       "notes": "Ask directly who will provide the topic and settle it on the spot."
@@ -327,12 +535,12 @@
     "s1/title": {
       "y": 360,
       "style": {
-        "fontSize": 128
+        "fontSize": 80
       }
     },
     "s6/card-1": {
       "style": {
-        "color": "#c8102e",
+        "color": "#1e2bfa",
         "fontSize": 160
       }
     },

@@ -6,12 +6,15 @@ import {
   type Override,
   type Slide,
   type Slot,
+  type TransitionFamily,
   transitionFamily,
 } from '../model/deck.ts'
 import { langOf } from '../model/lang.ts'
+import type { TalkCues } from '../talk/talk.ts'
 import {
   enterFor,
   type Layout,
+  layoutFitCss,
   layoutRoles,
   loadLayout,
   loadTheme,
@@ -37,6 +40,8 @@ export interface RenderDeckOptions {
   omitThemeCss?: boolean
   /** every step element visible and no transitions (QA and exports); same as opening with ?static=1 */
   staticMode?: boolean
+  /** the talk's cues per slide (decks/<id>/talk.md), embedded for the presenter window; absent means none */
+  talk?: TalkCues
 }
 
 export interface RenderDeckResult {
@@ -153,7 +158,7 @@ const EDITOR_CSS = readFileSync(new URL('../editor/editor.css', import.meta.url)
 /** The shared slot renderer, exposed to the editor as `window.__slotRender` (same source as Node uses). */
 const SLOT_RENDER_JS = `window.__slotRender = (() => {
 ${readFileSync(new URL('./slot-render.js', import.meta.url), 'utf8').replace(/^export /gm, '')}
-return { escapeHtml, inlineMarkup, chartSvg, renderSlot, slotText, applyTextOverride, effectiveSlot, DETAILS_ROLES };
+return { escapeHtml, inlineMarkup, chartSvg, renderSlot, slotText, applyTextOverride, effectiveSlot, DETAILS_ROLES, COUNTABLE, countValue };
 })();`
 
 /** Page-order helpers shared with the runtime (window.__pages); same source as Node uses. */
@@ -167,8 +172,8 @@ export function resolveTransition(
   deck: Pick<Deck, 'transition'>,
   theme: ThemeJson,
 ): {
-  transition: 'none' | 'fade' | 'push' | 'lift'
-  themeTransition: 'none' | 'fade' | 'push' | 'lift'
+  transition: TransitionFamily
+  themeTransition: TransitionFamily
 } {
   const themeTransition = theme.motion?.transition ?? 'fade'
   return {
@@ -181,6 +186,15 @@ function modelScript(deck: Deck): string {
   const json = JSON.stringify(normaliseDeck(deck)).replace(/</g, '\\u003c')
   return `<script type="application/json" id="deck-model">${json}</script>`
 }
+
+/** the talk's cues, beside the model rather than in it: the model stays the deck alone */
+function talkScript(talk: TalkCues): string {
+  const json = JSON.stringify(talk).replace(/</g, '\\u003c')
+  return `\n<script type="application/json" id="deck-talk">${json}</script>`
+}
+// The script right after the model keeps the document as written here (`window.__pristine`),
+// before the player and the editor touch the page: the editor's "Download deck.html" without a
+// dev server rebuilds the file from it, with the current model in place of this one.
 
 export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderDeckResult {
   const lookup = { root: opts.root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
@@ -213,6 +227,8 @@ export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderD
       enters,
       // story order at render time; the player renumbers by the playback order (hidden pages dropped)
       page: { index: deck.slides.indexOf(slide) + 1, count: deck.slides.length },
+      // the page's own family, played when it comes in; the legacy name folds into push
+      transition: slide.transition ? transitionFamily(slide.transition) : undefined,
     })
   })
   if (problems.length > 0) {
@@ -227,6 +243,7 @@ export function renderDeckDocument(deck: Deck, opts: RenderDeckOptions): RenderD
     themeCssVariables(theme.json),
     opts.omitThemeCss ? '' : theme.css,
     ...[...layouts.values()].map((l) => l.css),
+    ...[...layouts.values()].map((l) => layoutFitCss(l)),
     EDITOR_CSS,
   ].join('\n')
 
@@ -248,7 +265,8 @@ ${iconSprite()}
 ${sections.join('\n')}
 </div>
 </div>
-${modelScript(deck)}
+${modelScript(deck)}${opts.talk ? talkScript(opts.talk) : ''}
+<script id="deck-pristine">window.__pristine = document.documentElement.outerHTML;</script>
 <script>
 ${PAGES_JS}
 </script>

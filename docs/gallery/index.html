@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>slide-nextup themes</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root { --bg: #f6f5fa; --panel: #ffffff; --ink: #1a1930; --muted: #767490; --rule: #dcdae8; --accent: #4f47c8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121120; --panel: #1a1929; --ink: #ecebf6; --muted: #8b899f; --rule: #2a2940; --accent: #9c95ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px clamp(16px, 4vw, 48px) 64px; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 0 0 6px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 0.85em; color: var(--muted); font-weight: 400; }
+  .lead, .about, .count { color: var(--muted); margin: 0 0 8px; max-width: 80ch; }
+  .count { font-size: 13px; margin-bottom: 16px; }
+  .crumbs { font-size: 14px; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px 20px; }
+  figure { margin: 0; }
+  .frame { --s: 0.25; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; background: #808080; }
+  .frame iframe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; transform: scale(var(--s)); pointer-events: none; }
+  .frame .open { position: absolute; inset: 0; }
+  .frame:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+  figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  figcaption b { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-weight: 600; color: var(--ink); }
+  figcaption a { color: inherit; text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; }
+  .desc { display: block; margin-top: 2px; }
+  .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px 24px; margin-top: 24px; }
+  .pack h2 { margin-top: 12px; }
+</style>
+</head>
+<body>
+<h1>Themes</h1>
+<p class="lead">3 theme packs, 49 layouts. Every frame is a real page rendered from the layout's sample content, the same document the quality checks measure. Open a pack to see each of its layouts.</p>
+<div class="packs">
+  <figure class="pack">
+    <div class="frame"><iframe src="blue-professional/cover.html" loading="lazy" tabindex="-1" title="Blue Professional"></iframe><a class="open" href="blue-professional/cover.html" target="_blank" rel="noopener" aria-label="open the Blue Professional cover full size"></a></div>
+    <h2><a href="blue-professional/index.html">Blue Professional</a> <code>blue-professional</code></h2>
+    <p class="about">The restraint of a consulting report: warm cream paper, a single electric cobalt, ink-black headings and grey captions; Space Grotesk headings with Inter body text, CJK falling back to Noto Sans TC or Microsoft JhengHei. Cards are a pale blue tint with a 1.5px translucent border and 12px radius, no solid borders or shadows. Every page has a blue uppercase eyebrow top left, a pale blue rounded tag top right, the page number bottom left and a 3px progress bar along the bottom edge that advances with the page count; numbers are always cobalt, processes are numbered blue circles joined by faint lines, and the call to action is the only solid blue pill. Ported from beautiful-html-templates’ blue-professional.</p>
+    <p class="count"><a href="blue-professional/index.html">17 layouts →</a></p>
+  </figure>
+  <figure class="pack">
+    <div class="frame"><iframe src="technical-brief/cover.html" loading="lazy" tabindex="-1" title="Technical Brief"></iframe><a class="open" href="technical-brief/cover.html" target="_blank" rel="noopener" aria-label="open the Technical Brief cover full size"></a></div>
+    <h2><a href="technical-brief/index.html">Technical Brief</a> <code>technical-brief</code></h2>
+    <p class="about">A dark technical brief: a near-black green-grey room, panels one step up from the ground with a single hairline border and no shadow, a monospace uppercase eyebrow in bright teal trailed by a thin rule, dash-marked lists under a coloured pip label, monospace tabular numbers, and a teal hairline progress bar along the top edge. Teal is the working accent; emerald and amber mark the second and third card of a triple, and amber alone means a caveat. Ported from the author's own hand-written 1280x720 architecture deck, geometry x1.5; every face is a system font, because a projector is not guaranteed to have a network and a failed web font falls back silently.</p>
+    <p class="count"><a href="technical-brief/index.html">16 layouts →</a></p>
+  </figure>
+  <figure class="pack">
+    <div class="frame"><iframe src="warm-keynote/cover.html" loading="lazy" tabindex="-1" title="Warm Keynote"></iframe><a class="open" href="warm-keynote/cover.html" target="_blank" rel="noopener" aria-label="open the Warm Keynote cover full size"></a></div>
+    <h2><a href="warm-keynote/index.html">Warm Keynote</a> <code>warm-keynote</code></h2>
+    <p class="about">Warm cream paper with a faint 48px grid, dark brown text, teal as the only accent and orange-red reserved for consequences and risks. White glass cards (32px radius, large soft shadows), pill-shaped process nodes, section heads with a short teal bar and monospace text, Inter 900 big numbers, tables inside glass containers. Headings and body are Noto Sans TC (a local font), Latin and numerals use Inter, furniture uses JetBrains Mono. The style comes from a friend’s internal deck (with their consent, no attribution required); none of its content is used.</p>
+    <p class="count"><a href="warm-keynote/index.html">16 layouts →</a></p>
+  </figure>
+</div>
+<script>
+  const frames = document.querySelectorAll('.frame')
+  const fit = () => { for (const f of frames) f.style.setProperty('--s', String(f.clientWidth / 1920)) }
+  new ResizeObserver(fit).observe(document.body)
+  fit()
+</script>
+</body>
+</html>

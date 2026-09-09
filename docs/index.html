@@ -377,13 +377,19 @@
   .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   @media (min-width: 760px) { .gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   .gallery figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
-  .gallery img {
+  .gallery .frame {
+    --s: 0.2;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
     border: 1px solid var(--rule);
     border-radius: 6px;
     background: var(--panel);
     transition: transform 160ms ease, box-shadow 160ms ease;
   }
-  .gallery figure:hover img { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .gallery .frame iframe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; transform: scale(var(--s)); pointer-events: none; }
+  .gallery .frame .open { position: absolute; inset: 0; }
+  .gallery figure:hover .frame { transform: translateY(-2px); box-shadow: var(--shadow); }
   .gallery figcaption { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
   .two-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 40px; }
   @media (min-width: 760px) { .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -535,8 +541,8 @@
         </div>
         <div class="pillar">
           <h3>One file, no server</h3>
-          <p>The deck is one HTML file with the model, the styles and the runtime embedded: keyboard navigation, step reveals, entrance animations, page transitions, a presenter window with notes and a timer, and interactive slots such as expandable details, image hotspots and tabs. Render with <code>--inline-assets</code> and the images travel inside it too.</p>
-          <p class="how">deck.html · press P for the presenter window</p>
+          <p>The deck is one HTML file with the model, the styles and the runtime embedded: keyboard navigation, step reveals, entrance animations, page transitions, a presenter window with notes and a timer, and interactive slots such as expandable details, image hotspots and tabs. The reveals follow the story: an evidence page builds up, a peak lands whole, charts grow from their data. Render with <code>--inline-assets</code> and the images travel inside it too.</p>
+          <p class="how">deck.html · press F for fullscreen, P for the presenter window</p>
         </div>
         <div class="pillar">
           <h3>Edit everything in the browser</h3>
@@ -561,7 +567,7 @@
           <div class="step"><strong>Visual direction</strong><p>Three directions rendered as real covers from your own story. You pick one.</p><span class="out">design.json</span></div>
           <div class="step"><strong>Build, then edit</strong><p>A layout per slide, the theme filled in, one HTML file rendered and measured. Then the browser.</p><span class="out">deck.json · deck.html</span></div>
         </div>
-        <p class="measure">The agent follows four process skills, plain Markdown files that ship with the workspace. They live once in <code>.agents/skills/</code>; the copy Claude Code reads is generated and checked for drift, and Codex reads the originals through <code>AGENTS.md</code>.</p>
+        <p class="measure">The agent follows five process skills, plain Markdown files that ship with the workspace. They live once in <code>.agents/skills/</code>; the copy Claude Code reads is generated and checked for drift, and Codex reads the originals through <code>AGENTS.md</code>.</p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Skill</th><th>What it does</th><th>Output</th></tr></thead>
@@ -570,6 +576,7 @@
               <tr><td><strong>slide-story</strong></td><td>Writes the narrative, runs <code>story:check</code>, shows the summary and <strong>stops for your confirmation</strong>, then records it with <code>story:confirm</code>.</td><td><code>story.md</code>, <code>story.confirmed.json</code></td></tr>
               <tr><td><strong>slide-design</strong></td><td>Renders one cover per visual direction from the real first slide and lets you choose.</td><td><code>design.json</code></td></tr>
               <tr><td><strong>slide-build</strong></td><td>Gate, layouts, scaffold, fill the slots, validate, render, QA, hand over. "Redo page 3" rebuilds only that page and keeps your manual edits.</td><td><code>deck.json</code>, <code>deck.html</code></td></tr>
+              <tr><td><strong>slide-talk</strong></td><td>After the build, when you present it: cues for every slide (must or may, not a script), the questions to expect ranked by how likely and how costly, a checklist before going on. A cue can be pinned to a press, and the presenter window lights it then. Checked against the deck.</td><td><code>talk.md</code></td></tr>
             </tbody>
           </table>
         </div>
@@ -586,7 +593,7 @@
       <div class="section-body">
         <figure class="figure" style="margin:0">
           <div class="window">
-            <img src="assets/editor.png" width="1280" height="720" alt="Edit mode on the example deck: the slide rail on the left, the top bar with undo, redo, animations and download, and the floating toolbar over a selected text element with font, size, weight, line height, letter spacing and colour controls">
+            <img src="assets/editor.png" width="1280" height="720" alt="Edit mode on the example deck: the slide rail on the left, the top bar with undo, redo, the animation and transition controls, the two downloads and fullscreen, and the floating toolbar over a selected text element with font, size, weight, line height, letter spacing and colour controls">
           </div>
           <figcaption>Edit mode: the slide rail, the top bar, and the floating toolbar for the selected element. Every control writes to the model, so a regenerated page never loses what you moved.</figcaption>
         </figure>
@@ -595,6 +602,8 @@
           <div><dt>Undo, hide, reuse</dt><dd><kbd>Ctrl</kbd>+<kbd>Z</kbd> and <kbd>Ctrl</kbd>+<kbd>Y</kbd> undo and redo, <kbd>Delete</kbd> hides an element, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd> / <kbd>V</kbd> copy and paste a style.</dd></div>
           <div><dt>Arrange the deck</dt><dd>The slide rail reorders pages by drag or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>↑↓</kbd> and hides them with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd>; hidden pages are skipped in playback and can be written back into the story.</dd></div>
           <div><dt>Interactive content, in place</dt><dd>Expandable content behind a card, clickable areas drawn on an image, charts from <code>label | value</code> lines, tables, icons by name and tabs from <code>## label</code> headings.</dd></div>
+          <div><dt>Animation, per element</dt><dd>Appears on click and the entrance effect sit behind <strong>More</strong>; the top bar has the Animations toggle and the transition menus for the deck and for this page. The scaffold sets all of it from the story's rhythm first.</dd></div>
+          <div><dt>Take the file with you</dt><dd><strong>Download deck.json</strong> saves the model, <strong>Download deck.html</strong> the whole deck with your edits as one file, the images inlined while <code>pnpm dev</code> runs. <kbd>F</kbd> fills the screen, <kbd>E</kbd> goes back to playback.</dd></div>
         </dl>
       </div>
     </div>
@@ -612,7 +621,9 @@
           <li><strong>Overlap</strong>Text elements that collide.</li>
           <li><strong>Minimum font sizes</strong>A floor per text role: body text, captions, chips and the rest each have one.</li>
           <li><strong>Density</strong>How much text a page carries, counted in full-width units: a CJK glyph is one, a Latin letter or digit a half.</li>
+          <li><strong>Image fit</strong>A picture whose ratio is far from its frame, so a diagram is never cropped in silence.</li>
           <li><strong>Theme geometry</strong>Layout owns position and size, theme owns appearance; the check keeps them apart.</li>
+          <li><strong>Motion</strong>The deck is played to its last step: every element must end where static mode puts it, a page on its way out stays still, reduced motion leaves nothing moving, and every duration stays in its band.</li>
           <li><strong>Whole theme packs</strong><code>theme:qa</code> builds a deck from every layout's own sample and runs the same checks, so a pack is fit before it is shared.</li>
         </ul>
 <pre class="term"><span class="cmd">$ pnpm qa decks/tidewatch-progress/deck.json</span>
@@ -641,16 +652,16 @@ Tidewatch website health-check tool: progress, deliverables and direction (tidew
       </div>
       <div class="section-body">
         <div class="gallery">
-          <figure><img src="assets/layout-cover-editorial.png" width="768" height="432" alt="cover-editorial layout" loading="lazy"><figcaption>cover-editorial</figcaption></figure>
-          <figure><img src="assets/layout-hero.png" width="768" height="432" alt="hero layout" loading="lazy"><figcaption>hero</figcaption></figure>
-          <figure><img src="assets/layout-statement.png" width="768" height="432" alt="statement layout" loading="lazy"><figcaption>statement</figcaption></figure>
-          <figure><img src="assets/layout-chart-aside.png" width="768" height="432" alt="chart-aside layout" loading="lazy"><figcaption>chart-aside</figcaption></figure>
-          <figure><img src="assets/layout-dashboard.png" width="768" height="432" alt="dashboard layout" loading="lazy"><figcaption>dashboard</figcaption></figure>
-          <figure><img src="assets/layout-process.png" width="768" height="432" alt="process layout" loading="lazy"><figcaption>process</figcaption></figure>
-          <figure><img src="assets/layout-comparison.png" width="768" height="432" alt="comparison layout" loading="lazy"><figcaption>comparison</figcaption></figure>
-          <figure><img src="assets/layout-tabs.png" width="768" height="432" alt="tabs layout" loading="lazy"><figcaption>tabs</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/blue-professional/cover.html" loading="lazy" tabindex="-1" title="cover in blue-professional"></iframe><a class="open" href="gallery/blue-professional/cover.html" target="_blank" rel="noopener" aria-label="open cover in blue-professional full size"></a></div><figcaption>cover · blue-professional</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/blue-professional/dashboard.html" loading="lazy" tabindex="-1" title="dashboard in blue-professional"></iframe><a class="open" href="gallery/blue-professional/dashboard.html" target="_blank" rel="noopener" aria-label="open dashboard in blue-professional full size"></a></div><figcaption>dashboard · blue-professional</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/blue-professional/process.html" loading="lazy" tabindex="-1" title="process in blue-professional"></iframe><a class="open" href="gallery/blue-professional/process.html" target="_blank" rel="noopener" aria-label="open process in blue-professional full size"></a></div><figcaption>process · blue-professional</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/technical-brief/cover.html" loading="lazy" tabindex="-1" title="cover in technical-brief"></iframe><a class="open" href="gallery/technical-brief/cover.html" target="_blank" rel="noopener" aria-label="open cover in technical-brief full size"></a></div><figcaption>cover · technical-brief</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/technical-brief/comparison.html" loading="lazy" tabindex="-1" title="comparison in technical-brief"></iframe><a class="open" href="gallery/technical-brief/comparison.html" target="_blank" rel="noopener" aria-label="open comparison in technical-brief full size"></a></div><figcaption>comparison · technical-brief</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/technical-brief/diagram-notes.html" loading="lazy" tabindex="-1" title="diagram-notes in technical-brief"></iframe><a class="open" href="gallery/technical-brief/diagram-notes.html" target="_blank" rel="noopener" aria-label="open diagram-notes in technical-brief full size"></a></div><figcaption>diagram-notes · technical-brief</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/warm-keynote/cover.html" loading="lazy" tabindex="-1" title="cover in warm-keynote"></iframe><a class="open" href="gallery/warm-keynote/cover.html" target="_blank" rel="noopener" aria-label="open cover in warm-keynote full size"></a></div><figcaption>cover · warm-keynote</figcaption></figure>
+          <figure><div class="frame"><iframe src="gallery/warm-keynote/chart-aside.html" loading="lazy" tabindex="-1" title="chart-aside in warm-keynote"></iframe><a class="open" href="gallery/warm-keynote/chart-aside.html" target="_blank" rel="noopener" aria-label="open chart-aside in warm-keynote full size"></a></div><figcaption>chart-aside · warm-keynote</figcaption></figure>
         </div>
-        <p class="fine">Layouts rendered in the Blue Professional theme with their sample content, as <code>pnpm layout:gallery</code> screenshots them: some from the pack, some from the generic library it falls back to. The pack is ported from the MIT-licensed beautiful-html-templates; the sources are listed in the third-party notices.</p>
+        <p class="fine">Live pages, not pictures: every frame is the layout rendered with its sample content under one of the three packs, the same document the quality checks measure; click one to open it full size. <a href="gallery/index.html">The gallery</a> has a page per pack with each of the layouts it ships. Blue Professional is ported from the MIT-licensed beautiful-html-templates; the sources are listed in the third-party notices.</p>
         <div class="two-col">
           <div>
             <h3>Portable packs</h3>
@@ -706,7 +717,7 @@ Tidewatch website health-check tool: progress, deliverables and direction (tidew
       <div class="faq">
         <details>
           <summary>Does presenting need a server?</summary>
-          <p>No. <code>deck.html</code> carries the model, the styles and the player; rendered with <code>--inline-assets</code>, or saved with the editor's Download deck.html, it carries the images too. Open it in a browser and use the arrow keys. <kbd>P</kbd> opens the presenter window with the next slide, notes and a timer. The dev server is only for editing with autosave.</p>
+          <p>No. <code>deck.html</code> carries the model, the styles and the player; rendered with <code>--inline-assets</code>, or saved with the editor's Download deck.html while the dev server runs, it carries the images too (saved without the dev server, it keeps your edits and refers to the pictures by their relative paths). Open it in a browser and use the arrow keys. <kbd>F</kbd> fills the screen, <kbd>P</kbd> opens the presenter window with the next slide, notes and a timer. The dev server is only for editing with autosave.</p>
         </details>
         <details>
           <summary>Can I export PDF or PowerPoint?</summary>
@@ -763,6 +774,12 @@ Tidewatch website health-check tool: progress, deliverables and direction (tidew
       setTimeout(() => { button.textContent = 'Copy' }, 1600)
     })
   }
+</script>
+<script>
+  const frames = document.querySelectorAll('.gallery .frame')
+  const fit = () => { for (const f of frames) f.style.setProperty('--s', String(f.clientWidth / 1920)) }
+  new ResizeObserver(fit).observe(document.body)
+  fit()
 </script>
 </body>
 </html>

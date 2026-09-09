@@ -23,18 +23,25 @@ import { renderDeckDocument } from '../src/render/deck.ts'
 
 // A theme can live in three places, and the nearest one wins: the deck's own folder, the user's
 // directory, then the repo. These tests build both external places in a temp dir from copies of
-// ink-paper so that every other rule (lint, QA) still holds for them.
+// blue-professional so that every other rule (lint, QA) still holds for them.
 const REPO = { userThemesDir: null }
 let tmp: string
 let userDir: string
 let deckDir: string
 
-function copyTheme(from: string, to: string, patch: (json: Record<string, unknown>) => void) {
+/** theme.json (patched) and theme.css; with `withLayouts` the pack's own layouts come along too. */
+function copyTheme(
+  from: string,
+  to: string,
+  patch: (json: Record<string, unknown>) => void,
+  withLayouts = false,
+) {
   mkdirSync(to, { recursive: true })
   const json = JSON.parse(readFileSync(join(from, 'theme.json'), 'utf8')) as Record<string, unknown>
   patch(json)
   writeFileSync(join(to, 'theme.json'), `${JSON.stringify(json, null, 2)}\n`)
   writeFileSync(join(to, 'theme.css'), readFileSync(join(from, 'theme.css'), 'utf8'))
+  if (withLayouts) cpSync(join(from, 'layouts'), join(to, 'layouts'), { recursive: true })
 }
 
 function setAccent(json: Record<string, unknown>, value: string) {
@@ -43,9 +50,10 @@ function setAccent(json: Record<string, unknown>, value: string) {
   accent.value = value
 }
 
-function sample(): Deck {
-  const r = parseDeck(readFileSync(resolve('examples/deck.sample.json'), 'utf8'))
-  if (!r.ok) throw new Error('sample deck does not parse')
+const sample = () => example('deck.sample.json')
+function example(name: string): Deck {
+  const r = parseDeck(readFileSync(resolve('examples', name), 'utf8'))
+  if (!r.ok) throw new Error(`${name} does not parse`)
   return r.deck
 }
 
@@ -53,24 +61,31 @@ beforeAll(() => {
   tmp = mkdtempSync(join(tmpdir(), 'slide-themes-'))
   userDir = join(tmp, 'home', 'themes')
   deckDir = join(tmp, 'deck')
-  const inkPaper = join(PROJECT_ROOT, 'themes', 'ink-paper')
-  // the user directory: a new theme id with one layout of its own
-  copyTheme(inkPaper, join(userDir, 'ext-blue'), (j) => {
-    j.id = 'ext-blue'
-    j.name = '外部主題'
-    setAccent(j, '#0000ee')
-  })
-  cpSync(join(PROJECT_ROOT, 'layouts', 'cover'), join(userDir, 'ext-blue', 'layouts', 'cover'), {
-    recursive: true,
-  })
+  const bluePro = join(PROJECT_ROOT, 'themes', 'blue-professional')
+  // the user directory: a new theme id with the pack's layouts, its cover marked so a render shows it
+  copyTheme(
+    bluePro,
+    join(userDir, 'ext-blue'),
+    (j) => {
+      j.id = 'ext-blue'
+      j.name = '外部主題'
+      setAccent(j, '#0000ee')
+    },
+    true,
+  )
   writeFileSync(
     join(userDir, 'ext-blue', 'layouts', 'cover', 'layout.css'),
-    `/* ext-blue cover */\n${readFileSync(join(PROJECT_ROOT, 'layouts', 'cover', 'layout.css'), 'utf8')}`,
+    `/* ext-blue cover */\n${readFileSync(join(bluePro, 'layouts', 'cover', 'layout.css'), 'utf8')}`,
   )
-  // the deck folder: a copy of ink-paper that shadows the repo's under the same id
-  copyTheme(inkPaper, join(deckDir, 'themes', 'ink-paper'), (j) => {
-    setAccent(j, '#123456')
-  })
+  // the deck folder: a copy of blue-professional that shadows the repo's under the same id
+  copyTheme(
+    bluePro,
+    join(deckDir, 'themes', 'blue-professional'),
+    (j) => {
+      setAccent(j, '#123456')
+    },
+    true,
+  )
   writeFileSync(join(deckDir, 'deck.json'), stringifyDeck(sample()))
 })
 
@@ -100,12 +115,12 @@ describe('theme lookup order', () => {
     const themes = listThemes({ deckDir, userThemesDir: userDir })
     const byId = new Map(themes.map((t) => [t.id, t]))
     expect(byId.get('ext-blue')).toMatchObject({ origin: 'user', dir: join(userDir, 'ext-blue') })
-    expect(byId.get('ink-paper')).toMatchObject({
+    expect(byId.get('blue-professional')).toMatchObject({
       origin: 'deck',
-      dir: join(deckDir, 'themes', 'ink-paper'),
+      dir: join(deckDir, 'themes', 'blue-professional'),
     })
     expect(byId.get('warm-keynote')?.origin).toBe('repo')
-    expect(themes.filter((t) => t.id === 'ink-paper')).toHaveLength(1)
+    expect(themes.filter((t) => t.id === 'blue-professional')).toHaveLength(1)
     expect(listThemeIds({ deckDir, userThemesDir: userDir })).toContain('ext-blue')
     expect(listThemeIds(REPO)).not.toContain('ext-blue')
     expect(listThemeIds(REPO)).toEqual([...listThemeIds(REPO)].sort())
@@ -113,11 +128,11 @@ describe('theme lookup order', () => {
 
   it('a theme in the deck folder shadows the repo copy with the same id', () => {
     expect(
-      loadTheme('ink-paper', { deckDir, userThemesDir: userDir }).json.colors.accent?.value,
+      loadTheme('blue-professional', { deckDir, userThemesDir: userDir }).json.colors.accent?.value,
     ).toBe('#123456')
-    expect(loadTheme('ink-paper', REPO).json.colors.accent?.value).not.toBe('#123456')
-    expect(findTheme('ink-paper', { deckDir, userThemesDir: null })?.origin).toBe('deck')
-    expect(findTheme('ink-paper', REPO)?.origin).toBe('repo')
+    expect(loadTheme('blue-professional', REPO).json.colors.accent?.value).not.toBe('#123456')
+    expect(findTheme('blue-professional', { deckDir, userThemesDir: null })?.origin).toBe('deck')
+    expect(findTheme('blue-professional', REPO)?.origin).toBe('repo')
   })
 
   it('a user-directory theme brings its own layouts and falls back to the generic library', () => {
@@ -126,8 +141,10 @@ describe('theme lookup order', () => {
     const cover = loadLayout('cover', 'ext-blue', lookup)
     expect(cover.dir).toBe(join(userDir, 'ext-blue', 'layouts', 'cover'))
     expect(cover.css.startsWith('/* ext-blue cover */')).toBe(true)
-    expect(loadLayout('cards', 'ext-blue', lookup).dir).toBe(join(PROJECT_ROOT, 'layouts', 'cards'))
-    expect(listLayoutIdsFor('ext-blue', lookup)).toEqual(listLayoutIdsFor(undefined, REPO))
+    expect(loadLayout('hero', 'ext-blue', lookup).dir).toBe(join(PROJECT_ROOT, 'layouts', 'hero'))
+    expect(listLayoutIdsFor('ext-blue', lookup)).toEqual(
+      listLayoutIdsFor('blue-professional', REPO),
+    )
   })
 
   it('names every folder it searched when a theme is missing', () => {
@@ -177,10 +194,13 @@ describe('external themes flow through render, retheme, QA and the dev server', 
   })
 
   it('rethemes onto a user-directory theme and marks its own layout as a pack layout', () => {
-    const { deck, report } = rethemeDeck(sample(), 'ext-blue', { userThemesDir: userDir })
+    // the components deck opens on code-block, a generic layout no pack overrides, then cards
+    const { deck, report } = rethemeDeck(example('deck.components.json'), 'ext-blue', {
+      userThemesDir: userDir,
+    })
     expect(deck.theme).toBe('ext-blue')
-    expect(report.layoutSource.s1).toBe('pack')
-    expect(report.layoutSource.s2).toBe('global')
+    expect(report.layoutSource.s1).toBe('global')
+    expect(report.layoutSource.s2).toBe('pack')
   })
 
   it('theme QA runs a user-directory theme on its own sample', async () => {
@@ -211,11 +231,15 @@ describe('external themes flow through render, retheme, QA and the dev server', 
 describe('workspace themes', () => {
   it('searches the workspace themes/ after the deck folder and before the user directory', () => {
     const ws = mkdtempSync(join(tmpdir(), 'slide-ws-'))
-    copyTheme(join(PROJECT_ROOT, 'themes', 'ink-paper'), join(ws, 'themes', 'ws-red'), (j) => {
-      j.id = 'ws-red'
-      j.name = 'Workspace theme'
-      setAccent(j, '#c02020')
-    })
+    copyTheme(
+      join(PROJECT_ROOT, 'themes', 'blue-professional'),
+      join(ws, 'themes', 'ws-red'),
+      (j) => {
+        j.id = 'ws-red'
+        j.name = 'Workspace theme'
+        setAccent(j, '#c02020')
+      },
+    )
     const dirs = themeSearchDirs({ deckDir, workspaceDir: ws, userThemesDir: userDir })
     expect(dirs.map((d) => d.origin)).toEqual(['deck', 'workspace', 'user', 'repo'])
     expect(findTheme('ws-red', { workspaceDir: ws, userThemesDir: null })).toMatchObject({
@@ -225,7 +249,7 @@ describe('workspace themes', () => {
     expect(loadTheme('ws-red', { workspaceDir: ws, userThemesDir: null }).json.id).toBe('ws-red')
     expect(listThemeIds({ workspaceDir: ws, userThemesDir: null })).toContain('ws-red')
     // the same id in the user directory loses to the workspace copy
-    copyTheme(join(PROJECT_ROOT, 'themes', 'ink-paper'), join(userDir, 'ws-red'), (j) => {
+    copyTheme(join(PROJECT_ROOT, 'themes', 'blue-professional'), join(userDir, 'ws-red'), (j) => {
       j.id = 'ws-red'
       setAccent(j, '#2020c0')
     })

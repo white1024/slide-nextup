@@ -18,6 +18,8 @@ interface DeckApi {
   step: number
   steps: (i?: number) => number
   isPresenter: boolean
+  fullscreen: (on?: boolean) => Promise<void>
+  isFullscreen: boolean
   ids: string[]
   go: (n: number | string, step?: number) => void
   next: () => void
@@ -26,6 +28,8 @@ interface DeckApi {
   setMotion: (on: boolean, remember: boolean) => void
   transition: string
   setTransition: (value: string) => void
+  pageTransition: (id?: string) => string
+  setPageTransition: (id: string, value: string) => void
   scale: () => number
   exportModel: () => Deck
   storyIds: () => string[]
@@ -77,7 +81,7 @@ declare global {
 function buildDeck(): Deck {
   const r = parseDeck(readFileSync(resolve('examples/deck.sample.json'), 'utf8'))
   if (!r.ok) throw new Error(JSON.stringify(r.errors))
-  const photo = loadLayout('photo')
+  const photo = loadLayout('photo', 'blue-professional')
   // the sample's hotspot points at a layout id (theme:qa decks use those as slide ids); here it jumps to s1
   const pic = photo.json.sample.photo
   const picture =
@@ -193,7 +197,9 @@ describe('editor mode', () => {
         const c = await centerOf(slide.id, el.id)
         await page.mouse.click(c.x, c.y)
         const sel = await selected()
-        if (!sel || sel.slideId !== slide.id || sel.elId !== el.id)
+        // a pack's panel or ring sits under the text it frames: the click lands on that text
+        const underText = el.kind === 'shape' && sel?.slideId === slide.id && sel.elId !== el.id
+        if (!sel || sel.slideId !== slide.id || (sel.elId !== el.id && !underText))
           misses.push(`${slide.id}/${el.id} → ${JSON.stringify(sel)}`)
       }
     }
@@ -205,7 +211,7 @@ describe('editor mode', () => {
     await goTo('s1')
     await page.evaluate(() => window.__deck.editor.setSnap(false))
     const before = await overrideOf('s1/title')
-    expect(before).toEqual({ y: 360, style: { fontSize: 128 } })
+    expect(before).toEqual({ y: 360, style: { fontSize: 80 } })
     const c = await centerOf('s1', 'title')
     const s = await page.evaluate(() => window.__deck.scale())
     await page.mouse.move(c.x, c.y)
@@ -214,9 +220,9 @@ describe('editor mode', () => {
     await page.mouse.move(c.x + 120, c.y + 60, { steps: 4 })
     await page.mouse.up()
     const after = await overrideOf('s1/title')
-    expect(after?.x).toBeCloseTo(176 + 120 / s, 0)
+    expect(after?.x).toBeCloseTo(154 + 120 / s, 0)
     expect(after?.y).toBeCloseTo(360 + 60 / s, 0)
-    expect(after?.style).toEqual({ fontSize: 128 })
+    expect(after?.style).toEqual({ fontSize: 80 })
     const inline = await page.evaluate(
       () =>
         (document.querySelector('[data-slide="s1"] [data-el="title"]') as HTMLElement).style.left,
@@ -237,10 +243,10 @@ describe('editor mode', () => {
     await page.mouse.move(c.right + 60, c.bottom + 30, { steps: 3 })
     await page.mouse.up()
     const o = await overrideOf('s2/card-1')
-    expect(o?.w).toBeCloseTo(544 + 60 / s, 0)
-    expect(o?.h).toBeCloseTo(600 + 30 / s, 0)
-    expect(o?.x).toBe(96)
-    expect(o?.y).toBe(360)
+    expect(o?.w).toBeCloseTo(564 + 60 / s, 0)
+    expect(o?.h).toBeCloseTo(480 + 30 / s, 0)
+    expect(o?.x).toBe(77)
+    expect(o?.y).toBe(380)
   })
 
   it('edits text in place and stores it as a text override without touching slides[]', async () => {
@@ -315,48 +321,48 @@ describe('editor mode', () => {
   })
 
   it('hides with Delete, nudges with arrows and keeps hidden elements selectable only when revealed', async () => {
-    await goTo('s4')
-    const c = await centerOf('s4', 'divider')
+    await goTo('s3')
+    const c = await centerOf('s3', 'split')
     await page.mouse.click(c.x, c.y)
     await page.keyboard.press('Delete')
-    expect((await overrideOf('s4/divider'))?.hidden).toBe(true)
+    expect((await overrideOf('s3/split'))?.hidden).toBe(true)
     expect(await selected()).toBeNull()
     await page.mouse.click(c.x, c.y)
     expect(await selected()).toBeNull()
     await page.evaluate(() => window.__deck.editor.setRevealHidden(true))
     await page.mouse.click(c.x, c.y)
-    expect(await selected()).toEqual({ slideId: 's4', elId: 'divider' })
+    expect(await selected()).toEqual({ slideId: 's3', elId: 'split' })
     await page.keyboard.press('Shift+ArrowRight')
     await page.keyboard.press('ArrowDown')
-    await page.waitForFunction(() => window.__deck.exportModel().overrides['s4/divider']?.x === 962)
-    const o = await overrideOf('s4/divider')
-    expect(o).toMatchObject({ x: 962, y: 341, hidden: true })
+    await page.waitForFunction(() => window.__deck.exportModel().overrides['s3/split']?.x === 991)
+    const o = await overrideOf('s3/split')
+    expect(o).toMatchObject({ x: 991, y: 301, hidden: true })
     await page.evaluate(() => window.__deck.editor.setRevealHidden(false))
   })
 
   it('has one eye button that hides, and shows again once everything selected is hidden', async () => {
-    await goTo('s4')
-    // s4/divider is hidden by the previous test; it is selectable only while revealed
+    await goTo('s3')
+    // s3/split is hidden by the previous test; it is selectable only while revealed
     await page.evaluate(() => window.__deck.editor.setRevealHidden(true))
-    const c = await centerOf('s4', 'divider')
+    const c = await centerOf('s3', 'split')
     await page.mouse.click(c.x, c.y)
-    expect(await selected()).toEqual({ slideId: 's4', elId: 'divider' })
+    expect(await selected()).toEqual({ slideId: 's3', elId: 'split' })
     // the toolbar carries a single hide control; the "more" row lost its checkbox
     expect(await page.locator('.ed-float [data-action="hide"]').count()).toBe(1)
     expect(await page.locator('.ed-float [data-prop="hidden"]').count()).toBe(0)
     const eye = page.locator('.ed-float [data-action="hide"]')
     expect(await eye.getAttribute('data-state')).toBe('hidden')
     await eye.click()
-    expect((await overrideOf('s4/divider'))?.hidden).toBeUndefined()
-    expect(await selected()).toEqual({ slideId: 's4', elId: 'divider' })
+    expect((await overrideOf('s3/split'))?.hidden).toBeUndefined()
+    expect(await selected()).toEqual({ slideId: 's3', elId: 'split' })
     expect(await eye.getAttribute('data-state')).toBe('visible')
     await eye.click()
-    expect((await overrideOf('s4/divider'))?.hidden).toBe(true)
+    expect((await overrideOf('s3/split'))?.hidden).toBe(true)
     expect(await selected()).toBeNull()
     await page.keyboard.press('Control+z')
-    expect((await overrideOf('s4/divider'))?.hidden).toBeUndefined()
+    expect((await overrideOf('s3/split'))?.hidden).toBeUndefined()
     await page.keyboard.press('Control+y')
-    expect((await overrideOf('s4/divider'))?.hidden).toBe(true)
+    expect((await overrideOf('s3/split'))?.hidden).toBe(true)
     await page.evaluate(() => window.__deck.editor.setRevealHidden(false))
   })
 
@@ -411,6 +417,27 @@ describe('editor mode', () => {
     await goTo('s2')
     await page.evaluate(() => window.__deck.editor.select('card-3'))
     await openMore()
+    expect(
+      await page.evaluate(() =>
+        Array.from(document.querySelectorAll('[data-el-enter] option')).map(
+          (o) => (o as HTMLOptionElement).value,
+        ),
+      ),
+    ).toEqual([
+      '',
+      'fade-up',
+      'fade',
+      'scale-in',
+      'slide-left',
+      'slide-right',
+      'wipe',
+      'pop',
+      'blur',
+      'cascade',
+      'grow',
+      'draw',
+      'count',
+    ])
     await page.locator('[data-el-enter]').selectOption('wipe')
     await page.waitForFunction(
       () =>
@@ -536,7 +563,8 @@ describe('editor mode', () => {
     await goTo('s1')
     expect(await page.locator('.ed-float').isHidden()).toBe(true)
     const c = await centerOf('s1', 'title')
-    await page.mouse.click(c.x, c.y)
+    // the moved title of the drag test overlaps the subtitle; the top edge of the title is its own
+    await page.mouse.click(c.x, c.top + 30)
     expect(await selected()).toEqual({ slideId: 's1', elId: 'title' })
     expect(await page.locator('.ed-float').isVisible()).toBe(true)
     const r = await page.evaluate(() => {
@@ -567,10 +595,10 @@ describe('editor mode', () => {
         .locator('.ed-float .ed-image-only')
         .evaluateAll((ns) => ns.every((n) => (n as HTMLElement).hidden)),
     ).toBe(true)
-    // the field shows the effective size (the sample deck overrides this title to 128px) and −/＋ step it
-    expect(await page.locator('.ed-float [data-style="fontSize"]').inputValue()).toBe('128')
+    // the field shows the effective size (the sample deck overrides this title to 80px) and −/＋ step it
+    expect(await page.locator('.ed-float [data-style="fontSize"]').inputValue()).toBe('80')
     await page.locator('.ed-float [data-size-step="2"]').click()
-    expect((await overrideOf('s1/title'))?.style?.fontSize).toBe(130)
+    expect((await overrideOf('s1/title'))?.style?.fontSize).toBe(82)
     await page.keyboard.press('Control+z')
     await page.evaluate(() => window.__deck.editor.select(null))
     expect(await page.locator('.ed-float').isHidden()).toBe(true)
@@ -794,7 +822,7 @@ describe('editor mode', () => {
         [empty.x, empty.y] as const,
       ),
     ).toBe(true)
-    const end = await toClient(1900, 900)
+    const end = await toClient(1900, 700)
     await page.mouse.move(empty.x, empty.y)
     await page.mouse.down()
     await page.mouse.move(end.x, end.y, { steps: 5 })
@@ -901,6 +929,64 @@ describe('editor mode', () => {
     expect(await page.locator('.ed-panel').count()).toBe(1)
   })
 
+  it('in edit mode an arrow press turns the page (every step already shows); playback counts the steps again after exit', async () => {
+    expect(await page.evaluate(() => window.__deck.editor.active)).toBe(true)
+    // give s2 a reveal step through the panel, the way the step test does
+    await goTo('s2')
+    await page.evaluate(() => window.__deck.editor.select('card-2'))
+    await openMore()
+    await page.locator('[data-el-step]').fill('2')
+    await page.locator('[data-el-step]').press('Tab')
+    await page.waitForFunction(() => window.__deck.steps(1) === 2)
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+    await goTo('s1')
+    await page.keyboard.press('ArrowRight')
+    expect(await page.evaluate(() => [window.__deck.current, window.__deck.step])).toEqual([1, 0])
+    await page.keyboard.press('ArrowRight')
+    expect(await page.evaluate(() => window.__deck.current)).toBe(2)
+    await page.keyboard.press('ArrowLeft')
+    expect(
+      await page.evaluate(() => [
+        window.__deck.current,
+        window.__deck.step === window.__deck.steps(1),
+      ]),
+    ).toEqual([1, true])
+    await page.evaluate(() => window.__deck.next())
+    expect(await page.evaluate(() => window.__deck.current)).toBe(2)
+    await page.evaluate(() => window.__deck.editor.exit())
+    await page.waitForFunction(() => window.__deck.editor.active === false)
+    await page.evaluate(() => window.__deck.go('s1'))
+    await page.keyboard.press('ArrowRight')
+    expect(await page.evaluate(() => [window.__deck.current, window.__deck.step])).toEqual([1, 0])
+    await page.keyboard.press('ArrowRight')
+    expect(await page.evaluate(() => [window.__deck.current, window.__deck.step])).toEqual([1, 1])
+    await page.evaluate(() => window.__deck.editor.enter())
+    await page.waitForFunction(() => window.__deck.editor.active === true)
+    // put s2 back the way it was
+    await goTo('s2')
+    await page.evaluate(() => window.__deck.editor.select('card-2'))
+    await openMore()
+    await page.locator('[data-el-step]').fill('0')
+    await page.locator('[data-el-step]').press('Tab')
+    await page.waitForFunction(() => window.__deck.steps(1) === 0)
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+    await goTo('s1')
+  })
+
+  it('the top bar’s Fullscreen button and F fill the screen and leave it again', async () => {
+    await page.locator('.ed-topbar [data-action="fullscreen"]').click()
+    await page.waitForFunction(() => document.fullscreenElement === document.documentElement)
+    expect(await page.evaluate(() => window.__deck.isFullscreen)).toBe(true)
+    expect(await page.evaluate(() => window.__deck.editor.active)).toBe(true)
+    await page.keyboard.press('f')
+    await page.waitForFunction(() => document.fullscreenElement === null)
+    expect(await page.evaluate(() => window.__deck.isFullscreen)).toBe(false)
+    expect(await page.locator('.ed-topbar [data-action="fullscreen"] kbd').textContent()).toBe('F')
+    expect(await page.locator('.ed-topbar .ed-tb-help').getAttribute('title')).toContain(
+      'F fullscreen',
+    )
+  })
+
   it('Esc leaves playback for the editor, but only once the runtime has nothing left to close', async () => {
     await page.evaluate(() => window.__deck.editor.exit())
     await page.waitForFunction(() => document.documentElement.dataset.interactive === 'true')
@@ -966,9 +1052,9 @@ describe('editor mode', () => {
     const select = page.locator('.ed-topbar [data-transition]')
     const stageAttr = () =>
       page.evaluate(() => document.querySelector('.deck-stage')?.getAttribute('data-transition'))
-    // the sample deck names no transition, so the menu shows the theme default and the stage plays fade
+    // the sample deck names no transition, so the menu shows the theme default and the stage plays the pack's rise
     expect(await select.inputValue()).toBe('')
-    expect(await stageAttr()).toBe('fade')
+    expect(await stageAttr()).toBe('rise')
     await select.selectOption('push')
     expect(await page.evaluate(() => window.__deck.exportModel().transition)).toBe('push')
     expect(await stageAttr()).toBe('push')
@@ -978,7 +1064,26 @@ describe('editor mode', () => {
     expect(await page.evaluate(() => window.__deck.transition)).toBe('none')
     await select.selectOption('')
     expect(await page.evaluate(() => window.__deck.exportModel().transition)).toBeUndefined()
-    expect(await stageAttr()).toBe('fade')
+    expect(await stageAttr()).toBe('rise')
+    // this page's own family: written to slides[].transition, played live, "Deck setting" clears it
+    const own = () =>
+      page.evaluate(() => window.__deck.exportModel().slides.find((s) => s.id === 's1')?.transition)
+    const pageSelect = page.locator('.ed-topbar [data-page-transition]')
+    expect(await pageSelect.inputValue()).toBe('')
+    await pageSelect.selectOption('breath')
+    expect(await own()).toBe('breath')
+    expect(await page.evaluate(() => window.__deck.pageTransition('s1'))).toBe('breath')
+    expect(await stageAttr()).toBe('breath')
+    expect(await page.evaluate(() => window.__deck.transition)).toBe('rise')
+    await goTo('s2')
+    expect(await pageSelect.inputValue()).toBe('')
+    expect(await stageAttr()).toBe('rise')
+    await goTo('s1')
+    expect(await pageSelect.inputValue()).toBe('breath')
+    expect(await stageAttr()).toBe('breath')
+    await pageSelect.selectOption('')
+    expect(await own()).toBeUndefined()
+    expect(await stageAttr()).toBe('rise')
   })
 
   it('docks the element toolbar on the right as a column and remembers the choice', async () => {
@@ -1023,7 +1128,7 @@ describe('editor mode', () => {
       }),
     ).toBe(true)
     await page.locator('.ed-float [data-size-step="2"]').click()
-    expect((await overrideOf('s1/title'))?.style?.fontSize).toBe(130)
+    expect((await overrideOf('s1/title'))?.style?.fontSize).toBe(82)
     await page.keyboard.press('Control+z')
     // the preference is the browser's, not the deck's, and survives a reload
     expect(await page.evaluate(() => localStorage.getItem('slide-editor:toolbar'))).toBe('docked')
@@ -1059,7 +1164,7 @@ describe('editor source', () => {
   it('knows nothing about themes or layouts', () => {
     const src = readFileSync(resolve('src/editor/editor.js'), 'utf8')
     for (const banned of [
-      'ink-paper',
+      'blue-professional',
       'data-layout',
       'data-role',
       'cover',
@@ -1071,5 +1176,64 @@ describe('editor source', () => {
     ]) {
       expect(src).not.toContain(banned)
     }
+  })
+
+  it('never spells the tags that end its own script, the body or the document, since it is embedded inline', () => {
+    // the HTML parser ends the inline script at the first `</script` it sees, string or not: the
+    // editor would not load, and the rest of its source would be parsed as markup. The dev server
+    // splices its client in at the document's `</body>`, so that one must stay unique too.
+    for (const file of [
+      'src/editor/editor.js',
+      'src/render/runtime.ts',
+      'src/render/slot-render.js',
+      'src/model/pages.js',
+    ]) {
+      const src = readFileSync(resolve(file), 'utf8').toLowerCase()
+      for (const tag of ['script', 'body', 'html'])
+        expect(src, `${file} spells the ${tag} end tag`).not.toContain(['<', `/${tag}`].join(''))
+    }
+  })
+})
+
+describe('the top bar on a narrower window', () => {
+  it('keeps to one row from 1366px up: the key hints go first, then the icon-button labels, then the word Download', async () => {
+    const seen: Array<{
+      width: number
+      height: number
+      kbd: boolean
+      label: boolean
+      download: string
+    }> = []
+    for (const width of [1920, 1600, 1440, 1366]) {
+      const p = await browser.newPage({ viewport: { width, height: 800 } })
+      await p.goto(`${url}?edit=1#1`)
+      await p.waitForFunction(() => window.__deck?.editor?.active === true)
+      seen.push(
+        await p.evaluate((w) => {
+          const shown = (sel: string) => {
+            const el = document.querySelector(sel) as HTMLElement | null
+            return Boolean(el && el.getBoundingClientRect().width > 0)
+          }
+          return {
+            width: w,
+            height: Math.round(
+              (document.querySelector('.ed-topbar') as HTMLElement).getBoundingClientRect().height,
+            ),
+            kbd: shown('.ed-topbar [data-action="undo"] kbd'),
+            label: shown('.ed-topbar [data-action="fullscreen"] span'),
+            download: (
+              document.querySelector('.ed-topbar [data-action="download"]') as HTMLElement
+            ).innerText.trim(),
+          }
+        }, width),
+      )
+      await p.close()
+    }
+    expect(seen).toEqual([
+      { width: 1920, height: 48, kbd: true, label: true, download: 'Download deck.json' },
+      { width: 1600, height: 48, kbd: false, label: false, download: 'Download deck.json' },
+      { width: 1440, height: 48, kbd: false, label: false, download: 'deck.json' },
+      { width: 1366, height: 48, kbd: false, label: false, download: 'deck.json' },
+    ])
   })
 })

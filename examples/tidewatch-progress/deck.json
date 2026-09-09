@@ -7,7 +7,6 @@
     "width": 1920,
     "height": 1080
   },
-  "motion": "off",
   "story": {
     "path": "story.md",
     "sha256": "5fd9454aac3bbd902791f6caac92663c37241295d73c41733ded71f35ae7ae7d"
@@ -60,7 +59,7 @@
           "kind": "text"
         }
       ],
-      "notes": "Open with the conclusion in one sentence. What the owner most wants to know is \"can the tool be handed over\": give the answer first, then expand."
+      "notes": "Open with the conclusion in one sentence. What the owner most wants to know is \"can the tool be handed over\", so give the answer first, then expand."
     },
     {
       "id": "s2",
@@ -538,7 +537,7 @@
           "kind": "text"
         }
       ],
-      "notes": "One full-width flow. Point out the two easiest things to miss: run does not produce result.json by itself, so skipping export means finishing the run with nothing to hand over; aggregate must run on the machine that still holds the snapshots."
+      "notes": "One full-width flow. Point out the two things easiest to miss, namely that run does not produce result.json by itself (skipping export means finishing the run with nothing to hand over) and that aggregate must run on the machine that still holds the snapshots."
     },
     {
       "id": "s7",
@@ -624,7 +623,7 @@
           "kind": "text"
         }
       ],
-      "notes": "The direction the owner set last month. Two rulings: no full parameter editor, and no split into two apps. Three screens work end to end, with three looks; acceptance is \"unzip and double-click on a freshly reinstalled machine, run the smoke test through, never open a terminal\"."
+      "notes": "The direction the owner set last month. Two rulings, no full parameter editor and no split into two apps. Three screens work end to end, with three looks; acceptance is \"unzip and double-click on a freshly reinstalled machine, run the smoke test through, never open a terminal\"."
     },
     {
       "id": "s8",
@@ -695,7 +694,7 @@
           "kind": "text"
         }
       ],
-      "notes": "The close is about the delivery form only: no data, no timeline. If the owner asks about the next step, answer \"end-to-end acceptance of the bundle on a freshly reinstalled machine\"."
+      "notes": "The close is about the delivery form only, no data and no timeline. If the owner asks about the next step, answer \"end-to-end acceptance of the bundle on a freshly reinstalled machine\"."
     }
   ],
   "overrides": {

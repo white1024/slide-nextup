@@ -174,7 +174,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -182,39 +182,39 @@
     },
     "title": {
       "type": "text",
-      "value": "A fixed six-step check run"
+      "value": "A fixed six-step weekly loop"
     },
     "subtitle": {
       "type": "text",
-      "value": "A full check is the same six steps every time; it can be paused and resumed."
+      "value": "The update follows the same six steps every week; any step can be picked up where it stopped."
     },
     "step-1": {
       "type": "text",
-      "value": "preflight"
+      "value": "collect"
     },
     "step-2": {
       "type": "text",
-      "value": "download"
+      "value": "draft"
     },
     "step-3": {
       "type": "text",
-      "value": "plan"
+      "value": "review"
     },
     "step-4": {
       "type": "text",
-      "value": "run"
+      "value": "publish"
     },
     "step-5": {
       "type": "text",
-      "value": "aggregate"
+      "value": "comment"
     },
     "step-6": {
       "type": "text",
-      "value": "export"
+      "value": "decide"
     },
     "caption": {
       "type": "text",
-      "value": "run does not write the result file by itself; skip export and the run ends with nothing to hand over."
+      "value": "comment is the step most often skipped; without it, decide has nothing to weigh and the call grows back."
     }
   }
 }

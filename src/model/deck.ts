@@ -17,22 +17,63 @@ export interface Element {
 }
 
 /**
- * page transition families: fade (crossfade), push (both pages slide, reversed going back), lift
- * (the new page floats up over the old one), none. `slide-left` is the pre-T-0036 name and plays
- * as push; absent means the theme's motion.transition, else fade.
+ * page transition families, each an exit on the page being left and an entrance on the new one
+ * (140–280ms, at most 12px of travel, opacity always part of it): rise (6px up, the house default),
+ * settle (12px up with a touch of blur, for covers), dissolve (opacity only), breath (a full exit, a
+ * beat, then the entrance; for section breaks), fade (a plain crossfade over the old page), push
+ * (both pages move 12px sideways, mirrored going back), lift (8px up at 0.99), none (a cut).
+ * `slide-left` is the pre-T-0036 name and plays as push; absent means the theme's
+ * motion.transition, else fade.
  */
-export type Transition = 'none' | 'fade' | 'push' | 'lift' | 'slide-left'
-export const TRANSITIONS: readonly Transition[] = ['none', 'fade', 'push', 'lift', 'slide-left']
+export type TransitionFamily =
+  | 'none'
+  | 'fade'
+  | 'rise'
+  | 'settle'
+  | 'dissolve'
+  | 'breath'
+  | 'push'
+  | 'lift'
+export type Transition = TransitionFamily | 'slide-left'
+export const TRANSITION_FAMILIES: readonly TransitionFamily[] = [
+  'none',
+  'fade',
+  'rise',
+  'settle',
+  'dissolve',
+  'breath',
+  'push',
+  'lift',
+]
+export const TRANSITIONS: readonly Transition[] = [...TRANSITION_FAMILIES, 'slide-left']
 /** The family the player uses for a transition value (the legacy alias folded in). */
-export function transitionFamily(value: Transition): 'none' | 'fade' | 'push' | 'lift' {
+export function transitionFamily(value: Transition): TransitionFamily {
   return value === 'slide-left' ? 'push' : value
 }
 
 /** the deck-wide switch for element motion (reveal steps and entrances); page transitions are separate */
 export type Motion = 'on' | 'off'
 
-/** entrance of a step element when its step is reached; the theme supplies a default per role */
-export type Enter = 'fade-up' | 'fade' | 'scale-in' | 'slide-left' | 'slide-right' | 'wipe'
+/**
+ * entrance of a step element when its step is reached; the theme supplies a default per role.
+ * Each one is a keyframe run that ends on the element's resting state: pop overshoots, blur
+ * sharpens while rising, cascade plays fade-up on the element's items 50ms apart. The last three
+ * play from the data: grow and draw run a chart's bars, rings and lines out to their real values
+ * (either name works for every chart kind), count runs a number up to its real value.
+ */
+export type Enter =
+  | 'fade-up'
+  | 'fade'
+  | 'scale-in'
+  | 'slide-left'
+  | 'slide-right'
+  | 'wipe'
+  | 'pop'
+  | 'blur'
+  | 'cascade'
+  | 'grow'
+  | 'draw'
+  | 'count'
 export const ENTERS: readonly Enter[] = [
   'fade-up',
   'fade',
@@ -40,7 +81,17 @@ export const ENTERS: readonly Enter[] = [
   'slide-left',
   'slide-right',
   'wipe',
+  'pop',
+  'blur',
+  'cascade',
+  'grow',
+  'draw',
+  'count',
 ]
+
+/** the motion personality of a theme: the pace and curve its entrances default to, and the band they must stay in */
+export type MotionFamily = 'crisp' | 'soft' | 'minimal'
+export const MOTION_FAMILIES: readonly MotionFamily[] = ['crisp', 'soft', 'minimal']
 
 export type ChartKind = 'bar' | 'line' | 'donut' | 'progress'
 
@@ -91,6 +142,11 @@ export const DETAILS_TYPES: ReadonlySet<Slot['type']> = new Set(['text', 'list',
 export interface Slide {
   id: string
   layout: string
+  /**
+   * this page's own transition, played when it comes in (going back into it too); absent = the
+   * deck's. The scaffold writes breath on a pause page and settle on a hero page after the first
+   */
+  transition?: Transition
   slots: Record<string, Slot>
   elements: Element[]
   notes?: string
@@ -480,6 +536,7 @@ export function normaliseDeck(deck: Deck): Deck {
     const slide: Slide = {
       id: s.id,
       layout: s.layout,
+      ...(s.transition !== undefined ? { transition: s.transition } : {}),
       slots,
       elements: s.elements.map((e) => {
         const out: Element = { id: e.id, kind: e.kind }

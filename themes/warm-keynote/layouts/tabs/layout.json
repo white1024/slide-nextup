@@ -93,7 +93,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -101,39 +101,39 @@
     },
     "title": {
       "type": "text",
-      "value": "One bundle, three roles, each with its own document"
+      "value": "One page, three readers, each with their own section"
     },
     "subtitle": {
       "type": "text",
-      "value": "operator runs the checks, viewer reads the results, new-platform adds a platform."
+      "value": "leads write the progress, owners answer the blockers, everyone reads the decisions."
     },
     "panels": {
       "type": "tabs",
       "panels": [
         {
-          "label": "operator",
+          "label": "leads",
           "content": {
             "type": "list",
             "items": [
-              "Prepare: run preflight, stop on anything missing",
-              "Measure: six fixed steps, can pause and resume",
-              "Deliver: only export writes result.json"
+              "Write: three lines per thread, numbers first",
+              "Review: read the other leads before Friday noon",
+              "Decide: mark what still needs a call"
             ]
           }
         },
         {
-          "label": "viewer",
+          "label": "owners",
           "content": {
             "type": "list",
             "items": [
-              "Reads only result.json, never the run folder",
-              "Four summary tiles, a heatmap, a line chart",
-              "The full table sits in the expanded layer"
+              "Answer only the blockers with your name on them",
+              "One line: what unblocks it, and by when",
+              "Silence counts as agreement by Monday"
             ]
           }
         },
         {
-          "label": "new-platform",
+          "label": "everyone",
           "content": {
             "type": "table",
             "header": [
@@ -142,12 +142,12 @@
             ],
             "rows": [
               [
-                "Produce result.json",
-                "Result Schema v1"
+                "Read the decisions",
+                "The Friday page"
               ],
               [
-                "Pass smoke",
-                "The bundle preflight"
+                "Comment in place",
+                "The comment step"
               ]
             ]
           }

@@ -7,6 +7,20 @@ import type { Page } from 'playwright'
  * of being a guess; the numbers in a hint are read by `hintLimits`.
  */
 
+/** One list item laid out inline (a chip): its own box, so that a row of chips can be counted. */
+export interface ChipMetrics {
+  /** left and right padding plus border, in px */
+  padX: number
+  /** top and bottom padding plus border, in px */
+  padY: number
+  /** left and right margin, in px */
+  marginX: number
+  /** top and bottom margin, in px */
+  marginY: number
+  /** the chip's own line height, in px */
+  lineHeight: number
+}
+
 export interface TextCapacity {
   slide: string
   el: string
@@ -21,6 +35,12 @@ export interface TextCapacity {
   charsPerLine: number
   /** whole lines that fit in the content box */
   lines: number
+  /** list items in the sample (`li` count); absent when the element holds no list */
+  items?: number
+  /** one item's vertical margins (first `li`: margin-top + margin-bottom), in px */
+  itemGap?: number
+  /** set only when the items are laid out inline (a flow of chips) */
+  chip?: ChipMetrics
 }
 
 /**
@@ -38,6 +58,8 @@ export interface HintLimits {
   lines?: number
   /** the line count is about items ("one line each", 「每條一行」), not about the box */
   perItem: boolean
+  /** the largest item count the hint names (「三到五條」, "4 to 9 chips", "2 supporting points") */
+  items?: number
 }
 
 const DIGITS: Record<string, number> = {
@@ -90,11 +112,15 @@ function largest(hint: string, unit: string): number | undefined {
   return max
 }
 
-/** English counts: "up to 24 characters", "4 to 12 characters", "one line", "2 to 3 lines"; a range keeps its larger end. */
-function largestEn(hint: string, unit: string): number | undefined {
+/**
+ * English counts: "up to 24 characters", "4 to 12 characters", "one line", "2 to 3 lines";
+ * a range keeps its larger end. `between` allows a word or two between the number and the
+ * unit, which is how item counts are written: "2 supporting points", "3 short entries".
+ */
+function largestEn(hint: string, unit: string, between = ''): number | undefined {
   let max: number | undefined
   const re = new RegExp(
-    `\\b(${EN_NUMERAL})(?:\\s*(?:to|-|–)\\s*(${EN_NUMERAL}))?[\\s-]*${unit}\\b`,
+    `\\b(${EN_NUMERAL})(?:\\s*(?:to|-|–)\\s*(${EN_NUMERAL}))?[\\s-]*${between}${unit}\\b`,
     'gi',
   )
   for (const m of hint.matchAll(re)) {
@@ -107,6 +133,12 @@ function largestEn(hint: string, unit: string): number | undefined {
   return max
 }
 
+/** The units an item count is written in: 「三到五條」「2 到 3 點」, "4 to 9 chips", "2 supporting points". */
+const ITEM_UNIT = '(?:條|點|項)'
+const EN_ITEM_UNIT = '(?:items?|points?|chips?|entries|members?|bullets?)'
+/** a word or two may sit between the number and the unit: "3 supporting points", "2 short entries" */
+const EN_ITEM_BETWEEN = '(?:[a-z-]+\\s+){0,2}'
+
 /** The numbers a slot hint promises. */
 export function hintLimits(hint: string): HintLimits {
   const chars = largest(hint, '字') ?? largestEn(hint, 'characters?')
@@ -117,6 +149,7 @@ export function hintLimits(hint: string): HintLimits {
     perLine: /每行|每格|每條|每項|每列|\bper (?:line|cell|item|row)\b/i.test(hint),
     lines,
     perItem: /條|每項|每列|\bitems?\b|\brows?\b|\beach\b/i.test(hint),
+    items: largest(hint, ITEM_UNIT) ?? largestEn(hint, EN_ITEM_UNIT, EN_ITEM_BETWEEN),
   }
 }
 
@@ -137,6 +170,34 @@ export function capacityOf(box: {
   }
 }
 
+/**
+ * Chips are laid out inline, so a chip is not a line: the width of one chip says how many fit
+ * in a row, and the number of items says how many rows the flow needs. A chip's width is its
+ * text at the hint's character count (full-width units, the same rule as `charsPerLine`) plus
+ * its own padding, border and margin.
+ */
+function chipProblem(lim: HintLimits, cap: TextCapacity): string | null {
+  const chip = cap.chip
+  if (!chip || lim.items === undefined || lim.chars === undefined) return null
+  const chipW = lim.chars * (cap.fontSize + cap.letterSpacing) + chip.padX + chip.marginX
+  const perRow = Math.max(1, Math.floor((cap.contentW + TOL) / chipW))
+  const rows = Math.ceil(lim.items / perRow)
+  const rowH = chip.lineHeight + chip.padY + chip.marginY
+  const fit = Math.max(1, Math.floor((cap.contentH + TOL) / rowH))
+  if (rows <= fit) return null
+  return `hint says ${lim.items} chips of ${lim.chars} characters, which need ${rows} rows of ${perRow} (a chip is ${Math.round(chipW)}px wide), the box holds ${fit} rows (content ${cap.contentW}×${cap.contentH}px, ${Math.round(rowH)}px per row)`
+}
+
+/** A list item costs its own lines plus the margin between items, so N items are not N lines. */
+function listProblem(lim: HintLimits, cap: TextCapacity): string | null {
+  if (lim.items === undefined || cap.itemGap === undefined) return null
+  const linesEach = lim.perItem ? (lim.lines ?? 1) : 1
+  const perItem = linesEach * cap.lineHeight + cap.itemGap
+  const fit = Math.max(1, Math.floor((cap.contentH + TOL) / perItem))
+  if (lim.items <= fit) return null
+  return `hint says ${lim.items} items × ${linesEach} lines, the box only holds ${fit} such items (content height ${cap.contentH}px ÷ ${Math.round(perItem)}px per item: ${linesEach} × ${cap.lineHeight}px line + ${cap.itemGap}px margin)`
+}
+
 /** A message when the hint promises more than the box holds, else null. */
 export function checkHint(hint: string, cap: TextCapacity): string | null {
   const lim = hintLimits(hint)
@@ -150,7 +211,8 @@ export function checkHint(hint: string, cap: TextCapacity): string | null {
   if (lim.lines !== undefined && !lim.perItem && lim.lines > cap.lines) {
     return `hint says ${lim.lines} lines, the box only holds ${cap.lines} lines (content height ${cap.contentH}px ÷ line height ${cap.lineHeight}px)`
   }
-  return null
+  // an item count is checked against the box only where the sample shows how items are laid out
+  return cap.chip ? chipProblem(lim, cap) : listProblem(lim, cap)
 }
 
 /** Content box, font metrics and the derived capacity of every element on every slide in the document. */
@@ -171,7 +233,41 @@ export async function measureCapacity(page: Page): Promise<TextCapacity[]> {
         const h = Math.round(innerH - px(cs.paddingTop) - px(cs.paddingBottom))
         // vertical writing (直排): lines run top to bottom, so the axes swap
         const vertical = cs.writingMode.startsWith('vertical')
+        // a list: the first item stands for all of them (they share one rule in the layout CSS).
+        // Only what is on screen counts, so a collapsed `details` list or a hidden tab panel
+        // does not decide the metrics of the list that is actually shown.
+        const lis = [...node.querySelectorAll<HTMLElement>('li')].filter(
+          (n) => n.getClientRects().length > 0,
+        )
+        const first = lis[0]
+        let itemGap: number | undefined
+        let chip: ChipMetrics | undefined
+        if (first) {
+          const li = getComputedStyle(first)
+          itemGap = px(li.marginTop) + px(li.marginBottom)
+          if (li.display.startsWith('inline')) {
+            const liSize = px(li.fontSize)
+            chip = {
+              padX:
+                px(li.paddingLeft) +
+                px(li.paddingRight) +
+                px(li.borderLeftWidth) +
+                px(li.borderRightWidth),
+              padY:
+                px(li.paddingTop) +
+                px(li.paddingBottom) +
+                px(li.borderTopWidth) +
+                px(li.borderBottomWidth),
+              marginX: px(li.marginLeft) + px(li.marginRight),
+              marginY: itemGap,
+              lineHeight: li.lineHeight === 'normal' ? Math.round(liSize * 1.2) : px(li.lineHeight),
+            }
+          }
+        }
         out.push({
+          items: lis.length || undefined,
+          itemGap,
+          chip,
           slide: section.dataset.slide ?? '',
           el: node.dataset.el ?? '',
           role: node.dataset.role ?? '',

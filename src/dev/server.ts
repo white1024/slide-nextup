@@ -24,6 +24,7 @@ import {
 } from '../model/deck.ts'
 import { PROJECT_ROOT, userThemesDir } from '../render/assets.ts'
 import { renderDeckDocument } from '../render/deck.ts'
+import { loadTalkCues } from '../talk/talk.ts'
 
 const DEV_CLIENT_JS = readFileSync(new URL('./client.js', import.meta.url), 'utf8')
 
@@ -184,10 +185,13 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
       outDir: deckDir,
       root,
       userThemesDir: opts.userThemesDir,
+      talk: loadTalkCues(deckDir)?.cues,
     })
     const config = { overridesHash: hashJson(editable(deck)), warnings }
-    const inject = `<script>window.__devConfig=${JSON.stringify(config).replace(/</g, '\\u003c')}</script>\n<script>\n${DEV_CLIENT_JS}\n</script>\n</body>`
-    return html.replace(/<\/body>/, inject)
+    const inject = `<script>window.__devConfig=${JSON.stringify(config).replace(/</g, '\\u003c')}</script>\n<script>\n${DEV_CLIENT_JS}\n</script>\n`
+    // at the document's own end tag, the last one: the inline scripts before it must not be cut
+    const end = html.lastIndexOf('</body>')
+    return end === -1 ? `${html}${inject}` : `${html.slice(0, end)}${inject}${html.slice(end)}`
   }
 
   const broadcast = (event: string) => {
@@ -201,6 +205,7 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
       overrides?: unknown
       steps?: unknown
       enters?: unknown
+      pageTransitions?: unknown
       pages?: unknown
       base?: string
       force?: boolean
@@ -274,6 +279,18 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
         candidate.transition = body.transition as Transition
       else delete candidate.transition
     }
+    // a page's own transition: slide id → family ('' clears); a slide not in the map keeps its disk value
+    if (body.pageTransitions && typeof body.pageTransitions === 'object') {
+      const own = body.pageTransitions as Record<string, unknown>
+      candidate.slides = candidate.slides.map((s) => {
+        if (!(s.id in own)) return s
+        const { transition: _previous, ...rest } = s
+        const v = own[s.id]
+        return typeof v === 'string' && (TRANSITIONS as readonly string[]).includes(v)
+          ? { ...rest, transition: v as Transition }
+          : rest
+      })
+    }
     const validation = validateDeck(candidate)
     if (!validation.ok)
       return sendJson(res, 400, {
@@ -306,6 +323,7 @@ export async function createDevServer(opts: DevServerOptions): Promise<DevServer
           root,
           userThemesDir: opts.userThemesDir,
           inlineAssets: true,
+          talk: loadTalkCues(deckDir)?.cues,
         })
         const name = `${deck.id.replace(/[^A-Za-z0-9._-]+/g, '-') || 'deck'}.html`
         return send(res, 200, html, MIME['.html'] as string, {

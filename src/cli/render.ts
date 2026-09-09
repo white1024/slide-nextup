@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import { parseDeck, sha256 } from '../model/deck.ts'
 import { deckDirOf, defaultOutputPath, renderDeckDocument } from '../render/deck.ts'
+import { loadTalkCues } from '../talk/talk.ts'
 
 const args = process.argv.slice(2)
 const outIndex = args.indexOf('-o')
@@ -36,9 +37,20 @@ if (deck.story) {
   }
 }
 
+// the talk next to the deck rides along for the presenter window
+const talk = loadTalkCues(deckDir)
+if (talk?.problems)
+  console.log(
+    `⚠ talk.md has ${talk.problems} problem${talk.problems === 1 ? '' : 's'}; the cues that parsed are embedded, run pnpm talk:check ${relative(process.cwd(), talk.file).replace(/\\/g, '/')}`,
+  )
 let result: ReturnType<typeof renderDeckDocument>
 try {
-  result = renderDeckDocument(deck, { deckDir, outDir: dirname(outFile), inlineAssets })
+  result = renderDeckDocument(deck, {
+    deckDir,
+    outDir: dirname(outFile),
+    inlineAssets,
+    talk: talk?.cues,
+  })
 } catch (err) {
   console.log(`✖ ${(err as Error).message}`)
   process.exit(1)

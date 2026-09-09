@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { basename, dirname, join, relative, resolve } from 'node:path'
 import { PROJECT_ROOT } from '../render/assets.ts'
 import { hashTree, listFiles, syncSkills } from '../skills/sync.ts'
-import { workspaceScripts } from './commands.ts'
+import { SLIDE_SKILLS, workspaceScripts } from './commands.ts'
 
 const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
@@ -10,7 +10,7 @@ if (args.includes('--help') || args.includes('-h')) {
     [
       'Usage: slide-nextup init [<dir>] [--example] [--update] [--force] [--package <spec>]',
       '  Creates a workspace for making decks with your agent: package.json (slide-nextup pinned as a devDependency, one script per command),',
-      '  AGENTS.md and CLAUDE.md, the four slide skills under .agents/skills with their .claude/skills mirror, decks/ and themes/.',
+      '  AGENTS.md and CLAUDE.md, the five slide skills under .agents/skills with their .claude/skills mirror, decks/ and themes/.',
       '  An existing folder only gets the files it is missing; --force also rewrites AGENTS.md, CLAUDE.md and .gitignore from the templates.',
       '  --update refreshes the skills, the scripts and the pinned version and leaves everything else alone.',
       '  --package <spec> pins another package spec instead of this version (a tarball or a folder, for local builds).',
@@ -42,7 +42,7 @@ if (relative(PROJECT_ROOT, target) === '') {
   process.exit(2)
 }
 
-const SKILLS = ['slide-brief', 'slide-story', 'slide-design', 'slide-build']
+const SKILLS = SLIDE_SKILLS
 const created: string[] = []
 const updated: string[] = []
 const kept: string[] = []
@@ -123,7 +123,7 @@ put('.gitignore', template('gitignore'), force)
 put('decks/.gitkeep', '', false)
 put('themes/.gitkeep', '', false)
 
-// the four slide skills, then the Claude Code mirror of the whole .agents/skills folder
+// the five slide skills, then the Claude Code mirror of the whole .agents/skills folder
 const skillsDir = join(target, '.agents', 'skills')
 let skillChanges = 0
 for (const name of SKILLS) {

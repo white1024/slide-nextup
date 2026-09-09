@@ -67,7 +67,11 @@
             ]
           },
           "required": { "type": "boolean" },
-          "hint": { "type": "string" }
+          "hint": { "type": "string" },
+          "fit": {
+            "enum": ["cover", "contain"],
+            "description": "image slots only: how the picture fills its box. cover (the default) fills the box and crops what does not fit, for photos; contain shows the whole picture and leaves bands, for diagrams and charts. QA warns when a cover picture's ratio is far from its box's."
+          }
         }
       }
     },

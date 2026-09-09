@@ -92,7 +92,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -100,44 +100,44 @@
     },
     "title": {
       "type": "text",
-      "value": "What the checker can do ends where its tool specs end"
+      "value": "What the update can carry ends where its template ends"
     },
     "subtitle": {
       "type": "text",
-      "value": "Every capability needs a tool spec of its own."
+      "value": "Every section needs a template row of its own."
     },
     "table": {
       "type": "table",
       "header": [
-        "Tool",
+        "Section",
         "Purpose",
-        "Input",
-        "Output"
+        "Written by",
+        "Read by"
       ],
       "rows": [
         [
-          "getUptime",
-          "Read the uptime log",
-          "siteId, date",
-          "firstDown, lastUp"
+          "Progress",
+          "What moved this week",
+          "each lead",
+          "everyone"
         ],
         [
-          "openIncident",
-          "Open an incident",
-          "siteId, date, type",
-          "incidentId, status"
+          "Blockers",
+          "What is waiting on whom",
+          "the person blocked",
+          "the owner"
         ],
         [
-          "getQuota",
-          "Read the remaining quota",
-          "siteId, checkType",
-          "remainingRuns"
+          "Decisions",
+          "What still needs a call",
+          "anyone",
+          "the leads"
         ]
       ]
     },
     "caption": {
       "type": "text",
-      "value": "Input and output are only the minimum."
+      "value": "Written by and read by are only the minimum."
     }
   }
 }

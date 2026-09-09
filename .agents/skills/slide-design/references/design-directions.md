@@ -39,7 +39,7 @@ Elements respond to the mouse during playback, and that is the theme's job too:
 }
 ```
 
-`schemaVersion` is required (this engine understands 1; `pnpm theme:check` verifies it); `engine` (a semver range checked against package.json), `source` (where a ported pack came from) and `motion` (the pack's default page transition) are optional. All six colour roles are required; custom colours may be added (e.g. `accent2`) and the renderer turns every one into a `--color-<name>` variable.
+`schemaVersion` is required (this engine understands 1; `pnpm theme:check` verifies it); `engine` (a semver range checked against package.json), `source` (where a ported pack came from) and `motion` (the pack's motion family, crisp / soft / minimal, and its default page transition) are optional. All six colour roles are required; custom colours may be added (e.g. `accent2`) and the renderer turns every one into a `--color-<name>` variable.
 
 `themes/<id>/theme.css` takes its values only through variables: `var(--color-paper)`, `var(--color-ink)`, `var(--color-muted)`, `var(--color-accent)`, `var(--color-surface)`, `var(--color-line)`, `var(--font-display)`, `var(--font-display-weight)`, `var(--font-body)`, `var(--font-body-weight)`, `var(--radius)`.
 
@@ -53,14 +53,14 @@ Layouts mark the meaning of a component with `data-role`; a theme knows only rol
 | `kicker` | cover | accent colour, extra letter spacing |
 | `subtitle`, `caption` | cover, comparison column names, photo | muted colour |
 | `body` | statement, closing | ink colour |
-| `list` | statement, comparison | the marker of `.list li` drawn with `border-left`, not with `content` |
+| `list` | statement, comparison | the marker of `.list li` drawn with `border-left` or a background dash; a decorative `::before` may carry `content: ""`, never text |
 | `card` | cards | surface ground, line border, radius |
 | `backdrop` | the colour bar of cover and closing | an accent block |
 | `divider` | comparison | line colour |
 | `cta` | closing | accent or bold |
 | `photo` | photo | surface ground, line border |
 
-`data-tone="inverse"` marks a whole page (closing): the theme has to define the ground and text colours of inverted pages.
+`data-tone="inverse"` marks a whole page (closing): the theme has to define the ground and text colours of inverted pages. The same attribute gives one role colour variants (`[data-role="eyebrow-accent"][data-tone="second"]`), which is the way to a second or third colour on the same kind of element; list every tone the theme styles in theme.json `tones`, and `theme:check` warns when a layout asks for one the CSS does not style.
 
 The inside of a metric card is `.metric-value`, `.metric-label`, `.metric-delta`; a theme may colour those classes.
 
@@ -132,4 +132,4 @@ Every theme pack provides this set of core layout ids, with the same slot names 
 | quote | title, caption |
 | closing | title, body, cta |
 
-The furniture slots `brand`, `meta`, `kicker`, `page` are optional. A pack may add layouts of its own (for example warm-keynote's `cards-2`, `cards-4`, `fact`, `before-after`, `chart-aside`; blue-professional's `agenda`, `dashboard`, `detail`, `tabs`; technical-brief's `cards-list`, `chips-2`, `flow-3`, `diagram-notes`). Three packs are complete at the moment, warm-keynote, blue-professional and technical-brief (`ls themes/<id>/layouts` for the current set). All three are generated from a compact spec by their own `themes/<id>/generate-layouts.cjs` (warm-keynote's `cover` is the one hand-kept file): to change a layout, change the spec and run the generator again, because a hand edit to a generated layout.json is overwritten on the next run. A missing core layout falls back to the generic one, still styled by the theme, but it looks a notch weaker, so fill the set. Font-size floors are graded by role: ordinary content 32px; `chapter` / `pill` / `caption` / `cta` / `kicker` / `flow` 24px; `meta` / `chip` / `eyebrow` 20px; `table` 22px.
+The furniture slots `brand`, `meta`, `kicker`, `page` are optional. A pack may add layouts of its own (for example warm-keynote's `cards-2`, `cards-4`, `fact`, `before-after`, `chart-aside`; blue-professional's `agenda`, `dashboard`, `detail`, `tabs`; technical-brief's `cards-list`, `chips-2`, `flow-3`, `diagram-notes`). Three packs are complete at the moment, warm-keynote, blue-professional and technical-brief (`ls themes/<id>/layouts` for the current set). All three are generated from a compact spec by their own `themes/<id>/generate-layouts.cjs` (warm-keynote's `cover` is the one hand-kept file): to change a layout, change the spec and run the generator again, because a hand edit to a generated layout.json is overwritten on the next run. A missing core layout falls back to the generic one, still styled by the theme, but it looks a notch weaker, so fill the set. Font-size floors are graded by role: ordinary content 32px; `chapter` / `pill` / `caption` / `cta` / `kicker` / `flow` 24px; `meta` / `chip` / `eyebrow` 20px; `table` 22px. A role of the pack's own inherits the floor of its longest known prefix (`eyebrow-accent-2` → `eyebrow-accent`), anything else counts as content.

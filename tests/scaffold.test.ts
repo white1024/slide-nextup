@@ -6,6 +6,7 @@ import { type Deck, parseDeck, type Slide, validateDeck } from '../src/model/dec
 import {
   autoLayout,
   autoSteps,
+  autoTransition,
   BRAND_MAX_UNITS,
   chapterLabels,
   FURNITURE_MAX_UNITS,
@@ -19,20 +20,17 @@ import {
   splitSide,
   textUnits,
 } from '../src/model/scaffold.ts'
-import { loadStory, type Story, type StorySlide } from '../src/model/story.ts'
+import { loadStory, type SceneRole, type Story, type StorySlide } from '../src/model/story.ts'
 import { confirmationStatus, writeConfirmation } from '../src/model/story-confirm.ts'
 import { runDeckQa } from '../src/qa/run.ts'
-import {
-  type LayoutJson,
-  listLayoutIds,
-  listLayoutIdsFor,
-  loadLayout,
-} from '../src/render/assets.ts'
+import { type LayoutJson, listLayoutIdsFor, loadLayout } from '../src/render/assets.ts'
 import { renderDeckDocument } from '../src/render/deck.ts'
 
 const storyText = readFileSync(resolve('examples/story.sample.md'), 'utf8')
 const story = loadStory(storyText).story as Story
-const layouts = new Map<string, LayoutJson>(listLayoutIds().map((id) => [id, loadLayout(id).json]))
+const layouts = new Map<string, LayoutJson>(
+  listLayoutIdsFor('blue-professional').map((id) => [id, loadLayout(id, 'blue-professional').json]),
+)
 
 function scaffold(extra: Partial<Parameters<typeof scaffoldDeck>[0]> = {}) {
   return scaffoldDeck({
@@ -40,7 +38,7 @@ function scaffold(extra: Partial<Parameters<typeof scaffoldDeck>[0]> = {}) {
     storyText,
     storyRelativePath: 'story.sample.md',
     deckId: 'story-first',
-    theme: 'ink-paper',
+    theme: 'blue-professional',
     layouts,
     ...extra,
   })
@@ -48,11 +46,13 @@ function scaffold(extra: Partial<Parameters<typeof scaffoldDeck>[0]> = {}) {
 
 describe('story → deck scaffolding', () => {
   it('fills brand / meta / page furniture only on layouts that declare those slots', () => {
+    // the generic statement carries no furniture slots; the pack's version does
+    const generic = loadLayout('statement').json
     const furnished: LayoutJson = {
-      ...(layouts.get('statement') as LayoutJson),
+      ...generic,
       id: 'furnished',
       slots: {
-        ...(layouts.get('statement') as LayoutJson).slots,
+        ...generic.slots,
         brand: { type: 'text', required: false },
         meta: { type: 'text', required: false },
         page: { type: 'text', required: false },
@@ -63,7 +63,7 @@ describe('story → deck scaffolding', () => {
     expect(slots.brand).toEqual({ type: 'text', value: story.meta.title })
     expect(slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
     expect(slots.page).toEqual({ type: 'text', value: '03 / 08' })
-    const plain = slotsFor(third, layouts.get('statement') as LayoutJson, story)
+    const plain = slotsFor(third, generic, story)
     expect(Object.keys(plain)).not.toContain('brand')
     expect(Object.keys(plain)).not.toContain('page')
   })
@@ -112,12 +112,14 @@ describe('story → deck scaffolding', () => {
     }
     expect(r.warnings.filter((w) => w.includes('meta is left empty'))).toHaveLength(1)
     expect(r.warnings.filter((w) => w.includes('brand is left empty'))).toHaveLength(1)
-    expect(r.warnings.find((w) => w.includes('meta is left empty'))).toContain('s3, s5')
+    expect(r.warnings.find((w) => w.includes('meta is left empty'))).toContain(
+      's1, s2, s3, s4, s5, s6, s7',
+    )
     // the sample story's labels are short, so no furniture is reported empty
     const short = scaffold({ choices: { s3: 'process', s5: 'fact' } })
     expect(short.warnings.filter((w) => w.includes('left empty'))).toEqual([])
     expect(short.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
-    expect(short.deck.slides[2]?.slots.brand).toEqual({
+    expect(short.deck.slides[0]?.slots.brand).toEqual({
       type: 'text',
       value: 'Confirm the story before the slides',
     })
@@ -144,11 +146,12 @@ describe('story → deck scaffolding', () => {
     expect(r.deck.slides[3]?.slots.kicker).toEqual({ type: 'text', value: '01 — 診斷' })
     expect(r.deck.slides[4]?.slots.kicker).toEqual({ type: 'text', value: '02 — 解法' })
     expect(validateDeck(r.deck).ok).toBe(true)
-    // without a chapter only a hero page gets the occasion in its kicker; others stay empty
+    // without a chapter the kicker stays empty and the occasion goes to meta, on the cover too
     const plain = scaffold({ choices: { s3: 'fact' } })
     expect(plain.deck.slides[2]?.slots.kicker).toBeUndefined()
     expect(plain.deck.slides[2]?.slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
-    expect(plain.deck.slides[0]?.slots.kicker).toEqual({ type: 'text', value: 'Weekly proposal' })
+    expect(plain.deck.slides[0]?.slots.kicker).toBeUndefined()
+    expect(plain.deck.slides[0]?.slots.meta).toEqual({ type: 'text', value: 'Weekly proposal' })
   })
 
   it('picks layouts from scene role and content relation', () => {
@@ -185,7 +188,8 @@ describe('story → deck scaffolding', () => {
     expect(r.deck.story?.sha256).toHaveLength(64)
     expect(r.deck.slides).toHaveLength(8)
     expect(r.deck.slides[0]?.slots).toMatchObject({
-      kicker: { type: 'text', value: 'Weekly proposal' },
+      brand: { type: 'text', value: 'Confirm the story before the slides' },
+      meta: { type: 'text', value: 'Weekly proposal' },
       title: { type: 'text', value: 'Where our slide revisions go' },
       subtitle: {
         type: 'text',
@@ -273,18 +277,78 @@ describe('story → deck scaffolding', () => {
     expect(scaffold().stepsKept).toEqual([])
   })
 
-  it('leaves the transition to the theme, gives a default reveal order, and leaves regenerated slides alone', () => {
+  it('sequences by the story: hero, pause, close and intensity 4+ show whole, map reveals only its items, intensity 1–2 builds in two beats', () => {
+    const cards = [{ id: 'title' }, { id: 'card-1' }, { id: 'card-2' }, { id: 'card-3' }]
+    const scene = (scene_role: SceneRole, intensity: number) => ({ scene_role, intensity })
+    const table = (layout: string, els: { id: string }[], role: SceneRole, intensity: number) =>
+      Object.fromEntries(autoSteps(layout, els, scene(role, intensity)))
+    expect(table('cards', cards, 'evidence', 3)).toEqual({ 'card-1': 1, 'card-2': 2, 'card-3': 3 })
+    expect(table('cards', cards, 'relationship', 3)).toEqual({
+      'card-1': 1,
+      'card-2': 2,
+      'card-3': 3,
+    })
+    expect(table('cards', cards, 'evidence', 4)).toEqual({})
+    expect(table('cards', cards, 'evidence', 5)).toEqual({})
+    expect(table('cards', cards, 'evidence', 2)).toEqual({ 'card-1': 1, 'card-2': 2, 'card-3': 2 })
+    expect(table('cards', cards, 'map', 2)).toEqual({ 'card-1': 1, 'card-2': 2, 'card-3': 2 })
+    expect(table('cards', cards, 'hero', 3)).toEqual({})
+    expect(table('cards', cards, 'pause', 1)).toEqual({})
+    expect(table('closing', [{ id: 'title' }, { id: 'cta' }], 'close', 3)).toEqual({})
+    // a map page reveals agenda items, cards and blocks, never stats or a comparison's sides
+    const mixed = [
+      { id: 'stat-1' },
+      { id: 'stat-2' },
+      { id: 'left-items' },
+      { id: 'item-1' },
+      { id: 'item-2' },
+    ]
+    expect(table('dashboard', mixed, 'map', 3)).toEqual({ 'item-1': 1, 'item-2': 2 })
+    expect(table('dashboard', mixed, 'evidence', 3)).toEqual({
+      'stat-1': 1,
+      'stat-2': 2,
+      'left-items': 1,
+      'item-1': 1,
+      'item-2': 2,
+    })
+    // the layout table on its own (no scene) still steps everything but the hero-like layouts
+    expect(Object.fromEntries(autoSteps('closing', [{ id: 'cta' }]))).toEqual({ cta: 1 })
+    // the page's own transition: a pause breathes, a hero after the first settles
+    expect(autoTransition(scene('pause', 1), 6)).toBe('breath')
+    expect(autoTransition(scene('hero', 4), 0)).toBeUndefined()
+    expect(autoTransition(scene('hero', 4), 3)).toBe('settle')
+    expect(autoTransition(scene('evidence', 3), 3)).toBeUndefined()
+  })
+
+  it('leaves the transition to the theme, gives the story’s reveal order and page transitions, and leaves regenerated slides alone', () => {
     const r = scaffold()
     expect(r.deck.transition).toBeUndefined()
     const steps = (d: Deck, i: number) =>
       Object.fromEntries(
         (d.slides[i] as Slide).elements.filter((e) => e.step).map((e) => [e.id, e.step]),
       )
+    // s1 hero/4 and s8 close/4 show whole; s2 is a map at intensity 2: two beats
     expect(steps(r.deck, 0)).toEqual({})
-    expect(steps(r.deck, 1)).toEqual({ 'card-1': 1, 'card-2': 2, 'card-3': 3 })
+    expect(steps(r.deck, 1)).toEqual({ 'card-1': 1, 'card-2': 2, 'card-3': 2 })
+    expect(steps(r.deck, 7)).toEqual({})
     expect(r.stepsAuto).toContain('s2/card-1=1')
-    expect(r.stepsAuto).toContain('s8/cta=1')
+    expect(r.stepsAuto).not.toContain('s8/cta=1')
+    // s7 is the pause: it breathes, and it is the only page with its own transition
+    expect((r.deck.slides[6] as Slide).transition).toBe('breath')
+    expect(r.deck.slides.filter((s) => s.transition).map((s) => s.id)).toEqual(['s7'])
+    expect(r.transitionsAuto).toEqual(['s7=breath'])
     expect(validateDeck(r.deck).ok).toBe(true)
+    // a regenerated slide keeps its transition, a cleared one included
+    const noBreath: Deck = {
+      ...r.deck,
+      slides: r.deck.slides.map(({ transition: _cleared, ...s }) => s),
+    }
+    const s7 = scaffold({ existing: noBreath, only: ['s7'] })
+    expect((s7.deck.slides[6] as Slide).transition).toBeUndefined()
+    expect(s7.transitionsAuto).toEqual([])
+    expect((scaffold({ existing: r.deck, only: ['s2'] }).deck.slides[6] as Slide).transition).toBe(
+      'breath',
+    )
     // regenerating an existing slide never re-applies the defaults: the editor's state wins, even "no steps"
     const cleared: Deck = {
       ...r.deck,
@@ -430,10 +494,19 @@ describe('the demo deck with the scaffold’s furniture defaults', () => {
     expect(deck.slides[3]?.slots.kicker).toBeUndefined()
     expect(deck.slides[5]?.slots.page).toEqual({ type: 'text', value: '06 / 08' })
     const report = await runDeckQa(deck, { deckDir: dir })
+    // the example plays its reveals: 24 entrances, the s3 photo's wipe among them (its rest
+    // clip-path is inset(0px 0% 0px 0px), which the check has to read as open)
+    expect(report.motion).toEqual({ pages: 8, entrances: 24, changes: 7 })
+    // errors and warnings only: a slack notice on a short card is information, not a failure
     expect(
-      report.slides.flatMap((s) => s.findings.map((f) => `${s.id}/${f.element}:${f.rule}`)),
+      report.slides.flatMap((s) =>
+        s.findings
+          .filter((f) => f.severity !== 'info')
+          .map((f) => `${s.id}/${f.element}:${f.rule}`),
+      ),
     ).toEqual([])
     expect(report.errors).toBe(0)
+    expect(report.warnings).toBe(0)
   }, 60_000)
 })
 

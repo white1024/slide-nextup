@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Professional · layouts</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root { --bg: #f6f5fa; --panel: #ffffff; --ink: #1a1930; --muted: #767490; --rule: #dcdae8; --accent: #4f47c8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121120; --panel: #1a1929; --ink: #ecebf6; --muted: #8b899f; --rule: #2a2940; --accent: #9c95ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px clamp(16px, 4vw, 48px) 64px; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 0 0 6px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 0.85em; color: var(--muted); font-weight: 400; }
+  .lead, .about, .count { color: var(--muted); margin: 0 0 8px; max-width: 80ch; }
+  .count { font-size: 13px; margin-bottom: 16px; }
+  .crumbs { font-size: 14px; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px 20px; }
+  figure { margin: 0; }
+  .frame { --s: 0.25; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; background: #808080; }
+  .frame iframe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; transform: scale(var(--s)); pointer-events: none; }
+  .frame .open { position: absolute; inset: 0; }
+  .frame:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+  figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  figcaption b { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-weight: 600; color: var(--ink); }
+  figcaption a { color: inherit; text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; }
+  .desc { display: block; margin-top: 2px; }
+  .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px 24px; margin-top: 24px; }
+  .pack h2 { margin-top: 12px; }
+</style>
+</head>
+<body>
+<p class="crumbs"><a href="../index.html">Themes</a> › Blue Professional</p>
+<h1>Blue Professional <code>blue-professional</code></h1>
+<p class="about">The restraint of a consulting report: warm cream paper, a single electric cobalt, ink-black headings and grey captions; Space Grotesk headings with Inter body text, CJK falling back to Noto Sans TC or Microsoft JhengHei. Cards are a pale blue tint with a 1.5px translucent border and 12px radius, no solid borders or shadows. Every page has a blue uppercase eyebrow top left, a pale blue rounded tag top right, the page number bottom left and a 3px progress bar along the bottom edge that advances with the page count; numbers are always cobalt, processes are numbered blue circles joined by faint lines, and the call to action is the only solid blue pill. Ported from beautiful-html-templates’ blue-professional.</p>
+<p class="count">17 layouts, each rendered with its own sample content; click one to open it full size.</p>
+<div class="grid">
+    <figure>
+      <div class="frame"><iframe src="cover.html" loading="lazy" tabindex="-1" title="Cover: blue professional"></iframe><a class="open" href="cover.html" target="_blank" rel="noopener" aria-label="open cover full size"></a></div>
+      <figcaption><b>cover</b> <span class="desc">A consulting-report cover: a slanted tinted panel on the right with a 3 by 3 dot grid in its corner; on the left the series name, a short blue rule, the title, a lede and one line of meta, with the page number bottom left and the progress bar along the bottom edge. A centred title page would lose the document-like left-aligned rhythm and the weight of the slanted panel.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="agenda.html" loading="lazy" tabindex="-1" title="Agenda: blue professional"></iframe><a class="open" href="agenda.html" target="_blank" rel="noopener" aria-label="open agenda full size"></a></div>
+      <figcaption><b>agenda</b> <span class="desc">A contents page: a short blue rule under the title, then six numbered entries in two columns of three, each a blue number, a heading and a one-sentence note, separated by hairlines. A single list would lose the scanning rhythm of six things each in its own cell.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards.html" loading="lazy" tabindex="-1" title="Three cards: blue professional"></iframe><a class="open" href="cards.html" target="_blank" rel="noopener" aria-label="open cards full size"></a></div>
+      <figcaption><b>cards</b> <span class="desc">Under the title and lede, three rounded tinted cards, each with a big blue number, a bold heading and a one-sentence note. A bulleted list would lose the sense of cards standing side by side on their own.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-2.html" loading="lazy" tabindex="-1" title="Two cards: blue professional"></iframe><a class="open" href="cards-2.html" target="_blank" rel="noopener" aria-label="open cards-2 full size"></a></div>
+      <figcaption><b>cards-2</b> <span class="desc">Under the title and lede, two wide tinted cards. Use it for two ideas side by side; do not force in a third.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-4.html" loading="lazy" tabindex="-1" title="Four cards: blue professional"></iframe><a class="open" href="cards-4.html" target="_blank" rel="noopener" aria-label="open cards-4 full size"></a></div>
+      <figcaption><b>cards-4</b> <span class="desc">Under the title and lede, four narrow tinted cards. Use it for four small points side by side; keep the text short.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="chart-aside.html" loading="lazy" tabindex="-1" title="Chart with aside: blue professional"></iframe><a class="open" href="chart-aside.html" target="_blank" rel="noopener" aria-label="open chart-aside full size"></a></div>
+      <figcaption><b>chart-aside</b> <span class="desc">Under the title, a chart on the left (ranked bars, progress, line or donut) and a tinted card on the right for an aside or a key number, with a note underneath. A plain table would lose the sense of proportion.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="comparison.html" loading="lazy" tabindex="-1" title="Comparison: blue professional"></iframe><a class="open" href="comparison.html" target="_blank" rel="noopener" aria-label="open comparison full size"></a></div>
+      <figcaption><b>comparison</b> <span class="desc">Two tinted cards side by side, each with a bold column name and a blue-ruled list; the right one has a blue border and is the side the conclusion lands on. Two stacked paragraphs would lose the tension of the side-by-side contrast.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="dashboard.html" loading="lazy" tabindex="-1" title="Dashboard: blue professional"></iframe><a class="open" href="dashboard.html" target="_blank" rel="noopener" aria-label="open dashboard full size"></a></div>
+      <figcaption><b>dashboard</b> <span class="desc">Six stat cells: under the title, a three-by-two grid of tinted cells, each with a blue number, the name of the metric and a hairline-separated context note. A table would lose the weight each number gets from its own frame.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="data-table.html" loading="lazy" tabindex="-1" title="Data table: blue professional"></iframe><a class="open" href="data-table.html" target="_blank" rel="noopener" aria-label="open data-table full size"></a></div>
+      <figcaption><b>data-table</b> <span class="desc">Title and lede, then a tinted frame holding the table, whose header is small blue capitals over a blue underline, with a note beneath. A bulleted list would lose the alignment between columns.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="detail.html" loading="lazy" tabindex="-1" title="Detail: blue professional"></iframe><a class="open" href="detail.html" target="_blank" rel="noopener" aria-label="open detail full size"></a></div>
+      <figcaption><b>detail</b> <span class="desc">Four tinted blocks in two columns and two rows, each with a bold heading and two or three blue-ruled points. One long list would lose the grouping of four things each in its own set.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="photo.html" loading="lazy" tabindex="-1" title="Photo: blue professional"></iframe><a class="open" href="photo.html" target="_blank" rel="noopener" aria-label="open photo full size"></a></div>
+      <figcaption><b>photo</b> <span class="desc">Under the title, one full-width tinted frame for an image (a system diagram, a screenshot) with a caption beneath. A small image beside text would lose the weight of the image as the main act.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="process.html" loading="lazy" tabindex="-1" title="Process: blue professional"></iframe><a class="open" href="process.html" target="_blank" rel="noopener" aria-label="open process full size"></a></div>
+      <figcaption><b>process</b> <span class="desc">One horizontal flow: six numbered blue circular nodes that fade towards the end, a short hairline between nodes, the step name and a one-sentence note under each, and a reminder at the bottom. A bulleted list would lose seeing the whole line at a glance.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="quote.html" loading="lazy" tabindex="-1" title="Quote: blue professional"></iframe><a class="open" href="quote.html" target="_blank" rel="noopener" aria-label="open quote full size"></a></div>
+      <figcaption><b>quote</b> <span class="desc">A centred quote: a pale blue quotation mark above, bold large type, the source beneath; a thin ring top left and a pale blue dot bottom right. A plain text page would lose the pause.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="section.html" loading="lazy" tabindex="-1" title="Section: blue professional"></iframe><a class="open" href="section.html" target="_blank" rel="noopener" aria-label="open section full size"></a></div>
+      <figcaption><b>section</b> <span class="desc">A chapter opener: the series name and the tag top right, then a huge blue number on the left, a short blue rule, the chapter title and a lede. A plain title page would lose the turn-the-page rhythm the number gives.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="statement.html" loading="lazy" tabindex="-1" title="Statement: blue professional"></iframe><a class="open" href="statement.html" target="_blank" rel="noopener" aria-label="open statement full size"></a></div>
+      <figcaption><b>statement</b> <span class="desc">One claim per slide: the left column is a blue-ruled list of supporting points; across a hairline, the right column holds the tinted claim box, three small stat cells and a supplement. A plain text page would lose the reading direction of evidence on the left, conclusion on the right.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="tabs.html" loading="lazy" tabindex="-1" title="Tabs: blue professional"></iframe><a class="open" href="tabs.html" target="_blank" rel="noopener" aria-label="open tabs full size"></a></div>
+      <figcaption><b>tabs</b> <span class="desc">Title and lede, then a tinted frame holding a few tabs, each with its own panel (a list, a table or a paragraph); tabs switch on click during playback and only the first shows when static. Three separate slides would lose the contrast of switching within one frame.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="closing.html" loading="lazy" tabindex="-1" title="Closing: blue professional"></iframe><a class="open" href="closing.html" target="_blank" rel="noopener" aria-label="open closing full size"></a></div>
+      <figcaption><b>closing</b> <span class="desc">A centred close: two concentric thin rings behind, a short blue rule, one closing headline, a short explanation, a solid blue pill button as the call to action, and contact details on the last line. A thank-you page would lose the act of handing the next step to the audience.</span></figcaption>
+    </figure>
+</div>
+<script>
+  const frames = document.querySelectorAll('.frame')
+  const fit = () => { for (const f of frames) f.style.setProperty('--s', String(f.clientWidth / 1920)) }
+  new ResizeObserver(fit).observe(document.body)
+  fit()
+</script>
+</body>
+</html>

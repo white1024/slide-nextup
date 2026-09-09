@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "slide-nextup design choice",
+  "description": "decks/<id>/design.json: the visual direction the user chose for one deck. Written by design:set; deck:scaffold takes its default theme from it and deck:validate reports a deck that sits on another theme.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["theme"],
+  "properties": {
+    "theme": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "the id of the chosen theme pack, resolved from the deck folder outwards (deck folder, workspace, user directory, package)"
+    },
+    "direction": {
+      "type": "string",
+      "minLength": 1,
+      "description": "the name of the direction the user picked (safe, bold, free, or the pitch's own label); optional"
+    },
+    "chosenAt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "when the choice was recorded, ISO 8601; optional"
+    }
+  }
+}

@@ -92,7 +92,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -100,18 +100,18 @@
     },
     "title": {
       "type": "text",
-      "value": "The time we spend revising decks goes on layout"
+      "value": "The status hour goes on reading aloud"
     },
     "body": {
       "type": "text",
-      "value": "Last quarter six decks averaged four revision rounds; three of them touched only the layout."
+      "value": "Last month four weekly meetings averaged 62 minutes; 40 of them were updates read from the deck."
     },
     "evidence": {
       "type": "list",
       "items": [
-        "Round one: a new palette",
-        "Round two: a new layout",
-        "Round three: the content never changed"
+        "First half: updates read aloud",
+        "Second half: questions the notes had already answered",
+        "Decisions: pushed to next week"
       ]
     }
   }

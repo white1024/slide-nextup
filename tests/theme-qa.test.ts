@@ -23,8 +23,14 @@ describe('every theme pack’s layouts pass full QA on their own samples', () =>
     expect(deck.slides.map((s) => s.layout)).toEqual(listLayoutIdsFor('warm-keynote'))
     expect(deck.slides.map((s) => s.id)).toEqual(listLayoutIdsFor('warm-keynote'))
     expect(
-      sampleDeck('ink-paper', undefined, ['cover', 'closing']).slides.map((s) => s.id),
+      sampleDeck('blue-professional', undefined, ['cover', 'closing']).slides.map((s) => s.id),
     ).toEqual(['cover', 'closing'])
+    // stepped the way the scaffold steps that layout, on the theme's own transition, so theme:qa plays them
+    expect(deck.transition).toBeUndefined()
+    expect(deck.slides.find((s) => s.id === 'cards')?.elements.map((e) => e.step ?? 0)).toContain(1)
+    expect(
+      deck.slides.find((s) => s.id === 'cover')?.elements.every((e) => e.step === undefined),
+    ).toBe(true)
   })
 
   it.each(listThemeIds({ userThemesDir: null }))(
@@ -36,6 +42,9 @@ describe('every theme pack’s layouts pass full QA on their own samples', () =>
       expect(report.slides).toHaveLength(listLayoutIdsFor(theme).length)
       expect(themeQaProblems(report)).toEqual([])
       expect(report.errors + report.warnings).toBe(0)
+      expect(report.motion?.pages).toBe(report.slides.length)
+      expect(report.motion?.entrances).toBeGreaterThan(0)
+      expect(report.motion?.changes).toBe(report.slides.length - 1)
     },
     120_000,
   )

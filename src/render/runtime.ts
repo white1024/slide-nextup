@@ -1,3 +1,5 @@
+import { MIN_FONT_BY_ROLE } from '../qa/font-floors.ts'
+
 /**
  * Viewer runtime embedded into every rendered deck. Plain JavaScript kept as a
  * string so the output HTML stays dependency-free. Everything here is
@@ -9,7 +11,9 @@
  * `<html data-static="true">`) shows every element and disables transitions —
  * QA and exports use that. `?presenter=1` opens the presenter view; `P` opens
  * it from the main window, and the two stay in sync through BroadcastChannel
- * plus window messaging (same browser only).
+ * plus window messaging (same browser only). `F` fills the screen with the
+ * deck in any of these windows. In static mode and in the editor every step is
+ * already shown, so there a press turns the page instead of counting steps.
  *
  * Interactive slots (details, tabs, a chart's toggle legend, image hotspots) work only while
  * `html[data-interactive]` is present: static mode and the editor show their default state.
@@ -20,37 +24,91 @@ export const VIEWER_CSS = `html, body { margin: 0; padding: 0; height: 100%; bac
 .deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
 .deck-stage > .slide { position: absolute; left: 0; top: 0; visibility: hidden; }
 .deck-stage > .slide.is-active { visibility: visible; z-index: 2; }
-/* page change: the page being left stays underneath, opaque, until the new one has covered it, so the viewport ground never shows through */
+/* page change: the page being left keeps .is-leaving underneath while the new page comes in on top. Each family is an exit on the old page (ease-in) and an entrance on the new one (ease-out, delayed so the two overlap): 140–280ms, never more than 12px of travel or 3% of scale, opacity always part of it. breath is the one exception, a full exit, a beat, then the entrance, for section breaks; fade keeps the old page still and crossfades over it */
 .deck-stage > .slide.is-leaving { visibility: visible; z-index: 1; }
-.deck-stage > .slide [data-step] { transition: opacity var(--motion-duration, 350ms) ease-out, transform var(--motion-duration, 350ms) cubic-bezier(0.2, 0.7, 0.2, 1), clip-path var(--motion-duration, 350ms) ease-out; }
-.deck-stage > .slide [data-step].is-pending { visibility: hidden; opacity: 0; transform: translateY(24px); }
-.deck-stage > .slide [data-step][data-enter="fade"].is-pending { transform: none; }
-.deck-stage > .slide [data-step][data-enter="scale-in"].is-pending { transform: scale(0.9); }
-.deck-stage > .slide [data-step][data-enter="slide-left"].is-pending { transform: translateX(56px); }
-.deck-stage > .slide [data-step][data-enter="slide-right"].is-pending { transform: translateX(-56px); }
-.deck-stage > .slide [data-step][data-enter="wipe"] { clip-path: inset(0 0 0 0); }
-.deck-stage > .slide [data-step][data-enter="wipe"].is-pending { opacity: 1; transform: none; clip-path: inset(0 100% 0 0); }
-@media (prefers-reduced-motion: reduce) { .deck-stage > .slide, .deck-stage > .slide [data-step] { transition: none !important; animation: none !important; } }
-.deck-stage[data-transition="fade"] > .slide.is-active { animation: deck-fade var(--motion-duration, 350ms) ease both; }
-.deck-stage[data-transition="lift"] > .slide.is-active { animation: deck-lift calc(var(--motion-duration, 350ms) * 1.5) cubic-bezier(0.22, 1, 0.36, 1) both; }
-.deck-stage[data-transition="push"] > .slide.is-active { animation: deck-push-in calc(var(--motion-duration, 350ms) * 2) cubic-bezier(0.77, 0, 0.175, 1) both; }
-.deck-stage[data-transition="push"] > .slide.is-leaving { animation: deck-push-out calc(var(--motion-duration, 350ms) * 2) cubic-bezier(0.77, 0, 0.175, 1) both; }
+.deck-stage { --deck-ease-in: cubic-bezier(0.4, 0, 1, 1); --deck-ease-out: cubic-bezier(0, 0, 0.2, 1); }
+/* element entrances: an element waiting for its step is hidden; the press that reveals it adds .is-entering and it plays one keyframe run (fill both, so it holds the first frame through its stagger delay) that ends on the element's resting state, which is exactly what static mode shows. Elements already revealed when a page comes up (a hash jump, going back) do not replay, and a page on its way out (.is-leaving) never replays. The pace comes from the theme: --motion-duration, --motion-stagger and --motion-ease (its family); pop keeps its own overshoot curve. Every run stays within 150–800ms and 64px of travel */
+.deck-stage > .slide [data-step].is-pending { visibility: hidden; opacity: 0; }
+.deck-stage > .slide.is-active [data-step].is-entering { animation: deck-enter-fade-up var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) var(--enter-delay, 0ms) both; }
+.deck-stage > .slide.is-active [data-step][data-enter="fade"].is-entering { animation-name: deck-enter-fade; }
+.deck-stage > .slide.is-active [data-step][data-enter="scale-in"].is-entering { animation-name: deck-enter-scale-in; }
+.deck-stage > .slide.is-active [data-step][data-enter="slide-left"].is-entering { animation-name: deck-enter-slide-left; }
+.deck-stage > .slide.is-active [data-step][data-enter="slide-right"].is-entering { animation-name: deck-enter-slide-right; }
+.deck-stage > .slide.is-active [data-step][data-enter="wipe"].is-entering { animation-name: deck-enter-wipe; }
+.deck-stage > .slide.is-active [data-step][data-enter="pop"].is-entering { animation-name: deck-enter-pop; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+.deck-stage > .slide.is-active [data-step][data-enter="blur"].is-entering { animation-name: deck-enter-blur; }
+/* cascade: the element itself just appears and its items fade up one after another, 50ms apart: its direct children, or the children of its only child (a list's entries, a metric's parts). The runtime adds .is-cascading only when there are at least two items; otherwise the element plays fade-up */
+.deck-stage > .slide.is-active [data-step].is-entering.is-cascading { animation: none; }
+.deck-stage > .slide.is-active [data-step].is-entering.is-cascading > :not(:only-child), .deck-stage > .slide.is-active [data-step].is-entering.is-cascading > :only-child > * { animation: deck-enter-fade-up var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) calc(var(--enter-delay, 0ms) + var(--cascade-i, 0) * 50ms) both; }
+${Array.from({ length: 11 }, (_, i) => `.is-cascading > :nth-child(${i + 2}), .is-cascading > :only-child > :nth-child(${i + 2}) { --cascade-i: ${i + 1}; }`).join('\n')}
+/* data-driven chart entrances: the element shows at once and its parts play from the data. grow and draw are one rule, so a theme may name either for every chart kind: a bar or progress fill scales from its left end to its real width, a ring segment's dash runs from 0 to its real share (--share), a line draws itself along its real points (pathLength 1) with each point popping as the line reaches it (--t) and the area filling in behind. count fades the element in while the runtime runs its number up to the real value */
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) { animation: none; }
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) .chart-fill { transform-box: fill-box; transform-origin: left center; animation: deck-enter-grow-x var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) var(--enter-delay, 0ms) both; }
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) .chart-ring-fill { animation: deck-enter-grow-ring var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) var(--enter-delay, 0ms) both; }
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) .chart-line { animation: deck-enter-draw-line var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) var(--enter-delay, 0ms) both; }
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) .chart-area { animation: deck-enter-fade var(--motion-duration, 350ms) var(--motion-ease, cubic-bezier(0.2, 0.7, 0.2, 1)) calc(var(--enter-delay, 0ms) + var(--motion-duration, 350ms) / 2) both; }
+.deck-stage > .slide.is-active [data-step].is-entering:is([data-enter="grow"], [data-enter="draw"]) .chart-point { transform-box: fill-box; transform-origin: center; animation: deck-enter-pop calc(var(--motion-duration, 350ms) / 2) cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--enter-delay, 0ms) + var(--t, 0) * var(--motion-duration, 350ms)) both; }
+.deck-stage > .slide.is-active [data-step][data-enter="count"].is-entering { animation-name: deck-enter-fade; }
+/* the page being left never replays an entrance (open-slide's pitfall: the old layer animating under the new page) */
+.deck-stage > .slide.is-leaving [data-step], .deck-stage > .slide.is-leaving [data-step] * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .deck-stage > .slide, .deck-stage > .slide [data-step], .deck-stage > .slide [data-step] * { transition: none !important; animation: none !important; } }
+@keyframes deck-enter-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes deck-enter-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes deck-enter-scale-in { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+@keyframes deck-enter-slide-left { from { opacity: 0; transform: translateX(56px); } to { opacity: 1; transform: none; } }
+@keyframes deck-enter-slide-right { from { opacity: 0; transform: translateX(-56px); } to { opacity: 1; transform: none; } }
+@keyframes deck-enter-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes deck-enter-pop { from { opacity: 0; transform: scale(0.62); } 40% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes deck-enter-blur { from { opacity: 0; filter: blur(18px); transform: translateY(8px); } to { opacity: 1; filter: none; transform: none; } }
+@keyframes deck-enter-grow-x { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes deck-enter-grow-ring { from { stroke-dasharray: 0 1; } to { stroke-dasharray: var(--share, 1) 1; } }
+@keyframes deck-enter-draw-line { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
+.deck-stage[data-transition="fade"] > .slide.is-active { animation: deck-fade 240ms var(--deck-ease-out) both; }
+.deck-stage[data-transition="rise"] > .slide.is-active { animation: deck-rise-in 200ms var(--deck-ease-out) 80ms both; }
+.deck-stage[data-transition="rise"] > .slide.is-leaving { animation: deck-rise-out 140ms var(--deck-ease-in) both; }
+.deck-stage[data-transition="settle"] > .slide.is-active { animation: deck-settle-in 280ms var(--deck-ease-out) 100ms both; }
+.deck-stage[data-transition="settle"] > .slide.is-leaving { animation: deck-settle-out 160ms var(--deck-ease-in) both; }
+.deck-stage[data-transition="dissolve"] > .slide.is-active { animation: deck-dissolve-in 240ms var(--deck-ease-out) 40ms both; }
+.deck-stage[data-transition="dissolve"] > .slide.is-leaving { animation: deck-dissolve-out 200ms var(--deck-ease-in) both; }
+.deck-stage[data-transition="breath"] > .slide.is-active { animation: deck-breath-in 240ms var(--deck-ease-out) 300ms both; }
+.deck-stage[data-transition="breath"] > .slide.is-leaving { animation: deck-breath-out 180ms var(--deck-ease-in) both; }
+.deck-stage[data-transition="push"] > .slide.is-active { animation: deck-push-in 200ms var(--deck-ease-out) 80ms both; }
+.deck-stage[data-transition="push"] > .slide.is-leaving { animation: deck-push-out 140ms var(--deck-ease-in) both; }
 .deck-stage[data-transition="push"][data-direction="back"] > .slide.is-active { animation-name: deck-push-in-back; }
 .deck-stage[data-transition="push"][data-direction="back"] > .slide.is-leaving { animation-name: deck-push-out-back; }
-/* while a page is on its way out the stage clips, so a pushed page never shows in the letterbox */
-.deck-stage:has(> .slide.is-leaving) { overflow: hidden; }
+.deck-stage[data-transition="lift"] > .slide.is-active { animation: deck-lift-in 240ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both; }
+.deck-stage[data-transition="lift"] > .slide.is-leaving { animation: deck-lift-out 140ms var(--deck-ease-in) both; }
+/* while a page is on its way out the stage clips, so a moving page never shows in the letterbox, and carries the paper behind both pages (the runtime swaps in the leaving page's own background), so the beat between the exit and the entrance never shows the viewport ground */
+.deck-stage:has(> .slide.is-leaving) { overflow: hidden; background: var(--color-paper, #fff); }
 @keyframes deck-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes deck-lift { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: none; } }
-@keyframes deck-push-in { from { transform: translateX(100%); } to { transform: none; } }
-@keyframes deck-push-out { from { transform: none; } to { transform: translateX(-100%); } }
-@keyframes deck-push-in-back { from { transform: translateX(-100%); } to { transform: none; } }
-@keyframes deck-push-out-back { from { transform: none; } to { transform: translateX(100%); } }
-html[data-static="true"] .deck-stage > .slide, html[data-static="true"] .deck-stage > .slide [data-step] { transition: none; animation: none !important; }
+@keyframes deck-rise-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes deck-rise-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-4px); } }
+@keyframes deck-settle-in { from { opacity: 0; transform: translateY(12px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes deck-settle-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-6px); } }
+@keyframes deck-dissolve-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes deck-dissolve-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes deck-breath-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes deck-breath-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes deck-push-in { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+@keyframes deck-push-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-8px); } }
+@keyframes deck-push-in-back { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+@keyframes deck-push-out-back { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(8px); } }
+@keyframes deck-lift-in { from { opacity: 0; transform: translateY(8px) scale(0.99); } to { opacity: 1; transform: none; } }
+@keyframes deck-lift-out { from { opacity: 1; } to { opacity: 0; } }
+html[data-static="true"] .deck-stage > .slide, html[data-static="true"] .deck-stage > .slide [data-step], html[data-static="true"] .deck-stage > .slide [data-step] * { transition: none; animation: none !important; }
 body.deck-presenter .presenter-aside { position: fixed; top: 0; right: 0; bottom: 0; width: 34vw; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #1b1b1b; color: #eee; font: 16px system-ui, sans-serif; z-index: 2000; }
 .presenter-label { font-size: 12px; letter-spacing: 0.12em; opacity: 0.7; }
 .presenter-next-stage { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
 .presenter-next-stage > .slide { position: absolute; left: 0; top: 0; visibility: visible; transform-origin: 0 0; }
 .presenter-notes { flex: 1; overflow: auto; white-space: pre-wrap; font-size: 20px; line-height: 1.6; }
+/* the talk's cues (decks/<id>/talk.md, embedded at render): page cues stay lit, a cue pinned to a step waits dimmed until its press and is highlighted at that step */
+.presenter-cues { max-height: 40%; overflow: auto; display: flex; flex-direction: column; gap: 4px; font-size: 20px; line-height: 1.5; }
+.presenter-cue { padding: 6px 10px; border-left: 3px solid rgba(255, 255, 255, 0.25); border-radius: 0 6px 6px 0; }
+.presenter-cue[data-tag="must"] { border-left-color: #fff; }
+.presenter-cue[data-step] { opacity: 0.38; }
+.presenter-cue[data-step].is-due { opacity: 0.8; }
+.presenter-cue.is-current { opacity: 1; background: rgba(255, 255, 255, 0.14); }
+.presenter-cue-tag { display: inline-block; min-width: 3.2em; margin-right: 8px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
 .presenter-timer { font: 700 40px ui-monospace, Consolas, monospace; text-align: right; }
 .presenter-position { font-size: 14px; opacity: 0.8; }
 /* playback micro-interactions: everything hangs off html[data-interactive], which the runtime drops in static mode (?static=1, QA) and while the editor is active, so measurements and dragging never see a hover */
@@ -68,14 +126,25 @@ html:not([data-interactive]) .slide a { pointer-events: none; }
 /**
  * Auto-fit: text elements carrying `data-fit` shrink their font-size (after
  * fonts are ready) until the content no longer overflows the box, never below
- * the role's minimum (32px, 20px for page furniture). Embedded in decks and in
- * preview documents; QA and tests wait for `window.__fit.ready`.
+ * the role's minimum (the one table in qa/font-floors.ts, serialised here so the
+ * player and QA cannot drift apart). Embedded in decks and in preview documents;
+ * QA and tests wait for `window.__fit.ready`.
  */
 export const FIT_JS = `(() => {
-  const MIN = { default: 32, meta: 20, chip: 20, eyebrow: 20, 'eyebrow-accent': 20, chapter: 24, pill: 24, caption: 24, cta: 24, kicker: 24, flow: 24, 'flow-accent': 24, table: 22 };
+  const MIN = ${JSON.stringify(MIN_FONT_BY_ROLE)};
+  function floorFor(role) {
+    let r = role || '';
+    while (r) {
+      if (r !== 'default' && MIN[r] !== undefined) return MIN[r];
+      const cut = r.lastIndexOf('-');
+      if (cut === -1) break;
+      r = r.slice(0, cut);
+    }
+    return MIN.default;
+  }
   function fitOne(el) {
     if (el.dataset.fitLock === 'true') return;
-    const min = MIN[el.dataset.role] || MIN.default;
+    const min = floorFor(el.dataset.role);
     el.style.fontSize = '';
     let size = Number.parseFloat(getComputedStyle(el).fontSize);
     let guard = 0;
@@ -118,6 +187,7 @@ export const RUNTIME_JS = `(() => {
     applyMotion();
     try { if (remember) localStorage.setItem(motionKey, on ? 'on' : 'off'); else localStorage.removeItem(motionKey); } catch (_) {}
     step = 0;
+    entering = false;
     applySteps();
     const h = hashFor();
     if (location.hash !== h) history.replaceState(null, '', h);
@@ -174,25 +244,52 @@ export const RUNTIME_JS = `(() => {
   // the stage arrives with data-transition resolved by the renderer (the deck's value, else the theme's
   // default, which it also carries as data-transition-default); the editor changes it live here
   const FAMILY = { 'slide-left': 'push' };
-  function setTransition(value) {
-    const v = FAMILY[value] || value || stage.dataset.transitionDefault || 'fade';
+  let current = -1, step = 0;
+  // the deck's family; a page that carries its own data-transition (deck.json slides[].transition)
+  // plays that one when it comes in, so the stage attribute is settled again at every page change
+  let deckFamily = stage.dataset.transition || 'none';
+  function applyFamily(index) {
+    const own = slides[index] && slides[index].dataset.transition;
+    const v = own ? FAMILY[own] || own : deckFamily;
     if (v === 'none') delete stage.dataset.transition; else stage.dataset.transition = v;
   }
-  let current = -1, step = 0;
+  function setTransition(value) {
+    deckFamily = FAMILY[value] || value || stage.dataset.transitionDefault || 'fade';
+    if (current !== -1) applyFamily(current);
+  }
+  // the editor: one page's own family by slide id ('' = follow the deck)
+  function setPageTransition(id, value) {
+    const s = sectionById.get(id);
+    if (!s) return;
+    if (value) s.dataset.transition = FAMILY[value] || value; else delete s.dataset.transition;
+    if (s === slides[current]) applyFamily(current);
+  }
 
-  // the page being left keeps .is-leaving (visible, underneath) while the new page animates in
+  // the page being left keeps .is-leaving (visible, underneath) while the new page animates in; for
+  // that long the stage carries the leaving page's own background, so the beat where the old page has
+  // faded and the new one has not yet arrived shows this deck's paper, never the viewport ground
   let leaving = null, leaveTimer = 0;
   function settleLeaving() {
     clearTimeout(leaveTimer);
     if (leaving) { leaving.classList.remove('is-leaving'); leaving = null; }
+    stage.style.removeProperty('background');
+  }
+  // how long a page's animation runs in ms: its delay plus its duration (0 when it has none)
+  function animationSpan(el) {
+    const cs = getComputedStyle(el);
+    return ((Number.parseFloat(cs.animationDelay) || 0) + (Number.parseFloat(cs.animationDuration) || 0)) * 1000;
   }
   function leave(from) {
     settleLeaving();
     if (!from || !stage.dataset.transition || staticNow()) return;
     from.classList.add('is-leaving');
+    // each family runs its own exit and entrance, the entrance delayed so the two overlap: hold the old
+    // page until the longer of the two has finished; both at 0 (prefers-reduced-motion) is a cut
+    const ms = Math.max(animationSpan(slides[current]), animationSpan(from));
+    if (ms === 0) { from.classList.remove('is-leaving'); return; }
     leaving = from;
-    // each family runs its own length (push twice the entrance duration, lift 1.5×): read it off the new page
-    const ms = (Number.parseFloat(getComputedStyle(slides[current]).animationDuration) || 0.35) * 1000;
+    const backdrop = getComputedStyle(from).backgroundColor;
+    if (backdrop && backdrop !== 'rgba(0, 0, 0, 0)' && backdrop !== 'transparent') stage.style.background = backdrop;
     leaveTimer = setTimeout(settleLeaving, ms + 60);
   }
 
@@ -213,19 +310,95 @@ export const RUNTIME_JS = `(() => {
     return { index, step: Number.isFinite(st) && st > 0 ? st : 0 };
   }
 
+  // true right after a press advanced this page's step: the elements of that step play their
+  // entrance. A page change, a hash jump or a step back never replays one
+  let entering = false;
+  // cascade animates the element's items: its direct children, or the children of its only child
+  // (a list's entries, a metric's parts); fewer than two items and the element plays fade-up instead
+  function cascadeItems(el) {
+    const host = el.children.length === 1 ? el.children[0] : el;
+    return host.children.length;
+  }
+  // count: a number runs from 0 to its real value while its element enters. The runtime writes the
+  // text frame by frame and puts the exact original back at the end, or the moment anything else
+  // happens (another press, a page change, edit mode), so the DOM at rest, static mode, QA and the
+  // editor only ever see the real number. The hook is data-count (a metric's value) or, for an
+  // element that is nothing but a number (a section number), its own text; the format (thousands
+  // separators, decimals, leading zeros, prefix and suffix) is read off the text itself
+  // the pattern is the slot renderer's (one source), read when a count starts: that script is embedded after this one
+  const countable = () => (window.__slotRender && window.__slotRender.COUNTABLE) || null;
+  const counting = new Map();
+  function stopCounts() {
+    for (const [node, c] of counting) { cancelAnimationFrame(c.raf); node.textContent = c.text; }
+    counting.clear();
+  }
+  function countTargets(el) {
+    const hooks = el.querySelectorAll('[data-count]');
+    if (hooks.length) return Array.from(hooks);
+    const re = countable();
+    return re && el.children.length === 0 && re.test(el.textContent || '') ? [el] : [];
+  }
+  function group(digits) {
+    let out = '';
+    for (let i = 0; i < digits.length; i++) {
+      if (i > 0 && (digits.length - i) % 3 === 0) out += ',';
+      out += digits[i];
+    }
+    return out;
+  }
+  function startCount(node, delay, duration) {
+    const text = node.textContent || '';
+    const re = countable();
+    const m = re && re.exec(text.replace(/[*]/g, ''));
+    if (!m) return;
+    const target = Number.parseFloat(m[2].replace(/,/g, ''));
+    if (!Number.isFinite(target)) return;
+    const dot = m[2].indexOf('.');
+    const decimals = dot === -1 ? 0 : m[2].length - dot - 1;
+    const grouped = m[2].includes(',');
+    const whole = (dot === -1 ? m[2] : m[2].slice(0, dot)).replace(/[-,]/g, '');
+    const pad = whole.length > 1 && whole[0] === '0' ? whole.length : 0;
+    const format = (v) => {
+      const parts = Math.abs(v).toFixed(decimals).split('.');
+      let int = parts[0];
+      if (pad) int = int.padStart(pad, '0');
+      if (grouped) int = group(int);
+      return text.replace(m[2], (v < 0 ? '-' : '') + int + (parts[1] ? '.' + parts[1] : ''));
+    };
+    const c = { text, raf: 0 };
+    counting.set(node, c);
+    node.textContent = format(0);
+    const start = performance.now() + delay;
+    const tick = (now) => {
+      const p = Math.min(1, Math.max(0, (now - start) / duration));
+      const eased = 1 - (1 - p) * (1 - p) * (1 - p);
+      node.textContent = p >= 1 ? text : format(target * eased);
+      if (p >= 1) counting.delete(node); else c.raf = requestAnimationFrame(tick);
+    };
+    c.raf = requestAnimationFrame(tick);
+  }
   function applySteps() {
     const s = slides[current];
     if (!s) return;
+    stopCounts();
     s.dataset.stepCurrent = String(step);
     const reveal = staticNow() || motionOff;
     const stagger = reveal ? 0 : Number.parseFloat(getComputedStyle(stage).getPropertyValue('--motion-stagger')) || 0;
+    const duration = Number.parseFloat(getComputedStyle(stage).getPropertyValue('--motion-duration')) || 350;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let revealed = 0;
     for (const el of s.querySelectorAll('[data-step]')) {
       const n = Number(el.dataset.step) || 0;
       const pending = !reveal && n > step;
       el.classList.toggle('is-pending', pending);
-      // the elements this press reveals enter one after another; everything else moves at once
-      el.style.transitionDelay = !reveal && !pending && n === step ? (revealed++ * stagger) + 'ms' : '';
+      // the elements this press reveals enter one after another (--enter-delay is their stagger); everything else is simply at rest
+      const enters = entering && !reveal && !pending && n === step;
+      el.classList.toggle('is-entering', enters);
+      el.classList.toggle('is-cascading', enters && el.dataset.enter === 'cascade' && cascadeItems(el) >= 2);
+      if (!enters) { el.style.removeProperty('--enter-delay'); continue; }
+      const delay = revealed++ * stagger;
+      el.style.setProperty('--enter-delay', delay + 'ms');
+      if (el.dataset.enter === 'count' && !reduced) for (const node of countTargets(el)) startCount(node, delay, duration);
     }
   }
 
@@ -239,12 +412,15 @@ export const RUNTIME_JS = `(() => {
     const slideChanged = next !== current;
     const from = slides[current];
     const fromIndex = current;
+    entering = !slideChanged && st > step;
     current = next;
     step = st;
     if (slideChanged) {
       closeDetails();
       // push reverses when going back; the first page shown counts as forward
       stage.dataset.direction = fromIndex === -1 || next > fromIndex ? 'forward' : 'back';
+      // the incoming page's own family, else the deck's
+      applyFamily(current);
       slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
       leave(from);
     }
@@ -254,12 +430,14 @@ export const RUNTIME_JS = `(() => {
     document.dispatchEvent(new CustomEvent('deck:change', { detail: { index: current, id: ids[current], step, reason } }));
     if (reason !== 'remote') broadcast();
   }
+  // static mode and the editor show every step at once, so there a press turns the page; the
+  // landing step is the one a page turn lands on in playback (0 forward, the last step back)
   function next(reason) {
-    if (step < stepsOf(current)) show(current, step + 1, reason);
+    if (!staticNow() && step < stepsOf(current)) show(current, step + 1, reason);
     else show(current + 1, 0, reason);
   }
   function prev(reason) {
-    if (step > 0) show(current, step - 1, reason);
+    if (!staticNow() && step > 0) show(current, step - 1, reason);
     else if (current > 0) show(current - 1, stepsOf(current - 1), reason);
   }
 
@@ -272,6 +450,25 @@ export const RUNTIME_JS = `(() => {
     stage.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + s + ')';
     stage.dataset.scale = String(s);
   }
+
+  // fullscreen: F (or the editor's Fullscreen button) fills the screen with this window and the
+  // stage refits on the resize that follows; F or Esc leaves. Safari's prefixed pair is the one
+  // vendor form still worth carrying. on = true/false forces a direction, no argument toggles.
+  const fullscreenNow = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+  function fullscreen(on) {
+    const want = on == null ? !fullscreenNow() : Boolean(on);
+    if (want === fullscreenNow()) return Promise.resolve();
+    const request = root.requestFullscreen || root.webkitRequestFullscreen;
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (want && !request) { toast('Fullscreen is not available in this browser'); return Promise.resolve(); }
+    const refused = () => { if (want) toast('The browser refused fullscreen'); };
+    try {
+      const p = want ? request.call(root) : exit ? exit.call(document) : null;
+      return Promise.resolve(p).then(() => undefined, refused);
+    } catch (_) { refused(); return Promise.resolve(); }
+  }
+  document.addEventListener('fullscreenchange', fit);
+  document.addEventListener('webkitfullscreenchange', fit);
 
   // ---- sync between the main window and the presenter window --------------
   const channelName = 'deck:' + (model.id || 'deck');
@@ -304,10 +501,15 @@ export const RUNTIME_JS = `(() => {
     document.body.classList.add('deck-presenter');
     const aside = document.createElement('aside');
     aside.className = 'presenter-aside';
-    aside.innerHTML = '<div class="presenter-label">Next</div><div class="presenter-next-stage"></div><div class="presenter-position"></div><div class="presenter-label">Notes</div><div class="presenter-notes"></div><div class="presenter-timer">00:00</div>';
+    aside.innerHTML = '<div class="presenter-label">Next</div><div class="presenter-next-stage"></div><div class="presenter-position"></div><div class="presenter-label presenter-cues-label">Cues</div><div class="presenter-cues"></div><div class="presenter-label">Notes</div><div class="presenter-notes"></div><div class="presenter-timer">00:00</div>';
     document.body.appendChild(aside);
     const nextStage = aside.querySelector('.presenter-next-stage');
     const notes = aside.querySelector('.presenter-notes');
+    const cuesLabel = aside.querySelector('.presenter-cues-label');
+    const cuesEl = aside.querySelector('.presenter-cues');
+    // the talk's cues per slide, embedded beside the model when the deck was rendered with a talk.md
+    let talk = null;
+    try { const el = document.getElementById('deck-talk'); talk = el ? JSON.parse(el.textContent || 'null') : null; } catch (_) { talk = null; }
     const position = aside.querySelector('.presenter-position');
     const timerEl = aside.querySelector('.presenter-timer');
     const started = Date.now();
@@ -328,6 +530,27 @@ export const RUNTIME_JS = `(() => {
       }
       const slide = model.slides[current];
       notes.textContent = (slide && slide.notes) || '(No notes for this slide)';
+      // page cues always on; a cue pinned to a step is due once that press has happened and current at that step
+      const cues = (talk && talk[ids[current]]) || [];
+      cuesLabel.hidden = cues.length === 0;
+      cuesEl.hidden = cues.length === 0;
+      cuesEl.textContent = '';
+      for (const c of cues) {
+        const row = document.createElement('div');
+        row.className = 'presenter-cue';
+        row.dataset.tag = c.tag;
+        if (c.step) {
+          row.dataset.step = String(c.step);
+          row.classList.toggle('is-due', step >= c.step);
+          row.classList.toggle('is-current', step === c.step);
+        }
+        const tag = document.createElement('span');
+        tag.className = 'presenter-cue-tag';
+        tag.textContent = c.tag + (c.step ? ' @' + c.step : '');
+        row.appendChild(tag);
+        row.appendChild(document.createTextNode(c.text));
+        cuesEl.appendChild(row);
+      }
       position.textContent = (current + 1) + ' / ' + slides.length + (stepsOf(current) ? ' · step ' + step + ' / ' + stepsOf(current) : '');
     }
     document.addEventListener('deck:change', refresh);
@@ -344,6 +567,8 @@ export const RUNTIME_JS = `(() => {
   // dragging never meet a hover state.
   function syncInteractive() {
     if (staticNow()) delete root.dataset.interactive; else root.dataset.interactive = 'true';
+    // a number half-way through its count goes back to the real text the moment playback ends
+    if (staticNow()) stopCounts();
     // leaving playback: every interactive slot goes back to its default state
     if (!interactive()) { closeDetails(); closeLightbox(); clearChartTip(); resetCharts(); }
     syncControls();
@@ -591,6 +816,7 @@ export const RUNTIME_JS = `(() => {
       case 'Home': e.preventDefault(); show(0, 0, 'keyboard'); return;
       case 'End': e.preventDefault(); show(slides.length - 1, 0, 'keyboard'); return;
       case 'p': case 'P': if (!isPresenter) { e.preventDefault(); openPresenter(); } return;
+      case 'f': case 'F': e.preventDefault(); fullscreen(); return;
       case 'm': case 'M':
         if (staticNow()) return;
         e.preventDefault();
@@ -633,9 +859,12 @@ export const RUNTIME_JS = `(() => {
     get motion() { return !motionOff; },
     // remember=true keeps the choice for this browser (what M does); false clears it (the editor, which writes the file)
     setMotion,
-    // page transition family in effect ('none' when switching instantly); '' in setTransition = the theme default
-    get transition() { return stage.dataset.transition || 'none'; },
+    // the deck's page transition family ('none' when switching instantly); '' in setTransition = the theme default
+    get transition() { return deckFamily; },
     setTransition,
+    // a page's own family by slide id ('' when it follows the deck); no id = the current page
+    pageTransition: (id) => { const s = id == null ? slides[current] : sectionById.get(id); return (s && s.dataset.transition) || ''; },
+    setPageTransition,
     go: (n, st) => show(typeof n === 'string' ? ids.indexOf(n) : n, st || 0, 'api'),
     next: () => next('api'),
     prev: () => prev('api'),
@@ -646,6 +875,9 @@ export const RUNTIME_JS = `(() => {
     fit,
     openPresenter,
     isPresenter,
+    // fill the screen with this window (true/false forces a direction, no argument toggles)
+    fullscreen,
+    get isFullscreen() { return fullscreenNow(); },
     interactive,
     syncInteractive,
     closeLightbox,

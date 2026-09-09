@@ -26,7 +26,7 @@ function scaffoldWith(theme: string): Deck {
 }
 
 describe('deck:retheme — switching a finished deck to another theme pack', () => {
-  const base = scaffoldWith('ink-paper')
+  const base = scaffoldWith('blue-professional')
   const withEdits: Deck = {
     ...base,
     overrides: {
@@ -49,7 +49,7 @@ describe('deck:retheme — switching a finished deck to another theme pack', () 
     const { deck, report } = rethemeDeck(withEdits, 'warm-keynote')
     const s1 = deck.slides[0] as Deck['slides'][number]
     expect(s1.slots.title).toEqual(base.slides[0]?.slots.title)
-    expect(report.droppedSlots).toContain('s1/kicker')
+    expect(report.droppedSlots).toContain('s1/meta')
     for (const key of report.filledRequired) {
       const [sid, slotId] = key.split('/') as [string, string]
       const slot = deck.slides.find((s) => s.id === sid)?.slots[slotId]
@@ -83,8 +83,8 @@ describe('deck:retheme — switching a finished deck to another theme pack', () 
         staticMode: true,
       }),
     ).not.toThrow()
-    const back = rethemeDeck(deck, 'ink-paper')
-    expect(back.deck.theme).toBe('ink-paper')
+    const back = rethemeDeck(deck, 'blue-professional')
+    expect(back.deck.theme).toBe('blue-professional')
     expect(validateDeck(back.deck).ok).toBe(true)
     expect(() =>
       renderDeckDocument(back.deck, {

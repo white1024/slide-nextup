@@ -4,12 +4,21 @@ import { pathToFileURL } from 'node:url'
 import { launchChromium } from '../qa/browser.ts'
 import { checkHint, measureCapacity, type TextCapacity } from '../qa/capacity.ts'
 import { measureSlide, summariseOverflow, waitForFit } from '../qa/measure.ts'
-import { deckDirOfPath, listLayoutIdsFor, loadLayout, loadTheme } from '../render/assets.ts'
+import { imageFitProblem, measureImages } from '../qa/run.ts'
+import {
+  deckDirOfPath,
+  listLayoutIdsFor,
+  listThemeIds,
+  loadLayout,
+  loadTheme,
+} from '../render/assets.ts'
 import { renderPreviewDocument } from '../render/preview.ts'
+import { refusePathArgs } from './args.ts'
 
 const args = process.argv.slice(2)
 const themeIndex = args.indexOf('--theme')
-const themeId = themeIndex === -1 ? 'ink-paper' : (args[themeIndex + 1] ?? 'ink-paper')
+const themeId =
+  themeIndex === -1 ? 'blue-professional' : (args[themeIndex + 1] ?? 'blue-professional')
 const outIndex = args.indexOf('-o')
 const deckIndex = args.indexOf('--deck')
 const showCapacity = args.includes('--capacity')
@@ -20,6 +29,12 @@ const only = args.filter((a, i) => !a.startsWith('-') && !isOptionValue(i))
 
 // --deck <deck.json|dir>: the theme may live in that deck's own themes/ folder
 const lookup = { deckDir: deckIndex === -1 ? undefined : deckDirOfPath(args[deckIndex + 1] ?? '.') }
+refusePathArgs(
+  [themeIndex === -1 ? undefined : themeId, ...only],
+  'layout:gallery',
+  'Use `--theme <id>` for the pack and layout ids for the positional arguments.',
+  listThemeIds(lookup),
+)
 const theme = loadTheme(themeId, lookup)
 const outDir =
   outIndex === -1
@@ -44,6 +59,11 @@ for (const id of only.length > 0 ? only : listLayoutIdsFor(themeId, lookup)) {
   await page.screenshot({ path: shot })
   const boxes = await measureSlide(page)
   const problems = summariseOverflow(boxes)
+  // the sample picture against its box: a cover slot whose sample is far off crops the real image too
+  for (const im of await measureImages(page)) {
+    const problem = imageFitProblem(im)
+    if (problem) problems.push(`${im.el}: ${problem}`)
+  }
   // what each text slot really holds, against the numbers its hint promises
   const textEls = new Set(layout.json.elements.filter((e) => e.kind === 'text').map((e) => e.id))
   const rows: string[] = []

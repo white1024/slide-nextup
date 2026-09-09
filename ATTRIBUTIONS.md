@@ -10,8 +10,6 @@ editable shape elements):
 - layered backgrounds (radial aurora glows, 80px grid lines, paper noise, dot grids)
 - typography moves (negative tracking on display sizes, serif-italic emphasis on a keyword, tabular numerals)
 - bento-grid layout family (hero + 3, big + 2 small, asymmetric 2/3 + 1/3, 2x2), process rail with nodes
-- the three style systems deep-space / quarterly / concrete take their palettes and moods from
-  dark_tech, minimal_gray + mocha_editorial, and earth_concrete + bauhaus_block respectively.
 
 No code was copied; the reference mocks were read for their CSS approach only.
 

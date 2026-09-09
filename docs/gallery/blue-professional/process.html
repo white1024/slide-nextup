@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Process: blue professional · Blue Professional</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+.slide { position: relative; width: 1920px; height: 1080px; overflow: hidden; margin: 0; }
+.slide [data-el] { position: absolute; margin: 0; overflow: hidden; }
+.slide h1, .slide h2, .slide p { margin: 0; }
+.slide ul { list-style: none; margin: 0; padding: 0; }
+.slide li { margin: 0; }
+.slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.slide .metric { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+.slide [data-hidden="true"] { visibility: hidden; }
+.slide svg.chart { display: block; width: 100%; height: 100%; }
+.slide .chart text { font-family: inherit; }
+.chart-track { fill: var(--color-line); }
+.chart-fill { fill: var(--color-accent); }
+.chart-line { fill: none; stroke: var(--color-accent); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+.chart-area { fill: var(--color-accent); opacity: 0.12; }
+.chart-dot { fill: var(--color-accent); }
+.chart-grid { stroke: var(--color-line); stroke-width: 2; }
+.chart-label { fill: currentColor; opacity: 0.75; }
+.chart-value { fill: currentColor; font-weight: 700; }
+.chart-ring-track { fill: none; stroke: var(--color-line); stroke-width: 44; }
+.chart-ring-fill { fill: none; stroke: var(--color-accent); stroke-width: 44; }
+.chart-center { fill: currentColor; font-weight: 800; }
+.chart .chart-hit { fill: transparent; }
+.chart .chart-row, .chart .chart-point, .chart .chart-ring-fill { transition: opacity 0.18s ease; }
+.chart.has-hover .chart-row:not(.is-hover), .chart.has-hover .chart-point:not(.is-hover), .chart.has-hover .chart-ring-fill:not(.is-hover) { opacity: 0.4; }
+.chart-tip rect { fill: var(--color-ink, #111); }
+.chart-tip text { fill: var(--color-paper, #fff); font-size: 28px; font-weight: 600; }
+.slide a { color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+.slide table.table { border-collapse: collapse; width: 100%; }
+.slide .table th, .slide .table td { text-align: left; vertical-align: top; padding: 0.35em 0.6em; }
+.slide .table th { font-weight: 700; }
+.slide pre.code { margin: 0; white-space: pre; tab-size: 2; font-family: 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Noto Sans Mono CJK TC', monospace; }
+.slide svg.icon { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* interactive slots (behaviour in runtime.ts): the default state is what static mode, QA and the editor show */
+.slide .tabs { display: flex; flex-wrap: wrap; gap: 0 0.25em; margin: 0; border-bottom: 1px solid var(--color-line); }
+.slide .tab { flex: none; margin: 0; padding: 0.35em 0.8em; border: 0; border-bottom: 3px solid transparent; background: none; color: inherit; font: inherit; font-size: 0.875em; line-height: 1.3; opacity: 0.6; }
+.slide .tab.is-active { opacity: 1; border-bottom-color: var(--color-accent); }
+.slide .tab-panel { padding-top: 0.6em; }
+.slide [data-el] > .hotspot { position: absolute; display: block; border-radius: 8px; outline: 2px dashed transparent; outline-offset: -2px; }
+.slide .hotspot[data-label]::after { content: attr(data-label); position: absolute; left: 0; bottom: 100%; margin-bottom: 8px; padding: 6px 14px; border-radius: 8px; background: var(--color-ink, #111); color: var(--color-paper, #fff); font-size: 24px; line-height: 1.3; white-space: nowrap; visibility: hidden; }
+html[data-interactive] .slide .hotspot:hover, html[data-interactive] .slide .hotspot:focus-visible { outline-color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+html[data-interactive] .slide .hotspot:hover::after, html[data-interactive] .slide .hotspot:focus-visible::after { visibility: visible; }
+html[data-interactive] .slide [data-details] { cursor: pointer; }
+html[data-interactive] .slide [data-details]::after { content: '+'; position: absolute; right: 14px; bottom: 14px; width: 40px; height: 40px; border-radius: 50%; background: var(--color-accent); color: var(--color-paper, #fff); font-size: 30px; font-weight: 700; line-height: 40px; text-align: center; }
+/* a surface under the panel whatever the role, at role specificity so the theme's own box styling still wins */
+.deck-details { background: var(--color-surface, var(--color-paper, #fff)); }
+.slide .deck-details { position: absolute; z-index: 60; box-sizing: border-box; overflow: hidden; cursor: pointer; }
+/* the source stays in the tree and keeps focus (Enter toggles it) but nothing of it may show through a translucent theme surface */
+.slide [data-el][data-details].is-open { opacity: 0; transition: none; }
+.slide .deck-details .metric { height: auto; }
+.slide .deck-details .details { margin-top: 0.6em; padding-top: 0.6em; border-top: 1px solid var(--color-line); }
+.slide .deck-details .details .list li { padding-left: 1.1em; margin-bottom: 0.3em; }
+.slide .deck-details .details .table th, .slide .deck-details .details .table td { padding: 0.3em 0.5em; }
+html[data-interactive] .slide .tab, html[data-interactive] .chart-key { cursor: pointer; }
+.chart-key text { fill: currentColor; }
+.chart-swatch { fill: var(--color-accent); }
+.chart-key.is-off { opacity: 0.4; }
+.chart .chart-row.is-off, .chart .chart-point.is-off { opacity: 0.35; }
+html[data-interactive] .slide :is([data-details], .tab, .hotspot):focus-visible, html[data-interactive] .chart-key:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+:root {
+  --color-paper: #fdfae7;
+  --color-paper-use: "page background (warm cream paper)";
+  --color-ink: #111111;
+  --color-ink-use: "primary text; inverted pages use cobalt as the background";
+  --color-muted: #6b6b6b;
+  --color-muted-use: "subtitles, captions, body text";
+  --color-accent: #1e2bfa;
+  --color-accent-use: "the only accent: short rules, eyebrow, numbers, progress bar, charts, icons, process nodes, call to action";
+  --color-surface: #f4f2e8;
+  --color-surface-use: "card, table, tab and code block background (the original’s 4% cobalt tint, pre-blended with the paper)";
+  --color-line: #d0d1eb;
+  --color-line-use: "card borders, table rules, rings, process connectors (the original’s 20% cobalt)";
+  --color-tint: #ebe9e9;
+  --color-tint-use: "cover diagonal panel, tag background, statement box background, chart track (the original’s 8% cobalt)";
+  --color-light: #9a9a9a;
+  --color-light-use: "cover meta line, page number, context line of stat cells";
+  --color-positive: #059669;
+  --color-positive-use: "positive values";
+  --color-negative: #dc2626;
+  --color-negative-use: "negative values";
+  --font-display: 'Space Grotesk', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', sans-serif;
+  --font-display-weight: 700;
+  --font-body: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Source Han Sans TC', sans-serif;
+  --font-body-weight: 400;
+  --radius: 12px;
+  --motion-duration: 300ms;
+  --motion-stagger: 60ms;
+  --motion-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* blue-professional — appearance only; geometry lives in each layout.css.
+   Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT) — see THIRD_PARTY_NOTICES.md.
+   Fonts: Space Grotesk + Inter (OFL) via Google Fonts, Latin subset; CJK falls through to system fonts. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.slide {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-tone="inverse"] {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+/* ---- furniture: the cobalt rule, dividers, the cover's cut panel and dot grid, the progress bar ---- */
+
+[data-role="backdrop"] {
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+[data-role="divider"] {
+  background: var(--color-line);
+}
+
+[data-role="tint"] {
+  background: var(--color-tint);
+}
+
+[data-role="dots"] {
+  background-image: radial-gradient(circle, var(--color-accent) 3px, transparent 3.6px);
+  background-size: 18px 18px;
+  opacity: 0.25;
+}
+
+/* the template's fixed bottom bar: filled to page-index / page-count of the box the layout placed.
+   Percentages keep it geometry-free; the renderer and the player write the two variables on the section. */
+[data-role="progress"] {
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-size: calc(var(--page-index, 1) / max(1, var(--page-count, 10)) * 100%) 100%;
+}
+
+[data-role="meta"] {
+  color: var(--color-light);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+[data-role="eyebrow"],
+[data-role="kicker"] {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-role="chip"] {
+  background: var(--color-tint);
+  border-radius: 100px;
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+[data-role="number"] {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+}
+
+/* ---- type ---- */
+
+[data-role="title"] {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: -0.02em;
+}
+
+[data-role="label"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+[data-role="quote"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+[data-role="subtitle"],
+[data-role="body"],
+[data-role="caption"] {
+  color: var(--color-muted);
+}
+
+/* the split page's pull-quote box: tinted, a cobalt bar on the left, display type */
+[data-role="highlight"] {
+  background: var(--color-tint);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+[data-tone="inverse"] [data-role="subtitle"],
+[data-tone="inverse"] [data-role="body"],
+[data-tone="inverse"] [data-role="caption"],
+[data-tone="inverse"] [data-role="meta"],
+[data-tone="inverse"] [data-role="eyebrow"],
+[data-tone="inverse"] [data-role="kicker"] {
+  color: var(--color-paper);
+  opacity: 0.85;
+}
+
+[data-role="title"] em,
+[data-role="body"] em,
+[data-role="subtitle"] em,
+[data-role="caption"] em,
+[data-role="card"] em,
+[data-role="list"] em,
+[data-role="label"] em,
+[data-role="quote"] em,
+[data-role="highlight"] em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+/* ---- boxes: tinted cobalt at 4% with a 20% border, never a solid fill or a shadow ---- */
+
+[data-role="card"],
+[data-role="stat"],
+[data-role="photo"],
+[data-role="table"],
+[data-role="tabs"],
+[data-role="code"] {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+[data-role="card"][data-tone="accent"] {
+  border-color: var(--color-accent);
+}
+
+[data-role="entry"] {
+  border-bottom: 1px solid var(--color-line);
+}
+
+[data-role="ring"] {
+  border: 2px solid var(--color-line);
+  border-radius: 50%;
+}
+
+[data-role="ring"][data-tone="faint"] {
+  border-width: 1px;
+  opacity: 0.45;
+}
+
+[data-role="orb"] {
+  background: var(--color-tint);
+  border-radius: 50%;
+}
+
+[data-role="quote-mark"] {
+  opacity: 0.15;
+}
+
+[data-role="quote-mark"] path {
+  fill: var(--color-accent);
+}
+
+/* the one CTA shape: a solid cobalt pill with cream text */
+[data-role="cta"] {
+  background: var(--color-accent);
+  border-radius: 100px;
+  color: var(--color-paper);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+[data-role="corner"] {
+  border-top: 1.5px solid var(--color-line);
+  border-left: 1.5px solid var(--color-line);
+}
+
+[data-role="corner-end"] {
+  border-bottom: 1.5px solid var(--color-line);
+  border-right: 1.5px solid var(--color-line);
+}
+
+[data-role="glow"] {
+  background: radial-gradient(circle at center, var(--color-accent) 0%, transparent 62%);
+  opacity: 0.08;
+  filter: blur(40px);
+}
+
+[data-role="frame"] {
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+[data-role="node"] {
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+[data-role="connector"]:not(svg) {
+  background: var(--color-line);
+}
+
+[data-role="connector"] line {
+  stroke: var(--color-accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+[data-role="connector"] polygon {
+  fill: var(--color-accent);
+}
+
+[data-role="scrim"] {
+  background: var(--color-paper);
+  opacity: 0.9;
+}
+
+/* ---- the process steps: a numbered cobalt circle drawn as the step's own background (it goes when the
+   step is empty), fading along the line like the template's 1 → .85 → .7 → .55, and a short line
+   on the left of every step after the first ---- */
+
+[data-role="step"] {
+  background-repeat: no-repeat;
+}
+
+[data-role="step"][data-tone="s1"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E1%3C/text%3E%3C/svg%3E");
+  background-size: 64px 64px;
+  background-position: top center;
+}
+
+[data-role="step"][data-tone="s2"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa' fill-opacity='0.86'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E2%3C/text%3E%3C/svg%3E"), linear-gradient(var(--color-line), var(--color-line));
+  background-size: 64px 64px, 48px 2px;
+  background-position: top center, left 0 top 31px;
+}
+
+[data-role="step"][data-tone="s3"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa' fill-opacity='0.72'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E3%3C/text%3E%3C/svg%3E"), linear-gradient(var(--color-line), var(--color-line));
+  background-size: 64px 64px, 48px 2px;
+  background-position: top center, left 0 top 31px;
+}
+
+[data-role="step"][data-tone="s4"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa' fill-opacity='0.6'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E4%3C/text%3E%3C/svg%3E"), linear-gradient(var(--color-line), var(--color-line));
+  background-size: 64px 64px, 48px 2px;
+  background-position: top center, left 0 top 31px;
+}
+
+[data-role="step"][data-tone="s5"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa' fill-opacity='0.5'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E5%3C/text%3E%3C/svg%3E"), linear-gradient(var(--color-line), var(--color-line));
+  background-size: 64px 64px, 48px 2px;
+  background-position: top center, left 0 top 31px;
+}
+
+[data-role="step"][data-tone="s6"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e2bfa' fill-opacity='0.42'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Space Grotesk, Inter, Arial, sans-serif' font-size='30' font-weight='700' fill='%23fdfae7'%3E6%3C/text%3E%3C/svg%3E"), linear-gradient(var(--color-line), var(--color-line));
+  background-size: 64px 64px, 48px 2px;
+  background-position: top center, left 0 top 31px;
+}
+
+[data-role="step"] {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+[data-role="step"] .metric-value {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+[data-role="step"] .metric-label {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+/* ---- lists and metrics: numbers are the accent moment ---- */
+
+.list li {
+  border-left: 3px solid var(--color-accent);
+}
+
+.metric-value,
+[data-role="stat"] .metric-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+}
+
+.metric-label {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.metric-delta,
+[data-role="stat"] .metric-label {
+  color: var(--color-muted);
+}
+
+[data-role="stat"] .metric-label {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+[data-role="stat"] .metric-delta {
+  border-top: 1px solid var(--color-line);
+  color: var(--color-light);
+}
+
+[data-role="entry"] .metric-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* ---- chart, table, tabs, code, icon ---- */
+
+[data-role="chart"] {
+  color: var(--color-ink);
+}
+
+.chart-track {
+  fill: var(--color-tint);
+}
+
+.chart-grid {
+  stroke: var(--color-line);
+}
+
+[data-role="table"] .table th,
+[data-role="tabs"] .table th {
+  border-bottom: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-role="table"] .table td,
+[data-role="tabs"] .table td {
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+
+[data-role="tabs"] .tab {
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-weight: 500;
+  opacity: 1;
+}
+
+[data-role="tabs"] .tab.is-active {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+[data-interactive] [data-role="tabs"] .tab:hover {
+  color: var(--color-ink);
+}
+
+[data-role="icon"] {
+  color: var(--color-accent);
+}
+
+/* a content box with nothing in it disappears instead of showing a bare slab (shapes keep their look) */
+[data-slot][data-role="card"]:empty,
+[data-slot][data-role="stat"]:empty,
+[data-slot][data-role="chip"]:empty,
+[data-slot][data-role="cta"]:empty,
+[data-slot][data-role="highlight"]:empty,
+[data-slot][data-role="entry"]:empty,
+[data-slot][data-role="table"]:empty,
+[data-slot][data-role="tabs"]:empty {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+[data-slot][data-role="step"]:empty {
+  background-image: none;
+}
+
+/* ---- playback micro-interactions: only under html[data-interactive]; the player drops it in static and edit modes ---- */
+
+[data-interactive] [data-role="card"]:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+[data-interactive] [data-role="stat"]:hover {
+  border-color: var(--color-accent);
+}
+
+[data-interactive] [data-role="entry"]:hover {
+  background: var(--color-surface);
+}
+
+[data-interactive] [data-role="cta"]:hover {
+  box-shadow: 0 8px 24px rgba(30, 43, 250, 0.25);
+  transform: translateY(-2px);
+}
+
+[data-interactive] [data-role="photo"]:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  transform: scale(1.015);
+}
+
+[data-interactive] [data-role="table"] tbody tr:hover td {
+  background: var(--color-tint);
+}
+
+/* blue-professional/process — geometry only. Ported from beautiful-html-templates/blue-professional (Zara Zhang, MIT); vw/vh/rem resolved at 1920×1080 and type scaled up for projection. */
+
+[data-layout="process"] [data-el="kicker"] {
+  left: 77px;
+  top: 62px;
+  width: 1100px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+[data-layout="process"] [data-el="meta"] {
+  left: 1563px;
+  top: 58px;
+  width: 280px;
+  height: 44px;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+[data-layout="process"] [data-el="title"] {
+  left: 77px;
+  top: 128px;
+  width: 1766px;
+  height: 140px;
+  font-size: 56px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+[data-layout="process"] [data-el="subtitle"] {
+  left: 77px;
+  top: 292px;
+  width: 1766px;
+  height: 56px;
+  font-size: 32px;
+  line-height: 1.6;
+}
+
+[data-layout="process"] [data-el="step-1"] {
+  left: 77px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="step-2"] {
+  left: 371px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="step-3"] {
+  left: 665px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="step-4"] {
+  left: 959px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="step-5"] {
+  left: 1253px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="step-6"] {
+  left: 1547px;
+  top: 400px;
+  width: 294px;
+  height: 440px;
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+  padding: 100px 16px 0;
+}
+
+[data-layout="process"] [data-el="caption"] {
+  left: 77px;
+  top: 880px;
+  width: 1766px;
+  height: 100px;
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+[data-layout="process"] [data-el="progress"] {
+  left: 0px;
+  top: 1077px;
+  width: 1920px;
+  height: 3px;
+}
+
+[data-layout="process"] [data-el="page"] {
+  left: 58px;
+  top: 1029px;
+  width: 200px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+[data-layout="process"] [data-role="step"] .metric { justify-content: flex-start; }
+[data-layout="process"] [data-role="step"] .metric-value { font-size: 32px; line-height: 1.3; }
+[data-layout="process"] [data-role="step"] .metric-label { font-size: 28px; line-height: 1.5; margin-top: 12px; }
+
+
+
+html, body { margin: 0; padding: 0; background: #808080; }
+</style>
+</head>
+<body>
+<svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><symbol id="icon-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol><symbol id="icon-alert-triangle" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol><symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></symbol><symbol id="icon-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></symbol><symbol id="icon-battery" viewBox="0 0 24 24"><path d="M 22 14 L 22 10" /> <rect x="2" y="6" width="16" height="12" rx="2" /></symbol><symbol id="icon-beaker" viewBox="0 0 24 24"><path d="M4.5 3h15" /> <path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" /> <path d="M6 14h12" /></symbol><symbol id="icon-bookmark" viewBox="0 0 24 24"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z" /></symbol><symbol id="icon-box" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></symbol><symbol id="icon-briefcase" viewBox="0 0 24 24"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" /></symbol><symbol id="icon-bug" viewBox="0 0 24 24"><path d="M12 20v-9" /> <path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /> <path d="M14.12 3.88 16 2" /> <path d="M21 21a4 4 0 0 0-3.81-4" /> <path d="M21 5a4 4 0 0 1-3.55 3.97" /> <path d="M22 13h-4" /> <path d="M3 21a4 4 0 0 1 3.81-4" /> <path d="M3 5a4 4 0 0 0 3.55 3.97" /> <path d="M6 13H2" /> <path d="m8 2 1.88 1.88" /> <path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></symbol><symbol id="icon-building" viewBox="0 0 24 24"><path d="M12 10h.01" /> <path d="M12 14h.01" /> <path d="M12 6h.01" /> <path d="M16 10h.01" /> <path d="M16 14h.01" /> <path d="M16 6h.01" /> <path d="M8 10h.01" /> <path d="M8 14h.01" /> <path d="M8 6h.01" /> <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /> <rect x="4" y="2" width="16" height="20" rx="2" /></symbol><symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /></symbol><symbol id="icon-chart-bar" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M7 16h8" /> <path d="M7 11h12" /> <path d="M7 6h3" /></symbol><symbol id="icon-chart-line" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></symbol><symbol id="icon-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="icon-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol><symbol id="icon-circle-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></symbol><symbol id="icon-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></symbol><symbol id="icon-cpu" viewBox="0 0 24 24"><path d="M12 20v2" /> <path d="M12 2v2" /> <path d="M17 20v2" /> <path d="M17 2v2" /> <path d="M2 12h2" /> <path d="M2 17h2" /> <path d="M2 7h2" /> <path d="M20 12h2" /> <path d="M20 17h2" /> <path d="M20 7h2" /> <path d="M7 20v2" /> <path d="M7 2v2" /> <rect x="4" y="4" width="16" height="16" rx="2" /> <rect x="8" y="8" width="8" height="8" rx="1" /></symbol><symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></symbol><symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></symbol><symbol id="icon-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol><symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="icon-file-text" viewBox="0 0 24 24"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol><symbol id="icon-flag" viewBox="0 0 24 24"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" /></symbol><symbol id="icon-flask-conical" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></symbol><symbol id="icon-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></symbol><symbol id="icon-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol><symbol id="icon-git-branch" viewBox="0 0 24 24"><path d="M15 6a9 9 0 0 0-9 9V3" /> <circle cx="18" cy="6" r="3" /> <circle cx="6" cy="18" r="3" /></symbol><symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></symbol><symbol id="icon-hard-drive" viewBox="0 0 24 24"><path d="M10 16h.01" /> <path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /> <path d="M21.946 12.013H2.054" /> <path d="M6 16h.01" /></symbol><symbol id="icon-hash" viewBox="0 0 24 24"><line x1="4" x2="20" y1="9" y2="9" /> <line x1="4" x2="20" y1="15" y2="15" /> <line x1="10" x2="8" y1="3" y2="21" /> <line x1="16" x2="14" y1="3" y2="21" /></symbol><symbol id="icon-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol><symbol id="icon-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></symbol><symbol id="icon-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /> <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /> <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></symbol><symbol id="icon-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></symbol><symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol><symbol id="icon-list-checks" viewBox="0 0 24 24"><path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /></symbol><symbol id="icon-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></symbol><symbol id="icon-map" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /> <path d="M15 5.764v15" /> <path d="M9 3.236v15" /></symbol><symbol id="icon-message-square" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /></symbol><symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol><symbol id="icon-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></symbol><symbol id="icon-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <polyline points="3.29 7 12 12 20.71 7" /> <path d="m7.5 4.27 9 5.15" /></symbol><symbol id="icon-pause" viewBox="0 0 24 24"><rect x="14" y="3" width="5" height="18" rx="1" /> <rect x="5" y="3" width="5" height="18" rx="1" /></symbol><symbol id="icon-play" viewBox="0 0 24 24"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></symbol><symbol id="icon-plug" viewBox="0 0 24 24"><path d="M12 22v-5" /> <path d="M15 8V2" /> <path d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z" /> <path d="M9 8V2" /></symbol><symbol id="icon-plus" viewBox="0 0 24 24"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol><symbol id="icon-puzzle" viewBox="0 0 24 24"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /></symbol><symbol id="icon-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></symbol><symbol id="icon-rocket" viewBox="0 0 24 24"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></symbol><symbol id="icon-scale" viewBox="0 0 24 24"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></symbol><symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></symbol><symbol id="icon-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /></symbol><symbol id="icon-settings" viewBox="0 0 24 24"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></symbol><symbol id="icon-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="icon-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></symbol><symbol id="icon-star" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></symbol><symbol id="icon-tag" viewBox="0 0 24 24"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" /> <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></symbol><symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></symbol><symbol id="icon-terminal" viewBox="0 0 24 24"><path d="M12 19h8" /> <path d="m4 17 6-6-6-6" /></symbol><symbol id="icon-thermometer" viewBox="0 0 24 24"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></symbol><symbol id="icon-thumbs-up" viewBox="0 0 24 24"><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" /> <path d="M7 10v12" /></symbol><symbol id="icon-timer" viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2" /> <line x1="12" x2="15" y1="14" y2="11" /> <circle cx="12" cy="14" r="8" /></symbol><symbol id="icon-trending-down" viewBox="0 0 24 24"><path d="M16 17h6v-6" /> <path d="m22 17-8.5-8.5-5 5L2 7" /></symbol><symbol id="icon-trending-up" viewBox="0 0 24 24"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></symbol><symbol id="icon-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /></symbol><symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 3v12" /> <path d="m17 8-5-5-5 5" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></symbol><symbol id="icon-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></symbol><symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></symbol><symbol id="icon-wifi" viewBox="0 0 24 24"><path d="M12 20h.01" /> <path d="M2 8.82a15 15 0 0 1 20 0" /> <path d="M5 12.859a10 10 0 0 1 14 0" /> <path d="M8.5 16.429a5 5 0 0 1 7 0" /></symbol><symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></symbol><symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol><symbol id="icon-zap" viewBox="0 0 24 24"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></symbol></svg>
+<section class="slide" data-layout="process" data-slide="process">
+  <p data-el="kicker" data-slot="kicker" data-role="eyebrow">02 — Where we stand</p>
+  <p data-el="meta" data-slot="meta" data-role="chip">Quarterly review</p>
+  <h1 data-el="title" data-slot="title" data-role="title">Six fixed steps a quarter, stop and resume at will</h1>
+  <p data-el="subtitle" data-slot="subtitle" data-role="subtitle" data-fit="true">Every step has an output; skip one and the next cannot start.</p>
+  <div data-el="step-1" data-slot="step-1" data-role="step" data-tone="s1"><div class="metric"><span class="metric-value">Inventory</span><span class="metric-label">List every report this quarter</span></div></div>
+  <div data-el="step-2" data-slot="step-2" data-role="step" data-tone="s2"><div class="metric"><span class="metric-value">Rank</span><span class="metric-label">Grade by impact and cost</span></div></div>
+  <div data-el="step-3" data-slot="step-3" data-role="step" data-tone="s3"><div class="metric"><span class="metric-value">Assign</span><span class="metric-label">One owner per item</span></div></div>
+  <div data-el="step-4" data-slot="step-4" data-role="step" data-tone="s4"><div class="metric"><span class="metric-value">Fix</span><span class="metric-label">Two-week cycles</span></div></div>
+  <div data-el="step-5" data-slot="step-5" data-role="step" data-tone="s5"><div class="metric"><span class="metric-value">Verify</span><span class="metric-label">Rerun the same measurements</span></div></div>
+  <div data-el="step-6" data-slot="step-6" data-role="step" data-tone="s6"><div class="metric"><span class="metric-value">Review</span><span class="metric-label">Write the results into next quarter</span></div></div>
+  <p data-el="caption" data-slot="caption" data-role="caption" data-fit="true">Verification is missed most often: a fix that is not re-measured is no fix.</p>
+  <div data-el="progress" data-role="progress"></div>
+  <p data-el="page" data-slot="page" data-role="meta">03 / 10</p>
+</section>
+<script>
+(() => {
+  const MIN = {"default":32,"meta":20,"chip":20,"eyebrow":20,"eyebrow-accent":20,"chapter":24,"pill":24,"caption":24,"cta":24,"kicker":24,"flow":24,"flow-accent":24,"table":22};
+  function floorFor(role) {
+    let r = role || '';
+    while (r) {
+      if (r !== 'default' && MIN[r] !== undefined) return MIN[r];
+      const cut = r.lastIndexOf('-');
+      if (cut === -1) break;
+      r = r.slice(0, cut);
+    }
+    return MIN.default;
+  }
+  function fitOne(el) {
+    if (el.dataset.fitLock === 'true') return;
+    const min = floorFor(el.dataset.role);
+    el.style.fontSize = '';
+    let size = Number.parseFloat(getComputedStyle(el).fontSize);
+    let guard = 0;
+    const overflowing = () => el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1;
+    while (overflowing() && size > min && guard++ < 80) {
+      size = Math.max(min, size - 2);
+      el.style.fontSize = size + 'px';
+    }
+    if (el.style.fontSize) el.dataset.fitSize = el.style.fontSize; else delete el.dataset.fitSize;
+  }
+  function fitAll() {
+    for (const el of document.querySelectorAll('section.slide [data-el][data-fit]')) fitOne(el);
+    document.documentElement.dataset.fitDone = 'true';
+  }
+  const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  window.__fit = { fitAll, fitOne, ready: ready.then(fitAll) };
+})();
+
+</script>
+</body>
+</html>

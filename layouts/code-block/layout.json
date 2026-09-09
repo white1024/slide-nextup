@@ -28,7 +28,7 @@
     "code": {
       "type": "code",
       "lang": "bash",
-      "value": "$ pnpm story:check decks/q3/story.md\npassed: 0 errors, 0 warnings\n\n$ pnpm deck:scaffold decks/q3/story.md --theme ink-paper\nrefused: the story is not confirmed (no story.confirmed.json)\n\n$ pnpm story:confirm decks/q3/story.md\nconfirmed: 8 slides, sha256 edce99f4"
+      "value": "$ pnpm story:check decks/q3/story.md\npassed: 0 errors, 0 warnings\n\n$ pnpm deck:scaffold decks/q3/story.md\nrefused: the story is not confirmed (no story.confirmed.json)\n\n$ pnpm story:confirm decks/q3/story.md\nconfirmed: 8 slides, sha256 edce99f4"
     },
     "caption": { "type": "text", "value": "Unconfirmed, or edited since: the scaffold refuses outright; there is no way round it but --force." },
     "page": { "type": "text", "value": "05 / 08" }

@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { classifyProperty, lintCss, lintLayoutScope, parseCss } from '../src/qa/css-ownership.ts'
+import {
+  classifyProperty,
+  isEmptyContent,
+  lintCss,
+  lintLayoutScope,
+  parseCss,
+} from '../src/qa/css-ownership.ts'
 
 const badTheme = readFileSync(new URL('./fixtures/bad-theme.css', import.meta.url), 'utf8')
 const badLayout = readFileSync(new URL('./fixtures/bad-layout.css', import.meta.url), 'utf8')
@@ -57,6 +63,31 @@ describe('lintCss as theme', () => {
 [data-role="card"] { border: 2px solid var(--color-line); border-radius: var(--radius); }
 @font-face { font-family: "X"; src: url(x.woff2); }`
     expect(lintCss(css, 'theme')).toEqual([])
+  })
+})
+
+describe('content on decorative pseudo-elements', () => {
+  it('lets an empty content through on either side and refuses generated text', () => {
+    for (const v of ['""', "''", 'none', 'normal', ' "" ', 'NONE'])
+      expect(isEmptyContent(v)).toBe(true)
+    for (const v of ['"→"', "'x'", 'attr(data-n)', 'counter(item)', 'url(x.png)', '" "'])
+      expect(isEmptyContent(v)).toBe(false)
+    expect(classifyProperty('content')).toBe('forbidden')
+
+    const theme = `[data-role="eyebrow"]::after { content: ""; background: var(--color-line); }
+.list li::before { content: none; }`
+    expect(lintCss(theme, 'theme')).toEqual([])
+    const layout = `[data-layout="demo"] [data-el="kicker"]::after { content: ""; width: 200px; height: 2px; }`
+    expect(lintCss(layout, 'layout')).toEqual([])
+
+    const text = lintCss(`[data-role="list"] li::before { content: "→"; }`, 'theme')
+    expect(text).toHaveLength(1)
+    expect(text[0]?.message).toContain('may only be empty')
+    const generated = lintCss(
+      `[data-layout="demo"] [data-el="x"]::after { content: attr(data-n); }`,
+      'layout',
+    )
+    expect(generated.some((i) => i.property === 'content' && i.severity === 'error')).toBe(true)
   })
 })
 

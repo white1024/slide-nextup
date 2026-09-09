@@ -28,7 +28,7 @@ Read `decks/<id>/brief.md`. If there is no brief, run slide-brief first. If the 
 The format and the fields are in [references/story-format.md](references/story-format.md). Use the canonical headings `## Goal and audience`, `## Core message`, `## Narrative skeleton`, `## Slides` (the original Chinese headings are still accepted as aliases). While writing, hold these lines:
 
 - **One message per slide**: one sentence the speaker could say out loud. The title is a claim, not a topic.
-- **Intensity has a rhythm**: at least one slide pauses at intensity <= 2, at least one peaks at >= 4, and the same scene_role never runs for more than three slides in a row. Put the peak on the most important evidence or on the conclusion.
+- **Intensity has a rhythm**: at least one slide pauses at intensity <= 2, at least one peaks at >= 4, and the same scene_role never runs for more than three slides in a row. Put the peak on the most important evidence or on the conclusion. The build reads these two fields as motion too: an evidence or relationship page reveals step by step, a peak (4 or 5) lands whole, a pause page breathes between chapters, so write the rhythm the room should feel.
 - **Evidence is fact**: numbers, comparisons, cases, sources, not adjectives. Use the agreed forms so the build can fill the layouts automatically: a number as `72% | name of the metric | +11pp on last year`, a comparison as two items, `Now: a, b, c` and `Target: x, y, z`.
 - **First slide hero, last slide close**; the slide count lands in the brief's range, checked against the duration at 1 to 2 minutes per slide.
 - notes are speaker prompts (transitions, pauses, questions to ask), not the slide read out again.

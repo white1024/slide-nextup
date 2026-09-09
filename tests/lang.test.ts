@@ -4,10 +4,12 @@ import { normaliseDeck, validateDeck } from '../src/model/deck.ts'
 import { detectLang, langOf } from '../src/model/lang.ts'
 import { scaffoldDeck } from '../src/model/scaffold.ts'
 import { loadStory } from '../src/model/story.ts'
-import { type LayoutJson, listLayoutIds, loadLayout } from '../src/render/assets.ts'
+import { type LayoutJson, listLayoutIdsFor, loadLayout } from '../src/render/assets.ts'
 import { renderDeckDocument } from '../src/render/deck.ts'
 
-const layouts = new Map<string, LayoutJson>(listLayoutIds().map((id) => [id, loadLayout(id).json]))
+const layouts = new Map<string, LayoutJson>(
+  listLayoutIdsFor('blue-professional').map((id) => [id, loadLayout(id, 'blue-professional').json]),
+)
 
 const story = (lines: string[], lang?: string) =>
   [
@@ -53,7 +55,7 @@ function scaffold(text: string) {
     storyText: text,
     storyRelativePath: 'story.md',
     deckId: 'lang-test',
-    theme: 'ink-paper',
+    theme: 'blue-professional',
     layouts,
   }).deck
 }
@@ -121,7 +123,7 @@ describe('the language tag', () => {
       storyText: text,
       storyRelativePath: 'story.md',
       deckId: 'lang-test',
-      theme: 'ink-paper',
+      theme: 'blue-professional',
       layouts,
       existing: { ...en, lang: 'en-US' },
     }).deck

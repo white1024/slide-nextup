@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warm Keynote · layouts</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root { --bg: #f6f5fa; --panel: #ffffff; --ink: #1a1930; --muted: #767490; --rule: #dcdae8; --accent: #4f47c8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121120; --panel: #1a1929; --ink: #ecebf6; --muted: #8b899f; --rule: #2a2940; --accent: #9c95ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px clamp(16px, 4vw, 48px) 64px; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 0 0 6px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 0.85em; color: var(--muted); font-weight: 400; }
+  .lead, .about, .count { color: var(--muted); margin: 0 0 8px; max-width: 80ch; }
+  .count { font-size: 13px; margin-bottom: 16px; }
+  .crumbs { font-size: 14px; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px 20px; }
+  figure { margin: 0; }
+  .frame { --s: 0.25; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; background: #808080; }
+  .frame iframe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; transform: scale(var(--s)); pointer-events: none; }
+  .frame .open { position: absolute; inset: 0; }
+  .frame:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+  figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  figcaption b { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-weight: 600; color: var(--ink); }
+  figcaption a { color: inherit; text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; }
+  .desc { display: block; margin-top: 2px; }
+  .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px 24px; margin-top: 24px; }
+  .pack h2 { margin-top: 12px; }
+</style>
+</head>
+<body>
+<p class="crumbs"><a href="../index.html">Themes</a> › Warm Keynote</p>
+<h1>Warm Keynote <code>warm-keynote</code></h1>
+<p class="about">Warm cream paper with a faint 48px grid, dark brown text, teal as the only accent and orange-red reserved for consequences and risks. White glass cards (32px radius, large soft shadows), pill-shaped process nodes, section heads with a short teal bar and monospace text, Inter 900 big numbers, tables inside glass containers. Headings and body are Noto Sans TC (a local font), Latin and numerals use Inter, furniture uses JetBrains Mono. The style comes from a friend’s internal deck (with their consent, no attribution required); none of its content is used.</p>
+<p class="count">16 layouts, each rendered with its own sample content; click one to open it full size.</p>
+<div class="grid">
+    <figure>
+      <div class="frame"><iframe src="cover.html" loading="lazy" tabindex="-1" title="Cover: Warm Keynote"></iframe><a class="open" href="cover.html" target="_blank" rel="noopener" aria-label="open cover full size"></a></div>
+      <figcaption><b>cover</b> <span class="desc">A Keynote-style cover: on grid paper, a short teal rule leading into the series name, one line of 900-weight headline (the keyword turns teal) and one line of subtitle; bottom left the progress ticks (one per page, the current one lit), bottom right the page number pill. Title and subtitle are single lines and shrink automatically when too long. A centred title slide would lose the left-aligned rhythm and the product feel the page furniture gives.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="before-after.html" loading="lazy" tabindex="-1" title="Before and after: Warm Keynote"></iframe><a class="open" href="before-after.html" target="_blank" rel="noopener" aria-label="open before-after full size"></a></div>
+      <figcaption><b>before-after</b> <span class="desc">A sunken card on the left holds the before steps as pills, a glass card on the right the after steps as teal pills, with a reminder below. Two bulleted lists would lose the visual contrast of fewer steps.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards.html" loading="lazy" tabindex="-1" title="Three cards: Warm Keynote"></iframe><a class="open" href="cards.html" target="_blank" rel="noopener" aria-label="open cards full size"></a></div>
+      <figcaption><b>cards</b> <span class="desc">Chapter head and lede, then three glass cards each holding a number, a title and one explanatory sentence. A bulleted list would lose the sense of three things standing side by side on their own.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-2.html" loading="lazy" tabindex="-1" title="Two cards: Warm Keynote"></iframe><a class="open" href="cards-2.html" target="_blank" rel="noopener" aria-label="open cards-2 full size"></a></div>
+      <figcaption><b>cards-2</b> <span class="desc">Chapter head and lede, then two wide glass cards. Use it for two concepts side by side; do not force a third card in.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-4.html" loading="lazy" tabindex="-1" title="Four cards: Warm Keynote"></iframe><a class="open" href="cards-4.html" target="_blank" rel="noopener" aria-label="open cards-4 full size"></a></div>
+      <figcaption><b>cards-4</b> <span class="desc">Chapter head and lede, then four narrow glass cards. Use it for four small points side by side; keep the text short.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="chart-aside.html" loading="lazy" tabindex="-1" title="Chart and aside: Warm Keynote"></iframe><a class="open" href="chart-aside.html" target="_blank" rel="noopener" aria-label="open chart-aside full size"></a></div>
+      <figcaption><b>chart-aside</b> <span class="desc">Under the chapter head, a chart on the left (bar, progress, line or donut) and a glass card on the right holding an aside or a key number, with a note below. A plain table would lose the sense of proportion.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="comparison.html" loading="lazy" tabindex="-1" title="Cause and consequence: Warm Keynote"></iframe><a class="open" href="comparison.html" target="_blank" rel="noopener" aria-label="open comparison full size"></a></div>
+      <figcaption><b>comparison</b> <span class="desc">A glass card on the left holds the cause, an orange-red card on the right the consequence, with a round orange-red arrow between them. The consequence card is deliberately heavier. Two symmetrical columns would lose the direction of cause and effect.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="data-table.html" loading="lazy" tabindex="-1" title="Table: Warm Keynote"></iframe><a class="open" href="data-table.html" target="_blank" rel="noopener" aria-label="open data-table full size"></a></div>
+      <figcaption><b>data-table</b> <span class="desc">Chapter head and lede, then a glass container holding the table, its header in small monospace capitals, with a note below. A bulleted list would lose the alignment between columns.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="fact.html" loading="lazy" tabindex="-1" title="Big number: Warm Keynote"></iframe><a class="open" href="fact.html" target="_blank" rel="noopener" aria-label="open fact full size"></a></div>
+      <figcaption><b>fact</b> <span class="desc">Under the chapter label, one huge teal number with its label and an explanation below. A table would lose the punch of one number saying it all.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="photo.html" loading="lazy" tabindex="-1" title="Photo: Warm Keynote"></iframe><a class="open" href="photo.html" target="_blank" rel="noopener" aria-label="open photo full size"></a></div>
+      <figcaption><b>photo</b> <span class="desc">A full-width glass frame under the chapter head holding an image (a system diagram, a screenshot), with a caption below. A small image beside text would lose the weight of the image as the lead.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="process.html" loading="lazy" tabindex="-1" title="Process: Warm Keynote"></iframe><a class="open" href="process.html" target="_blank" rel="noopener" aria-label="open process full size"></a></div>
+      <figcaption><b>process</b> <span class="desc">One horizontal flow: six pill nodes and five arrows, a lede above and a reminder below. A bulleted list would lose the effect of taking in the whole line at a glance.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="quote.html" loading="lazy" tabindex="-1" title="Quote: Warm Keynote"></iframe><a class="open" href="quote.html" target="_blank" rel="noopener" aria-label="open quote full size"></a></div>
+      <figcaption><b>quote</b> <span class="desc">Under the chapter label, one block of pale teal holding the quote in large bold type, with the source below. A plain text slide would lose the pause.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="section.html" loading="lazy" tabindex="-1" title="Section: Warm Keynote"></iframe><a class="open" href="section.html" target="_blank" rel="noopener" aria-label="open section full size"></a></div>
+      <figcaption><b>section</b> <span class="desc">Chapter opener: a pill tag top right, a huge pale teal number on the left, a short teal rule, the heading and a lede. A plain title slide would lose the turn-to-the-next-chapter rhythm the number gives.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="statement.html" loading="lazy" tabindex="-1" title="Statement: Warm Keynote"></iframe><a class="open" href="statement.html" target="_blank" rel="noopener" aria-label="open statement full size"></a></div>
+      <figcaption><b>statement</b> <span class="desc">One claim per slide: the chapter head, a lede, and a glass card below holding the supporting list. A text-only slide would lose the weight the card adds by framing the argument.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="tabs.html" loading="lazy" tabindex="-1" title="Tabs: Warm Keynote"></iframe><a class="open" href="tabs.html" target="_blank" rel="noopener" aria-label="open tabs full size"></a></div>
+      <figcaption><b>tabs</b> <span class="desc">Chapter head and lede, then a glass card holding a few tabs, each with its own panel (a list, a table or a paragraph); clicking a tab during playback switches, static rendering shows only the first. Three separate slides would lose the comparison of switching inside the same frame.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="closing.html" loading="lazy" tabindex="-1" title="Closing: Warm Keynote"></iframe><a class="open" href="closing.html" target="_blank" rel="noopener" aria-label="open closing full size"></a></div>
+      <figcaption><b>closing</b> <span class="desc">A short teal rule, one closing headline, a lede and a reminder, then a row of pills: the main call to action plus a few key points. A &quot;thank you&quot; slide would lose the gesture of handing the next step to the audience.</span></figcaption>
+    </figure>
+</div>
+<script>
+  const frames = document.querySelectorAll('.frame')
+  const fit = () => { for (const f of frames) f.style.setProperty('--s', String(f.clientWidth / 1920)) }
+  new ResizeObserver(fit).observe(document.body)
+  fit()
+</script>
+</body>
+</html>

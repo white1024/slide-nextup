@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "qa-broken",
   "title": "A deck that deliberately breaks the quality rules",
-  "theme": "ink-paper",
+  "theme": "blue-professional",
   "canvas": {
     "width": 1920,
     "height": 1080
@@ -19,12 +19,20 @@
       },
       "elements": [
         {
-          "id": "backdrop",
+          "id": "panel",
           "kind": "shape"
         },
         {
-          "id": "kicker",
+          "id": "dots",
+          "kind": "shape"
+        },
+        {
+          "id": "brand",
           "kind": "text"
+        },
+        {
+          "id": "accent",
+          "kind": "shape"
         },
         {
           "id": "title",
@@ -32,6 +40,18 @@
         },
         {
           "id": "subtitle",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ]
@@ -51,15 +71,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ]
@@ -79,15 +135,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ]
@@ -118,15 +210,51 @@
       },
       "elements": [
         {
+          "id": "kicker",
+          "kind": "text"
+        },
+        {
+          "id": "meta",
+          "kind": "text"
+        },
+        {
           "id": "title",
           "kind": "text"
+        },
+        {
+          "id": "evidence",
+          "kind": "text"
+        },
+        {
+          "id": "split",
+          "kind": "shape"
         },
         {
           "id": "body",
           "kind": "text"
         },
         {
-          "id": "evidence",
+          "id": "stat-1",
+          "kind": "text"
+        },
+        {
+          "id": "stat-2",
+          "kind": "text"
+        },
+        {
+          "id": "stat-3",
+          "kind": "text"
+        },
+        {
+          "id": "caption",
+          "kind": "text"
+        },
+        {
+          "id": "progress",
+          "kind": "shape"
+        },
+        {
+          "id": "page",
           "kind": "text"
         }
       ]
@@ -140,7 +268,7 @@
     "s2/body": {
       "y": 160
     },
-    "s3/body": {
+    "s3/title": {
       "style": {
         "fontSize": 28
       }

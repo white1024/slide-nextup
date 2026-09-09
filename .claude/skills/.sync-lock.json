@@ -2,12 +2,13 @@
   "source": "../.agents/skills",
   "files": {
     "slide-brief/SKILL.md": "18a50d001eacbfbc148de1ce90789b98f81c896f0f7242a20b3bd5b1ee2e7e55",
-    "slide-build/SKILL.md": "d2f83804a4174edd173923f7e1fb6115fa68ecb29da1d5ec3b7841189b1cae12",
-    "slide-build/references/new-layout.md": "434089afda2b3c7dac9dc3da7cca272382fea6fb0d99f6335ad74b63194eb0a0",
-    "slide-build/references/slot-mapping.md": "46fc6a7ccc5c7db9617e0bcca090d30bf98c69a54049b3d4ef7cd7a49d6631f3",
-    "slide-design/SKILL.md": "0f5789207b89481d116493457bcbe596d7ece8bb0be4df1140d55b8d2dc3670d",
-    "slide-design/references/design-directions.md": "24095029fdcc2b90d07e08f2a6120ea93324e99bcf0e14110612a46d507fe7d7",
-    "slide-story/SKILL.md": "918c7a3831512605f7a471506f1df350d1fa3bd552e041ef5095912d15d27f3f",
-    "slide-story/references/story-format.md": "5ab0eb763ef7cc710ee45c3b8f26764947d384454571b24ee0507ee64fce2935"
+    "slide-build/SKILL.md": "2ad2ece3c3ac9916a772ec14ac2da9261d5a00f25fdc754c2f559d3a455a4b87",
+    "slide-build/references/new-layout.md": "f4219adb781cf827be824f4bc09578c6899e0532b7833d60ec3097546c84d9d9",
+    "slide-build/references/slot-mapping.md": "f7f46a4596d0c0a9d8d591369145fb6c3051895785ae4b0fe71b19d305fa6241",
+    "slide-design/SKILL.md": "840dd05a39f2b439b18b153c31b59b72837e8c75da199c2fd9555331a5cfe258",
+    "slide-design/references/design-directions.md": "ad860715b5ad811656fdff5a84c1301d16c3a6d9d0c2b646aa3fecc11ca1c5a0",
+    "slide-story/SKILL.md": "84e38c3fdd51623f033149bf1614ac0e7b20bed057846cf6433da37df760ced7",
+    "slide-story/references/story-format.md": "5ab0eb763ef7cc710ee45c3b8f26764947d384454571b24ee0507ee64fce2935",
+    "slide-talk/SKILL.md": "876531b961dc757e677ae3bfef914af98f90d43533c16ba1642002fc4a7d9cba"
   }
 }

@@ -96,6 +96,8 @@
     paste:
       '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
     close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    expand:
+      '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
     spot: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
     trash:
       '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>',
@@ -188,6 +190,31 @@
 
   function applyAll() {
     for (const s of model.slides) for (const e of s.elements) apply(s.id, e.id)
+  }
+
+  /**
+   * A file saved by the editor carries its edits in the model only (its page is the renderer's
+   * original): put them back on the page when it opens. Overrides, reveal steps, entrances and
+   * the page transition live here; the motion switch and the page arrangement the player reads
+   * from the file itself.
+   */
+  function applyEditedModel() {
+    applyAll()
+    for (const s of model.slides) {
+      for (const e of s.elements) {
+        const node = elementOf(s.id, e.id)
+        if (!node) continue
+        if (e.step) node.dataset.step = String(e.step)
+        else node.removeAttribute('data-step')
+        if (e.enter) node.dataset.enter = e.enter
+        else node.removeAttribute('data-enter')
+      }
+    }
+    if (deck.rescan) deck.rescan()
+    if (deck.refresh) deck.refresh()
+    if (deck.setTransition) deck.setTransition(model.transition || '')
+    if (deck.setPageTransition)
+      for (const s of model.slides) deck.setPageTransition(s.id, s.transition || '')
   }
 
   // ---- overrides + history -------------------------------------------------
@@ -470,6 +497,9 @@
   }
 
   function applyInsets() {
+    // the top bar wraps onto a second row when the window is narrow: the panels below it and the
+    // stage follow its real height
+    document.documentElement.style.setProperty('--ed-top', `${panel.offsetHeight}px`)
     if (deck.setInsets)
       deck.setInsets({
         top: panel.offsetHeight,
@@ -1209,6 +1239,17 @@
     emit('deck:edit', { overrides: JSON.parse(snapshot()).o })
   }
 
+  /** One page's own transition: a slide field like steps; '' hands it back to the deck's. */
+  function setPageTransitionSetting(slideId, value) {
+    const s = slidesById.get(slideId)
+    if (!s) return
+    if (value) s.transition = value
+    else delete s.transition
+    syncModelScript()
+    if (deck.setPageTransition) deck.setPageTransition(slideId, value)
+    emit('deck:edit', { overrides: JSON.parse(snapshot()).o })
+  }
+
   /** The deck-wide motion switch: a deck field like steps, so it syncs and saves directly, outside undo. */
   function setMotionSetting(on) {
     if (on) delete model.motion
@@ -1549,6 +1590,7 @@
   function onSlideChange() {
     select(null)
     renderPagesList(false)
+    refreshTopbar()
   }
 
   // ---- slide rail: live thumbnails, playback order and hidden slides (model.pages) ----
@@ -1736,14 +1778,15 @@
       `<label class="ed-toggle" title="Show the hidden elements so they can be selected again"><input type="checkbox" data-toggle="reveal">${icon('eye')}<span>Show hidden items</span></label>`,
       `<label class="ed-toggle" title="Elements appear step by step with their entrance effects. When off, every element shows at once and each press turns the page (saved to deck.json; press M during playback to override it in this browser)"><input type="checkbox" data-toggle="motion"${model.motion === 'off' ? '' : ' checked'}>${icon('play')}<span>Animations</span></label>`,
       `<label class="ed-toggle" title="Keep the element toolbar as a panel on the right with every group open, instead of floating next to the selection; remembered by this browser"><input type="checkbox" data-toggle="dock"${docked ? ' checked' : ''}>${icon('objRight')}<span>Side panel</span></label>`,
-      '<div class="ed-ctl ed-tb-select" title="How one slide changes to the next, saved to deck.json; “Theme default” follows the theme pack’s source template"><span class="ed-lbl">Slide transition</span><select data-transition><option value="">Theme default</option><option value="none">None</option><option value="fade">Fade</option><option value="push">Slide</option><option value="lift">Rise</option></select></div>',
+      '<div class="ed-ctl ed-tb-select"><span class="ed-lbl">Transition</span><select data-transition title="The deck: how one slide changes to the next, saved to deck.json; “Theme” follows the theme pack’s source template"><option value="">Theme</option><option value="none">None</option><option value="rise">Rise</option><option value="settle">Settle</option><option value="dissolve">Dissolve</option><option value="breath">Breath</option><option value="fade">Fade</option><option value="push">Push</option><option value="lift">Lift</option></select><select data-page-transition title="This page only, played when it comes in and saved to deck.json; “Deck” follows the deck’s. The scaffold writes Breath on a pause page and Settle on a hero page after the first"><option value="">Deck</option><option value="none">None</option><option value="rise">Rise</option><option value="settle">Settle</option><option value="dissolve">Dissolve</option><option value="breath">Breath</option><option value="fade">Fade</option><option value="push">Push</option><option value="lift">Lift</option></select></div>',
       '</div>',
       '<div class="ed-tb-sep"></div>',
-      `<button type="button" class="ed-btn" data-action="download" title="Save the current model as deck.json">${icon('download')}<span>Download deck.json</span></button>`,
-      `<button type="button" class="ed-btn" data-action="download-html" hidden title="Render the deck on disk into a single HTML file with images inlined, for offline viewing or sending; unsaved edits are saved first">${icon('download')}<span>Download deck.html</span></button>`,
+      `<button type="button" class="ed-btn" data-action="download" title="Save the current model as deck.json">${icon('download')}<span><span class="ed-long">Download </span>deck.json</span></button>`,
+      `<button type="button" class="ed-btn" data-action="download-html" hidden title="Save the deck as one HTML file with your edits: rendered on disk with the images inlined while the dev server runs, otherwise this page as it is (pictures keep their relative paths)">${icon('download')}<span><span class="ed-long">Download </span>deck.html</span></button>`,
       '<div class="ed-tb-spacer"></div>',
       '<div class="ed-tb-status" data-status></div>',
-      '<span class="ed-tb-help" title="Click an element to drag or resize · Shift+click or drag on empty space to select several · Ctrl+A selects the page · double-click to edit text · arrow keys nudge (Shift: 10px) · Delete hides · Esc clears the selection&#10;Ctrl+Z undo · Ctrl+Y redo · Ctrl+Alt+C copy style · Ctrl+Alt+V paste style · Ctrl+Shift+↑↓ move the current page · Ctrl+Shift+H hide or show the current page · E leave">?</span>',
+      '<span class="ed-tb-help" title="Click an element to drag or resize · Shift+click or drag on empty space to select several · Ctrl+A selects the page · double-click to edit text · arrow keys nudge (Shift: 10px) · Delete hides · Esc clears the selection&#10;Ctrl+Z undo · Ctrl+Y redo · Ctrl+Alt+C copy style · Ctrl+Alt+V paste style · Ctrl+Shift+↑↓ move the current page · Ctrl+Shift+H hide or show the current page · ←→ turn the page with nothing selected · F fullscreen · E leave">?</span>',
+      `<button type="button" class="ed-btn" data-action="fullscreen" title="Fill the screen with the deck (F; Esc or F again leaves)">${icon('expand')}<span>Fullscreen</span><kbd>F</kbd></button>`,
       `<button type="button" class="ed-btn ed-btn-primary" data-action="exit" title="Leave edit mode and go back to playback (E)">${icon('play')}<span>Present</span><kbd>E</kbd></button>`,
     ].join('')
     document.body.appendChild(panel)
@@ -1765,12 +1808,16 @@
     transitionSelect.addEventListener('change', (e) => {
       setTransitionSetting(e.target.value)
     })
+    panel.querySelector('[data-page-transition]').addEventListener('change', (e) => {
+      setPageTransitionSetting(activeSlideId(), e.target.value)
+    })
     panel.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action]')
       if (!btn) return
       if (btn.dataset.action === 'undo') undo()
       else if (btn.dataset.action === 'redo') redo()
       else if (btn.dataset.action === 'exit') exit()
+      else if (btn.dataset.action === 'fullscreen') deck.fullscreen?.()
       else if (btn.dataset.action === 'download') exportFile()
       else if (btn.dataset.action === 'download-html') exportHtml()
     })
@@ -1781,8 +1828,27 @@
     if (!panel) return
     panel.querySelector('[data-action="undo"]').disabled = history.length === 0
     panel.querySelector('[data-action="redo"]').disabled = future.length === 0
-    // the portable HTML comes from the dev server (it announces itself after the editor loads)
-    panel.querySelector('[data-action="download-html"]').hidden = !hasDevServer()
+    // the current page's own transition (the pre-T-0036 name plays as push)
+    const pageSelect = panel.querySelector('[data-page-transition]')
+    const own = slidesById.get(activeSlideId())?.transition || ''
+    if (document.activeElement !== pageSelect)
+      pageSelect.value = own === 'slide-left' ? 'push' : own
+    // the portable HTML comes from the dev server (it announces itself after the editor loads), or
+    // from the page itself when the renderer kept its pristine copy
+    panel.querySelector('[data-action="download-html"]').hidden = !(hasDevServer() || hasPortable())
+  }
+
+  let statusTimer = 0
+  /** A line in the top bar for a moment (an empty text clears it). */
+  function setStatus(text) {
+    const el = panel?.querySelector('[data-status]')
+    if (!el) return
+    el.textContent = text
+    clearTimeout(statusTimer)
+    if (text)
+      statusTimer = setTimeout(() => {
+        if (el.textContent === text) el.textContent = ''
+      }, 8000)
   }
 
   // ---- theme tokens, read back from :root (names only; no theme id is known here) ------
@@ -1847,6 +1913,12 @@
     ['slide-left', 'Slide left'],
     ['slide-right', 'Slide right'],
     ['wipe', 'Wipe'],
+    ['pop', 'Pop'],
+    ['blur', 'Blur in'],
+    ['cascade', 'Cascade'],
+    ['grow', 'Grow (bars, rings)'],
+    ['draw', 'Draw (lines)'],
+    ['count', 'Count up'],
   ]
   // number field + slider pairs: the slider's range, the number field's floor, the scale between
   // the shown unit and the override (opacity is shown as a percentage), the decimals shown, and
@@ -2558,17 +2630,77 @@
     return saveAs(text, `${model.id || 'deck'}.json`, 'application/json', '.json', 'deck.json')
   }
 
+  // ---- the page itself as a file (no dev server) ---------------------------------
+
+  const MODEL_TAG = '<script type="application/json" id="deck-model"'
+  // this source sits inside an inline script tag, so the tag that ends a script never appears in it
+  // whole; the tags that end the body and the document are spelled the same way, because the dev
+  // server splices its client in at the body end tag of the document itself
+  const endTag = (name) => ['<', `/${name}>`].join('')
+  const SCRIPT_END = endTag('script')
+  const DOCUMENT_END = `\n${endTag('body')}\n${endTag('html')}\n`
+  const PRISTINE_TAG = `<script id="deck-pristine">window.__pristine = document.documentElement.outerHTML;${SCRIPT_END}`
+  const hasPortable = () =>
+    typeof window.__pristine === 'string' && window.__pristine.includes(MODEL_TAG)
+
   /**
-   * The deck on disk as one portable HTML with the images inlined, rendered by the dev server;
-   * whatever is still unsaved is written first so the file matches what is on screen.
+   * This deck as one HTML file with the edits: the document as the renderer wrote it (kept by the
+   * pristine script before any script touched the page), the current model in place of the
+   * rendered one, flagged so the editor puts the model back on the page when the file opens, and
+   * the same scripts after it. Pictures keep their relative paths. Null for a page rendered
+   * before the pristine script existed.
+   */
+  function portableHtml() {
+    if (!hasPortable()) return null
+    const pristine = window.__pristine
+    let head = pristine.slice(0, pristine.lastIndexOf(MODEL_TAG))
+    // the deck-wide motion switch is read from <html data-motion> before any script runs
+    head = head.replace(/^<html([^>]*)>/, (_, attrs) => {
+      const rest = attrs.replace(/\s+data-motion="[^"]*"/, '')
+      return `<html${rest}${model.motion === 'off' ? ' data-motion="off"' : ''}>`
+    })
+    const json = JSON.stringify(exportModel()).replace(/</g, '\\u003c')
+    const scripts = Array.from(document.querySelectorAll('body > script'))
+      .filter((s) => !s.id && !s.src && !s.type)
+      .map((s) => `<script>\n${s.textContent.trim()}\n${SCRIPT_END}`)
+    return `<!doctype html>\n${head}${MODEL_TAG} data-edited="true">${json}${SCRIPT_END}\n${PRISTINE_TAG}\n${scripts.join('\n')}${DOCUMENT_END}`
+  }
+
+  /**
+   * The deck as one HTML file: rendered on disk with the images inlined by the dev server (whatever
+   * is still unsaved is written first so the file matches what is on screen), or, without one,
+   * this page with its edits.
    */
   async function exportHtml() {
-    if (!hasDevServer()) return 'unavailable'
-    if (window.__dev?.dirty) await window.__dev.save()
-    const res = await fetch('/__export')
-    if (!res.ok) return 'failed'
-    const text = await res.text()
-    return saveAs(text, `${model.id || 'deck'}.html`, 'text/html', '.html', 'deck.html')
+    let text
+    if (hasDevServer()) {
+      if (window.__dev?.dirty) await window.__dev.save()
+      const res = await fetch('/__export')
+      if (!res.ok) return 'failed'
+      text = await res.text()
+    } else {
+      text = portableHtml()
+      if (text == null) return 'unavailable'
+    }
+    const result = await saveAs(
+      text,
+      `${model.id || 'deck'}.html`,
+      'text/html',
+      '.html',
+      'deck.html',
+    )
+    if (!hasDevServer() && (result === 'saved' || result === 'downloaded')) {
+      const relative = Array.from(stage.querySelectorAll('img')).some((img) => {
+        const src = img.getAttribute('src') || ''
+        return src && !/^(data:|blob:|https?:)/i.test(src)
+      })
+      setStatus(
+        relative
+          ? 'Saved with your edits. Its pictures are relative paths: keep it next to the original deck.html, or render with --inline-assets first.'
+          : 'Saved with your edits.',
+      )
+    }
+    return result
   }
 
   // ---- public api ----------------------------------------------------------------
@@ -2636,6 +2768,8 @@
     },
     exportFile,
     exportHtml,
+    /** The deck as one HTML file with the edits, as text (null when the page has no pristine copy). */
+    portableHtml,
     get editingText() {
       return editing ? { slideId: editing.slideId, elId: editing.elId } : null
     },
@@ -2689,6 +2823,9 @@
     e.preventDefault()
     enter()
   })
+
+  // a file saved by "Download deck.html" without a dev server: the edits are in its model only
+  if (document.getElementById('deck-model')?.dataset.edited === 'true') applyEditedModel()
 
   if (new URLSearchParams(location.search).get('edit') === '1') enter()
 })()

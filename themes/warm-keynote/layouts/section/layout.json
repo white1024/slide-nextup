@@ -83,11 +83,11 @@
     },
     "title": {
       "type": "text",
-      "value": "Why the layout keeps changing"
+      "value": "Where the hour goes"
     },
     "body": {
       "type": "text",
-      "value": "Hear how users describe the problem first, then look at the numbers."
+      "value": "Hear how the team describes the meeting first, then look at the minutes."
     },
     "page": {
       "type": "text",

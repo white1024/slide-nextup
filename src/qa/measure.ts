@@ -14,37 +14,18 @@ export interface ElementBox {
   hasText: boolean
   /** the element's data-role; QA thresholds differ for page furniture (`meta`) */
   role: string
+  /** the element paints its own ground: a background, a border or a shadow, so its emptiness shows */
+  paints: boolean
+  /**
+   * the height of what the element really holds: from the top of its first line, picture or
+   * painted child to the bottom of its last; 0 when it holds nothing visible
+   */
+  contentH: number
+  /** vertical padding plus borders, the part of the box that is not content by design */
+  padY: number
 }
 
-/**
- * Minimum font size for a text element, by role: page furniture and labels may be
- * smaller than content (chips, eyebrows and meta at 20px; chapter labels, kickers,
- * pills, pill lists (flow), captions and CTAs at 24px; table cells at 22px). Everything
- * else keeps the base floor. FIT_JS in src/render/runtime.ts embeds the same table.
- */
-export const MIN_FONT_BY_ROLE: Record<string, number> = {
-  default: 32,
-  meta: 20,
-  chip: 20,
-  eyebrow: 20,
-  'eyebrow-accent': 20,
-  chapter: 24,
-  pill: 24,
-  caption: 24,
-  cta: 24,
-  kicker: 24,
-  flow: 24,
-  'flow-accent': 24,
-  table: 22,
-}
-
-export function minFontFor(
-  role: string,
-  base: number = MIN_FONT_BY_ROLE.default as number,
-): number {
-  const floor = MIN_FONT_BY_ROLE[role]
-  return floor === undefined || role === 'default' ? base : Math.min(base, floor)
-}
+export { MIN_FONT_BY_ROLE, minFontFor } from './font-floors.ts'
 
 /**
  * Wait until fonts are loaded and the auto-fit pass (FIT_JS) has run, so that
@@ -63,11 +44,52 @@ export async function waitForFit(page: Page): Promise<void> {
 export async function measureSlide(page: Page): Promise<ElementBox[]> {
   return page.evaluate(() => {
     const out: ElementBox[] = []
+    // a box paints its ground when it has a visible background, a border or a shadow
+    const paintsOwn = (el: Element): boolean => {
+      const s = getComputedStyle(el)
+      const bg = s.backgroundColor
+      const clear = bg === 'transparent' || /^rgba\((?:\s*\d+\s*,){3}\s*0\s*\)$/.test(bg)
+      if (!clear || s.backgroundImage !== 'none' || s.boxShadow !== 'none') return true
+      return ['top', 'right', 'bottom', 'left'].some(
+        (side) =>
+          s.getPropertyValue(`border-${side}-style`) !== 'none' &&
+          Number.parseFloat(s.getPropertyValue(`border-${side}-width`)) > 0,
+      )
+    }
+    // the vertical extent of what the element holds: its own text by line boxes, and every
+    // descendant that carries something of its own (text, a picture, a painted chip or rule);
+    // bare wrappers are ignored so a stretched container does not hide the blank
+    const extentOf = (node: HTMLElement): number => {
+      let top = Number.POSITIVE_INFINITY
+      let bottom = Number.NEGATIVE_INFINITY
+      const add = (r: DOMRect) => {
+        if (r.height <= 0 || r.width <= 0) return
+        if (r.top < top) top = r.top
+        if (r.bottom > bottom) bottom = r.bottom
+      }
+      const ownText = (el: Node) =>
+        [...el.childNodes].some(
+          (c) => c.nodeType === Node.TEXT_NODE && (c.textContent ?? '').trim().length > 0,
+        )
+      for (const child of node.childNodes) {
+        if (child.nodeType !== Node.TEXT_NODE || !(child.textContent ?? '').trim()) continue
+        const range = document.createRange()
+        range.selectNodeContents(child)
+        for (const r of range.getClientRects()) add(r)
+      }
+      for (const el of node.querySelectorAll<HTMLElement>('*')) {
+        if (el.getClientRects().length === 0) continue
+        const replaced = /^(IMG|SVG|VIDEO|CANVAS)$/i.test(el.tagName)
+        if (ownText(el) || replaced || paintsOwn(el)) add(el.getBoundingClientRect())
+      }
+      return bottom > top ? bottom - top : 0
+    }
     for (const section of document.querySelectorAll<HTMLElement>('section.slide')) {
       const origin = section.getBoundingClientRect()
       for (const node of section.querySelectorAll<HTMLElement>('[data-el]')) {
         const r = node.getBoundingClientRect()
         const cs = getComputedStyle(node)
+        const px = (v: string) => Number.parseFloat(v) || 0
         out.push({
           slide: section.dataset.slide ?? '',
           el: node.dataset.el ?? '',
@@ -80,6 +102,13 @@ export async function measureSlide(page: Page): Promise<ElementBox[]> {
           scrollH: node.scrollHeight,
           fontSize: Number.parseFloat(cs.fontSize),
           hasText: (node.textContent ?? '').trim().length > 0,
+          paints: paintsOwn(node),
+          contentH: extentOf(node),
+          padY:
+            px(cs.paddingTop) +
+            px(cs.paddingBottom) +
+            px(cs.borderTopWidth) +
+            px(cs.borderBottomWidth),
         })
       }
     }

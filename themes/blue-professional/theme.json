@@ -30,26 +30,26 @@
     "vocabulary": ["diagonal pale panel", "3×3 dot cluster", "60×4 cobalt rule", "pale blue rounded cards", "3px bottom progress bar", "uppercase eyebrow with rounded tag", "numbered blue circles with faint connectors", "statement box on a pale blue tint with a blue left rule", "concentric thin rings", "solid blue pill button"],
     "avoid": ["solid-bordered cards", "shadows", "a second accent colour", "gradients", "illustrations", "centred headings (cover and body pages; quote and closing are the exception)"]
   },
+  "tones": ["inverse", "accent", "faint", "s1", "s2", "s3", "s4", "s5", "s6"],
   "motion": {
-    "transition": "push",
+    "family": "crisp",
+    "transition": "rise",
     "default": "fade-up",
     "byRole": {
       "card": "scale-in",
-      "stat": "scale-in",
+      "stat": "count",
       "entry": "fade-up",
       "step": "fade-up",
       "highlight": "fade-up",
       "list": "fade-up",
       "cta": "scale-in",
-      "number": "fade",
-      "chart": "wipe",
+      "number": "count",
+      "chart": "grow",
       "table": "wipe",
       "tabs": "fade-up",
       "photo": "fade",
       "connector": "fade"
-    },
-    "stagger": 70,
-    "duration": 350
+    }
   },
   "source": {
     "name": "beautiful-html-templates",

@@ -1,4 +1,4 @@
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -11,7 +11,13 @@ import {
   satisfies,
   THEME_SCHEMA_VERSION,
 } from '../src/qa/theme-check.ts'
-import { listThemeIds, loadLayout, loadTheme, PROJECT_ROOT } from '../src/render/assets.ts'
+import {
+  listThemeIds,
+  loadLayout,
+  loadTheme,
+  motionFor,
+  PROJECT_ROOT,
+} from '../src/render/assets.ts'
 
 const REPO = { userThemesDir: null }
 let tmp: string
@@ -108,20 +114,23 @@ describe('theme:check on the shipped themes', () => {
   })
 
   it('a cover-only bake-off pack gets one warning instead of ten missing-layout errors', () => {
-    for (const id of ['cobalt-grid', 'creative-mode']) {
-      const report = runThemeCheck(id, REPO)
-      expect(report.packLayouts, id).toEqual(['cover'])
-      expect(report.coreChecked, id).toBe(false)
-      expect(report.errors, id).toBe(0)
-      expect(
-        report.issues.map((i) => i.message),
-        id,
-      ).toContainEqual(expect.stringMatching(/cover-only pitch theme pack/))
-    }
+    const lookup = copyPack('pitch-only', (dir) => {
+      for (const layout of readdirSync(join(dir, 'layouts'))) {
+        if (layout !== 'cover') rmSync(join(dir, 'layouts', layout), { recursive: true })
+      }
+    })
+    const report = runThemeCheck('pitch-only', lookup)
+    expect(report.packLayouts).toEqual(['cover'])
+    expect(report.coreChecked).toBe(false)
+    expect(report.errors).toBe(0)
+    expect(report.issues.map((i) => i.message)).toContainEqual(
+      expect.stringMatching(/cover-only pitch theme pack/),
+    )
   })
 
   it('a plain theme without its own layouts skips the core check but is measured against the library', () => {
-    const report = runThemeCheck('ink-paper', REPO)
+    const lookup = copyPack('plain', (dir) => rmSync(join(dir, 'layouts'), { recursive: true }))
+    const report = runThemeCheck('plain', lookup)
     expect(report.coreChecked).toBe(false)
     expect(report.packLayouts).toEqual([])
     expect(report.errors).toBe(0)
@@ -249,5 +258,81 @@ describe('theme:check catches a broken pack', () => {
     expect(report.origin).toBeNull()
     expect(report.errors).toBe(1)
     expect(report.issues[0]?.message).toMatch(/theme `nope` not found; searched: /)
+  })
+})
+
+describe('theme:lint holds a pack to the motion rules', () => {
+  it('the three packs each declare one family, which sets the pace unless the pack overrides it', () => {
+    expect(motionFor(loadTheme('blue-professional', REPO).json)).toMatchObject({
+      family: 'crisp',
+      duration: 300,
+      stagger: 60,
+      band: [150, 400],
+    })
+    expect(motionFor(loadTheme('warm-keynote', REPO).json)).toMatchObject({
+      family: 'soft',
+      duration: 450,
+      stagger: 90,
+      band: [300, 800],
+    })
+    expect(motionFor(loadTheme('technical-brief', REPO).json)).toMatchObject({
+      family: 'minimal',
+      duration: 220,
+      stagger: 40,
+      band: [150, 320],
+    })
+    expect(motionFor({ motion: { family: 'soft', duration: 320 } })).toMatchObject({
+      duration: 320,
+      stagger: 90,
+    })
+    expect(motionFor({})).toMatchObject({
+      family: null,
+      duration: 350,
+      stagger: 70,
+      band: [150, 800],
+    })
+  })
+
+  it('a duration outside the family band is an error; beyond 150–800ms the schema refuses it first', () => {
+    const motion = (j: Record<string, unknown>) => j.motion as Record<string, unknown>
+    const slow = copyPack('bp-slow', (dir) =>
+      editJson(join(dir, 'theme.json'), (j) => {
+        motion(j).duration = 600
+      }),
+    )
+    expect(runThemeCheck('bp-slow', slow).issues.map((i) => i.message)).toEqual([
+      expect.stringMatching(/motion.duration 600ms is outside the crisp family's band 150–400ms/),
+    ])
+    const far = copyPack('bp-far', (dir) =>
+      editJson(join(dir, 'theme.json'), (j) => {
+        motion(j).duration = 900
+      }),
+    )
+    expect(runThemeCheck('bp-far', far).issues.map((i) => i.message)).toEqual([
+      expect.stringMatching(/\/motion\/duration must be <= 800/),
+    ])
+    const free = copyPack('bp-free', (dir) =>
+      editJson(join(dir, 'theme.json'), (j) => {
+        delete motion(j).family
+        motion(j).duration = 700
+      }),
+    )
+    expect(runThemeCheck('bp-free', free).errors).toBe(0)
+  })
+
+  it('keyframes in theme.css may move an element at most 64px', () => {
+    const lookup = copyPack('bp-fly', (dir) => {
+      const css = join(dir, 'theme.css')
+      writeFileSync(
+        css,
+        `${readFileSync(css, 'utf8')}
+@keyframes bp-fly { from { opacity: 0; transform: translate3d(0, 120px, 0); } to { opacity: 1; transform: none; } }
+@keyframes bp-nudge { from { transform: translateY(24px); } to { transform: none; } }
+`,
+      )
+    })
+    expect(runThemeCheck('bp-fly', lookup).issues.map((i) => i.message)).toEqual([
+      expect.stringMatching(/at most 64px \(this one moves 120px\)/),
+    ])
   })
 })

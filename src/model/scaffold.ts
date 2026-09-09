@@ -11,7 +11,7 @@ import {
   sha256,
 } from './deck.ts'
 import { langOf } from './lang.ts'
-import type { Story, StorySlide } from './story.ts'
+import type { SceneRole, Story, StorySlide } from './story.ts'
 
 export const IMAGE_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'><rect width='16' height='9' fill='%23ddd6c6'/><path d='M0 9 L5 4 L8 7 L11 5 L16 9 Z' fill='%23b5ad9c'/><circle cx='12' cy='2.5' r='1.2' fill='%23b5ad9c'/></svg>"
@@ -222,6 +222,8 @@ export interface ScaffoldResult extends MergeReport {
   stepsDropped: string[]
   /** "s2/card-1=1": steps the scaffold assigned itself on slides new to the deck */
   stepsAuto: string[]
+  /** "s7=breath": the page's own transition the scaffold wrote from the story, on slides new to the deck */
+  transitionsAuto: string[]
   /** slides whose story text exceeds the layout's density: the scaffold suggests `details` rather than a split */
   detailsSuggested: string[]
 }
@@ -236,29 +238,100 @@ export function slotChars(slots: Record<string, Slot>): number {
   return Math.round(n)
 }
 
+/** What the story says about a slide's place in the rhythm: the two fields the scaffold reads. */
+export interface Scene {
+  scene_role: SceneRole
+  intensity: number
+}
+
+/** The elements a map page (an agenda, an overview) reveals one by one: its items, cards or blocks. */
+const MAP_STEPPED = /^(item|card|block|head|list)-\d+$/
+
 /**
- * Default reveal order for a slide that is new to the deck: cards, process steps and KPI
- * stats one by one; the two sides of a comparison or before/after one after the other; a
- * statement's evidence and a closing's call to action after the claim. Hero pages (cover,
- * hero, section, quote) stay still. The editor can change every step afterwards and a
- * regenerated slide keeps what the editor set.
+ * Default reveal order for a slide that is new to the deck, decided by the story rather than by
+ * the layout: a hero, a pause and a close page show whole, and so does any page at intensity 4
+ * or 5 (the peak lands at once); a map page reveals only its agenda items, cards or blocks; an
+ * evidence or relationship page builds up element by element (cards, process steps and KPI stats
+ * one by one, the two sides of a comparison or before/after one after the other, a statement's
+ * evidence after the claim), in at most two beats at intensity 1 or 2. Without a scene the
+ * layout table alone applies, to every layout except the hero-like ones (cover, hero, section,
+ * quote), a closing's call to action included. The editor can change every step afterwards and
+ * a regenerated slide keeps what the editor set.
  */
 export function autoSteps(
   layoutId: string,
   elements: ReadonlyArray<{ id: string }>,
+  scene?: Scene,
 ): Map<string, number> {
   const steps = new Map<string, number>()
   if (/^(cover|hero|section|quote)/.test(layoutId)) return steps
+  if (
+    scene &&
+    (scene.scene_role === 'hero' || scene.scene_role === 'pause' || scene.scene_role === 'close')
+  )
+    return steps
+  if (scene && scene.intensity >= 4) return steps
   for (const { id } of elements) {
-    const numbered = /^(card|step|stat|icon|node|side)-(\d+)$/.exec(id)
+    if (scene?.scene_role === 'map' && !MAP_STEPPED.test(id)) continue
+    const numbered = /^(card|step|stat|icon|node|side|item|block|head|list)-(\d+)$/.exec(id)
     const arrow = /^arrow-(\d+)$/.exec(id)
-    if (numbered) steps.set(id, Number(numbered[2]))
-    else if (arrow) steps.set(id, Number(arrow[1]) + 1)
-    else if (/^(left|before)/.test(id)) steps.set(id, 1)
-    else if (/^(right|after|link|badge)/.test(id) || id === 'arrow') steps.set(id, 2)
-    else if (id === 'evidence' || id === 'cta') steps.set(id, 1)
+    let step: number | undefined
+    if (numbered) step = Number(numbered[2])
+    else if (arrow) step = Number(arrow[1]) + 1
+    else if (/^(left|before)/.test(id)) step = 1
+    else if (/^(right|after|link|badge)/.test(id) || id === 'arrow') step = 2
+    else if (id === 'evidence' || id === 'cta') step = 1
+    if (step === undefined) continue
+    steps.set(id, scene && scene.intensity <= 2 ? Math.min(step, 2) : step)
   }
   return steps
+}
+
+/**
+ * The page transition the story asks for: a pause page breathes (a full exit, a beat, then the
+ * entrance), a hero page after the first settles (the cover-grade entrance); every other page
+ * follows the deck. `index` is the slide's position in the story, 0-based.
+ */
+export function autoTransition(scene: Scene, index: number): 'breath' | 'settle' | undefined {
+  if (scene.scene_role === 'pause') return 'breath'
+  if (scene.scene_role === 'hero' && index > 0) return 'settle'
+  return undefined
+}
+
+/** The reveal steps and the page transition the story implies for one deck slide as it stands. */
+export interface Rhythm {
+  scene: Scene
+  steps: Map<string, number>
+  transition: 'breath' | 'settle' | undefined
+}
+
+/** What the story implies for a deck slide (its current layout and elements), or null when the story has no such slide. */
+export function storyRhythm(slide: Slide, story: Story): Rhythm | null {
+  const index = story.slides.findIndex((s) => s.id === slide.id)
+  if (index === -1) return null
+  const s = story.slides[index] as StorySlide
+  return {
+    scene: { scene_role: s.scene_role, intensity: s.intensity },
+    steps: autoSteps(slide.layout, slide.elements, s),
+    transition: autoTransition(s, index),
+  }
+}
+
+/** True when a deck slide's steps or its own transition differ from what the story implies now. */
+export function rhythmDiffers(slide: Slide, rhythm: Rhythm): boolean {
+  if ((slide.transition ?? undefined) !== (rhythm.transition ?? undefined)) return true
+  return slide.elements.some((e) => (e.step ?? undefined) !== rhythm.steps.get(e.id))
+}
+
+/** Rewrite a deck slide's steps and its own transition to the story's rhythm; entrances stay. */
+export function applyRhythm(slide: Slide, rhythm: Rhythm): void {
+  for (const e of slide.elements) {
+    const n = rhythm.steps.get(e.id)
+    if (n === undefined) delete e.step
+    else e.step = n
+  }
+  if (rhythm.transition === undefined) delete slide.transition
+  else slide.transition = rhythm.transition
 }
 
 export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
@@ -267,6 +340,7 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
   const stepsKept: string[] = []
   const stepsDropped: string[] = []
   const stepsAuto: string[] = []
+  const transitionsAuto: string[] = []
   const detailsSuggested: string[] = []
   const existingById = new Map((input.existing?.slides ?? []).map((s) => [s.id, s]))
   const only = input.only ? new Set(input.only) : null
@@ -284,7 +358,7 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
   const emptyMeta: string[] = []
   const emptyBrand: string[] = []
 
-  const slides: Slide[] = input.story.slides.map((s) => {
+  const slides: Slide[] = input.story.slides.map((s, index) => {
     const replacement = input.replacements?.[s.id]
     if (replacement) {
       chosen[s.id] = replacement.layout
@@ -336,10 +410,10 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
     if ('brand' in layout.slots && !furniture.brand) emptyBrand.push(s.id)
     // reveal steps and entrances live in slides[].elements (set in the editor, not an override):
     // a regenerated slide keeps them on same-id elements, like deck:retheme does, and reports the
-    // steps whose element is gone; a slide that is new to the deck gets the layout's default order
+    // steps whose element is gone; a slide that is new to the deck gets the story's rhythm
     const previous = existingById.get(s.id)
     const prior = new Map((previous?.elements ?? []).map((e) => [e.id, e]))
-    const auto = previous ? new Map<string, number>() : autoSteps(layoutId, layout.elements)
+    const auto = previous ? new Map<string, number>() : autoSteps(layoutId, layout.elements, s)
     const elements = layout.elements.map((e) => {
       const p = prior.get(e.id)
       const out: Element = { id: e.id, kind: e.kind }
@@ -361,6 +435,13 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
       layout: layoutId,
       slots,
       elements,
+    }
+    // the page's own transition, like its steps: a regenerated slide keeps what it had (a cleared
+    // one included), a slide new to the deck follows the story
+    const transition = previous ? previous.transition : autoTransition(s, index)
+    if (transition !== undefined) {
+      slide.transition = transition
+      if (!previous) transitionsAuto.push(`${s.id}=${transition}`)
     }
     if (s.notes) slide.notes = s.notes
     return slide
@@ -393,7 +474,16 @@ export function scaffoldDeck(input: ScaffoldInput): ScaffoldResult {
   // the language tag: the frontmatter's, else a guess from the story's script; an existing deck keeps its own
   merged.deck.lang ??= langOf(input.story.meta.lang, input.storyText)
   merged.deck.story = { path: input.storyRelativePath, sha256: sha256(input.storyText) }
-  return { ...merged, warnings, chosen, stepsKept, stepsDropped, stepsAuto, detailsSuggested }
+  return {
+    ...merged,
+    warnings,
+    chosen,
+    stepsKept,
+    stepsDropped,
+    stepsAuto,
+    transitionsAuto,
+    detailsSuggested,
+  }
 }
 
 export function deckIdFromStoryPath(storyFile: string): string {

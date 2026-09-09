@@ -124,7 +124,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -132,7 +132,7 @@
     },
     "title": {
       "type": "text",
-      "value": "Not another dashboard: put the fix inside the alert"
+      "value": "Not a new meeting: put the update next to the work"
     },
     "before-label": {
       "type": "text",
@@ -141,11 +141,11 @@
     "before": {
       "type": "list",
       "items": [
-        "Find the dashboard",
-        "Read the log",
-        "Pick a form",
-        "Fill the fields",
-        "Submit"
+        "Book the room",
+        "Collect the numbers",
+        "Build the deck",
+        "Present",
+        "Send the notes"
       ]
     },
     "after-label": {
@@ -155,14 +155,14 @@
     "after": {
       "type": "list",
       "items": [
-        "Get the alert",
-        "Confirm the prefilled fix",
-        "Submit"
+        "Write the update",
+        "Read and comment",
+        "Decide in a short call"
       ]
     },
     "caption": {
       "type": "text",
-      "value": "The two steps that vanish are exactly where owners get stuck."
+      "value": "The two steps that vanish are exactly where the hour went."
     }
   }
 }

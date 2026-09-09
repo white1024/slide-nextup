@@ -85,27 +85,27 @@
   "sample": {
     "title": {
       "type": "text",
-      "value": "Whenever you wonder \"could this be checked automatically?\", come and talk."
+      "value": "Whenever you wonder \"does this need a meeting?\", write it down first."
     },
     "body": {
       "type": "text",
-      "value": "Whether you want a second pair of eyes or want the checks run for you, you are welcome."
+      "value": "Whether you want a second pair of eyes on it or the template set up for you, you are welcome."
     },
     "caption": {
       "type": "text",
-      "value": "When you are ready to start, we will work through these five questions with you:"
+      "value": "When you are ready to start, we will settle these four questions with you:"
     },
     "cta": {
       "type": "text",
-      "value": "Talk to the Tidewatch team"
+      "value": "Try it for a month"
     },
     "evidence": {
       "type": "list",
       "items": [
-        "Which checks to run",
-        "Which fields to pull",
-        "When to ask again",
-        "Whether a person confirms"
+        "Which sections to keep",
+        "Who writes what",
+        "When to comment",
+        "What still needs a call"
       ]
     },
     "page": {

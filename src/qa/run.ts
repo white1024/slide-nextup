@@ -3,10 +3,13 @@ import { join } from 'node:path'
 import type { Browser, Page } from 'playwright'
 import type { Deck } from '../model/deck.ts'
 import { effectiveOrder } from '../model/pages.js'
-import { loadLayout, PROJECT_ROOT } from '../render/assets.ts'
+import { loadLayout, loadTheme, motionFor, PROJECT_ROOT } from '../render/assets.ts'
 import { renderDeckDocument } from '../render/deck.ts'
 import { launchChromium } from './browser.ts'
-import { type ElementBox, measureSlide, minFontFor, waitForFit } from './measure.ts'
+import { checkHint, measureCapacity, type TextCapacity } from './capacity.ts'
+import { DEFAULT_MIN_FONT, DEFAULT_MIN_INNER_FONT, floorExit, minFontFor } from './font-floors.ts'
+import { type ElementBox, measureSlide, waitForFit } from './measure.ts'
+import { checkMotion, type MotionRule, type MotionSummary } from './motion-check.ts'
 
 export type QaRule =
   | 'overflow'
@@ -15,10 +18,17 @@ export type QaRule =
   | 'min-font-inner'
   | 'density'
   | 'geometry-invariant'
+  | 'image-fit'
+  | 'hint-capacity'
+  | 'slack'
+  | MotionRule
+
+/** info is a notice: printed and written to the report, never counted as a failure */
+export type QaSeverity = 'error' | 'warning' | 'info'
 
 export interface QaFinding {
   rule: QaRule
-  severity: 'error' | 'warning'
+  severity: QaSeverity
   slide: string
   element?: string
   message: string
@@ -39,7 +49,42 @@ export interface QaReport {
   skipped: string[]
   errors: number
   warnings: number
+  /** info findings (the `slack` rule at its default level); absent in reports written before the rule existed */
+  notices?: number
+  /** what the motion checks played: absent in reports written before they existed */
+  motion?: MotionSummary
   durationMs: number
+}
+
+/** how the `slack` rule reports: off, as a notice (the default), or as a warning that counts */
+export type SlackLevel = 'off' | 'info' | 'warning'
+export const SLACK_LEVELS: readonly SlackLevel[] = ['off', 'info', 'warning']
+export const DEFAULT_SLACK: SlackLevel = 'info'
+/** a painted text box is reported when it is taller than its content by more than this many pixels… */
+export const SLACK_PX = 40
+/** …or by more than this share of its inner height (the box minus its padding)… */
+export const SLACK_SHARE = 0.15
+/** …but never for less than this: page furniture (a 40px meta line) is not what the rule is for */
+export const SLACK_MIN_PX = 24
+
+/**
+ * How much taller a painted text box is than what it holds, as a message; null for a box that
+ * paints nothing (its blank is invisible; that is the hug question, not this rule) or for a fair
+ * fit. QA is exact about content taller than its box; this is the same measurement the other way.
+ * Shapes are the caller's to leave out: a rule or a backdrop holds nothing by design.
+ */
+export function slackProblem(
+  b: Pick<ElementBox, 'h' | 'padY' | 'contentH' | 'paints'>,
+): string | null {
+  if (!b.paints) return null
+  const inner = Math.max(0, b.h - b.padY)
+  const slack = inner - b.contentH
+  if (slack <= SLACK_PX && (slack <= inner * SLACK_SHARE || slack <= SLACK_MIN_PX)) return null
+  if (b.contentH <= 0) {
+    return `the box paints its ground (${Math.round(b.h)}px tall) but holds nothing: fill the slot, or use a layout that leaves it out`
+  }
+  const share = inner > 0 ? Math.round((slack / inner) * 100) : 100
+  return `the box is ${Math.round(slack)}px (${share}%) taller than its content: shorten the box in the layout, or give the slot more to say`
 }
 
 export interface QaOptions {
@@ -53,6 +98,14 @@ export interface QaOptions {
   minInnerFont?: number
   /** an already running browser to reuse (the caller closes it); launching one costs seconds */
   browser?: Browser
+  /**
+   * check every text slot's hint against what its box really holds (`theme:qa`). Off for
+   * `pnpm qa`: a deck cannot change the hint of the layout it uses, so the finding would be
+   * addressed to somebody who is not there.
+   */
+  checkHints?: boolean
+  /** how a painted box far taller than its content is reported (default info) */
+  slack?: SlackLevel
 }
 
 const CANVAS_W = 1920
@@ -99,6 +152,66 @@ async function measureInner(page: Page): Promise<InnerFont[]> {
   })
 }
 
+export interface ImageBox {
+  slide: string
+  el: string
+  naturalW: number
+  naturalH: number
+  boxW: number
+  boxH: number
+  /** the computed object-fit of the picture */
+  fit: string
+}
+
+/** Every image element's picture size against its box, once the pictures have loaded. */
+export async function measureImages(page: Page): Promise<ImageBox[]> {
+  await page.evaluate(() =>
+    Promise.all(
+      [...document.images].map((img) =>
+        img.complete
+          ? null
+          : new Promise<void>((done) => {
+              img.addEventListener('load', () => done(), { once: true })
+              img.addEventListener('error', () => done(), { once: true })
+            }),
+      ),
+    ),
+  )
+  return page.evaluate(() => {
+    const out: ImageBox[] = []
+    for (const section of document.querySelectorAll<HTMLElement>('section.slide')) {
+      for (const node of section.querySelectorAll<HTMLElement>('[data-el]')) {
+        const img = node.querySelector('img')
+        if (!img) continue
+        const r = node.getBoundingClientRect()
+        out.push({
+          slide: section.dataset.slide ?? '',
+          el: node.dataset.el ?? '',
+          naturalW: img.naturalWidth,
+          naturalH: img.naturalHeight,
+          boxW: r.width,
+          boxH: r.height,
+          fit: getComputedStyle(img).objectFit,
+        })
+      }
+    }
+    return out
+  })
+}
+
+/** cover may cut off up to this share of a picture before QA says so */
+export const IMAGE_CROP_LIMIT = 0.25
+
+/** What cover would cut off, as a message; null for contain, for a picture that did not load, or a fair crop. */
+export function imageFitProblem(im: ImageBox): string | null {
+  if (im.fit !== 'cover' || !im.naturalW || !im.naturalH || !im.boxW || !im.boxH) return null
+  const picture = im.naturalW / im.naturalH
+  const box = im.boxW / im.boxH
+  const crop = 1 - Math.min(picture, box) / Math.max(picture, box)
+  if (crop <= IMAGE_CROP_LIMIT) return null
+  return `image is ${picture.toFixed(2)}:1 but the box is ${box.toFixed(2)}:1; cover crops ${Math.round(crop * 100)}% of it (a diagram wants \`fit: contain\` on the slot in layout.json, a photo a crop that matches the box)`
+}
+
 function intersects(a: ElementBox, b: ElementBox): boolean {
   const ix = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)
   const iy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y)
@@ -109,14 +222,17 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
   const started = Date.now()
   const root = opts.root ?? PROJECT_ROOT
   const lookup = { root, deckDir: opts.deckDir, userThemesDir: opts.userThemesDir }
-  const minFont = opts.minFont ?? 32
-  const minInnerFont = opts.minInnerFont ?? 28
+  const minFont = opts.minFont ?? DEFAULT_MIN_FONT
+  const minInnerFont = opts.minInnerFont ?? DEFAULT_MIN_INNER_FONT
+  const slackLevel = opts.slack ?? DEFAULT_SLACK
   const themed = renderDeckDocument(deck, {
     deckDir: opts.deckDir,
     outDir: opts.deckDir,
     root,
     userThemesDir: opts.userThemesDir,
     staticMode: true,
+    // pictures have to load for the image-fit rule to see their size
+    inlineAssets: true,
   }).html
   const bare = renderDeckDocument(deck, {
     deckDir: opts.deckDir,
@@ -133,6 +249,8 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
   await waitForFit(page)
   const boxes = await measureSlide(page)
   const inner = await measureInner(page)
+  const images = await measureImages(page)
+  const caps: TextCapacity[] = opts.checkHints ? await measureCapacity(page) : []
   const hidden = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('section.slide [data-el][data-hidden="true"]')].map(
       (n) => `${n.closest('section')?.getAttribute('data-slide')}/${n.dataset.el}`,
@@ -141,6 +259,20 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
   await page.setContent(bare)
   await waitForFit(page)
   const bareBoxes = await measureSlide(page)
+  // the motion rules are measured in the player itself: the deck opened interactive, every page played
+  const interactive = renderDeckDocument(deck, {
+    deckDir: opts.deckDir,
+    outDir: opts.deckDir,
+    root,
+    userThemesDir: opts.userThemesDir,
+    inlineAssets: true,
+  }).html
+  await page.setContent(interactive)
+  await waitForFit(page)
+  await page.waitForFunction(() => Boolean((window as unknown as { __deck?: unknown }).__deck))
+  const motion = await checkMotion(page, {
+    band: motionFor(loadTheme(deck.theme, lookup).json).band,
+  })
   await page.close()
   if (!opts.browser) await browser.close()
 
@@ -175,6 +307,22 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           message: `text overflows the element box: content ${b.scrollW}×${b.scrollH}, box ${Math.round(b.w)}×${Math.round(b.h)}`,
         })
       }
+      // the same measurement the other way: a painted text box far taller than what it holds.
+      // Shapes hold nothing by design (a rule, a backdrop, a progress bar), and page furniture
+      // (the roles with a lower font floor: meta, chips, pills, a call to action) is sized by the
+      // theme, not by its text, so neither is measured.
+      const furniture = minFontFor(b.role, DEFAULT_MIN_FONT) < DEFAULT_MIN_FONT
+      const slack =
+        slackLevel === 'off' || kind.get(b.el) !== 'text' || furniture ? null : slackProblem(b)
+      if (slack) {
+        findings.push({
+          rule: 'slack',
+          severity: slackLevel === 'warning' ? 'warning' : 'info',
+          slide: slide.id,
+          element: b.el,
+          message: slack,
+        })
+      }
       const floor = minFontFor(b.role, minFont)
       if (b.hasText && kind.get(b.el) === 'text' && b.fontSize < floor) {
         findings.push({
@@ -182,7 +330,7 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'error',
           slide: slide.id,
           element: b.el,
-          message: `font size ${b.fontSize}px below the minimum ${floor}px${floor < minFont ? ` (${b.role} furniture)` : ''}`,
+          message: `font size ${b.fontSize}px below the minimum ${floor}px; ${floorExit('--min-font', floor < minFont ? b.role : undefined)}`,
         })
       }
     }
@@ -198,7 +346,40 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
           severity: 'warning',
           slide: slide.id,
           element: i.el,
-          message: `smallest inner text ${i.minInner}px below ${innerFloor}px`,
+          message: `smallest inner text ${i.minInner}px below ${innerFloor}px; ${floorExit('--min-inner-font', innerFloor < minInnerFont ? role : undefined)}`,
+        })
+      }
+    }
+
+    for (const im of images.filter(
+      (x) => x.slide === slide.id && !hiddenSet.has(`${slide.id}/${x.el}`),
+    )) {
+      const problem = imageFitProblem(im)
+      if (problem) {
+        findings.push({
+          rule: 'image-fit',
+          severity: 'warning',
+          slide: slide.id,
+          element: im.el,
+          message: problem,
+        })
+      }
+    }
+
+    // what the layout promises a slot holds, against what the box measured out at
+    for (const cap of caps.filter(
+      (x) => x.slide === slide.id && !hiddenSet.has(`${slide.id}/${x.el}`),
+    )) {
+      if (kind.get(cap.el) !== 'text') continue
+      const hint = layout.json.slots[cap.el]?.hint
+      const problem = hint ? checkHint(hint, cap) : null
+      if (problem) {
+        findings.push({
+          rule: 'hint-capacity',
+          severity: 'warning',
+          slide: slide.id,
+          element: cap.el,
+          message: `the hint "${hint}" promises more than the box holds: ${problem}`,
         })
       }
     }
@@ -252,6 +433,8 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
       }
     }
 
+    findings.push(...motion.findings.filter((f) => f.slide === slide.id))
+
     return { id: slide.id, layout: slide.layout, findings }
   })
 
@@ -264,9 +447,13 @@ export async function runDeckQa(deck: Deck, opts: QaOptions): Promise<QaReport> 
     skipped: pages.hidden,
     errors: all.filter((f) => f.severity === 'error').length,
     warnings: all.filter((f) => f.severity === 'warning').length,
+    notices: all.filter((f) => f.severity === 'info').length,
+    motion: motion.summary,
     durationMs: Date.now() - started,
   }
 }
+
+const MARK: Record<QaSeverity, string> = { error: '✖', warning: '⚠', info: 'ℹ' }
 
 export function writeQaReport(report: QaReport, root = process.cwd()): string {
   const dir = join(root, 'artifacts', 'qa')
@@ -281,22 +468,30 @@ export function formatQaReport(report: QaReport): string {
     `${report.title} (${report.deck}) · ${report.slides.length} slides · ${report.durationMs} ms`,
   ]
   if (report.skipped?.length) lines.push(`- skipped hidden slides: ${report.skipped.join(', ')}`)
+  if (report.motion)
+    lines.push(
+      `- motion: ${report.motion.pages} pages played, ${report.motion.entrances} entrances, ${report.motion.changes} page changes; rest state, leaving layer, reduced motion and duration bands checked`,
+    )
   for (const s of report.slides) {
     if (s.findings.length === 0) {
       lines.push(`✓ ${s.id.padEnd(6)} ${s.layout}`)
       continue
     }
-    lines.push(
-      `${s.findings.some((f) => f.severity === 'error') ? '✖' : '⚠'} ${s.id.padEnd(6)} ${s.layout}`,
-    )
+    const worst: QaSeverity = s.findings.some((f) => f.severity === 'error')
+      ? 'error'
+      : s.findings.some((f) => f.severity === 'warning')
+        ? 'warning'
+        : 'info'
+    lines.push(`${MARK[worst]} ${s.id.padEnd(6)} ${s.layout}`)
     for (const f of s.findings) {
       lines.push(
-        `    ${f.severity === 'error' ? '✖' : '⚠'} [${f.rule}] ${f.element ? `${f.element}: ` : ''}${f.message}`,
+        `    ${MARK[f.severity]} [${f.rule}] ${f.element ? `${f.element}: ` : ''}${f.message}`,
       )
     }
   }
+  const notices = report.notices ? `, ${report.notices} notices` : ''
   lines.push(
-    `${report.errors === 0 ? 'passed' : 'failed'}: ${report.errors} errors, ${report.warnings} warnings`,
+    `${report.errors === 0 ? 'passed' : 'failed'}: ${report.errors} errors, ${report.warnings} warnings${notices}`,
   )
   return lines.join('\n')
 }

@@ -146,6 +146,17 @@ export function cssMentionsRole(css: string, role: string): boolean {
   return css.includes(`[data-role="${role}"]`)
 }
 
+export function cssMentionsTone(css: string, tone: string): boolean {
+  return css.includes(`[data-tone="${tone}"]`)
+}
+
+/** The tones a set of layouts asks for, in first-seen order. */
+export function tonesUsedBy(html: string[]): string[] {
+  const tones = new Set<string>()
+  for (const h of html) for (const t of scanLayoutHtml(h).tones) tones.add(t)
+  return [...tones]
+}
+
 export function runThemeCheck(
   themeId: string,
   lookup?: Lookup,
@@ -275,6 +286,27 @@ export function runThemeCheck(
         severity: 'warning',
         file: cssFile,
         message: `layouts use role \`${role}\` but theme.css has no [data-role="${role}"] rule`,
+      })
+    }
+  }
+
+  // 5. every tone the layouts ask for: a tone no rule styles falls back to the plain look in silence
+  const used = tonesUsedBy(html)
+  for (const tone of used) {
+    if (!cssMentionsTone(theme.css, tone)) {
+      issues.push({
+        severity: 'warning',
+        file: cssFile,
+        message: `layouts use data-tone="${tone}" but theme.css has no [data-tone="${tone}"] rule; the element silently keeps the role's plain look`,
+      })
+    }
+  }
+  for (const tone of theme.json.tones ?? []) {
+    if (!used.includes(tone) && !cssMentionsTone(theme.css, tone)) {
+      issues.push({
+        severity: 'warning',
+        file: jsonFile,
+        message: `theme.json lists tone \`${tone}\` but theme.css has no [data-tone="${tone}"] rule`,
       })
     }
   }

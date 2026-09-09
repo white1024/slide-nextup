@@ -117,25 +117,29 @@
       "filling a gap with a plausible-looking value: an empty slot stays empty"
     ]
   },
+  "tones": [
+    "inverse",
+    "second",
+    "third"
+  ],
   "motion": {
-    "transition": "fade",
+    "family": "minimal",
+    "transition": "dissolve",
     "default": "fade-up",
     "byRole": {
       "card": "fade-up",
-      "stat": "fade-up",
+      "stat": "count",
       "list": "fade-up",
       "alert": "fade",
       "list-alert": "fade",
       "photo": "fade",
       "connector": "fade",
       "table": "wipe",
-      "chart": "wipe",
+      "chart": "grow",
       "node": "fade-up",
       "pill": "fade-up",
       "flow": "fade-up",
       "flow-accent": "fade-up"
-    },
-    "stagger": 60,
-    "duration": 300
+    }
   }
 }

@@ -12,6 +12,8 @@ test-results/
 artifacts/preflight/
 artifacts/qa/
 artifacts/layout-gallery/
+artifacts/deck-gallery/
+artifacts/demo/portable-save/
 artifacts/themes/
 artifacts/**/*.tmp
 

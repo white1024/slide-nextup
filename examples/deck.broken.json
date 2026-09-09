@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "broken",
   "title": "A deliberately broken deck",
-  "theme": "ink-paper",
+  "theme": "blue-professional",
   "canvas": {
     "width": 1920,
     "height": 1080

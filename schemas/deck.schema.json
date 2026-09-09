@@ -24,8 +24,8 @@
       }
     },
     "transition": {
-      "enum": ["none", "fade", "push", "lift", "slide-left"],
-      "description": "Page transition: fade cross-fades, push moves both pages together (reversed when going back), lift floats the new page over the old, none cuts; slide-left is the old name and plays as push. Without this field the theme’s motion.transition applies, and failing that fade. Static mode (?static=1, QA, export) never transitions"
+      "enum": ["none", "fade", "rise", "settle", "dissolve", "breath", "push", "lift", "slide-left"],
+      "description": "Page transition family, an exit on the old page and an entrance on the new one (140–280ms, at most 12px of travel, opacity always part of it): rise (6px up, the house default), settle (12px up with a touch of blur, for covers), dissolve (opacity only), breath (a full exit, a beat, then the entrance; for section breaks), fade (a plain crossfade over the old page), push (both pages move 12px sideways, mirrored going back), lift (8px up at 0.99), none (a cut); slide-left is the old name and plays as push. Without this field the theme’s motion.transition applies, and failing that fade. Static mode (?static=1, QA, export) and prefers-reduced-motion never transition"
     },
     "motion": {
       "enum": ["on", "off"],
@@ -87,6 +87,10 @@
           "$ref": "#/definitions/id",
           "description": "Layout id, resolved to layouts/<id>/ (a theme may override it with themes/<theme>/layouts/<id>/)"
         },
+        "transition": {
+          "enum": ["none", "fade", "rise", "settle", "dissolve", "breath", "push", "lift", "slide-left"],
+          "description": "This slide’s own page transition, played when it comes in (going back into it too); absent means the deck’s transition. The scaffold writes breath on a pause slide and settle on a hero slide after the first; the editor’s “This page” menu changes it"
+        },
         "slots": {
           "type": "object",
           "description": "The content slots declared by the layout; every key must be one of this slide’s elements",
@@ -115,8 +119,8 @@
           "description": "Reveal step: which press of “next” shows the element; absent means visible from the start"
         },
         "enter": {
-          "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe"],
-          "description": "Entrance used when the step is reached; absent means the theme’s motion default for the data-role. Only affects elements with a step"
+          "enum": ["fade-up","fade","scale-in","slide-left","slide-right","wipe","pop","blur","cascade","grow","draw","count"],
+          "description": "Entrance played once when the step is reached, ending on the element’s resting state (what static mode shows): fade-up (24px rise), fade, scale-in (from 0.9), slide-left / slide-right (56px), wipe (a left-to-right reveal), pop (from 0.62 with an overshoot), blur (18px of blur sharpening while rising 8px), cascade (the element’s items, a list’s entries or its direct children, fade up 50ms apart); and from the data: grow / draw (a chart’s bars and progress fills grow to their real width, ring segments to their real share, a line draws itself along its real points with each point popping as the line arrives; either name works for every chart kind), count (a number runs up to its real value, a metric’s value or an element that is nothing but a number, keeping its separators, decimals, prefix and suffix). Absent means the theme’s motion default for the data-role; the theme’s motion family sets the pace. Only affects elements with a step"
         }
       }
     },

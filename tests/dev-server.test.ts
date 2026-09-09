@@ -77,7 +77,7 @@ describe('dev server', () => {
     await page.evaluate(() => window.__deck.editor.select('card-1'))
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('ArrowRight')
-    await waitFor(() => readDeck().overrides['s2/card-1']?.x === 98, 6000)
+    await waitFor(() => readDeck().overrides['s2/card-1']?.x === 79, 6000)
     const after = readDeck()
     expect(JSON.stringify(after.slides)).toBe(slidesBefore)
     expect(after.overrides['s1/title']).toEqual(before.overrides['s1/title'])
@@ -107,7 +107,7 @@ describe('dev server', () => {
     expect(await page.evaluate(() => location.search)).toBe('?edit=1')
     expect(
       await page.evaluate(() => window.__deck.exportModel().overrides['s2/card-1']),
-    ).toMatchObject({ x: 98 })
+    ).toMatchObject({ x: 79 })
   })
 
   it('rejects cross-origin and malformed saves without touching the file', async () => {
@@ -331,6 +331,44 @@ describe('dev server', () => {
     expect(readDeck().transition).toBeUndefined()
   })
 
+  it("saves a page's own transition: a family is written on the slide, empty clears it, other slides keep theirs", async () => {
+    const post = (body: unknown) =>
+      fetch(`${server.url}/__save`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: server.url },
+        body: JSON.stringify(body),
+      })
+    const before = readDeck()
+    const own = (id: string) => readDeck().slides.find((s) => s.id === id)?.transition
+    const set = await post({
+      overrides: before.overrides,
+      pageTransitions: { s2: 'breath', s3: 'bogus' },
+      base: server.overridesHash(),
+    })
+    expect(set.status).toBe(200)
+    expect(own('s2')).toBe('breath')
+    expect(own('s3')).toBeUndefined()
+    // a slide missing from the map keeps its disk value; the deck-wide field is untouched
+    const keep = await post({
+      overrides: before.overrides,
+      pageTransitions: { s1: 'lift' },
+      base: server.overridesHash(),
+    })
+    expect(keep.status).toBe(200)
+    expect(own('s1')).toBe('lift')
+    expect(own('s2')).toBe('breath')
+    expect(readDeck().transition).toBe(before.transition)
+    const clear = await post({
+      overrides: before.overrides,
+      pageTransitions: { s1: '', s2: '' },
+      base: server.overridesHash(),
+    })
+    expect(clear.status).toBe(200)
+    expect(own('s1')).toBeUndefined()
+    expect(own('s2')).toBeUndefined()
+    expect(readDeck().slides.map((s) => s.slots)).toEqual(before.slides.map((s) => s.slots))
+  })
+
   it('serves deck assets but nothing outside the deck directory', async () => {
     expect(confinedFile(outDir, '/story.sample.md')).toBe(join(outDir, 'story.sample.md'))
     expect(confinedFile(outDir, '/../package.json')).toBeNull()
@@ -359,7 +397,10 @@ describe('dev server', () => {
       title: { type: 'text', value: '一張圖' },
       photo: { type: 'image', src: 'pic.png' },
     }
-    s5.elements = loadLayout('photo').json.elements.map((e) => ({ id: e.id, kind: e.kind }))
+    s5.elements = loadLayout('photo', 'blue-professional').json.elements.map((e) => ({
+      id: e.id,
+      kind: e.kind,
+    }))
     writeFileSync(deckFile, stringifyDeck(deck), 'utf8')
     await page.waitForFunction(
       () => Boolean(document.querySelector('[data-slide="s5"] [data-el="photo"] img')),
@@ -412,8 +453,8 @@ describe('file:// fallback', () => {
     })
     await p.goto(`${pathToFileURL(file).href}?edit=1`)
     await p.waitForFunction(() => window.__deck?.editor?.active === true)
-    // no dev server, no portable-HTML button: the file the user opened is the HTML already
-    expect(await p.locator('.ed-panel [data-action="download-html"]').isHidden()).toBe(true)
+    // no dev server, but the page keeps its pristine copy: the portable-HTML button stays and saves the page itself
+    expect(await p.locator('.ed-panel [data-action="download-html"]').isHidden()).toBe(false)
     const [download] = await Promise.all([
       p.waitForEvent('download'),
       p.click('.ed-panel button[data-action="download"]'),

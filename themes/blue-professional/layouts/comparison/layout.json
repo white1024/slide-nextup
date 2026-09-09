@@ -37,7 +37,7 @@
     "left-items": {
       "type": "list",
       "required": true,
-      "hint": "3 to 5 items, up to 2 lines each"
+      "hint": "3 to 4 items, up to 2 lines each"
     },
     "right-title": {
       "type": "text",
@@ -47,7 +47,7 @@
     "right-items": {
       "type": "list",
       "required": true,
-      "hint": "3 to 5 items, up to 2 lines each"
+      "hint": "3 to 4 items, up to 2 lines each"
     },
     "page": {
       "type": "text",

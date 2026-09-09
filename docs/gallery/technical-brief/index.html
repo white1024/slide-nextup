@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical Brief · layouts</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root { --bg: #f6f5fa; --panel: #ffffff; --ink: #1a1930; --muted: #767490; --rule: #dcdae8; --accent: #4f47c8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121120; --panel: #1a1929; --ink: #ecebf6; --muted: #8b899f; --rule: #2a2940; --accent: #9c95ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px clamp(16px, 4vw, 48px) 64px; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 0 0 6px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 0.85em; color: var(--muted); font-weight: 400; }
+  .lead, .about, .count { color: var(--muted); margin: 0 0 8px; max-width: 80ch; }
+  .count { font-size: 13px; margin-bottom: 16px; }
+  .crumbs { font-size: 14px; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px 20px; }
+  figure { margin: 0; }
+  .frame { --s: 0.25; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; background: #808080; }
+  .frame iframe { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; transform: scale(var(--s)); pointer-events: none; }
+  .frame .open { position: absolute; inset: 0; }
+  .frame:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+  figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  figcaption b { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-weight: 600; color: var(--ink); }
+  figcaption a { color: inherit; text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; }
+  .desc { display: block; margin-top: 2px; }
+  .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px 24px; margin-top: 24px; }
+  .pack h2 { margin-top: 12px; }
+</style>
+</head>
+<body>
+<p class="crumbs"><a href="../index.html">Themes</a> › Technical Brief</p>
+<h1>Technical Brief <code>technical-brief</code></h1>
+<p class="about">A dark technical brief: a near-black green-grey room, panels one step up from the ground with a single hairline border and no shadow, a monospace uppercase eyebrow in bright teal trailed by a thin rule, dash-marked lists under a coloured pip label, monospace tabular numbers, and a teal hairline progress bar along the top edge. Teal is the working accent; emerald and amber mark the second and third card of a triple, and amber alone means a caveat. Ported from the author's own hand-written 1280x720 architecture deck, geometry x1.5; every face is a system font, because a projector is not guaranteed to have a network and a failed web font falls back silently.</p>
+<p class="count">16 layouts, each rendered with its own sample content; click one to open it full size.</p>
+<div class="grid">
+    <figure>
+      <div class="frame"><iframe src="cover.html" loading="lazy" tabindex="-1" title="Cover: Technical Brief"></iframe><a class="open" href="cover.html" target="_blank" rel="noopener" aria-label="open cover full size"></a></div>
+      <figcaption><b>cover</b> <span class="desc">A filled teal dot and a monospace eyebrow, the title big and tight with its subtitle under it, then a hairline over a five-column meta grid divided by vertical rules, and an amber callout for what the deck does not cover. A plain title card would lose the meta grid, which is where a technical deck states the machine it is talking about.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards.html" loading="lazy" tabindex="-1" title="Three cards: Technical Brief"></iframe><a class="open" href="cards.html" target="_blank" rel="noopener" aria-label="open cards full size"></a></div>
+      <figcaption><b>cards</b> <span class="desc">Three panels, each a monospace teal label over a title and one explanation. Use `cards-list` when each card carries several points instead.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-2.html" loading="lazy" tabindex="-1" title="Two cards: Technical Brief"></iframe><a class="open" href="cards-2.html" target="_blank" rel="noopener" aria-label="open cards-2 full size"></a></div>
+      <figcaption><b>cards-2</b> <span class="desc">Two wide panels for two concepts side by side. Do not force a third in; use cards for that.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-4.html" loading="lazy" tabindex="-1" title="Four axis tiles: Technical Brief"></iframe><a class="open" href="cards-4.html" target="_blank" rel="noopener" aria-label="open cards-4 full size"></a></div>
+      <figcaption><b>cards-4</b> <span class="desc">Four narrow tiles, each a monospace key over a large teal number and its value — the axes of a matrix, or four counts that belong together. Four cards of prose would bury the numbers.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="cards-list.html" loading="lazy" tabindex="-1" title="Three cards with lists: Technical Brief"></iframe><a class="open" href="cards-list.html" target="_blank" rel="noopener" aria-label="open cards-list full size"></a></div>
+      <figcaption><b>cards-list</b> <span class="desc">The pack's signature card: a coloured pip over a faint monospace label, the card's claim in one bold line, then two or three dash points. Cards holding one paragraph each (`cards`) would lose the parallel reading down the three columns.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="chips-2.html" loading="lazy" tabindex="-1" title="Two chip sets: Technical Brief"></iframe><a class="open" href="chips-2.html" target="_blank" rel="noopener" aria-label="open chips-2 full size"></a></div>
+      <figcaption><b>chips-2</b> <span class="desc">Two panels, each a heading and one line of what decides membership, then the members themselves as monospace chips. A prose list of fifteen field names would be unreadable; chips make the count visible.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="comparison.html" loading="lazy" tabindex="-1" title="Two columns: Technical Brief"></iframe><a class="open" href="comparison.html" target="_blank" rel="noopener" aria-label="open comparison full size"></a></div>
+      <figcaption><b>comparison</b> <span class="desc">Two panels of equal weight, each a title over a dash list, with room for a caveat below. Deliberately symmetrical: built for two boundaries of equal standing, where making one side heavier would be a claim about which one is right.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="data-table.html" loading="lazy" tabindex="-1" title="Table: Technical Brief"></iframe><a class="open" href="data-table.html" target="_blank" rel="noopener" aria-label="open data-table full size"></a></div>
+      <figcaption><b>data-table</b> <span class="desc">A table with a small uppercase header over hairline rows and tabular numbers, with a note below. A list of cards would lose the alignment that lets a reader compare down a column.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="diagram-notes.html" loading="lazy" tabindex="-1" title="Guided view: Technical Brief"></iframe><a class="open" href="diagram-notes.html" target="_blank" rel="noopener" aria-label="open diagram-notes full size"></a></div>
+      <figcaption><b>diagram-notes</b> <span class="desc">The same system diagram on the left with one path lit, and a note column on the right: a teal bar down the lede, then what this view is for in teal dash points. Three separate slides of prose would lose that all three views are the same diagram read three ways.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="flow-3.html" loading="lazy" tabindex="-1" title="Three-party flow: Technical Brief"></iframe><a class="open" href="flow-3.html" target="_blank" rel="noopener" aria-label="open flow-3 full size"></a></div>
+      <figcaption><b>flow-3</b> <span class="desc">Three tall panels joined by two arrows, each a monospace role label over what that party does — a handover, not a list of three teams. Cards without arrows would lose the direction the contract flows in.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="photo.html" loading="lazy" tabindex="-1" title="Diagram: Technical Brief"></iframe><a class="open" href="photo.html" target="_blank" rel="noopener" aria-label="open photo full size"></a></div>
+      <figcaption><b>photo</b> <span class="desc">A full-width hairline frame holding a system diagram, with a legend line below. A diagram shrunk beside text would lose the detail that makes it worth showing at all.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="process.html" loading="lazy" tabindex="-1" title="Process: Technical Brief"></iframe><a class="open" href="process.html" target="_blank" rel="noopener" aria-label="open process full size"></a></div>
+      <figcaption><b>process</b> <span class="desc">One horizontal run of monospace pills joined by arrows, with a caveat below. A numbered list would lose the effect of taking the whole sequence in at a glance.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="quote.html" loading="lazy" tabindex="-1" title="Principle: Technical Brief"></iframe><a class="open" href="quote.html" target="_blank" rel="noopener" aria-label="open quote full size"></a></div>
+      <figcaption><b>quote</b> <span class="desc">One principle on a teal tint, large and quiet, with its source below. An ordinary content slide would lose the pause that makes a principle land.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="section.html" loading="lazy" tabindex="-1" title="Section: Technical Brief"></iframe><a class="open" href="section.html" target="_blank" rel="noopener" aria-label="open section full size"></a></div>
+      <figcaption><b>section</b> <span class="desc">A chapter break: a huge dim teal numeral, a short teal bar, the chapter title and one line of what it has to establish. A plain title slide would lose the beat that tells the audience a new chapter has started.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="statement.html" loading="lazy" tabindex="-1" title="Statement: Technical Brief"></iframe><a class="open" href="statement.html" target="_blank" rel="noopener" aria-label="open statement full size"></a></div>
+      <figcaption><b>statement</b> <span class="desc">One claim, then a single panel holding the supporting points as a dash list, with room for a caveat below. Three cards would break one argument into three unrelated ones.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><iframe src="closing.html" loading="lazy" tabindex="-1" title="Closing: Technical Brief"></iframe><a class="open" href="closing.html" target="_blank" rel="noopener" aria-label="open closing full size"></a></div>
+      <figcaption><b>closing</b> <span class="desc">A short teal bar, the closing claim, one line of scope, then where to go next as a dash list and the single next step as a teal button. A thank-you slide would waste the last thing the audience looks at.</span></figcaption>
+    </figure>
+</div>
+<script>
+  const frames = document.querySelectorAll('.frame')
+  const fit = () => { for (const f of frames) f.style.setProperty('--s', String(f.clientWidth / 1920)) }
+  new ResizeObserver(fit).observe(document.body)
+  fit()
+</script>
+</body>
+</html>

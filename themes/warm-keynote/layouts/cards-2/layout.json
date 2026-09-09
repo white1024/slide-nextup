@@ -99,7 +99,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -107,31 +107,31 @@
     },
     "title": {
       "type": "text",
-      "value": "No single step is hard; the hard part is they sit in different places"
+      "value": "No single update is long; the trouble is they arrive one after another"
     },
     "subtitle": {
       "type": "text",
-      "value": "Four small mental loads add up to putting it off."
+      "value": "Four small waits add up to an hour a week."
     },
     "card-1": {
       "type": "metric",
       "value": "A",
-      "label": "Is my site down?",
-      "delta": "A silent outage goes unnoticed",
+      "label": "Who is waiting on me?",
+      "delta": "Nobody knows until their turn comes",
       "details": {
         "type": "list",
         "items": [
-          "Downtime: the checker alerts nobody",
-          "Slow pages: only seen in the monthly report",
-          "Expired certificate: the site simply goes dark"
+          "Blockers surface late",
+          "Handoffs wait for the next meeting",
+          "Two people report the same item"
         ]
       }
     },
     "card-2": {
       "type": "metric",
       "value": "B",
-      "label": "Where do I fix it?",
-      "delta": "The dashboard is never at hand"
+      "label": "What changed since last week?",
+      "delta": "The deck is written the night before"
     }
   }
 }

@@ -117,6 +117,23 @@ const APPEARANCE_PREFIXES = [
 const FORBIDDEN_EVERYWHERE = new Set(['font', 'content', 'cursor', 'pointer-events', 'user-select'])
 
 /**
+ * `content` values that generate nothing. A decorative pseudo-element (the rule that trails an
+ * eyebrow, the dot before a label) may carry one on either side of the ownership line; text,
+ * attr() and counter() generate content the editor cannot reach and stay forbidden.
+ */
+const EMPTY_CONTENT = /^(""|''|none|normal)$/i
+export function isEmptyContent(value: string): boolean {
+  return EMPTY_CONTENT.test(value.trim())
+}
+
+function forbiddenMessage(property: string): string {
+  if (property.toLowerCase() === 'content') {
+    return '`content` may only be empty ("", none or normal) on a decorative pseudo-element; text, attr() and counter() generate content the editor cannot reach'
+  }
+  return `\`${property}\` belongs to neither theme nor layout; use longhands instead of \`font\`, the rest belongs to the editor/player`
+}
+
+/**
  * What a theme may additionally set inside a `:hover` rule: a lift or a slight scale is a
  * transient state of a box the layout placed, not a change of layout. The player drops the
  * `[data-interactive]` gate in static and edit modes, so QA and dragging never see it.
@@ -303,11 +320,12 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
           message: `geometry property \`${d.property}\` can only be set by the layout (layout.css)${HOVER_ONLY.has(d.property.toLowerCase()) ? ' (only a hover rule may use it for a lift or a slight scale)' : ''}`,
         })
       } else if (cls === 'forbidden') {
+        if (d.property.toLowerCase() === 'content' && isEmptyContent(d.value)) continue
         issues.push({
           ...base,
           severity: 'error',
           property: d.property,
-          message: `\`${d.property}\` belongs to neither theme nor layout; use longhands instead of \`font\`, the rest belongs to the editor/player`,
+          message: forbiddenMessage(d.property),
         })
       } else if (cls === 'custom') {
         if (LENGTH_UNIT.test(d.value) && !APPEARANCE_VAR_NAME.test(d.property)) {
@@ -343,11 +361,12 @@ export function lintCss(css: string, owner: CssOwner): CssLintIssue[] {
           message: `appearance property \`${d.property}\` can only be set by the theme (theme.css)`,
         })
       } else if (cls === 'forbidden') {
+        if (d.property.toLowerCase() === 'content' && isEmptyContent(d.value)) continue
         issues.push({
           ...base,
           severity: 'error',
           property: d.property,
-          message: `\`${d.property}\` belongs to neither theme nor layout; use longhands instead of \`font\`, the rest belongs to the editor/player`,
+          message: forbiddenMessage(d.property),
         })
       } else if (cls === 'custom') {
         issues.push({

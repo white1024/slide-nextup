@@ -6,6 +6,7 @@ decks/*/deck.html
 # transient outputs of qa, galleries, previews and theme exports
 artifacts/qa/
 artifacts/layout-gallery/
+artifacts/deck-gallery/
 artifacts/preflight/
 artifacts/design/
 artifacts/themes/

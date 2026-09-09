@@ -1,5 +1,6 @@
 import { formatThemeCheck, runThemeCheck } from '../qa/theme-check.ts'
 import { deckDirOfPath, describeOrigin, listThemes } from '../render/assets.ts'
+import { refusePathArgs } from './args.ts'
 
 const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
@@ -18,7 +19,14 @@ const themeIndex = args.indexOf('--theme')
 const themeId = themeIndex === -1 ? undefined : args[themeIndex + 1]
 const deckIndex = args.indexOf('--deck')
 const lookup = { deckDir: deckIndex === -1 ? undefined : deckDirOfPath(args[deckIndex + 1] ?? '.') }
+const isValueOf = (idx: number, i: number) => idx !== -1 && i === idx + 1
 const known = listThemes(lookup)
+refusePathArgs(
+  args.filter((a, i) => !a.startsWith('-') && !isValueOf(deckIndex, i)),
+  'theme:check',
+  'Use `--theme <id>` for the pack; it takes no other arguments.',
+  known.map((t) => t.id),
+)
 if (themeId !== undefined && !known.some((t) => t.id === themeId)) {
   console.log(`✖ no theme \`${themeId}\`; available: ${known.map((t) => t.id).join(', ')}`)
   process.exit(2)

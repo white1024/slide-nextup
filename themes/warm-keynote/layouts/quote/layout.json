@@ -82,11 +82,11 @@
     },
     "title": {
       "type": "text",
-      "value": "Could a wrong answer cause an *outage*? Hard-code it; only wording goes to the LLM."
+      "value": "Can it wait a *week*? Then it goes in writing; only what cannot wait gets a call."
     },
     "caption": {
       "type": "text",
-      "value": "Thresholds and rules are hard-coded; only wording goes to the LLM"
+      "value": "The one rule that keeps the written update from turning into a second meeting"
     },
     "page": {
       "type": "text",

@@ -34,7 +34,7 @@
     "chart": {
       "type": "chart",
       "required": true,
-      "hint": "chart; kind progress looks most like the bar list in the source deck"
+      "hint": "chart; kind progress reads most like a ranked bar list"
     },
     "aside": {
       "type": [
@@ -97,7 +97,7 @@
     },
     "meta": {
       "type": "text",
-      "value": "Site owners"
+      "value": "Team leads"
     },
     "page": {
       "type": "text",
@@ -105,27 +105,27 @@
     },
     "title": {
       "type": "text",
-      "value": "Start with the three most-used checks"
+      "value": "Start with the three sections everyone reads"
     },
     "chart": {
       "type": "chart",
       "kind": "bar",
       "series": [
         {
-          "label": "Uptime",
-          "value": 37
+          "label": "Progress",
+          "value": 41
         },
         {
-          "label": "Latency",
-          "value": 28
+          "label": "Blockers",
+          "value": 27
         },
         {
-          "label": "Certificates",
-          "value": 20
+          "label": "Decisions",
+          "value": 19
         },
         {
-          "label": "Broken links",
-          "value": 9
+          "label": "Everything else",
+          "value": 13
         }
       ],
       "unit": "%",
@@ -133,13 +133,13 @@
     },
     "aside": {
       "type": "metric",
-      "value": "85%",
+      "value": "87%",
       "label": "the top three combined",
-      "delta": "are the checks owners run most"
+      "delta": "are the sections people scroll to first"
     },
     "caption": {
       "type": "text",
-      "value": "The top three match in every industry; click a legend entry during playback to drop one and compare again."
+      "value": "The top three match in every team; click a legend entry during playback to drop one and compare again."
     }
   }
 }
