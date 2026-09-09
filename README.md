@@ -174,6 +174,8 @@ pnpm typecheck   # tsc --noEmit
 
 Examples: `examples/tidewatch-progress/` is a confirmed story with its design choice, generated `deck.json` and assets (the deck that `init --example` copies); `examples/story.sample.md` passes `story:check`, while `examples/story.broken-fields.md` and `examples/story.broken-rhythm.md` show the two kinds of failure.
 
+Releases go through npm's trusted publishing: bump `version` in `package.json`, commit, tag `v<version>` and push the tag, and [.github/workflows/publish.yml](.github/workflows/publish.yml) runs the checks and publishes with provenance; no npm token is stored anywhere (the package's Trusted Publisher on npmjs.com names this repository and that workflow file). Version 0.1.0 was published by hand.
+
 The package ships `dist/`, built by `pnpm build` (tsc plus the editor and runtime files copied next to the compiled modules), because Node does not strip types under `node_modules`. `npm pack` and `npm publish` build it first (`prepack`); the tarball is a few hundred files and about a quarter of a megabyte (the end-to-end transcript below records the exact numbers of the last run). `node tools/e2e-package.mjs` packs the tarball, creates a workspace from it in a temp folder, installs it and runs the workspace scripts through the bin, writing a transcript to `artifacts/demo/npm-package/`.
 
 ## License

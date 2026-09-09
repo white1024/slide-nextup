@@ -1,0 +1,42 @@
+# Publishes slide-nextup to npm through trusted publishing (OIDC): no token anywhere, npm
+# accepts the workflow's identity once the package's Trusted Publisher on npmjs.com names this
+# repository and this file. Runs on a v* tag whose version matches package.json, after the
+# whole check suite; only from the public repository, never from a fork or the dev tree.
+name: Publish to npm
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    if: github.repository == 'white1024/slide-nextup'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # the version comes from package.json's packageManager
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: npm 11.5.1 or later (trusted publishing)
+        run: npm install -g npm@^11.5.1 && npm --version
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm typecheck
+      - run: pnpm check
+      - run: pnpm test
+      - name: The tag must be the version in package.json
+        if: github.event_name == 'push'
+        run: |
+          v="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "v$v" ]; then
+            echo "tag $GITHUB_REF_NAME does not match package.json version $v"
+            exit 1
+          fi
+      - run: npm publish --provenance --access public
